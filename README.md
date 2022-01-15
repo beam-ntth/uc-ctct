@@ -28,7 +28,7 @@ Follow Google's style guides for:
 
 - Natheethorn Teacharuangchit
 
-- Emmy Hyunh
+- Emmy Huynh
 
 - Maria Tilve
 
