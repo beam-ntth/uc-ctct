@@ -14,7 +14,7 @@ export default function Home() {
         <h1 className={styles.title}>
           Register or Login here!
         </h1>
-        <a className={styles.signinBtn} href="/main">Sign In with Google</a>
+        <a className={styles.signinBtn} href="/api/app">Sign In with Google</a>
       </main>
     </div>
   )
