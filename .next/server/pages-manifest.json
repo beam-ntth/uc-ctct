@@ -2,8 +2,6 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/auth/accepted": "pages/api/auth/accepted.js",
-  "/main": "pages/main.js",
   "/api/app": "pages/api/app.js",
   "/": "pages/index.js"
 }
