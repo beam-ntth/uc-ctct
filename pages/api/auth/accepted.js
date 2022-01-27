@@ -1,9 +1,16 @@
 import nextConnect from 'next-connect';
 import passport from 'passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import setup from '../../../api-lib/auth/passportSetup'
 
-const hiddenClientID = process.env.CLIENT_ID
-const hiddenClientSecret = process.env.CLIENT_SECRET
+
+const handler = nextConnect();
+handler.use(...setup);
+
+handler.get('api/auth/accepted', passport.authenticate('google'),
+  (req, res) => {
+    res.redirect('/main')
+  });
 
 // const handler = nextConnect();
 
@@ -34,6 +41,8 @@ const hiddenClientSecret = process.env.CLIENT_SECRET
 //     res.redirect('/main');
 // });
 
-export default function handler(req, res) {
-    res.status(200).redirect("/main")
-}
+export default handler;
+
+// export default function handler(req, res) {
+//   res.status(200).redirect("/main")
+// }
