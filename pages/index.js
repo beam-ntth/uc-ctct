@@ -7,7 +7,7 @@ export default function Home() {
   const [btn, useBtn] = useState([styles.circle1, styles.circle2, styles.circle3])
   let logoImage = <img className={styles.fadeInAndOut} src='/asset/images/ucd-logo.png' alt='UC Davis Logo' style={{height: 'auto', width: '100%'}} />
   if (btn[0] == styles.circle2) {
-    logoImage = <img key='logo1' className={styles.fadeInAndOut} src="/asset/images/ucsf-logo.png" alt='UC Davis Logo' style={{height: 'auto', width: '100%'}} />
+    logoImage = <img key='logo1' className={styles.fadeInAndOut} src="/asset/images/ucsf-logo.png" alt='UC Davis Logo' style={{height: 'auto', width: '75%'}} />
   } else if (btn[0] == styles.circle3) {
     logoImage = <img key='logo2' className={styles.fadeInAndOut} src="/asset/images/ucla-logo.png" alt='UC Davis Logo' style={{height: 'auto', width: '100%'}} />
   } else {
