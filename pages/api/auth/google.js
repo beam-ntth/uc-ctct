@@ -1,5 +1,5 @@
-import passport from 'passport'
 import nextConnect from 'next-connect';
+import passport from 'passport'
 import setup from '../../../api-lib/auth/passportSetup'
 
 const handler = nextConnect();
