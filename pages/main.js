@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '../styles/Main.module.css'
 
 export default function Main() {
     return (
@@ -9,7 +9,9 @@ export default function Main() {
                 <meta name="description" content="University of California - Clinic Coordination Tools" />
                 <link rel="icon" href="/favicon.ico" />
             </Head>
-            <h1 className={styles.title}>You made it!</h1>
+            <main className={styles.main}>
+                <h1 className={styles.title}>You made it! <br /> Your future application will be here</h1>
+            </main>
         </div>
     )
 }
