@@ -5,11 +5,8 @@ import setup from '../../../api-lib/auth/passportSetup'
 const handler = nextConnect();
 
 handler.use(...setup);
-// Valid example of using next-connect. Call to google.js when clicking login button was hanging
-// because next() was not included.
+
+// Redirection to the Google login page. 
 handler.get('api/auth/google',
-  async (req, res, next) => {
-    next()
-  },
   passport.authenticate("google", { scope: ['profile', 'email'] }));
 export default handler;
