@@ -7,7 +7,7 @@ let googleLoginData = {
   proxy: true
 };
 
-// TODO: DO SERIALIZATION, DESERIALIZATION, SETTING UP IN THIS FILE THEN IMPORT PASSPORT FROM HERE
+
 passport.serializeUser((userid, done) => {
   console.log("Serializing User. Input is: ", userid);
   done(null, userid);
@@ -25,11 +25,10 @@ passport.use(new GoogleStrategy(googleLoginData, gotProfile));
 async function gotProfile(accessToken, refreshToken, profile, done) {
   console.log("User profile has arrived.", profile);
   let userid = profile.id;
-  // let firstName = profile.name.givenName;
   done(null, userid);
 };
 
-// TODO: CAN ALSO DO THIS WITH HANDLER, EXPORT HANDLER WITH THE handler.use(cookieSession)
-// OR CAN JUST DO THIS ALL IN AN ARRAY, one including cookie setup. example is of AUTHS by hoangvv
+
+
 
 export default passport;
