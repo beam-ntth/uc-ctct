@@ -1,9 +1,6 @@
 import passport from 'passport'
 import nextConnect from 'next-connect';
 import setup from '../../../api-lib/auth/passportSetup'
-import cookieSession from 'cookie-session';
-import { getSession } from "../../../api-lib/auth/session"
-import next from 'next';
 
 const handler = nextConnect();
 
