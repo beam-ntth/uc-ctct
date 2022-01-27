@@ -12,13 +12,14 @@ passport.use(new GoogleStrategy({
   clientID: hiddenClientID,
   clientSecret: hiddenClientSecret,
   // TODO: Will need to change this to the real URL
-  callbackURL: "http://localhost:3000/api/auth/accepted"
+  callbackURL: "http://localhost:3000/api/auth/accepted",
+  proxy: true
 },
-function(accessToken, refreshToken, profile, cb) {
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
-}
+  function (accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
 ));
 
 // handler.use(cookieSession({
@@ -34,6 +35,6 @@ handler.use(passport.initialize());
 // which we can use to check for a profile in the database
 // handler.use(passport.session());
 
-handler.get('/api/app', passport.authenticate("google", {scope: ['profile', 'email']}));
+handler.get('/api/app', passport.authenticate("google", { scope: ['profile', 'email'] }));
 
 export default handler;
