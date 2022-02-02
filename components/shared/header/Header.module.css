@@ -1,0 +1,33 @@
+.mainHeader {
+    height: 10%;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5rem;
+}
+
+.headerText {
+    margin: 0 0 0 15rem;
+}
+
+.headerName {
+    margin: 0 0 0.5rem 0;
+    font-size: 2rem;
+}
+
+.headerName, .headerDate {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+}
+
+.headerDate {
+    margin: 0;
+    color: #AAB2C8;
+    font-size: 1.2rem;
+}
+
+.headerImg {
+    margin: 0 5rem;
+}

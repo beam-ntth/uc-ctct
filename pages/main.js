@@ -8,8 +8,8 @@ import nextConnect from 'next-connect';
 import setup from '../api-lib/auth/passportSetup';
 
 // Component Packages
-import Navbar from '../components/shared/navbar';
-import Header from '../components/shared/header';
+import Navbar from '../components/shared/navbar/navbar';
+import Header from '../components/shared/header/header';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -41,8 +41,8 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Navbar />
-        <Header props={{name: "Welcome, Rosalind De Lisser!", date: "Today: Febuary 2, 2022", img: ""}} />
+        <Navbar /> 
+        <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="" />
       </main>
     </div>
   )
