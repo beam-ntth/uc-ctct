@@ -15,7 +15,10 @@ passport.serializeUser((userid, done) => {
 
 passport.deserializeUser(async (userid, done) => {
   console.log("Deserializing user: ", userid);
-  done(null, { userData: "This is a test. Must create db function first" });
+  const testObject = {
+    userName: 'testUSerName'
+  }
+  done(null, JSON.stringify(testObject));
 });
 
 passport.use(new GoogleStrategy(googleLoginData, gotProfile));
