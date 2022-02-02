@@ -5,24 +5,25 @@ import passport from 'passport';
 import nextConnect from 'next-connect';
 import setup from '../api-lib/auth/passportSetup';
 
+/* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
-export async function getServerSideProps({ req, res }) {
-  const handler = nextConnect().use(...setup);
-  await handler.run(req, res);
-  const user = req.user;
-  console.log("Getting user: ", user)
-  if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/',
-      },
-    }
-  }
-  return {
-    props: { user: req.user },
-  };
-}
+// export async function getServerSideProps({ req, res }) {
+//   const handler = nextConnect().use(...setup);
+//   await handler.run(req, res);
+//   const user = req.user;
+//   console.log("Getting user: ", user)
+//   if (!user) {
+//     return {
+//       redirect: {
+//         permanent: false,
+//         destination: '/',
+//       },
+//     }
+//   }
+//   return {
+//     props: { user: req.user },
+//   };
+// }
 
 
 export default function Main() {
