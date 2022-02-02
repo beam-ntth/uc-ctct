@@ -1,12 +1,20 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
+
+// Mock data for dev
 let googleLoginData = {
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: `${process.env.LOCAL_URL}api/auth/accepted`,
+  clientID: 'my_id',
+  clientSecret: 'my_secret',
+  callbackURL: `call_me_maybe`,
   proxy: true
 };
 
+// let googleLoginData = {
+//   clientID: process.env.CLIENT_ID,
+//   clientSecret: process.env.CLIENT_SECRET,
+//   callbackURL: `${process.env.LOCAL_URL}api/auth/accepted`,
+//   proxy: true
+// };
 
 passport.serializeUser((userid, done) => {
   console.log("Serializing User. Input is: ", userid);
