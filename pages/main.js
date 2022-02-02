@@ -1,9 +1,15 @@
 import Head from 'next/head'
 import styles from '../styles/Main.module.css'
+
+// Authentication Packages
 import { isAuthenticated } from './api/auth/isAuthenticated';
 import passport from 'passport';
 import nextConnect from 'next-connect';
 import setup from '../api-lib/auth/passportSetup';
+
+// Component Packages
+import Navbar from '../components/shared/navbar';
+import Header from '../components/shared/header';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -35,7 +41,8 @@ export default function Main() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <h1 className={styles.title}>You made it! <br /> Your future application will be here</h1>
+        <Navbar />
+        <Header props={{name: "Welcome, Rosalind De Lisser!", date: "Today: Febuary 2, 2022", img: ""}} />
       </main>
     </div>
   )
