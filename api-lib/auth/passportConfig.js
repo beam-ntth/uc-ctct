@@ -3,7 +3,7 @@ import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 let googleLoginData = {
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: `${process.env.LOCAL_URL}/api/auth/accepted`,
+  callbackURL: `${process.env.LOCAL_URL}api/auth/accepted`,
   proxy: true
 };
 
@@ -15,7 +15,10 @@ passport.serializeUser((userid, done) => {
 
 passport.deserializeUser(async (userid, done) => {
   console.log("Deserializing user: ", userid);
-  done(null, { userData: "This is a test. Must create db function first" });
+  const testObject = {
+    userName: 'testUSerName'
+  }
+  done(null, JSON.stringify(testObject));
 });
 
 passport.use(new GoogleStrategy(googleLoginData, gotProfile));
