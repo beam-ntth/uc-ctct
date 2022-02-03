@@ -31,12 +31,14 @@ export default function Database({ data }) {
                                 <p>Region Name</p>
                                 <p>Total number of sites</p>
                             </div>
-                            {data.map((x) => {
+                            {data.map((x, ind) => {
                             return (
-                                <div className='displayRow'>
-                                    <p style={{marginLeft: '2rem'}}>{x['name']}</p>
-                                    <p style={{marginRight: '5rem'}}>{x['num_sites']}</p>
-                                </div>)
+                                <Link href={`/sites/database/site?location=${x['id']}`}>
+                                    <div className='displayRow' key={`elem_${ind}`}>
+                                        <p style={{marginLeft: '2rem'}}>{x['name']}</p>
+                                        <p style={{marginRight: '5rem'}}>{x['num_sites']}</p>
+                                    </div>
+                                </Link>)
                             })}
                             <div className='addRow'>
                                     <p style={{marginLeft: '2.5rem', color: "#545454"}}>+ Add New Region</p>

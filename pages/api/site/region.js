@@ -7,14 +7,17 @@ export default function handler(req, res) {
         res.status(200).json(
             [
                 {
+                    id: 'north',
                     name: "Northern & Central Region",
                     num_sites: 1
                 },
                 {
+                    id: 'coastal',
                     name: "Coastal Region",
                     num_sites: 1
                 },
                 {
+                    id: 'south',
                     name: "Southern Region",
                     num_sites: 1
                 },
@@ -26,23 +29,69 @@ export default function handler(req, res) {
     // /api/site/region?location=north
     if (query["location"] == 'north') {
         res.status(200).json(
-            { 
-                site1: {
+            [ 
+                {
                     name: "Site 1",
                     affiliation: "UCSF",
                     num_clinics: 3
                 },
-                site2: {
+                {
                     name: "Site 2",
                     affiliation: "UCSF",
                     num_clinics: 1
                 },
-                site3: {
+                {
                     name: "Site 3",
                     affiliation: "No Affiliation",
                     num_clinics: 2
                 },
-            }
+            ]
+        )
+        return;
+    }
+    // /api/site/region?location=coastal
+    if (query["location"] == 'coastal') {
+        res.status(200).json(
+            [ 
+                {
+                    name: "Site 3",
+                    affiliation: "UCSF",
+                    num_clinics: 3
+                },
+                {
+                    name: "Site 4",
+                    affiliation: "UCSF",
+                    num_clinics: 1
+                },
+                {
+                    name: "Site 5",
+                    affiliation: "No Affiliation",
+                    num_clinics: 2
+                },
+            ]
+        )
+        return;
+    }
+    // /api/site/region?location=south
+    if (query["location"] == 'south') {
+        res.status(200).json(
+            [ 
+                {
+                    name: "Site 6",
+                    affiliation: "UCSF",
+                    num_clinics: 3
+                },
+                {
+                    name: "Site 6",
+                    affiliation: "UCSF",
+                    num_clinics: 1
+                },
+                {
+                    name: "Site 6",
+                    affiliation: "No Affiliation",
+                    num_clinics: 2
+                },
+            ]
         )
         return;
     }
