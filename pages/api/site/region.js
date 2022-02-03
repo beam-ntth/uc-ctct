@@ -3,7 +3,7 @@ export default function handler(req, res) {
     // Simulate waiting time
     setTimeout(() => {1000})
 
-    // /api/site
+    // /api/site/region
     if (query.length == 0) {
         res.status(200).json(
             { 
@@ -24,8 +24,8 @@ export default function handler(req, res) {
         return;
     }
 
-    // /api/site?region=north
-    if (query["region"] == 'north') {
+    // /api/site/region?location=north
+    if (query["location"] == 'north') {
         res.status(200).json(
             { 
                 site1: {
