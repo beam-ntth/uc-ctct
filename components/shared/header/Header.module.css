@@ -1,6 +1,6 @@
 .mainHeader {
     height: 10%;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -9,7 +9,7 @@
 }
 
 .headerText {
-    margin: 0 0 0 15rem;
+    margin: 0 0 0 7rem;
 }
 
 .headerName {
@@ -31,3 +31,5 @@
 .headerImg {
     margin: 0 5rem;
 }
+
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
