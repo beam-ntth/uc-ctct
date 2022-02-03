@@ -15,7 +15,7 @@ export default function Navbar(props) {
             <div className={styles.navbar}>
                 {/* Logo Side */}
                 <div className={styles.logo}>
-                    <img src="/asset/images/uc-seal-blue-clear.png" alt="UC Seal" style={{height: 'auto', width: '100%'}}/>
+                    <img src="/asset/images/uc-seal-blue.png" alt="UC Seal" style={{height: 'auto', width: '80%'}}/>
                 </div>
                 <Link href="/main">
                     <div className={styles.dashboard}>

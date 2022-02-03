@@ -2,24 +2,23 @@ export default function handler(req, res) {
     const query = req.query
     // Simulate waiting time
     setTimeout(() => {1000})
-
     // /api/site/region
-    if (query.length == 0) {
+    if (Object.keys(query).length === 0) {
         res.status(200).json(
-            { 
-                region1: {
+            [
+                {
                     name: "Northern & Central Region",
                     num_sites: 1
                 },
-                region2: {
+                {
                     name: "Coastal Region",
                     num_sites: 1
                 },
-                region3: {
+                {
                     name: "Southern Region",
                     num_sites: 1
                 },
-            }
+            ]
         )
         return;
     }

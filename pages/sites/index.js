@@ -1,8 +1,10 @@
 import Head from 'next/head'
 import styles from '../../styles/Sites.module.css'
+import Link from 'next/link'
 
 import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
+import { FaChartPie, FaDatabase } from 'react-icons/fa';
 
 export default function Sites() {
     return (
@@ -17,12 +19,20 @@ export default function Sites() {
                 <div className={styles.content}>
                     <Header header="Site Management Tools" date="Today: Febuary 2, 2022" imgSrc="" />
                     <div className={styles.menu}>
-                        <div className={styles.chart}>
-                            
-                        </div>
-                        <div className={styles.chart}>
-
-                        </div>
+                        <Link href="/sites/database">
+                            <div className={styles.menuOption}>
+                                <FaDatabase size={100} color='#079CDB'/>
+                                <h1>Manage Clinical Database</h1>
+                                <p>Add more clinics, sites, or regions and edit existing information</p>
+                            </div>
+                        </Link>
+                        <Link href="/sites/visual">
+                            <div className={styles.menuOption}>
+                                <FaChartPie size={100} color='#079CDB' />
+                                <h1>Manage Data Visualization</h1>
+                                <p>Quick overview of all the clinics and chart analysis</p>
+                            </div>
+                        </Link>
                     </div>
                 </div>
             </main>

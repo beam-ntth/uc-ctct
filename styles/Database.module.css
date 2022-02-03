@@ -27,31 +27,27 @@
     align-items: center;
 }
 
-.menuOption {
-    height: 75%;
-    width: 38rem;
-    background-color: #F5F5F5;
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 4rem 2rem 1rem 2rem;
+    height: 10%;
+    width: 85%;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.data {
+    background-color: #F5F6FA;
+    margin: 5rem 5rem 0 7rem;
     border-radius: 2rem;
-    margin: 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    cursor: pointer;
-}
-
-.menuOption:hover {
-    height: 80%;
-    width: 40rem;
-    transition: linear 0.3s;
-}
-
-.menuOption h1 {
-    margin: 1rem;
-    color: #079CDB;
-}
-
-.menuOption p {
-    margin: 0;
-    color: #AAB2C8;
+    height: 60%;
+    width: auto;
 }
