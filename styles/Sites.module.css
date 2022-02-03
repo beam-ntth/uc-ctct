@@ -18,8 +18,8 @@
     overflow-y: scroll;
 }
 
-.mainCharts {
-    height: 60%;
+.menu {
+    height: 80%;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -27,35 +27,31 @@
     align-items: center;
 }
 
-.chart {
-    height: 80%;
-    width: 40%;
+.menuOption {
+    height: 75%;
+    width: 38rem;
     background-color: #F5F5F5;
     border-radius: 2rem;
     margin: 1rem;
-}
-
-.activities {
-    height: 100%;
-    width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
-.activityBox {
-    height: 90%;
-    width: 82%;
-    border-radius: 2rem;
-    background-color: #F5F5F5;
+.menuOption:hover {
+    height: 80%;
+    width: 40rem;
+    transition: linear 0.3s;
 }
 
-.actTitle {
-    font-family: 'Lato', sans-serif;
-    font-weight: 500;
-    padding: 2rem;
-    margin: auto;
+.menuOption h1 {
+    margin: 1rem;
+    color: #079CDB;
 }
 
-
+.menuOption p {
+    margin: 0;
+    color: #AAB2C8;
+}

@@ -1,0 +1,43 @@
+.navbar {
+    height: 100vh;
+    width: 8%;
+    background-color: #F5F6FA;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 400;
+    color: #464255;
+}
+
+.logo {
+    width: 80%;
+    height: auto;
+    background-color: transparent;
+    margin: 2rem 0 5rem 0;
+    text-align: center;
+}
+
+.dashboard {
+    cursor: pointer;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+
+.dashboard p {
+    margin: 0;
+}
+
+/* For Screens 1024px and under */
+@media screen and (max-width: 1024px) {
+    .navbar {
+        width: 15%
+    }
+  }
+  
+  /* On screens that are 600px or less, set the background color to olive */
+  /* @media screen and (max-width: 600px) {
+    
+  } */
