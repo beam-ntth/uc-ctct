@@ -49,6 +49,8 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    height: auto;
+    height: 550px;
     width: auto;
+    margin-bottom: 3rem;
+    /* padding: 1rem; */
 }
