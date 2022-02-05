@@ -36,8 +36,8 @@ export default function Database({ data }) {
                             </div>
                             {data.map((x, ind) => {
                                 return (
-                                    <Link href="/sites/database/clinics">
-                                        <div className='displayRow'>
+                                    <Link href={`/sites/database/clinics?location=${x['id']}`}>
+                                        <div key={`site_${ind}`} className='displayRow'>
                                             <p style={{marginLeft: '2rem'}}>{x['name']}</p>
                                             <p>{x['affiliation']}</p>
                                             <p style={{marginRight: '5rem'}}>{x['num_clinics']}</p>

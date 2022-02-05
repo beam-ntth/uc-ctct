@@ -30,16 +30,19 @@ export default function handler(req, res) {
   if (query["location"] == "north") {
     res.status(200).json([
       {
+        id: "site1",
         name: "Site 1",
         affiliation: "UCSF",
         num_clinics: 3,
       },
       {
+        id: "site2",
         name: "Site 2",
         affiliation: "UCSF",
         num_clinics: 1,
       },
       {
+        id: "site3",
         name: "Site 3",
         affiliation: "No Affiliation",
         num_clinics: 2,
@@ -51,16 +54,19 @@ export default function handler(req, res) {
   if (query["location"] == "coastal") {
     res.status(200).json([
       {
+        id: "site1",
         name: "Site 3",
         affiliation: "UCSF",
         num_clinics: 3,
       },
       {
+        id: "site2",
         name: "Site 4",
         affiliation: "UCSF",
         num_clinics: 1,
       },
       {
+        id: "site3",
         name: "Site 5",
         affiliation: "No Affiliation",
         num_clinics: 2,
@@ -72,16 +78,19 @@ export default function handler(req, res) {
   if (query["location"] == "south") {
     res.status(200).json([
       {
+        id: "site1",
         name: "Site 6",
         affiliation: "UCSF",
         num_clinics: 3,
       },
       {
+        id: "site2",
         name: "Site 6",
         affiliation: "UCSF",
         num_clinics: 1,
       },
       {
+        id: "site3",
         name: "Site 6",
         affiliation: "No Affiliation",
         num_clinics: 2,

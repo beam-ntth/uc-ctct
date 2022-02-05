@@ -1,39 +1,45 @@
-import nextConnect from 'next-connect'
-let handler = nextConnect()
-
-const clinic1 = {
-  name: 'Clinic 1',
-  lastUpdated: '01/21/2019',
-  status: 0,
-}
-
-const clinic2 = {
-  name: 'Clinic 2',
-  lastUpdated: '01/22/2019',
-  status: 2,
-}
-
-const clinic3 = {
-  name: 'Clinic 4',
-  lastUpdated: '01/23/2019',
-  status: 1,
-}
-
-const clinic4 = {
-  name: 'Clinic 5',
-  lastUpdated: '02/23/2019',
-  status: 4,
-}
-
-handler.get((req, res) => {
-  if (req.query.site == 'Site 1') {
-    res.json([clinic1, clinic3])
-  } else if (req.query.site == 'Site 2') {
-    res.json([clinic4, clinic2])
-  } else {
-    res.json(clinic1)
+export default function handler(req, res) {
+  const clinic1 = {
+    name: 'Clinic 1',
+    lastUpdated: '01/21/2019',
+    status: 0,
   }
-})
+  
+  const clinic2 = {
+    name: 'Clinic 2',
+    lastUpdated: '01/22/2019',
+    status: 2,
+  }
+  
+  const clinic3 = {
+    name: 'Clinic 4',
+    lastUpdated: '01/23/2019',
+    status: 1,
+  }
+  
+  const clinic4 = {
+    name: 'Clinic 5',
+    lastUpdated: '02/23/2019',
+    status: 1,
+  }
+
+  if (req.query.location == 'site1') {
+    res.status(200).json([clinic1, clinic3])
+    return;
+  }
+
+  if (req.query.location == 'site2') {
+    res.status(200).json([clinic4, clinic2])
+    return;
+  }
+
+  if (req.query.location == 'site3') {
+    res.status(200).json([clinic1])
+    return;
+  }
+
+  res.status(400).json("400: Bad Request")
+}
 
 // handler.get('/api/clinic/getClinic1', (req, res) => {
 //   const genInfo = {
@@ -54,8 +60,6 @@ handler.get((req, res) => {
 // handler.get((req, res) => {
 //   res.send({sent : 'yes'});
 // })
-
-export default handler
 
 // handler.get('api/clinic/getAdminContact', (req, res) => {
 //   const adminContact = {
