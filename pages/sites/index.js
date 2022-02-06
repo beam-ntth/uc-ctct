@@ -19,7 +19,8 @@ export default function Sites() {
                 <div className={styles.content}>
                     <Header header="Site Management Tools" date="Today: Febuary 2, 2022" imgSrc="" />
                     <div className={styles.menu}>
-                        <Link href="/sites/visual">
+                        {/* <Link href="/sites/visual"> */}
+                        <Link href="/404">
                             <div className={styles.menuOption}>
                                 <FaChartPie size={100} color='#079CDB' />
                                 <h1>Manage Data Visualization</h1>

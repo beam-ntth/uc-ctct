@@ -6,7 +6,30 @@ import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 
+import { IoIosArrowDown } from 'react-icons/io'
+
+export async function getServerSideProps(context) {
+    const clinicName = context.query.name
+    const res = await fetch(`http://localhost:3000/api/clinic/detail?name=${clinicName}`)
+    const data = await res.json()
+    return { props: { data } }
+}
+
 export default function Database({ data }) {
+    let statusText = 'N/A'
+
+    if (data['status'] === 0) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FF3E3E', color: '#fff', borderRadius: '0.5rem'}}>Need To Contact</span>
+    }
+    if (data['status'] === 1) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FFB23E', color: '#fff', borderRadius: '0.5rem'}}>Need To Follow Up</span>
+    }
+    if (data['status'] === 2) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#3EDCFF', color: '#fff', borderRadius: '0.5rem'}}>Contacted</span>
+    }
+    if (data['status'] === 3) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem'}}>Connected</span>
+    }
     return (
         <React.Fragment>
             <div className={styles.container}>
@@ -29,15 +52,15 @@ export default function Database({ data }) {
                                     <div className={styles.editButton}>Edit Information</div>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p style={{marginRight: '2rem'}}>Site:</p>
-                                    <p>Phone Number:</p>
+                                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.site}</p>
+                                    <p><strong>Phone Number:</strong> {data.phoneNumber}</p>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p style={{marginRight: '2rem'}}>Address:</p>
-                                    <p>Fax Number:</p>
+                                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.addressLine1}, ${data.addressLine2 ? `${data.addressLine2}, ` : ''}${data.city}, ${data.state}, ${data.postal}`}</p>
+                                    <p><strong>Fax Number:</strong> {data.faxNumber}</p>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p>Current Status:</p>
+                                    <p><strong>Current Status:</strong> {statusText}</p>
                                 </div>
                             </div>
                         </div>
@@ -49,21 +72,16 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>+ Add Information</div>  
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
+                                {
+                                data.adminInfo.map((x, ind) => {
+                                    return (
+                                    <div key={`admin_${ind}`} className="displayRow">
+                                        <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
+                                        <p className="adminCol2">{x.phone}</p>
+                                        <p className="adminCol3">{x.email}</p>
+                                    </div>
+                                    )})
+                                }
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -74,21 +92,17 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>+ Add Information</div>
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
+                                {
+                                data.preceptorInfo.map((x, ind) => {
+                                    return (
+                                    <div key={`preceptor_${ind}`} className="displayRow">
+                                        <p className="preceptorCol1">{x.name}</p>
+                                        <p className="preceptorCol2">{x.credential}</p>
+                                        <p className="preceptorCol3">{x.phone}</p>
+                                        <p className="preceptorCol4">{x.email}</p>
+                                    </div>
+                                    )})
+                                }
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -99,21 +113,18 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>Edit Information</div>
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
+                                {
+                                data.clinicPlacementDetail.map((x, ind) => {
+                                    return (
+                                    <div key={`placement_${ind}`} className="displayRow">
+                                        <p className="placementCol1">{x.title}</p>
+                                        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+                                            <p style={{paddingRight: '1rem'}}>Full Detail</p>
+                                            <IoIosArrowDown size={20} />
+                                        </div>
+                                    </div>
+                                    )})
+                                }
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -136,9 +147,6 @@ export default function Database({ data }) {
                                 <div className={styles.generalDetail} style={{height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0'}}>
                                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{border: 0}} allowfullscreen="" loading="lazy"></iframe>
                                 </div>
-                                <div className={styles.generalDetail}>
-                                    <p className={styles.editButton} style={{width: '12rem'}}>Show on Google Maps</p>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -150,7 +158,7 @@ export default function Database({ data }) {
                     .displayRow {
                         display: flex;
                         flex-direction: row;
-                        justify-content: space-between;
+                        justify-content: flex-start;
                         align-items: center;
                         background-color: #fff;
                         height: auto;
@@ -161,7 +169,43 @@ export default function Database({ data }) {
                         font-family: 'Lato', sans-serif;
                         font-weight: 500;
                         font-size: 1.2rem;
-                        cursor: pointer;
+                        padding: 0.4rem 0;
+                    }
+
+                    .adminCol1 {
+                        width: 50%;
+                    }
+
+                    .adminCol2 {
+                        width: 25%;
+                    }
+
+                    .adminCol3 {
+                        width: 25%;
+                    }
+
+                    .preceptorCol1 {
+                        width: 40%;
+                    }
+
+                    .preceptorCol2 {
+                        width: 10%
+                    }
+
+                    .preceptorCol3 {
+                        width: 25%;
+                    }
+
+                    .preceptorCol4 {
+                        width: 25%;
+                    }
+
+                    .placementCol1 {
+                        width: 80%;
+                    }
+
+                    .adminCol1, .preceptorCol1, .placementCol1 {
+                        padding-left: 2rem;
                     }
                     `
                 }

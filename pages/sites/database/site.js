@@ -27,12 +27,12 @@ export default function Database({ data }) {
                 <main className={styles.main}>
                     <Navbar icons={[false, true, false, false, false]} /> 
                     <div className={styles.content}>
-                        <Header header="Management Overview - Regions" date="Today: Febuary 2, 2022" imgSrc="" />
+                        <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="" />
                         <div className={styles.data}>
                             <div className={styles.row}>
                                 <p className='row1'>Site Name</p>
                                 <p className='row2'>Affiliation</p>
-                                <p className='row3'>Total number of sites</p>
+                                <p className='row3'>Total sites</p>
                             </div>
                             {data.map((x, ind) => {
                                 return (
@@ -45,9 +45,6 @@ export default function Database({ data }) {
                                     </Link>
                                 )
                             })}
-                            <div className='addRow'>
-                                    <p style={{marginLeft: '2.5rem', color: "#545454"}}>+ Add New Site</p>
-                            </div>
                         </div>
                     </div>
                 </main>
@@ -55,7 +52,7 @@ export default function Database({ data }) {
             <style jsx>
                 {
                     `
-                    .displayRow, .addRow {
+                    .displayRow {
                         display: flex;
                         flex-direction: row;
                         justify-content: space-between;
@@ -79,21 +76,16 @@ export default function Database({ data }) {
                         transition: linear 0.3s;
                     }
 
-                    .addRow {
-                        opacity: 0.75;
-                        border: 1px solid #CACACA;
-                    }
-
                     .row1 {
                         width: 50%;
                     }
 
                     .row2 {
-                        width: 25%;
+                        width: 30%;
                     }
 
                     .row3 {
-                        width: 25%;
+                        width: 20%;
                     }
                     `
                 }

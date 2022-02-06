@@ -53,7 +53,7 @@ export default function Clinics({ data }) {
                 }
                 
                 return(
-                  <Link href={`/sites/database/clinics/clinic`}>
+                  <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                       <div key={`clinic_${ind}`} className="displayRow">
                         <div className="rowContent">
                           <p className="row1" style={{marginLeft: '2rem'}}>{x['name']}</p>
@@ -117,22 +117,28 @@ export default function Clinics({ data }) {
                 width: 20%;
               }
 
-              .tag0 {
-                background-color: #FF8B8B;
+              .tag0, .tag1, .tag2, .tag3 {
                 height: 100%;
                 width: 3%;
                 border-start-end-radius: 1rem;
-                border-end-end-radius: 1rem 
+                border-end-end-radius: 1rem; 
+              }
+
+              .tag0 {
+                background-color: #FF8B8B;
               }
 
               .tag1 {
-                background-color: #FFD88B;
-                height: 100%;
-                width: 3%;
-                border-start-end-radius: 1rem;
-                border-end-end-radius: 1rem 
+                background-color: #FFB23E;
+              }
+              
+              .tag2 {
+                background-color: #3EDCFF;
               }
 
+              .tag3 {
+                background-color: #34E23B;
+              }
               `
           }
       </style>
