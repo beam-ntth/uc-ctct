@@ -30,17 +30,17 @@ export default function Database({ data }) {
                         <Header header="Management Overview - Regions" date="Today: Febuary 2, 2022" imgSrc="" />
                         <div className={styles.data}>
                             <div className={styles.row}>
-                                <p>Site Name</p>
-                                <p>Affiliation</p>
-                                <p>Total number of sites</p>
+                                <p className='row1'>Site Name</p>
+                                <p className='row2'>Affiliation</p>
+                                <p className='row3'>Total number of sites</p>
                             </div>
                             {data.map((x, ind) => {
                                 return (
                                     <Link href={`/sites/database/clinics?location=${x['id']}`}>
                                         <div key={`site_${ind}`} className='displayRow'>
-                                            <p style={{marginLeft: '2rem'}}>{x['name']}</p>
-                                            <p>{x['affiliation']}</p>
-                                            <p style={{marginRight: '5rem'}}>{x['num_clinics']}</p>
+                                            <p className='row1' style={{marginLeft: '2rem'}}>{x['name']}</p>
+                                            <p className='row2'>{x['affiliation']}</p>
+                                            <p className='row3' style={{paddingLeft: '3rem'}}>{x['num_clinics']}</p>
                                         </div>
                                     </Link>
                                 )
@@ -82,6 +82,18 @@ export default function Database({ data }) {
                     .addRow {
                         opacity: 0.75;
                         border: 1px solid #CACACA;
+                    }
+
+                    .row1 {
+                        width: 50%;
+                    }
+
+                    .row2 {
+                        width: 25%;
+                    }
+
+                    .row3 {
+                        width: 25%;
                     }
                     `
                 }

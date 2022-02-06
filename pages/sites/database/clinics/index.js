@@ -31,19 +31,37 @@ export default function Clinics({ data }) {
           <Header header="Management Overview - Clinics" date = "Today: February 2, 2022"/>
             <div className={styles.data}>
               <div className={styles.row}>
-                <p>Clinic Name</p>
-                <p>Last Updated</p>
-                <p>Status</p>
+                <p className="row1">Clinic Name</p>
+                <p className="row2">Last Updated</p>
+                <p className="row3" style={{paddingLeft: '1rem'}}>Status</p>
               </div>
               {
               data.map((x, ind) => {
+                let statusText = 'N/A'
+
+                if (x['status'] === 0) {
+                  statusText = 'Need To Contact'
+                }
+                if (x['status'] === 1) {
+                  statusText = 'Need To Follow Up'
+                }
+                if (x['status'] === 2) {
+                  statusText = 'Contacted'
+                }
+                if (x['status'] === 3) {
+                  statusText = 'Connected'
+                }
+                
                 return(
                   <Link href={`/sites/database/clinics/clinic`}>
-                    <div key={`clinic_${ind}`} className="displayRow">
-                      <p style={{marginLeft: '2rem'}}>{x['name']}</p>
-                      <p>{x['lastUpdated']}</p>
-                      <p style={{marginRight: '5rem'}}>{x['status']}</p>
-                    </div>
+                      <div key={`clinic_${ind}`} className="displayRow">
+                        <div className="rowContent">
+                          <p className="row1" style={{marginLeft: '2rem'}}>{x['name']}</p>
+                          <p className="row2" >{x['lastUpdated']}</p>
+                          <p className="row3">{statusText}</p>
+                        </div>
+                        <div className={`tag${x['status']}`}></div>
+                      </div>
                   </Link>
                 )
               })
@@ -55,7 +73,7 @@ export default function Clinics({ data }) {
       <style jsx>
           {
               `
-              .displayRow, .addRow {
+              .displayRow {
                   display: flex;
                   flex-direction: row;
                   justify-content: space-between;
@@ -79,9 +97,29 @@ export default function Clinics({ data }) {
                   transition: linear 0.3s;
               }
 
-              .addRow {
-                  opacity: 0.75;
-                  border: 1px solid #CACACA;
+              .rowContent {
+                display: flex;
+                  flex-direction: row;
+                  justify-content: space-between;
+                  align-items: center;
+              }
+
+              .row1 {
+                width: 50%;
+              }
+              
+              .row2 {
+                width: 25%;
+              }
+
+              .row3 {
+                width: 25%;
+              }
+
+              .tag0 {
+                background-color: #000;
+                height: 50px;
+                width: 5%;
               }
               `
           }

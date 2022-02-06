@@ -1,29 +1,25 @@
-import nextConnect from "next-connect";
-let handler = nextConnect();
-
-
-const clinic1Data = {
-  uid: 54,
-  name: 'Clinic 1',
-  lastUpdated: '2/5/2022',
-  status: 0
-}
-
-const clinic2Data = {
-  uid: 23,
-  name: 'Clinic 2',
-  lastUpdated: '2/7/2022',
-  status: 1
-}
-
-const clinic3Data = {
-  uid: 43,
-  name: 'Clinic 3',
-  lastUpdated: '2/7/2022',
-  status: 3
-}
-
-handler.get((req, res) => {
+export default handler = (req, res) => {
+  const clinic1Data = {
+    uid: 54,
+    name: 'Clinic 1',
+    lastUpdated: '2/5/2022',
+    status: 0
+  }
+  
+  const clinic2Data = {
+    uid: 23,
+    name: 'Clinic 2',
+    lastUpdated: '2/7/2022',
+    status: 1
+  }
+  
+  const clinic3Data = {
+    uid: 43,
+    name: 'Clinic 3',
+    lastUpdated: '2/7/2022',
+    status: 3
+  }
+  
   console.log(req.query)
   const region = req.query.site;
   if (region == 1) {
@@ -33,16 +29,12 @@ handler.get((req, res) => {
   } else if (region == 2) {
     res.json({ clinic1Data })
   }
-});
-
-export default handler;
-
-
+};
 
 // handler.get('/api/clinic/getClinic1', (req, res) => {
 //   const genInfo = {
 //     pOrg: 'UC Davis Site',
-//     initDate: '01/22/2022',
+//     initDate: '01/w22/2022',
 //     currentStatus: 'needToContact'
 //   }
 
