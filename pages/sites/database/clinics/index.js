@@ -78,9 +78,8 @@ export default function Clinics({ data }) {
                   flex-direction: row;
                   justify-content: space-between;
                   align-items: center;
-                  padding: 0.5rem;
                   background-color: #fff;
-                  height: auto;
+                  height: 4.2rem;
                   width: 90%;
                   margin: 0.4rem 0;
                   border-radius: 1rem;
@@ -99,9 +98,11 @@ export default function Clinics({ data }) {
 
               .rowContent {
                 display: flex;
-                  flex-direction: row;
-                  justify-content: space-between;
-                  align-items: center;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+                height: 100%;
               }
 
               .row1 {
@@ -113,14 +114,25 @@ export default function Clinics({ data }) {
               }
 
               .row3 {
-                width: 25%;
+                width: 20%;
               }
 
               .tag0 {
-                background-color: #000;
-                height: 50px;
-                width: 5%;
+                background-color: #FF8B8B;
+                height: 100%;
+                width: 3%;
+                border-start-end-radius: 1rem;
+                border-end-end-radius: 1rem 
               }
+
+              .tag1 {
+                background-color: #FFD88B;
+                height: 100%;
+                width: 3%;
+                border-start-end-radius: 1rem;
+                border-end-end-radius: 1rem 
+              }
+
               `
           }
       </style>
