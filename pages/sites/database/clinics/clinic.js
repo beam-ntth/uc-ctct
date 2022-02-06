@@ -23,8 +23,8 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>General Clinic Information</p>
-                                        <p>Last Updated: 26 January 2021</p>
+                                        <h2 className={styles.genTitle}>General Clinic Information</h2>
+                                        <p className={styles.subTitle}>Last Updated: 26 January 2021</p>
                                     </div>
                                     <div>Edit Information</div>
                                 </div>
