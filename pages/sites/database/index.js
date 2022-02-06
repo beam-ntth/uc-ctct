@@ -8,51 +8,51 @@ import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 
 export async function getServerSideProps() {
-    const res = await fetch(`http://localhost:3000/api/site/region`)
-    const data = await res.json()
-    return { props: { data } }
+  const res = await fetch(`http://localhost:3000/api/site/region`)
+  const data = await res.json()
+  return { props: { data } }
 }
 
 export default function Database({ data }) {
-    return (
-        <React.Fragment>
-            <div className={styles.container}>
-                <Head>
-                    <title>UC-CTCT: Site Management Systems</title>
-                    <meta name="description" content="University of California - Clinic Coordination Tools" />
-                    <link rel="icon" href="/favicon.ico" />
-                </Head>
-                <main className={styles.main}>
-                    <Navbar icons={[false, true, false, false, false]} /> 
-                    <div className={styles.content}>
-                        <Header header="Management Overview - All Regions" date="Today: Febuary 2, 2022" imgSrc="" />
-                        <div className={styles.data}>
-                            <div className={styles.row}>
-                                <p>Region Name</p>
-                                <p>Total number of sites</p>
-                            </div>
-                            {data.map((x, ind) => {
-                            return (
-                                <Link href={`/sites/database/site?location=${x['id']}`}>
-                                    <div className='displayRow' key={`elem_${ind}`}>
-                                        <p style={{marginLeft: '2rem'}}>{x['name']}</p>
-                                        <p style={{marginRight: '5rem'}}>{x['num_sites']}</p>
-                                    </div>
-                                </Link>)
-                            })}
-                            <div className='addRow'>
-                                    <p style={{marginLeft: '2.5rem', color: "#545454"}}>+ Add New Region</p>
-                            </div>
-                        </div>
+  return (
+    <React.Fragment>
+      <div className={styles.container}>
+        <Head>
+          <title>UC-CTCT: Site Management Systems</title>
+          <meta name="description" content="University of California - Clinic Coordination Tools" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main className={styles.main}>
+          <Navbar icons={[false, true, false, false, false]} />
+          <div className={styles.content}>
+            <Header header="Management Overview - All Regions" date="Today: Febuary 2, 2022" imgSrc="" />
+            <div className={styles.data}>
+              <div className={styles.row}>
+                <p>Region Name</p>
+                <p>Total number of sites</p>
+              </div>
+              {data.map((x, ind) => {
+                return (
+                  <Link href={`/sites/database/site?location=${x['id']}`}>
+                    <div className='displayRow' key={`elem_${ind}`}>
+                      <p style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                      <p style={{ marginRight: '5rem' }}>{x['num_sites']}</p>
                     </div>
-                </main>
+                  </Link>)
+              })}
+              <div className='addRow'>
+                <p style={{ marginLeft: '2.5rem', color: "#545454" }}>+ Add New Region</p>
+              </div>
             </div>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-            </style>
-            <style jsx>
-                {
-                    `
+          </div>
+        </main>
+      </div>
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+      </style>
+      <style jsx>
+        {
+          `
                     .displayRow, .addRow {
                         display: flex;
                         flex-direction: row;
@@ -82,8 +82,8 @@ export default function Database({ data }) {
                         border: 1px solid #CACACA;
                     }
                     `
-                }
-            </style>
-        </React.Fragment>
-    )
+        }
+      </style>
+    </React.Fragment>
+  )
 }

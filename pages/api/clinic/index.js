@@ -4,19 +4,19 @@ export default function handler(req, res) {
     lastUpdated: '01/21/2019',
     status: 0,
   }
-  
+
   const clinic2 = {
     name: 'Clinic 2',
     lastUpdated: '01/22/2019',
     status: 2,
   }
-  
+
   const clinic3 = {
     name: 'Clinic 4',
     lastUpdated: '01/23/2019',
     status: 1,
   }
-  
+
   const clinic4 = {
     name: 'Clinic 5',
     lastUpdated: '02/23/2019',
@@ -24,7 +24,7 @@ export default function handler(req, res) {
   }
 
   if (req.query.location == 'site1') {
-    res.status(200).json([clinic1, clinic3])
+    res.status(200).json([clinic1, clinic3, clinic4, clinic4])
     return;
   }
 
