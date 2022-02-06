@@ -23,10 +23,10 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>General Clinic Information</p>
-                                        <p>Last Updated: 26 January 2021</p>
+                                        <p className={styles.generalTitleHeader}>General Clinic Information</p>
+                                        <p className={styles.generalTitleSubHeader}>Last Updated: 26 January 2021</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>Edit Information</div>
                                 </div>
                                 <div className={styles.generalDetail}>
                                     <p style={{marginRight: '2rem'}}>Site:</p>
@@ -45,9 +45,9 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Administrative and Other Contact Information</p>
+                                        <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                                     </div>
-                                    <div>Edit Information</div>  
+                                    <div className={styles.editButton}>+ Add Information</div>  
                                 </div>
                                 <div className="displayRow">
                                     <p>Name</p>
@@ -70,9 +70,9 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Preceptors Information</p>
+                                        <p className={styles.generalTitleHeader}>Preceptors Information</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>+ Add Information</div>
                                 </div>
                                 <div className="displayRow">
                                     <p>Name</p>
@@ -95,9 +95,9 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Clinical Placement Details</p>
+                                        <p className={styles.generalTitleHeader}>Clinical Placement Details</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>Edit Information</div>
                                 </div>
                                 <div className="displayRow">
                                     <p>Name</p>
@@ -120,9 +120,9 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Clinical Notes</p>
+                                        <p className={styles.generalTitleHeader}>Clinical Notes</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>+ Add Notes</div>
                                 </div>
                             </div>
                         </div>
@@ -130,14 +130,14 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Map & Direction</p>
+                                        <p className={styles.generalTitleHeader}>Map & Direction</p>
                                     </div>
+                                </div>
+                                <div className={styles.generalDetail} style={{height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0'}}>
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{border: 0}} allowfullscreen="" loading="lazy"></iframe>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width="600" height="450" style={{border: 0}} allowfullscreen="" loading="lazy"></iframe>
-                                </div>
-                                <div className={styles.generalDetail}>
-                                    <p>Show on Google Maps</p>
+                                    <p className={styles.editButton} style={{width: '12rem'}}>Show on Google Maps</p>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +159,7 @@ export default function Database({ data }) {
                         border-radius: 1rem;
                         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
                         font-family: 'Lato', sans-serif;
-                        font-weight: 600;
+                        font-weight: 500;
                         font-size: 1.2rem;
                         cursor: pointer;
                     }
