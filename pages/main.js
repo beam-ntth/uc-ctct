@@ -48,7 +48,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]}/> 
         <div className={styles.content}>
-          <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="" />
+          <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <BarChart />

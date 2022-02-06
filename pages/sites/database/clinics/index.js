@@ -28,7 +28,7 @@ export default function Clinics({ data }) {
         <main className={styles.main}>
           <Navbar icons = {[false, true, false, false, false]} />
           <div className={styles.content}>
-          <Header header="Management Overview - Clinics" date = "Today: February 2, 2022"/>
+          <Header header="Management Overview - Clinics" date = "Today: February 2, 2022" imgSrc="/asset/images/user-image.png"/>
             <div className={styles.data}>
               <div className={styles.row}>
                 <p className="row1">Clinic Name</p>

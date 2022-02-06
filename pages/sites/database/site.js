@@ -27,7 +27,7 @@ export default function Database({ data }) {
                 <main className={styles.main}>
                     <Navbar icons={[false, true, false, false, false]} /> 
                     <div className={styles.content}>
-                        <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="" />
+                        <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
                         <div className={styles.data}>
                             <div className={styles.row}>
                                 <p className='row1'>Site Name</p>

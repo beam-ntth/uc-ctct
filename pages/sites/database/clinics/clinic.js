@@ -41,7 +41,7 @@ export default function Database({ data }) {
                 <main className={styles.main}>
                     <Navbar icons={[false, true, false, false, false]} /> 
                     <div className={styles.content}>
-                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="" />
+                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
                         <div className={styles.generalBox}>
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
@@ -72,16 +72,18 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>+ Add Information</div>  
                                 </div>
-                                {
-                                data.adminInfo.map((x, ind) => {
-                                    return (
-                                    <div key={`admin_${ind}`} className="displayRow">
-                                        <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
-                                        <p className="adminCol2">{x.phone}</p>
-                                        <p className="adminCol3">{x.email}</p>
-                                    </div>
-                                    )})
-                                }
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                    data.adminInfo.map((x, ind) => {
+                                        return (
+                                        <div key={`admin_${ind}`} className="displayRow">
+                                            <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
+                                            <p className="adminCol2">{x.phone}</p>
+                                            <p className="adminCol3">{x.email}</p>
+                                        </div>
+                                        )})
+                                    }
+                                </div>
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -92,17 +94,19 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>+ Add Information</div>
                                 </div>
-                                {
-                                data.preceptorInfo.map((x, ind) => {
-                                    return (
-                                    <div key={`preceptor_${ind}`} className="displayRow">
-                                        <p className="preceptorCol1">{x.name}</p>
-                                        <p className="preceptorCol2">{x.credential}</p>
-                                        <p className="preceptorCol3">{x.phone}</p>
-                                        <p className="preceptorCol4">{x.email}</p>
-                                    </div>
-                                    )})
-                                }
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                    data.preceptorInfo.map((x, ind) => {
+                                        return (
+                                        <div key={`preceptor_${ind}`} className="displayRow">
+                                            <p className="preceptorCol1">{x.name}</p>
+                                            <p className="preceptorCol2">{x.credential}</p>
+                                            <p className="preceptorCol3">{x.phone}</p>
+                                            <p className="preceptorCol4">{x.email}</p>
+                                        </div>
+                                        )})
+                                    }
+                                </div>
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -113,18 +117,20 @@ export default function Database({ data }) {
                                     </div>
                                     <div className={styles.editButton}>Edit Information</div>
                                 </div>
-                                {
-                                data.clinicPlacementDetail.map((x, ind) => {
-                                    return (
-                                    <div key={`placement_${ind}`} className="displayRow">
-                                        <p className="placementCol1">{x.title}</p>
-                                        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                                            <p style={{paddingRight: '1rem'}}>Full Detail</p>
-                                            <IoIosArrowDown size={20} />
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                    data.clinicPlacementDetail.map((x, ind) => {
+                                        return (
+                                        <div key={`placement_${ind}`} className="displayRow">
+                                            <p className="placementCol1">{x.title}</p>
+                                            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
+                                                <p style={{paddingRight: '1rem'}}>Full Detail</p>
+                                                <IoIosArrowDown size={20} />
+                                            </div>
                                         </div>
-                                    </div>
-                                    )})
-                                }
+                                        )})
+                                    }
+                                </div>
                             </div>
                         </div>
                         <div className={styles.generalBox}>
@@ -134,6 +140,9 @@ export default function Database({ data }) {
                                         <p className={styles.generalTitleHeader}>Clinical Notes</p>
                                     </div>
                                     <div className={styles.editButton}>+ Add Notes</div>
+                                </div>
+                                <div style={{marginTop: '2rem'}}>
+                                        
                                 </div>
                             </div>
                         </div>
