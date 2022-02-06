@@ -1,12 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
+import Accordion from "../../../../components/clinicPage/accordion";
 
-import { IoIosArrowDown } from 'react-icons/io'
+
 
 export async function getServerSideProps(context) {
     const clinicName = context.query.name
@@ -30,6 +31,28 @@ export default function Database({ data }) {
     if (data['status'] === 3) {
         statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem'}}>Connected</span>
     }
+
+    // const [accordion, setAccordion] = useState(false)
+
+    // function displayWithAcc (accordion, setAccordion, styles) {
+    //     return function (x, ind) {
+    //         return (
+    //             <div key={`placement_${ind}`} className={styles.noteContainer}>
+    //                 <div className={styles.noteTitle}>
+    //                     <p className={styles.placementCol1}>{x.title}</p>
+    //                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}} onClick={() => setAccordion(!accordion)}>
+    //                         <p style={{paddingRight: '1rem'}}>Full Detail</p>
+    //                         <IoIosArrowDown size={20} />
+    //                     </div>
+    //                 </div>
+    //                 <div className={styles.noteContent} style={accordion ? {} : {display: 'none'}}>
+    //                     {x.note}
+    //                 </div>
+    //             </div>
+    //         )
+    //     }
+    // } 
+
     return (
         <React.Fragment>
             <div className={styles.container}>
@@ -119,16 +142,25 @@ export default function Database({ data }) {
                                 </div>
                                 <div style={{marginTop: '2rem'}}>
                                     {
-                                    data.clinicPlacementDetail.map((x, ind) => {
-                                        return (
-                                        <div key={`placement_${ind}`} className="displayRow">
-                                            <p className="placementCol1">{x.title}</p>
-                                            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                                                <p style={{paddingRight: '1rem'}}>Full Detail</p>
-                                                <IoIosArrowDown size={20} />
-                                            </div>
-                                        </div>
-                                        )})
+                                       data.clinicPlacementDetail.map( (x, ind) => {
+                                           return (<Accordion x={x} ind={ind} />)
+                                       }
+                                       )
+                                    // data.clinicPlacementDetail.map((x, ind, accordion, setAccordion) => {
+                                    //     return (
+                                    //         <div key={`placement_${ind}`} className="noteContainer">
+                                    //             <div className="noteTitle">
+                                    //                 <p className="placementCol1">{x.title}</p>
+                                    //                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
+                                    //                     <p style={{paddingRight: '1rem'}}>Full Detail</p>
+                                    //                     <IoIosArrowDown size={20} onClick={() => setAccordion(!accordion)}/>
+                                    //                 </div>
+                                    //             </div>
+                                    //             <div className="noteContent" style={accordion ? {} : {display: 'none'}}>
+                                    //                 {x.note}
+                                    //             </div>
+                                    //         </div>
+                                    //     )})
                                     }
                                 </div>
                             </div>
@@ -184,36 +216,36 @@ export default function Database({ data }) {
                     .adminCol1 {
                         width: 50%;
                     }
-
+                    
                     .adminCol2 {
                         width: 25%;
                     }
-
+                    
                     .adminCol3 {
                         width: 25%;
                     }
-
+                    
                     .preceptorCol1 {
                         width: 40%;
                     }
-
+                    
                     .preceptorCol2 {
                         width: 10%
                     }
-
+                    
                     .preceptorCol3 {
                         width: 25%;
                     }
-
+                    
                     .preceptorCol4 {
                         width: 25%;
                     }
-
+                    
                     .placementCol1 {
                         width: 80%;
                     }
-
-                    .adminCol1, .preceptorCol1, .placementCol1 {
+                    
+                    .adminCol1, .preceptorCol1 {
                         padding-left: 2rem;
                     }
                     `
