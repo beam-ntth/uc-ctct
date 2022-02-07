@@ -26,122 +26,50 @@ export default function Clinics({ data }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-          <Navbar icons = {[false, true, false, false, false]} />
+          <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-          <Header header="Management Overview - Clinics" date = "Today: February 2, 2022" imgSrc="/asset/images/user-image.png"/>
+            <Header header="Management Overview - Clinics" date="Today: February 2, 2022" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className="row1">Clinic Name</p>
-                <p className="row2">Last Updated</p>
-                <p className="row3" style={{paddingLeft: '1rem'}}>Status</p>
+                <p className="row1Clinics">Clinic Name</p>
+                <p className="row2Clinics" style={{ marginLeft: '-7rem' }}>Last Updated</p>
+                <p className="row3Clinics" style={{ paddingLeft: '1rem' }}>Status</p>
               </div>
               {
-              data.map((x, ind) => {
-                let statusText = 'N/A'
+                data.map((x, ind) => {
+                  let statusText = 'N/A'
 
-                if (x['status'] === 0) {
-                  statusText = 'Need To Contact'
-                }
-                if (x['status'] === 1) {
-                  statusText = 'Need To Follow Up'
-                }
-                if (x['status'] === 2) {
-                  statusText = 'Contacted'
-                }
-                if (x['status'] === 3) {
-                  statusText = 'Connected'
-                }
-                
-                return(
-                  <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
+                  if (x['status'] === 0) {
+                    statusText = 'Need To Contact'
+                  }
+                  if (x['status'] === 1) {
+                    statusText = 'Need To Follow Up'
+                  }
+                  if (x['status'] === 2) {
+                    statusText = 'Contacted'
+                  }
+                  if (x['status'] === 3) {
+                    statusText = 'Connected'
+                  }
+
+                  return (
+                    <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                       <div key={`clinic_${ind}`} className="displayRow">
-                        <div className="rowContent">
-                          <p className="row1" style={{marginLeft: '2rem'}}>{x['name']}</p>
-                          <p className="row2" >{x['lastUpdated']}</p>
-                          <p className="row3">{statusText}</p>
+                        <div className="rowContentClinics">
+                          <p className="row1Clinics" style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                          <p className="row2Clinics" >{x['lastUpdated']}</p>
+                          <p className="row3Clinics">{statusText}</p>
                         </div>
                         <div className={`tag${x['status']}`}></div>
                       </div>
-                  </Link>
-                )
-              })
+                    </Link>
+                  )
+                })
               }
             </div>
           </div>
         </main>
       </div>
-      <style jsx>
-          {
-              `
-              .displayRow {
-                  display: flex;
-                  flex-direction: row;
-                  justify-content: space-between;
-                  align-items: center;
-                  background-color: #fff;
-                  height: 4.2rem;
-                  width: 90%;
-                  margin: 0.4rem 0;
-                  border-radius: 1rem;
-                  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-                  font-family: 'Lato', sans-serif;
-                  font-weight: 600;
-                  font-size: 1.2rem;
-                  cursor: pointer;
-              }
-
-              .displayRow:hover {
-                  color: #079CDB;
-                  width: 91%;
-                  transition: linear 0.3s;
-              }
-
-              .rowContent {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                width: 100%;
-                height: 100%;
-              }
-
-              .row1 {
-                width: 50%;
-              }
-              
-              .row2 {
-                width: 25%;
-              }
-
-              .row3 {
-                width: 20%;
-              }
-
-              .tag0, .tag1, .tag2, .tag3 {
-                height: 100%;
-                width: 3%;
-                border-start-end-radius: 1rem;
-                border-end-end-radius: 1rem; 
-              }
-
-              .tag0 {
-                background-color: #FF8B8B;
-              }
-
-              .tag1 {
-                background-color: #FFB23E;
-              }
-              
-              .tag2 {
-                background-color: #3EDCFF;
-              }
-
-              .tag3 {
-                background-color: #34E23B;
-              }
-              `
-          }
-      </style>
     </React.Fragment>
   );
 }

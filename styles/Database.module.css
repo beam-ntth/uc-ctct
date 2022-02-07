@@ -33,12 +33,17 @@
     justify-content: space-between;
     align-items: center;
     /* margin: 4rem 2rem 1rem 2rem; */
-    margin: 2rem 2rem 0 2rem;
+    /* margin: 2rem 2rem 0 2rem; */
+    /* margin-left: 2.5rem; */
     height: 10%;
-    width: 85%;
+    width: 90%;
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
+}
+
+.row > p {
+  padding-left: 2.5rem;
 }
 
 .data {
@@ -49,10 +54,15 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    
     /* height: 550px; */
     width: auto;
     margin-bottom: 3rem;
     padding-bottom: 4rem;
     /* padding: 1rem; */
 }
+
+/* .data > p {
+  margin-left: 2.5rem;
+} */
 

@@ -45,36 +45,6 @@ export default function Database({ data }) {
         </main>
       </div>
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
-      </style>
-      <style jsx>
-        {
-          `
-            .displayRow, .addRow {
-                display: flex;
-                flex-direction: row;
-                justify-content: space-between;
-                align-items: center;
-                padding: 0.5rem;
-                background-color: #fff;
-                height: auto;
-                width: 90%;
-                margin: 0.4rem 0;
-                border-radius: 1rem;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-                font-family: 'Lato', sans-serif;
-                font-weight: 600;
-                font-size: 1.2rem;
-                cursor: pointer;
-            }
-
-            .displayRow:hover {
-                color: #079CDB;
-                width: 91%;
-                transition: linear 0.3s;
-            }
-          `
-        }
       </style>
     </React.Fragment>
   )
