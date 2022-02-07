@@ -1,12 +1,58 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
+import Accordion from "../../../../components/clinicPage/accordion";
+
+
+
+export async function getServerSideProps(context) {
+    const clinicName = context.query.name
+    const res = await fetch(`http://localhost:3000/api/clinic/detail?name=${clinicName}`)
+    const data = await res.json()
+    return { props: { data } }
+}
 
 export default function Database({ data }) {
+    let statusText = 'N/A'
+
+    if (data['status'] === 0) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FF3E3E', color: '#fff', borderRadius: '0.5rem'}}>Need To Contact</span>
+    }
+    if (data['status'] === 1) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FFB23E', color: '#fff', borderRadius: '0.5rem'}}>Need To Follow Up</span>
+    }
+    if (data['status'] === 2) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#3EDCFF', color: '#fff', borderRadius: '0.5rem'}}>Contacted</span>
+    }
+    if (data['status'] === 3) {
+        statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem'}}>Connected</span>
+    }
+
+    // const [accordion, setAccordion] = useState(false)
+
+    // function displayWithAcc (accordion, setAccordion, styles) {
+    //     return function (x, ind) {
+    //         return (
+    //             <div key={`placement_${ind}`} className={styles.noteContainer}>
+    //                 <div className={styles.noteTitle}>
+    //                     <p className={styles.placementCol1}>{x.title}</p>
+    //                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}} onClick={() => setAccordion(!accordion)}>
+    //                         <p style={{paddingRight: '1rem'}}>Full Detail</p>
+    //                         <IoIosArrowDown size={20} />
+    //                     </div>
+    //                 </div>
+    //                 <div className={styles.noteContent} style={accordion ? {} : {display: 'none'}}>
+    //                     {x.note}
+    //                 </div>
+    //             </div>
+    //         )
+    //     }
+    // } 
+
     return (
         <React.Fragment>
             <div className={styles.container}>
@@ -18,26 +64,26 @@ export default function Database({ data }) {
                 <main className={styles.main}>
                     <Navbar icons={[false, true, false, false, false]} /> 
                     <div className={styles.content}>
-                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="" />
+                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
                         <div className={styles.generalBox}>
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <h2 className={styles.genTitle}>General Clinic Information</h2>
-                                        <p className={styles.subTitle}>Last Updated: 26 January 2021</p>
+                                        <p className={styles.generalTitleHeader}>General Clinic Information</p>
+                                        <p className={styles.generalTitleSubHeader}>Last Updated: 26 January 2021</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>Edit Information</div>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p style={{marginRight: '2rem'}}>Site:</p>
-                                    <p>Phone Number:</p>
+                                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.site}</p>
+                                    <p><strong>Phone Number:</strong> {data.phoneNumber}</p>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p style={{marginRight: '2rem'}}>Address:</p>
-                                    <p>Fax Number:</p>
+                                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.addressLine1}, ${data.addressLine2 ? `${data.addressLine2}, ` : ''}${data.city}, ${data.state}, ${data.postal}`}</p>
+                                    <p><strong>Fax Number:</strong> {data.faxNumber}</p>
                                 </div>
                                 <div className={styles.generalDetail}>
-                                    <p>Current Status:</p>
+                                    <p><strong>Current Status:</strong> {statusText}</p>
                                 </div>
                             </div>
                         </div>
@@ -45,24 +91,21 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Administrative and Other Contact Information</p>
+                                        <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                                     </div>
-                                    <div>Edit Information</div>  
+                                    <div className={styles.editButton}>+ Add Information</div>  
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                    data.adminInfo.map((x, ind) => {
+                                        return (
+                                        <div key={`admin_${ind}`} className="displayRow">
+                                            <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
+                                            <p className="adminCol2">{x.phone}</p>
+                                            <p className="adminCol3">{x.email}</p>
+                                        </div>
+                                        )})
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -70,24 +113,22 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Preceptors Information</p>
+                                        <p className={styles.generalTitleHeader}>Preceptors Information</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>+ Add Information</div>
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                    data.preceptorInfo.map((x, ind) => {
+                                        return (
+                                        <div key={`preceptor_${ind}`} className="displayRow">
+                                            <p className="preceptorCol1">{x.name}</p>
+                                            <p className="preceptorCol2">{x.credential}</p>
+                                            <p className="preceptorCol3">{x.phone}</p>
+                                            <p className="preceptorCol4">{x.email}</p>
+                                        </div>
+                                        )})
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -95,24 +136,32 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Clinical Placement Details</p>
+                                        <p className={styles.generalTitleHeader}>Clinical Placement Details</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>Edit Information</div>
                                 </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
-                                </div>
-                                <div className="displayRow">
-                                    <p>Name</p>
-                                    <p>Phone</p>
-                                    <p>Email</p>
+                                <div style={{marginTop: '2rem'}}>
+                                    {
+                                       data.clinicPlacementDetail.map( (x, ind) => {
+                                           return (<Accordion x={x} ind={ind} />)
+                                       }
+                                       )
+                                    // data.clinicPlacementDetail.map((x, ind, accordion, setAccordion) => {
+                                    //     return (
+                                    //         <div key={`placement_${ind}`} className="noteContainer">
+                                    //             <div className="noteTitle">
+                                    //                 <p className="placementCol1">{x.title}</p>
+                                    //                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
+                                    //                     <p style={{paddingRight: '1rem'}}>Full Detail</p>
+                                    //                     <IoIosArrowDown size={20} onClick={() => setAccordion(!accordion)}/>
+                                    //                 </div>
+                                    //             </div>
+                                    //             <div className="noteContent" style={accordion ? {} : {display: 'none'}}>
+                                    //                 {x.note}
+                                    //             </div>
+                                    //         </div>
+                                    //     )})
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -120,24 +169,24 @@ export default function Database({ data }) {
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Clinical Notes</p>
+                                        <p className={styles.generalTitleHeader}>Clinical Notes</p>
                                     </div>
-                                    <div>Edit Information</div>
+                                    <div className={styles.editButton}>+ Add Notes</div>
+                                </div>
+                                <div style={{marginTop: '2rem'}}>
+                                        
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.generalBox}>
+                        <div className={styles.generalBox} style={{marginBottom: '3rem'}}>
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>
-                                        <p>Map & Direction</p>
+                                        <p className={styles.generalTitleHeader}>Map & Direction</p>
                                     </div>
                                 </div>
-                                <div className={styles.generalDetail}>
-                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width="600" height="450" style={{border: 0}} allowfullscreen="" loading="lazy"></iframe>
-                                </div>
-                                <div className={styles.generalDetail}>
-                                    <p>Show on Google Maps</p>
+                                <div className={styles.generalDetail} style={{height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0'}}>
+                                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{border: 0}} allowfullscreen="" loading="lazy"></iframe>
                                 </div>
                             </div>
                         </div>
@@ -150,7 +199,7 @@ export default function Database({ data }) {
                     .displayRow {
                         display: flex;
                         flex-direction: row;
-                        justify-content: space-between;
+                        justify-content: flex-start;
                         align-items: center;
                         background-color: #fff;
                         height: auto;
@@ -159,9 +208,45 @@ export default function Database({ data }) {
                         border-radius: 1rem;
                         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
                         font-family: 'Lato', sans-serif;
-                        font-weight: 600;
+                        font-weight: 500;
                         font-size: 1.2rem;
-                        cursor: pointer;
+                        padding: 0.4rem 0;
+                    }
+
+                    .adminCol1 {
+                        width: 50%;
+                    }
+                    
+                    .adminCol2 {
+                        width: 25%;
+                    }
+                    
+                    .adminCol3 {
+                        width: 25%;
+                    }
+                    
+                    .preceptorCol1 {
+                        width: 40%;
+                    }
+                    
+                    .preceptorCol2 {
+                        width: 10%
+                    }
+                    
+                    .preceptorCol3 {
+                        width: 25%;
+                    }
+                    
+                    .preceptorCol4 {
+                        width: 25%;
+                    }
+                    
+                    .placementCol1 {
+                        width: 80%;
+                    }
+                    
+                    .adminCol1, .preceptorCol1 {
+                        padding-left: 2rem;
                     }
                     `
                 }

@@ -14,9 +14,11 @@ export default function Navbar(props) {
         <React.Fragment>
             <div className={styles.navbar}>
                 {/* Logo Side */}
-                <div className={styles.logo}>
-                    <img src="/asset/images/uc-seal-blue.png" alt="UC Seal" style={{height: 'auto', width: '80%'}}/>
-                </div>
+                <Link href="/main">
+                    <div className={styles.logo}>
+                        <img src="/asset/images/uc-seal-blue.png" alt="UC Seal" style={{height: 'auto', width: '80%'}}/>
+                    </div>
+                </Link>
                 <Link href="/main">
                     <div className={styles.dashboard}>
                         <MdHomeFilled size={icons[0] ? 40 : 30} color={icons[0] ? '#079CDB' : '#E0E0E0'} />

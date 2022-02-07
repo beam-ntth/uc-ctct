@@ -1,4 +1,5 @@
-import {Pie, Doughnut} from 'react-chartjs-2';
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
 
 const state = {
   labels: ['Active', 'Pending', 'Cold Called',
@@ -27,22 +28,20 @@ const state = {
 
 export default function PieChart() {
     return (
-      <div>
+      <React.Fragment>
         <Doughnut
-          data={state}
-          width={"30%"}
-          options={{ maintainAspectRatio: false,
-            title:{
-              display:true,
-              text:'Clinic Status',
-              fontSize:20
-            },
-            legend:{
-              display:true,
-              position:'right'
+          data={state} options={{
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: true,
+                position: 'left',
+              }
             }
+            
           }}
         />
-      </div>
+      </React.Fragment>
     );
 }

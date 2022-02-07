@@ -48,13 +48,23 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]}/> 
         <div className={styles.content}>
-          <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="" />
+          <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
-              <BarChart />
+              <div className={styles.chartTitle}>
+                <p>Chart 1: Detail</p>
+              </div>
+              <div style={{height: '90%', width: 'auto'}}>
+                <BarChart />
+              </div>
             </div>
             <div className={styles.chart}>
-              <PieChart />
+              <div className={styles.chartTitle}>
+                <p>Chart 2: Detail</p>
+              </div>
+              <div style={{height: '90%', width: 'auto'}}>
+                <PieChart />
+              </div>
             </div>
           </div>
           <div className={styles.activities}>

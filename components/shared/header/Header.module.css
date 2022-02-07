@@ -29,7 +29,14 @@
 }
 
 .headerImg {
+    height: 100%;
+    width: auto;
     margin: 0 5rem;
+}
+
+.headerImg img {
+    height: 80%;
+    width: auto;
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
