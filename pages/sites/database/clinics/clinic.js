@@ -178,7 +178,7 @@ export default function Database({ data }) {
                                 </div>
                             </div>
                         </div>
-                        <div className={styles.generalBox}>
+                        <div className={styles.generalBox} style={{marginBottom: '3rem'}}>
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
                                     <div>

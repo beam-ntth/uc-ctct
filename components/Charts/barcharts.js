@@ -1,3 +1,4 @@
+import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
 const state = {
@@ -16,21 +17,20 @@ const state = {
 
 export default function BarChart() {
     return (
-      <div>
-        <Bar
-          data={state}
-          options={{
-            title:{
-              display:true,
-              text:'Average Rainfall per month',
-              fontSize:20
-            },
-            legend:{
-              display:true,
-              position:'right'
-            }
-          }}
+      <React.Fragment>
+        <Bar data={state} options={{
+          responsive: true,
+          maintainAspectRatio: false,
+          title:{
+            display:true,
+            text:'Average Rainfall per month',
+          },
+          legend:{
+            display:true,
+            position:'right'
+          }
+        }}
         />
-      </div>
+      </React.Fragment>
     );
 }
