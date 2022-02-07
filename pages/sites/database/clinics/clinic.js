@@ -1,13 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
-
-
+import { useRouter } from "next/router";
+import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
+import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
+import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
+import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
+import NoteEdit from "../../../../components/clinicPage/noteEdit";
 
 export async function getServerSideProps(context) {
     const clinicName = context.query.name
@@ -17,6 +21,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Database({ data }) {
+    const router = useRouter()
+
     let statusText = 'N/A'
 
     if (data['status'] === 0) {
@@ -32,39 +38,29 @@ export default function Database({ data }) {
         statusText = <span style={{padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem'}}>Connected</span>
     }
 
-    // const [accordion, setAccordion] = useState(false)
-
-    // function displayWithAcc (accordion, setAccordion, styles) {
-    //     return function (x, ind) {
-    //         return (
-    //             <div key={`placement_${ind}`} className={styles.noteContainer}>
-    //                 <div className={styles.noteTitle}>
-    //                     <p className={styles.placementCol1}>{x.title}</p>
-    //                     <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}} onClick={() => setAccordion(!accordion)}>
-    //                         <p style={{paddingRight: '1rem'}}>Full Detail</p>
-    //                         <IoIosArrowDown size={20} />
-    //                     </div>
-    //                 </div>
-    //                 <div className={styles.noteContent} style={accordion ? {} : {display: 'none'}}>
-    //                     {x.note}
-    //                 </div>
-    //             </div>
-    //         )
-    //     }
-    // } 
+    const [generalOpen, setGeneralOpen] = useState(false);
+    const [adminOpen, setAdminOpen] = useState(false);
+    const [preceptorOpen, setPreceptorOpen] = useState(false);
+    const [placementOpen, setPlacementOpen] = useState(false);
+    const [noteOpen, setNoteOpen] = useState(false);
 
     return (
         <React.Fragment>
+            {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} /> : null}
+            {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} /> : null}
+            {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} /> : null}
+            {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} /> : null}
+            {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} /> : null}
             <div className={styles.container}>
                 <Head>
                     <title>UC-CTCT: Site Management Systems</title>
                     <meta name="description" content="University of California - Clinic Coordination Tools" />
-                    <link rel="icon" href="/favicon.ico" />
+                    <link rel="icon" href="/favicon.ico" />e
                 </Head>
                 <main className={styles.main}>
                     <Navbar icons={[false, true, false, false, false]} /> 
                     <div className={styles.content}>
-                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+                        <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
                         <div className={styles.generalBox}>
                             <div className={styles.generalContent}>
                                 <div className={styles.generalTitle}>
@@ -72,7 +68,7 @@ export default function Database({ data }) {
                                         <p className={styles.generalTitleHeader}>General Clinic Information</p>
                                         <p className={styles.generalTitleSubHeader}>Last Updated: 26 January 2021</p>
                                     </div>
-                                    <div className={styles.editButton}>Edit Information</div>
+                                    <div className={styles.editButton} onClick={() => setGeneralOpen(true)}>Edit Information</div>
                                 </div>
                                 <div className={styles.generalDetail}>
                                     <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.site}</p>
@@ -93,7 +89,7 @@ export default function Database({ data }) {
                                     <div>
                                         <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                                     </div>
-                                    <div className={styles.editButton}>+ Add Information</div>  
+                                    <div className={styles.editButton} onClick={() => setAdminOpen(true)}>+ Add Information</div>  
                                 </div>
                                 <div style={{marginTop: '2rem'}}>
                                     {
@@ -115,7 +111,7 @@ export default function Database({ data }) {
                                     <div>
                                         <p className={styles.generalTitleHeader}>Preceptors Information</p>
                                     </div>
-                                    <div className={styles.editButton}>+ Add Information</div>
+                                    <div className={styles.editButton} onClick={() => setPreceptorOpen(true)}>+ Add Information</div>
                                 </div>
                                 <div style={{marginTop: '2rem'}}>
                                     {
@@ -138,7 +134,7 @@ export default function Database({ data }) {
                                     <div>
                                         <p className={styles.generalTitleHeader}>Clinical Placement Details</p>
                                     </div>
-                                    <div className={styles.editButton}>Edit Information</div>
+                                    <div className={styles.editButton} onClick={() => setPlacementOpen(true)}>Edit Information</div>
                                 </div>
                                 <div style={{marginTop: '2rem'}}>
                                     {
@@ -146,21 +142,6 @@ export default function Database({ data }) {
                                            return (<Accordion x={x} ind={ind} />)
                                        }
                                        )
-                                    // data.clinicPlacementDetail.map((x, ind, accordion, setAccordion) => {
-                                    //     return (
-                                    //         <div key={`placement_${ind}`} className="noteContainer">
-                                    //             <div className="noteTitle">
-                                    //                 <p className="placementCol1">{x.title}</p>
-                                    //                 <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', cursor: 'pointer'}}>
-                                    //                     <p style={{paddingRight: '1rem'}}>Full Detail</p>
-                                    //                     <IoIosArrowDown size={20} onClick={() => setAccordion(!accordion)}/>
-                                    //                 </div>
-                                    //             </div>
-                                    //             <div className="noteContent" style={accordion ? {} : {display: 'none'}}>
-                                    //                 {x.note}
-                                    //             </div>
-                                    //         </div>
-                                    //     )})
                                     }
                                 </div>
                             </div>
@@ -171,7 +152,7 @@ export default function Database({ data }) {
                                     <div>
                                         <p className={styles.generalTitleHeader}>Clinical Notes</p>
                                     </div>
-                                    <div className={styles.editButton}>+ Add Notes</div>
+                                    <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
                                 </div>
                                 <div style={{marginTop: '2rem'}}>
                                         

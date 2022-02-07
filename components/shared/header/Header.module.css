@@ -3,13 +3,10 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     margin-top: 5rem;
-}
-
-.headerText {
-    margin: 0 0 0 7rem;
+    padding-left: 7rem;
 }
 
 .headerName {

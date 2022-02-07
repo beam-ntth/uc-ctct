@@ -83,6 +83,7 @@
     border: solid 2px #1AACFE;
     border-radius: 0.5rem;
     cursor: pointer;
+    z-index: 100;
 }
 
 .editButton:hover {

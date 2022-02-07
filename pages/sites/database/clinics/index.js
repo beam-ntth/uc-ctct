@@ -5,6 +5,7 @@ import React, { useEffect } from "react";
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Database.module.css";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const query = context.query
@@ -14,6 +15,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Clinics({ data }) {
+  const router = useRouter()
+
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -28,12 +31,12 @@ export default function Clinics({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - Clinics" date="Today: February 2, 2022" imgSrc="/asset/images/user-image.png" />
+            <Header header="Management Overview - Clinics" date="Today: February 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className="row1Clinics">Clinic Name</p>
-                <p className="row2Clinics" style={{ marginLeft: '-7rem' }}>Last Updated</p>
-                <p className="row3Clinics" style={{ paddingLeft: '1rem' }}>Status</p>
+                <p className="row1Clinics" style={{marginLeft: '2rem'}}>Clinic Name</p>
+                <p className="row2Clinics">Last Updated</p>
+                <p className="row3Clinics">Status</p>
               </div>
               {
                 data.map((x, ind) => {
