@@ -30,7 +30,7 @@
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
     /* margin: 4rem 2rem 1rem 2rem; */
     /* margin: 2rem 2rem 0 2rem; */
@@ -42,9 +42,9 @@
     font-size: 1.5rem;
 }
 
-.row > p {
+/* .row > p {
   padding-left: 2.5rem;
-}
+} */
 
 .data {
     background-color: #F5F6FA;

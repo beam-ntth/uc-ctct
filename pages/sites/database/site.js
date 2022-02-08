@@ -16,6 +16,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Database({ data }) {
+  const router = useRouter()
+
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -27,16 +29,16 @@ export default function Database({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+            <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className='row1Sites'>Site Name</p>
-                <p className='row2Sites' style={{ marginLeft: '-3rem' }}>Affiliation</p>
+                <p className='row1Sites' style={{marginLeft: '2rem'}}>Site Name</p>
+                <p className='row2Sites'>Affiliation</p>
                 <p className='row3Sites'>Total sites</p>
               </div>
               {data.map((x, ind) => {
                 return (
-                  <Link href={`/sites/database/clinics?location=${x['id']}`}>
+                  <Link href={`/sites/database/clinics?location=${x.id}`}>
                     <div key={`site_${ind}`} className='displayRow'>
                       <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
                       <p className='row2Sites'>{x['affiliation']}</p>
