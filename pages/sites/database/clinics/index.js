@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
   const query = context.query
-  const res = await fetch(`http://localhost:3000/api/clinic?location=${query['location']}`)
+  const res = await fetch(`${process.env.LOCAL_URL}api/clinic?location=${query['location']}`)
   const data = await res.json()
   return { props: { data } }
 }

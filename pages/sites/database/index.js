@@ -9,7 +9,7 @@ import Header from '../../../components/shared/header/header';
 import { useRouter } from 'next/router';
 
 export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:3000/api/site/region`)
+  const res = await fetch(`${process.env.LOCAL_URL}api/site/region`)
   const data = await res.json()
   return { props: { data } }
 }

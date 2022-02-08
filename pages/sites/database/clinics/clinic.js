@@ -16,7 +16,7 @@ import NoteEdit from "../../../../components/clinicPage/noteEdit";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const res = await fetch(`http://localhost:3000/api/clinic/detail?name=${clinicName}`)
+  const res = await fetch(`${process.env.LOCAL_URL}api/clinic/detail?name=${clinicName}`)
   const status = res.ok;
   // console.log(res.status)
   const errorCode = status ? false : res.status;
