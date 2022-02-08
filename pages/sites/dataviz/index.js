@@ -3,8 +3,11 @@ import styles from '../../../styles/Visualization.module.css'
 import Link from 'next/link'
 
 import React, { useEffect } from "react";
+import Chart from 'chart.js/auto'
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
+import PieChart from '../../../components/Charts/piechart';
+import BarChart from '../../../components/Charts/barcharts';
 
 // export async function getServerSideProps() {
 //     const res = await fetch(`http://localhost:3000/api/dataviz/visualization`)
@@ -34,7 +37,7 @@ export default function Visualization({ data }) {
                 <p className='col5DV'>Status</p>
               </div>
               {/* { */}
-                {/* // data.map((x, ind) => {
+              {/* // data.map((x, ind) => {
                   // let statusText = 'N/A'
 
                   // if (x['status'] === 0) {
@@ -50,23 +53,41 @@ export default function Visualization({ data }) {
                   //   statusText = 'Connected'
                   // } */}
 
-                  {/* return ( */}
-                    {/* <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}> */}
-                      <div className="displayRow">
-                        <div className="rowContentClinics">
-                          <p className="col1DV" style={{ marginLeft: '2rem' }}>{'Clinic 1'}</p>
-                          <p className="col2DV" >{'FNP'}</p>
-                          <p className="col3DV">{'UCSF'}</p>
-                          <p className="col4DV">{'Southern'}</p>
-                          <p className="col5DV">{'Status'}</p>
-                        </div>
-                        {/* <div className={`tag${x['status']}`}></div> */}
-                      </div>
-                    {/* </Link> */}
-                  {/* ) */}
-                {/* }) */}
+              {/* return ( */}
+              {/* <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}> */}
+              <div className="displayRow">
+                <div className="rowContentClinics">
+                  <p className="col1DV" style={{ marginLeft: '2rem' }}>{'Clinic 1'}</p>
+                  <p className="col2DV" >{'FNP'}</p>
+                  <p className="col3DV">{'UCSF'}</p>
+                  <p className="col4DV">{'Southern'}</p>
+                  <p className="col5DV"style={{ marginRight: '2rem' }}>{'Status'}</p>
+                </div>
+                {/* <div className={`tag${x['status']}`}></div> */}
+              </div>
+              {/* </Link> */}
+              {/* ) */}
+              {/* }) */}
               {/* } */}
             </div>
+            <div className={styles.mainCharts}>
+                <div className={styles.chart}>
+                  <div className={styles.chartTitle}>
+                    <p>Clinic Regions</p>
+                  </div>
+                  <div style={{ height: '90%', width: 'auto' }}>
+                    <PieChart />
+                  </div>
+                </div>
+                <div className={styles.chart}>
+                  <div className={styles.chartTitle}>
+                    <p>Training Types</p>
+                  </div>
+                  <div style={{ height: '90%', width: 'auto' }}>
+                    <PieChart />
+                  </div>
+                </div>
+              </div>
           </div>
         </main>
       </div>
