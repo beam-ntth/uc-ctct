@@ -8,7 +8,8 @@
 //         affiliation: 'UCSF',
 //         region: 'Coastal',
 //         status: 'Cold Called'
-//       }]
+//       }]);
+//       return;
 
 //     // clinic name, training type, affiliation, region, status
 
