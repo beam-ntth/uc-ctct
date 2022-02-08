@@ -1,4 +1,4 @@
-export default function handler (req, res) {
+export default function handler(req, res) {
   console.log(req.query)
   const clinicName = req.query.name;
   if (clinicName === 'clinic1') {
@@ -73,7 +73,7 @@ export default function handler (req, res) {
     )
     return
   }
-  res.status(400).json("400: Bed Request")
+  res.status(400).json({ name: 'Bad Request' });
 };
 
 // handler.get('/api/clinic/getClinic1', (req, res) => {
