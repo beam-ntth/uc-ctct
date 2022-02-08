@@ -1,12 +1,21 @@
-import Head from 'next/head'
-import styles from '../../styles/Sites.module.css'
-import Link from 'next/link'
+import Head from "next/head";
+import Link from "next/link";
 
-import Navbar from '../../components/shared/navbar/navbar';
-import Header from '../../components/shared/header/header';
-import { FaChartPie, FaDatabase } from 'react-icons/fa';
+import React from "react";
+//import Navbar from "../../../../components/shared/navbar/navbar";
+// import Header from "../../../../components/shared/header/header";
+// import styles from "../../../../styles/Visualization.module.css";
+import styles from '../../styles/Database.module.css'
 
-export default function Sites() {
+
+// export async function getServerSideProps() {
+//     const res = await fetch(`http://localhost:3000/api/dataviz`)
+//     const data = await res.json()
+//     return { props: { data } }
+//   }
+
+
+export default function Visualization() {
     return (
         <div className={styles.container}>
             <Head>
@@ -17,10 +26,10 @@ export default function Sites() {
             <main className={styles.main}>
                 <Navbar icons={[false, true, false, false, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Site Management Tools" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+                    <Header header="Data Visualization" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
                     <div className={styles.menu}>
                         {/* <Link href="/sites/visual"> */}
-                        <Link href="/sites/dataviz">
+                          <Link href="/sites/dataviz">
                             <div className={styles.menuOption}>
                                 <FaChartPie size={100} color='#079CDB' />
                                 <h1>Manage Data Visualization</h1>
