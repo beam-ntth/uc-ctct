@@ -29,7 +29,7 @@ export default function Database({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - Sites" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Management Overview - Northern Region" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
                 <p className='row1Sites' style={{marginLeft: '2rem'}}>Site Name</p>
@@ -40,9 +40,12 @@ export default function Database({ data }) {
                 return (
                   <Link href={`/sites/database/clinics?location=${x.id}`}>
                     <div key={`site_${ind}`} className='displayRow'>
-                      <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                      <p className='row2Sites'>{x['affiliation']}</p>
-                      <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['num_clinics']}</p>
+                      <div className='rowContentClinics'>
+                        <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                        <p className='row2Sites'>{x['affiliation']}</p>
+                        <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['num_clinics']}</p>
+                      </div>
+                      <div className={`tag${x['status']}`}></div>
                     </div>
                   </Link>
                 )

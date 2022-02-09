@@ -28,7 +28,7 @@ export default function Database({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - All Regions" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
                 <p style={{marginLeft: '2rem', width:'80%'}}>Region Name</p>

@@ -18,7 +18,7 @@ a {
   align-items: center;
   background-color: #fff;
   height: 3.6rem;
-  width: 95%;
+  width: 90%;
   margin: 0.4rem 0;
   border-radius: 1rem;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
@@ -39,7 +39,7 @@ a {
 }
 
 .row2Sites {
-  width: 30%;
+  width: 25%;
 }
 
 .row3Sites {
@@ -67,6 +67,12 @@ a {
   height: 100%;
 }
 
+.titleClinics {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
 .tag0, .tag1, .tag2, .tag3 {
   height: 100%;
   width: 3%;
@@ -88,6 +94,22 @@ a {
 
 .tag3 {
   background-color: #34E23B;
+}
+
+.editButton {
+  height: 3rem;
+  width: 10rem;
+  background-color: #fff;
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: #1AACFE;
+  border: solid 2px #1AACFE;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  z-index: 100;
 }
 
 * {

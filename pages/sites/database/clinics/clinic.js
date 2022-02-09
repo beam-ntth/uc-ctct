@@ -77,7 +77,7 @@ export default function Database({ errorCode, data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Clinic Details" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Clinic Details" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.generalBox}>
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>

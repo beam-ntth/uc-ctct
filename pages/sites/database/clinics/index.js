@@ -31,7 +31,15 @@ export default function Clinics({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - Clinics" date="Today: February 2, 2022" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Management Overview - Site 1" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <div className={styles.data}>
+              <div style={{width: '100%', display: 'flex', paddingTop: '2rem'}}>
+                <p className="titleClinics" style={{width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center'}}>Site Notes</p>
+                <div style={{width: '20%', display: 'flex', justifyContent: 'center'}}>
+                  <div className='editButton'>+ Add Note</div>
+                </div>
+              </div>
+            </div>
             <div className={styles.data}>
               <div className={styles.row}>
                 <p className="row1Clinics" style={{marginLeft: '2rem'}}>Clinic Name</p>
