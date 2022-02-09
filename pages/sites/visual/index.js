@@ -9,11 +9,12 @@ import Header from '../../../components/shared/header/header';
 import PieChart from '../../../components/Charts/piechart';
 import BarChart from '../../../components/Charts/barcharts';
 
-// export async function getServerSideProps() {
-//     const res = await fetch(`http://localhost:3000/api/dataviz/visualization`)
-//     const data = await res.json()
-//     return { props: { data } }
-//   }
+export async function getServerSideProps() {
+  const res = await fetch(`${process.env.LOCAL_URL}/api/clinic`)
+  const data = await res.json()
+  console.log(data);
+ return { props: { data } }
+}
 
 export default function Visualization({ data }) {
   return (
