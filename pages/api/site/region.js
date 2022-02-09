@@ -4,6 +4,7 @@ export default function handler(req, res) {
   setTimeout(() => {
     1000;
   });
+  
   // /api/site/region
   if (Object.keys(query).length === 0) {
     res.status(200).json([
