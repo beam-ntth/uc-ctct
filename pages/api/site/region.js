@@ -27,6 +27,7 @@ export default function handler(req, res) {
   }
 
   // /api/site/region?location=north
+  
   if (query["location"] == "north") {
     res.status(200).json([
       {
