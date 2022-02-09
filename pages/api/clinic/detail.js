@@ -1,5 +1,60 @@
+let clinicPlacementDetail = [
+  {
+    title: 'Clerance Timeline',
+    note: 'Greatly cottage thought fortune no mention he. Of mr certainty arranging am smallness by conveying. Him plate you allow built grave. Sigh sang nay sex high yet door game. She dissimilar was favourable unreserved nay expression contrasted saw. Past her find she like bore pain open. Shy lose need eyes son not shot. Jennings removing are his eat dashwood. Middleton as pretended listening he smallness perceived. Now his but two green spoil drift.'
+  },
+  {
+    title: 'Clerance Requirement',
+    note: 'Wrote water woman of heart it total other. By in entirely securing suitable graceful at families improved. Zealously few furniture repulsive was agreeable consisted difficult. Collected breakfast estimable questions in to favourite it. Known he place worth words it as to. Spoke now noise off smart her ready.'
+  },
+  {
+    title: 'Orientation',
+    note: 'Behaviour we improving at something to. Evil true high lady roof men had open. To projection considered it precaution an melancholy or. Wound young you thing worse along being ham.'
+  },
+  {
+    title: 'Tips & Tricks',
+    note: 'Dissimilar of favourable solicitude if sympathize middletons at. Forfeited up if disposing perfectly in an eagerness perceived necessary. Belonging sir curiosity discovery extremity yet forfeited prevailed own off.'
+  },
+  {
+    title: 'Attire',
+    note: 'Travelling by introduced of mr terminated. Knew as miss my high hope quit. In curiosity shameless dependent knowledge up.'
+  },
+]
+
+let adminInfo = [
+  {
+    name: "Admin 1",
+    position: 'CEO',
+    phone: '123-455-6789',
+    email: 'jphnny.doe@email.com'
+  },
+  {
+    name: "Admin 2",
+    position: 'HR',
+    phone: '123-455-6789',
+    email: 'johnny.doe@email.com'
+  }
+]
+
 export default function handler(req, res) {
-  console.log(req.query)
+  console.log(req)
+  if (req.method === 'POST') {
+    if (req.query.input === 'placement') {
+      clinicPlacementDetail = req.body
+      // console.log(`After: ${clinicPlacementDetail}`)
+      res.status(200).json({name: "200: HTTPS OK"})
+      return
+    }
+
+    if (req.query.input === 'addAdmin') {
+      adminInfo.push(req.body)
+      // console.log(`After: ${adminInfo}`)
+      res.status(200).json({name: "200: HTTPS OK"})
+      return
+    }
+    res.status(400).json({name: "400: Bad Request"})
+  }
+
   const clinicName = req.query.name;
   if (clinicName === 'clinic1') {
     res.status(200).json(
@@ -13,20 +68,7 @@ export default function handler(req, res) {
         state: 'CA',
         postal: '95616',
         status: 0,
-        adminInfo: [
-          {
-            name: "Admin 1",
-            position: 'CEO',
-            phone: '123-455-6789',
-            email: 'jphnny.doe@email.com'
-          },
-          {
-            name: "Admin 2",
-            position: 'HR',
-            phone: '123-455-6789',
-            email: 'johnny.doe@email.com'
-          }
-        ],
+        adminInfo: adminInfo,
         preceptorInfo: [
           {
             name: "Preceptor 1",
@@ -41,28 +83,7 @@ export default function handler(req, res) {
             email: 'johnny.doe@email.com'
           }
         ],
-        clinicPlacementDetail: [
-          {
-            title: 'Clerance Timeline',
-            note: 'Greatly cottage thought fortune no mention he. Of mr certainty arranging am smallness by conveying. Him plate you allow built grave. Sigh sang nay sex high yet door game. She dissimilar was favourable unreserved nay expression contrasted saw. Past her find she like bore pain open. Shy lose need eyes son not shot. Jennings removing are his eat dashwood. Middleton as pretended listening he smallness perceived. Now his but two green spoil drift.'
-          },
-          {
-            title: 'Clerance Requirement',
-            note: 'Wrote water woman of heart it total other. By in entirely securing suitable graceful at families improved. Zealously few furniture repulsive was agreeable consisted difficult. Collected breakfast estimable questions in to favourite it. Known he place worth words it as to. Spoke now noise off smart her ready.'
-          },
-          {
-            title: 'Orientation',
-            note: 'Behaviour we improving at something to. Evil true high lady roof men had open. To projection considered it precaution an melancholy or. Wound young you thing worse along being ham.'
-          },
-          {
-            title: 'Tips & Tricks',
-            note: 'Dissimilar of favourable solicitude if sympathize middletons at. Forfeited up if disposing perfectly in an eagerness perceived necessary. Belonging sir curiosity discovery extremity yet forfeited prevailed own off.'
-          },
-          {
-            title: 'Attire',
-            note: 'Travelling by introduced of mr terminated. Knew as miss my high hope quit. In curiosity shameless dependent knowledge up.'
-          },
-        ],
+        clinicPlacementDetail: clinicPlacementDetail,
         clinicalNotes: [
 
         ],

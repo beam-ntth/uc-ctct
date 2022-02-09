@@ -1,10 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Database.module.css";
+import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
@@ -15,10 +16,13 @@ export async function getServerSideProps(context) {
 }
 
 export default function Clinics({ data }) {
+  const [openNote, setOpenNote] = useState(false)
+
   const router = useRouter()
 
   return (
     <React.Fragment>
+      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -33,10 +37,10 @@ export default function Clinics({ data }) {
           <div className={styles.content}>
             <Header header="Management Overview - Site 1" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
-              <div style={{width: '100%', display: 'flex', paddingTop: '2rem'}}>
+              <div style={{width: '90%', display: 'flex', paddingTop: '2rem'}}>
                 <p className="titleClinics" style={{width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center'}}>Site Notes</p>
                 <div style={{width: '20%', display: 'flex', justifyContent: 'center'}}>
-                  <div className='editButton'>+ Add Note</div>
+                  <div className='editButton' onClick={() => setOpenNote(true)}>+ Add Note</div>
                 </div>
               </div>
             </div>

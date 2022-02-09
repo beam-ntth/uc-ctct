@@ -36,6 +36,10 @@ export default function Database({ errorCode, data }) {
     return <Error statusCode={errorCode} />
   }
   const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
   let statusText = 'N/A'
 
   if (data['status'] === 0) {
@@ -51,23 +55,19 @@ export default function Database({ errorCode, data }) {
     statusText = <span style={{ padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem' }}>Connected</span>
   }
 
-
-
   const [generalOpen, setGeneralOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
-
-
   return (
     <React.Fragment>
-      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} /> : null}
-      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} /> : null}
-      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} /> : null}
-      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} /> : null}
-      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} /> : null}
+      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} /> : null}
+      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} /> : null}
+      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} /> : null}
+      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} /> : null}
+      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -78,26 +78,46 @@ export default function Database({ errorCode, data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header="Clinic Details" imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.generalBox}>
+            <div className={styles.generalBox} style={{marginTop: '3rem'}}>
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>
                   <div>
-                    <p className={styles.generalTitleHeader}>General Clinic Information</p>
+                    <p className={styles.generalTitleHeader}>Clinic Profile</p>
                     <p className={styles.generalTitleSubHeader}>Last Updated: 26 January 2021</p>
                   </div>
                   <div className={styles.editButton} onClick={() => setGeneralOpen(true)}>Edit Information</div>
                 </div>
-                <div className={styles.generalDetail}>
-                  <p style={{ marginRight: '2rem' }}><strong>Site:</strong> {data.site}</p>
-                  <p><strong>Phone Number:</strong> {data.phoneNumber}</p>
-                </div>
-                <div className={styles.generalDetail}>
-                  <p style={{ marginRight: '2rem' }}><strong>Address:</strong> {`${data.addressLine1}, ${data.addressLine2 ? `${data.addressLine2}, ` : ''}${data.city}, ${data.state}, ${data.postal}`}</p>
-                  <p><strong>Fax Number:</strong> {data.faxNumber}</p>
-                </div>
-                <div className={styles.generalDetail}>
-                  <p><strong>Current Status:</strong> {statusText}</p>
-                </div>
+                <Accordion x={{title: "General Information", note: null}} ind={`profile0`}>
+                  <div className={styles.generalDetail}>
+                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.site}</p>
+                    <p style={{marginRight: '2rem'}}><strong>Phone Number:</strong> {data.phoneNumber}</p>
+                    <p><strong>Fax Number:</strong> {data.faxNumber}</p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.addressLine1}, ${data.addressLine2 ? `${data.addressLine2}, ` : ''}${data.city}, ${data.state}, ${data.postal}`}</p>
+                    <p><strong>Current Status:</strong> {statusText}</p>
+                  </div>
+                </Accordion>
+                <Accordion x={{title: "Clinic Details", note: null}} ind={`profile1`}>
+                  <div className={styles.generalDetail}>
+                    <p style={{marginRight: '2rem'}}><strong>Setting (Location):</strong> In-patient </p>
+                    <p style={{marginRight: '2rem'}}><strong>Setting (Population):</strong> Women's Health </p>
+                    <p><strong>Population:</strong> Child/Adolescent </p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p style={{marginRight: '2rem'}}><strong>Visit type:</strong> 50% In-person | 50% Video Visits</p>
+                    <p><strong>Patient Acuity:</strong> Acute Care In-patient psychiatry</p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p><strong>Documentation:</strong> Student does not document in the EMR/chart (notes provided to preceptor for in-put in the EMR/chart)</p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p><strong>Orders:</strong> Student does not enter orders, preceptor must enter</p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p><strong>Appointment template:</strong> Student has a separate template and schedule of patients</p>
+                  </div>
+                </Accordion>
               </div>
             </div>
             <div className={styles.generalBox}>
@@ -112,7 +132,7 @@ export default function Database({ errorCode, data }) {
                   {
                     data.adminInfo.map((x, ind) => {
                       return (
-                        <div key={`admin_${ind}`} className="displayRow">
+                        <div key={`admin_${ind}`} className="displayDetailRow">
                           <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
                           <p className="adminCol2">{x.phone}</p>
                           <p className="adminCol3">{x.email}</p>
@@ -135,7 +155,7 @@ export default function Database({ errorCode, data }) {
                   {
                     data.preceptorInfo.map((x, ind) => {
                       return (
-                        <div key={`preceptor_${ind}`} className="displayRow">
+                        <div key={`preceptor_${ind}`} className="displayDetailRow">
                           <p className="preceptorCol1">{x.name}</p>
                           <p className="preceptorCol2">{x.credential}</p>
                           <p className="preceptorCol3">{x.phone}</p>
@@ -186,7 +206,7 @@ export default function Database({ errorCode, data }) {
                   </div>
                 </div>
                 <div className={styles.generalDetail} style={{ height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0' }}>
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{ border: 0 }} allowfullscreen="" loading="lazy"></iframe>
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{ border: 0 }} allowFullScreen="" loading="lazy"></iframe>
                 </div>
               </div>
             </div>
@@ -196,7 +216,7 @@ export default function Database({ errorCode, data }) {
       <style jsx>
         {
           `
-                    .displayRow {
+                    .displayDetailRow {
                         display: flex;
                         flex-direction: row;
                         justify-content: flex-start;
@@ -209,8 +229,8 @@ export default function Database({ errorCode, data }) {
                         box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
                         font-family: 'Lato', sans-serif;
                         font-weight: 500;
-                        font-size: 1.2rem;
-                        padding: 0.4rem 0;
+                        font-size: 1rem;
+                        // padding: 0.4rem 0;
                     }
 
                     .adminCol1 {

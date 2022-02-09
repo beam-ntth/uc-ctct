@@ -1,26 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function PlacementInfoEdit(props) {
+    const [info, setInfo] = useState(props.data.clinicPlacementDetail)
+
+    const updateInfo = (res, req) => {
+        const response = fetch(`${process.env.LOCAL_URL}/api/clinic/detail?input=placement`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(info),
+          })
+        // Print response status code
+        response.then((val) => {
+            props.reload()
+            console.log(val.status)
+            return
+        })
+    }
+
+    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
+    useEffect(() => {
+        document.addEventListener("keydown", e => {
+            if (e.key === 'Enter') {
+                updateInfo()
+                props.setOpen(false)
+                return
+            }
+        })
+    })
+
     return (
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-        <div className="editScreen">
+        <div className="editScreen" onKeyPress={(e) => {console.log(e.key)}}>
             <p className="editTitle">Edit Clinical Placement Information</p>
             <div style={{height: 'auto', width: '90%'}}>
                 {props.data.clinicPlacementDetail.map((x, ind) => {
                     return (
                         <React.Fragment>
-                            <p><strong>Title:</strong><input value={x.title} disabled /></p>
-                            <div style={{display: 'flex'}}>
+                            <p key={`title_${ind}`}><strong>Title:</strong><input value={x.title} disabled /></p>
+                            <div key={`note_${ind}`} style={{display: 'flex'}}>
                                 <strong>Note:</strong>
-                                <textarea value={x.note}></textarea>
+                                <textarea value={info[ind] ? info[ind].note : ""} 
+                                onChange={e => {
+                                    let newInfo = [...info]
+                                    newInfo[ind].note = (e.target.value ? e.target.value : "")
+                                    setInfo(newInfo)
+                                    return
+                                    }
+                                }
+                                ></textarea>
                             </div>
                         </React.Fragment>
                     )
                 })}
             </div>
             <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => props.setOpen(false)}>Save</div>
+                <div className="saveBtn" onClick={() => {
+                    updateInfo()
+                    props.setOpen(false)
+                    return
+                    }
+                }>Save</div>
             </div>
         </div>
         <style jsx>

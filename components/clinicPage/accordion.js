@@ -15,7 +15,7 @@ export default function Accordion(props) {
                 </div>
             </div>
             <div className={styles.noteContent} style={accordion ? {} : {display: 'none'}}>
-                {props.x.note}
+                {props.x.note ? props.x.note : props.children}
             </div>
         </div>
     )

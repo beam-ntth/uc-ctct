@@ -1,19 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function AdminInfoEdit(props) {
+
+    const [info, setInfo] = useState({
+        name: null,
+        position: null,
+        phone: null,
+        email: null
+    })
+
+    const updateInfo = (res, req) => {
+        info.phone = info.phone.substring(0,3) + '-' + info.phone.substring(3,6) + '-' + info.phone.substring(6,10)
+        const response = fetch(`${process.env.LOCAL_URL}/api/clinic/detail?input=addAdmin`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(info),
+          })
+        // Print response status code
+        response.then((val) => {
+            props.reload()
+            console.log(val.status)
+            return
+        })
+    }
+
+    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
+    useEffect(() => {
+        document.addEventListener("keydown", e => {
+            if (e.key === 'Enter') {
+                updateInfo()
+                props.setOpen(false)
+                return
+            }
+        })
+    })
+
     return (
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
             <p className="editTitle">Add Contact Information</p>
             <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="First Last" /> </p>
-                <p><strong>Position:</strong><input placeholder="Position" /></p>
-                <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
-                <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
+                <p><strong>Name:</strong><input placeholder="First Last" onChange={(e) => {
+                    let newInfo = {...info}
+                    newInfo.name = e.target.value
+                    setInfo(newInfo)
+                    return
+                }} /> </p>
+                <p><strong>Position:</strong><input placeholder="Position" onChange={(e) => {
+                    let newInfo = {...info}
+                    newInfo.position = e.target.value
+                    setInfo(newInfo)
+                    return
+                }} /></p>
+                <p><strong>Phone Number:</strong><input placeholder="000-000-0000" value={info.phone} onChange={(e) => {
+                    let newInfo = {...info}
+                    newInfo.phone = e.target.value.replace(/\D/g,'').substring(0, 10)
+                    setInfo(newInfo)
+                    return
+                }}
+                /></p>
+                <p><strong>Email Address:</strong><input placeholder="Email Address" type={'email'} onChange={(e) => {
+                    let newInfo = {...info}
+                    newInfo.email = e.target.value
+                    setInfo(newInfo)
+                    return
+                }} /></p>
             </div>
             <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
+                <div className="saveBtn" onClick={() => {
+                updateInfo()
+                props.setOpen(false)
+                return
+            }}>Add Contact</div>
             </div>
         </div>
         <style jsx>
