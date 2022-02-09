@@ -34,18 +34,21 @@ export default function handler(req, res) {
         name: "Site 1",
         affiliation: "UCSF",
         num_clinics: 3,
+        status: 0
       },
       {
         id: "site2",
         name: "Site 2",
         affiliation: "UCSF",
         num_clinics: 1,
+        status: 1
       },
       {
         id: "site3",
         name: "Site 3",
         affiliation: "No Affiliation",
         num_clinics: 2,
+        status: 2
       },
     ]);
     return;
@@ -58,18 +61,21 @@ export default function handler(req, res) {
         name: "Site 3",
         affiliation: "UCSF",
         num_clinics: 3,
+        status: 0
       },
       {
         id: "site2",
         name: "Site 4",
         affiliation: "UCSF",
         num_clinics: 1,
+        status: 1
       },
       {
         id: "site3",
         name: "Site 5",
         affiliation: "No Affiliation",
         num_clinics: 2,
+        status: 2
       },
     ]);
     return;
@@ -82,18 +88,21 @@ export default function handler(req, res) {
         name: "Site 6",
         affiliation: "UCSF",
         num_clinics: 3,
+        status: 0
       },
       {
         id: "site2",
         name: "Site 6",
         affiliation: "UCSF",
         num_clinics: 1,
+        status: 1
       },
       {
         id: "site3",
         name: "Site 6",
         affiliation: "No Affiliation",
         num_clinics: 2,
+        status: 2
       },
     ]);
     return;

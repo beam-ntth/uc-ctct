@@ -17,7 +17,7 @@ export default function Sites() {
             <main className={styles.main}>
                 <Navbar icons={[false, true, false, false, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Site Management Tools" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+                    <Header header="Site Management Tools" imgSrc="/asset/images/user-image.png" />
                     <div className={styles.menu}>
                         <Link href="/sites/visual">
                             <div className={styles.menuOption}>

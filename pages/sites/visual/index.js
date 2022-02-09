@@ -27,7 +27,7 @@ export default function Visualization({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Data Analytics" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.row}>
                 <p className='col1DV'>Clinic Name</p>

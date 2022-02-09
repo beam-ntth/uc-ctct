@@ -37,6 +37,7 @@ import PieChart from '../components/Charts/piechart';
 
 
 export default function Main() {
+
   return (
     <div className={styles.container}>
       <Head>
@@ -48,7 +49,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]}/> 
         <div className={styles.content}>
-          <Header header="Welcome, Rosalind De Lisser!" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+          <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
