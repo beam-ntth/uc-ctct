@@ -3,6 +3,9 @@ export default function handler(req, res) {
     id: 'clinic1',
     name: 'Clinic 1',
     lastUpdated: '01/21/2019',
+    training_type: "FNP",
+    affiliation: "UCSF",
+    region: "Southern",
     status: 0,
   }
 
@@ -10,21 +13,34 @@ export default function handler(req, res) {
     id: 'clinic2',
     name: 'Clinic 2',
     lastUpdated: '01/22/2019',
+    training_type: "FNP",
+    affiliation: "UCSF",
+    region: "Southern",
     status: 2,
   }
 
   const clinic3 = {
-    id: 'clinic4',
-    name: 'Clinic 4',
+    id: 'clinic3',
+    name: 'Clinic 3',
     lastUpdated: '01/23/2019',
+    training_type: "NPHMP",
+    affiliation: "UCSF",
+    region: "Southern",
     status: 1,
   }
 
   const clinic4 = {
-    id: 'clinic5',
-    name: 'Clinic 5',
+    id: 'clinic4',
+    name: 'Clinic 4',
     lastUpdated: '02/23/2019',
+    training_type: "NPHMP",
+    affiliation: "UCSF",
+    region: "Southern",
     status: 3,
+  }
+
+  if(!req.query.params) {
+    return res.status(200).json([clinic1,clinic2,clinic3,clinic4]);
   }
 
   if (req.query.location == 'site1') {
