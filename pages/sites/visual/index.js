@@ -37,22 +37,20 @@ export default function Visualization({ data }) {
                 <p className='col4DV'>Region</p>
                 <p className='col5DV'>Status</p>
               </div>
-              {/* { */}
-              {/* // data.map((x, ind) => {
-                  // let statusText = 'N/A'
-
-                  // if (x['status'] === 0) {
-                  //   statusText = 'Need To Contact'
-                  // }
-                  // if (x['status'] === 1) {
-                  //   statusText = 'Need To Follow Up'
-                  // }
-                  // if (x['status'] === 2) {
-                  //   statusText = 'Contacted'
-                  // }
-                  // if (x['status'] === 3) {
-                  //   statusText = 'Connected'
-                  // } */}
+              
+              {data.map((x, ind) => {
+                return (
+          
+                    <div className='displayRow' key={`elem_${ind}`}>
+                        <p className="clinicCol1">{x.name}</p>
+                        <p className="clinicCol2">{x.training_type}</p>
+                        <p className="clinicCol3">{x.affiliation}</p>
+                        <p className="clinicCol4">{x.region}</p>
+                        <p className="clinicCol4">{x.status}</p>
+                        </div>
+                      )
+                    })
+                  }
 
               {/* return ( */}
               {/* <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}> */}
