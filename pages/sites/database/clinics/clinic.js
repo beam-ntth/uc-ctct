@@ -8,37 +8,48 @@ import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
 import { useRouter } from "next/router";
+import { CosmosClient } from '@azure/cosmos';
 import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
 import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
 
+// Setting up access to API
+const endpoint = process.env.COSMOS_ENDPOINT;
+const key = process.env.COSMOS_KEY;
+const client = new CosmosClient({endpoint , key});
+
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const res = await fetch(`${process.env.LOCAL_URL}api/clinic/detail?name=${clinicName}`)
-  const status = res.ok;
-  // console.log(res.status)
-  const errorCode = status ? false : res.status;
-  console.log("Error code", errorCode)
-  const data = await res.json()
-  if (errorCode) {
-    console.log("FOUND ERROR", errorCode)
-    return {
-      props: { errorCode }
-    }
-  }
-  return { props: { data } }
+  const database = client.database("uc-ctct");
+  const container = database.container("Clinics");
+  const { resources: clinic_data } = await container.items.query(`SELECT * from c WHERE c.id = '${clinicName}'`).fetchAll();
+
+  // const status = res.ok;
+  // const errorCode = status ? false : res.status;
+  // console.log("Error code", errorCode)
+  // const data = await res.json()
+  // if (errorCode) {
+  //   console.log("FOUND ERROR", errorCode)
+  //   return {
+  //     props: { errorCode }
+  //   }
+  // }
+
+  return { props: { clinic_data } }
 }
 
-export default function Database({ errorCode, data }) {
-  if (errorCode) {
-    return <Error statusCode={errorCode} />
-  }
+export default function Database({ clinic_data }) {
+  // if (errorCode) {
+  //   return <Error statusCode={errorCode} />
+  // }
+
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
+  const data = clinic_data[0]  
 
   let statusText = 'N/A'
 
@@ -64,7 +75,7 @@ export default function Database({ errorCode, data }) {
   return (
     <React.Fragment>
       {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} /> : null}
-      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} /> : null}
+      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} id={data.id} /> : null}
       {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} /> : null}
       {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} /> : null}

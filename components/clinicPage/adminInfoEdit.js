@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { CosmosClient } from '@azure/cosmos';
+
+// Setting up access to API
+const endpoint = process.env.COSMOS_ENDPOINT;
+const key = process.env.COSMOS_KEY;
+const client = new CosmosClient({endpoint , key});
 
 export default function AdminInfoEdit(props) {
 
@@ -9,21 +15,36 @@ export default function AdminInfoEdit(props) {
         email: null
     })
 
-    const updateInfo = (res, req) => {
+    async function updateInfo (clinicId) {
+        const database = client.database("uc-ctct");
+        const container = database.container("Clinics");
+        const { resources: clinic_data } = await container.items.query(`SELECT * from c WHERE c.id = '${clinicId}'`).fetchAll();
+        let adminInfo = clinic_data[0].adminInfo
         info.phone = info.phone.substring(0,3) + '-' + info.phone.substring(3,6) + '-' + info.phone.substring(6,10)
-        const response = fetch(`${process.env.LOCAL_URL}/api/clinic/detail?input=addAdmin`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(info),
-          })
+        adminInfo.push(info)
+
+        const replaceOperation = 
+        [{ 
+        op: "replace", 
+        path: "/adminInfo", 
+        value: {adminInfo} 
+        }];
+        const { resource: patchRes } = await container.item(`${clinicId}`, `/${clinicId}`).patch(replaceOperation)
+        console.log(`Patched ${patchRes.adminInfo} to new ${patchRes.adminInfo}.`); 
+        
+        // const response = fetch(`${process.env.LOCAL_URL}/api/clinic/detail?input=addAdmin`, {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(info),
+        //   })
         // Print response status code
-        response.then((val) => {
-            props.reload()
-            console.log(val.status)
-            return
-        })
+        // response.then((val) => {
+        //     props.reload()
+        //     console.log(val.status)
+        //     return
+        // })
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -71,7 +92,7 @@ export default function AdminInfoEdit(props) {
             </div>
             <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
                 <div className="saveBtn" onClick={() => {
-                updateInfo()
+                updateInfo(props.id)
                 props.setOpen(false)
                 return
             }}>Add Contact</div>
