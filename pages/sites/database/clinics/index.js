@@ -10,6 +10,7 @@ import Accordion from "../../../../components/clinicPage/accordion";
 import { useRouter } from "next/router";
 import { CosmosClient } from '@azure/cosmos';
 import StatusParser from "../../../../components/shared/status";
+import { IoMdAdd } from "react-icons/io";
 
 // Setting up access to API
 const endpoint = process.env.COSMOS_ENDPOINT;
@@ -30,6 +31,7 @@ export default function Clinics({ data, note_data }) {
   const [openNote, setOpenNote] = useState(false)
 
   const router = useRouter()
+  const [hover, setHover] = useState(false)
   const refreshData = () => {
     router.replace(router.asPath);
   }
@@ -70,6 +72,8 @@ export default function Clinics({ data, note_data }) {
                 <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
                 <p className="row2Clinics">Last Updated</p>
                 <p className="row3Clinics">Status</p>
+                <IoMdAdd color="#079CDB" size={hover ? 45 : 40} style={{cursor: 'pointer', transition: '0.2s linear'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
               </div>
               {
                 data.map((x, ind) => {
