@@ -30,10 +30,13 @@ export default function Clinics({ data, note_data }) {
   const [openNote, setOpenNote] = useState(false)
 
   const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} /> : null}
+      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -70,7 +73,7 @@ export default function Clinics({ data, note_data }) {
               </div>
               {
                 data.map((x, ind) => {
-                  const statusText = StatusParser("clinics", x.status)
+                  const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
                     <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
@@ -80,7 +83,7 @@ export default function Clinics({ data, note_data }) {
                           <p className="row2Clinics" >{x['last_updated']}</p>
                           <p className="row3Clinics">{statusText}</p>
                         </div>
-                        <div className={`tag${x['status']}`}></div>
+                        <div className={`tag${parseInt(x.status)}`}></div>
                       </div>
                     </Link>
                   )
