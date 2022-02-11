@@ -74,11 +74,11 @@ export default function Database({ clinic_data }) {
 
   return (
     <React.Fragment>
-      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} /> : null}
+      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} id={data.id} /> : null}
       {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} id={data.id} /> : null}
-      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} /> : null}
-      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} /> : null}
-      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} /> : null}
+      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
+      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
+      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} id={data.id} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>

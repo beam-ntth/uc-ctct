@@ -9,6 +9,7 @@ import Header from '../../../components/shared/header/header';
 import PieChart from '../../../components/Charts/piechart';
 import BarChart from '../../../components/Charts/barcharts';
 import { CosmosClient } from '@azure/cosmos';
+import StatusParser from '../../../components/shared/status';
 
 const endpoint = process.env.COSMOS_ENDPOINT;
 const key = process.env.COSMOS_KEY;
@@ -44,43 +45,27 @@ export default function Visualization({ data }) {
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className='col1DV'>Clinic Name</p>
-                <p className='col2DV'>Training Type</p>
-                <p className='col3DV'>Affiliation</p>
-                <p className='col4DV'>Region</p>
-                <p className='col5DV'>Status</p>
+                <p className={styles.titleCol1} style={{ marginLeft: '2rem' }}>Clinic Name</p>
+                <p className={styles.titleCol2}>Affiliation</p>
+                <p className={styles.titleCol3}>Region</p>
+                <p className={styles.titleCol4}>Status</p>
               </div>
 
               {data.map((x, ind) => {
+                const statusText = StatusParser("clinics", x.status)
                 return (
-
                   <div className='displayRow' key={`elem_${ind}`}>
-                    <p className="clinicCol1">{x.name}</p>
-                    <p className="clinicCol2">{x.training_type}</p>
-                    <p className="clinicCol3">{x.affiliation}</p>
-                    <p className="clinicCol4">{x.region}</p>
-                    <p className="clinicCol4">{x.status}</p>
+                    <div className="rowContentClinics">
+                      <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                      <p className={styles.dataCol2}>{x.affiliation}</p>
+                      <p className={styles.dataCol3}>{x.region}</p>
+                      <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+                    </div>
+                    <div className={`tag${x['status']}`}></div>
                   </div>
                 )
               })
               }
-
-              {/* return ( */}
-              {/* <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}> */}
-              <div className="displayRow">
-                <div className="rowContentClinics">
-                  <p className="col1DV" style={{ marginLeft: '2rem' }}>{'Clinic 1'}</p>
-                  <p className="col2DV" >{'FNP'}</p>
-                  <p className="col3DV">{'UCSF'}</p>
-                  <p className="col4DV">{'Southern'}</p>
-                  <p className="col5DV" style={{ marginRight: '2rem' }}>{'Status'}</p>
-                </div>
-                {/* <div className={`tag${x['status']}`}></div> */}
-              </div>
-              {/* </Link> */}
-              {/* ) */}
-              {/* }) */}
-              {/* } */}
             </div>
             <div className={styles.mainCharts}>
               <div className={styles.chart}>

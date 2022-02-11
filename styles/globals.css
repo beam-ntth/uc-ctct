@@ -35,16 +35,21 @@ a {
 }
 
 .row1Sites {
-  width: 50%;
+  width: 40%;
 }
 
 .row2Sites {
-  width: 25%;
+  width: 20%;
 }
 
 .row3Sites {
   width: 20%;
 }
+
+.row4Sites {
+  width: 15%;
+}
+
 
 .row1Clinics {
   width: 50%;
@@ -94,6 +99,50 @@ a {
 
 .tag3 {
   background-color: #34E23B;
+}
+
+.tag4 {
+  background-color: #8B97FF;
+}
+
+.tag5 {
+  background-color: #CC8BFF;
+}
+
+.tag6 {
+  background-color: #FF8BE6;
+}
+
+.tag7 {
+  background-color: #FDFF8B;
+}
+
+.tag8 {
+  background-color: #814242;
+}
+
+.tag9 {
+  background-color: #816F42;
+}
+
+.tag10 {
+  background-color: #438142;
+}
+
+.tag11 {
+  background-color: #425381;
+}
+
+.tag12 {
+  background-color: #c4c4c4;
+}
+
+.tag13 {
+  background-color: #fff;
+}
+
+.tag {
+  background-color: #000;
 }
 
 .editButton {

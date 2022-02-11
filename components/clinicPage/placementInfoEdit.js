@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
+import { CosmosClient } from '@azure/cosmos';
+
+// Setting up access to API
+const endpoint = process.env.COSMOS_ENDPOINT;
+const key = process.env.COSMOS_KEY;
+const client = new CosmosClient({endpoint , key});
 
 export default function PlacementInfoEdit(props) {
     const [info, setInfo] = useState(props.data.clinicPlacementDetail)
 
-    const updateInfo = (res, req) => {
-        const response = fetch(`${process.env.LOCAL_URL}/api/clinic/detail?input=placement`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(info),
-          })
-        // Print response status code
-        response.then((val) => {
-            props.reload()
-            console.log(val.status)
-            return
-        })
+    async function updateInfo() {
+        const database = client.database("uc-ctct");
+        const container = database.container("Clinics");
+        const { resource: clinic_data } = await container.item(props.id, props.id).read();
+        let adminInfo = clinic_data.adminInfo
+        adminInfo = info
+        console.log(info)
+        const replaceOperation = 
+        [{ 
+        op: "replace", 
+        path: "/clinicPlacementDetail", 
+        value: adminInfo
+        }];
+        const { resource: patchRes } = await container.item(props.id, props.id).patch(replaceOperation)
+        props.reload()
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'

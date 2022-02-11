@@ -9,6 +9,7 @@ import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import Accordion from "../../../../components/clinicPage/accordion";
 import { useRouter } from "next/router";
 import { CosmosClient } from '@azure/cosmos';
+import StatusParser from "../../../../components/shared/status";
 
 // Setting up access to API
 const endpoint = process.env.COSMOS_ENDPOINT;
@@ -17,15 +18,11 @@ const client = new CosmosClient({ endpoint, key });
 
 export async function getServerSideProps(context) {
   const location = context.query.location;
-  console.log("Location is", location);
   const database = client.database("uc-ctct");
   const site_container = database.container("Sites");
   const clinic_container = database.container("Clinics");
   const { resources: data } = await clinic_container.items.query(`SELECT * from c WHERE c.site_id = '${location}'`).fetchAll();
-  console.log("Clinics data is", data);
-  // const { resources: note_data } = await site_container.items.query(`SELECT * from c WHERE c.id = '${location}'`).fetchAll();
   const { resource: note_data } = await site_container.item(location, location).read();
-  console.log("Note data is", note_data);
   return { props: { data, note_data } }
 }
 
@@ -49,7 +46,7 @@ export default function Clinics({ data, note_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview - Site 1" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${note_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
                 <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
@@ -73,20 +70,7 @@ export default function Clinics({ data, note_data }) {
               </div>
               {
                 data.map((x, ind) => {
-                  let statusText = 'N/A'
-
-                  if (x['status'] === 0) {
-                    statusText = 'Need To Contact'
-                  }
-                  if (x['status'] === 1) {
-                    statusText = 'Need To Follow Up'
-                  }
-                  if (x['status'] === 2) {
-                    statusText = 'Contacted'
-                  }
-                  if (x['status'] === 3) {
-                    statusText = 'Connected'
-                  }
+                  const statusText = StatusParser("clinics", x.status)
 
                   return (
                     <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
