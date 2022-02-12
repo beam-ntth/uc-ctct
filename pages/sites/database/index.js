@@ -7,12 +7,9 @@ import React, { useState } from 'react';
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 import { useRouter } from 'next/router';
-<<<<<<< HEAD
 import { client } from '../../../api-lib/azure/azureConfig';
-=======
 import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
->>>>>>> ae0177ad9e5d0a9dcd8da3ca1c0ef0af22239bf8
 
 // Setting up access to API
 // const endpoint = process.env.COSMOS_ENDPOINT;
