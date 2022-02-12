@@ -19,7 +19,10 @@ import { FiEdit } from 'react-icons/fi'
 export async function getServerSideProps() {
   const database = client.database("uc-ctct");
   const container = database.container("Regions");
-  const { resources: data } = await container.items.query("SELECT * from c").fetchAll();
+  const querySpec = {
+    query : "SELECT * from f"
+  }
+  const { resources: data } = await container.items.query(querySpec).fetchAll();
   return { props: { data } }
 }
 
