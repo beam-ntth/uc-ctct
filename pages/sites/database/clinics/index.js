@@ -13,10 +13,11 @@ import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 
 // Import DB component
-import { client } from '../../../api-lib/azure/azureConfig';
+import { client } from '../../../../api-lib/azure/azureConfig';
 
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export async function getServerSideProps(context) {
   const location = context.query.location;
@@ -33,6 +34,7 @@ export default function Clinics({ data, note_data }) {
 
   const router = useRouter()
   const [hover, setHover] = useState(false)
+  const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
   const refreshData = () => {
     router.replace(router.asPath);
   }
@@ -73,7 +75,7 @@ export default function Clinics({ data, note_data }) {
                 <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
                 <p className="row2Clinics">Last Updated</p>
                 <p className="row3Clinics">Status</p>
-                <IoMdAdd color="#079CDB" size={hover ? 45 : 40} style={{cursor: 'pointer', transition: '0.2s linear'}} 
+                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{cursor: 'pointer', transition: '0.2s linear'}} 
                 onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
               </div>
               {
@@ -81,16 +83,33 @@ export default function Clinics({ data, note_data }) {
                   const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
-                    <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
-                      <div key={`clinic_${ind}`} className="displayRow">
-                        <div className="rowContentClinics">
-                          <p className="row1Clinics" style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                          <p className="row2Clinics" >{x['last_updated']}</p>
-                          <p className="row3Clinics">{statusText}</p>
+                    <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
+                        <div key={`clinic_${ind}`} className="displayRow">
+                          <div className="rowContentClinics">
+                            <p className="row1Clinics" style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                            <p className="row2Clinics" >{x['last_updated']}</p>
+                            <p className="row3Clinics">{statusText}</p>
+                          </div>
+                          <div className={`tag${parseInt(x.status)}`}></div>
                         </div>
-                        <div className={`tag${parseInt(x.status)}`}></div>
-                      </div>
-                    </Link>
+                      </Link>
+                      <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35} 
+                      style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                      onMouseEnter={() => {
+                        let newStatus = [...trashHover]
+                        newStatus[ind] = true
+                        setTrashHover(newStatus)
+                        return
+                        }
+                      } onMouseLeave={() => {
+                        let newStatus = [...trashHover]
+                        newStatus[ind] = false
+                        setTrashHover(newStatus)
+                        return
+                        }
+                      } onClick={() => removeElement(x.id)} />
+                    </div>
                   )
                 })
               }

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 // Import DB modules
 import { CosmosClient } from '@azure/cosmos';
-import { client } from '../../../api-lib/azure/azureConfig';
+import { client } from '../../api-lib/azure/azureConfig';
 
 export default function PlacementInfoEdit(props) {
     const [info, setInfo] = useState(props.data.clinicPlacementDetail)
@@ -17,9 +17,9 @@ export default function PlacementInfoEdit(props) {
         console.log(info)
         const replaceOperation = 
         [{ 
-        op: "replace", 
-        path: "/clinicPlacementDetail", 
-        value: adminInfo
+            op: "replace", 
+            path: "/clinicPlacementDetail", 
+            value: adminInfo
         }];
         const { resource: patchRes } = await container.item(props.id, props.id).patch(replaceOperation)
         props.reload()
