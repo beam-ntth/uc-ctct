@@ -27,3 +27,14 @@ export const getAllSites = async () => {
   return data.resources;
 }
 
+export const getAllRegions = async () => {
+  let data;
+  try {
+    data = await regions.items.query(selectAll).fetchAll();
+  } catch (error) {
+    console.log("Error is", error);
+    throw new Error("Issue fetching Regions");
+  }
+  return data.resources;
+}
+

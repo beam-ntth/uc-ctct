@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import StatusParser from "../shared/status";
 import DescriptionGenerator from "./description";
 import { CosmosClient } from '@azure/cosmos';
-import { client } from '../../../api-lib/azure/azureConfig';
+import { client } from '../../api-lib/azure/azureConfig';
 
 export default function ClinicInfoEdit(props) {
     const [info, setInfo] = useState(props.data)

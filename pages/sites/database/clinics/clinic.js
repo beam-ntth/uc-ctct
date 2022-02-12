@@ -17,7 +17,8 @@ import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import StatusParser from "../../../../components/shared/status";
 
 // Import DB component
-import { client } from '../../../api-lib/azure/azureConfig';
+import { client } from '../../../../api-lib/azure/azureConfig';
+import { FiEdit } from "react-icons/fi";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
@@ -63,7 +64,7 @@ export default function Database({ data }) {
       {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} id={data.id} /> : null}
       {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
-      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} id={data.id} /> : null}
+      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} type="Clinics" id={data.id} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -127,11 +128,17 @@ export default function Database({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.adminInfo.map((x, ind) => {
+                      const [hover, setHover] = useState(false)
+
                       return (
-                        <div key={`admin_${ind}`} className="displayDetailRow">
-                          <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
-                          <p className="adminCol2">{x.phone}</p>
-                          <p className="adminCol3">{x.email}</p>
+                        <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                          <div key={`admin_${ind}`} className="displayDetailRow">
+                            <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
+                            <p className="adminCol2">{x.phone}</p>
+                            <p className="adminCol3">{x.email}</p>
+                          </div>
+                          <FiEdit color="#C4C4C4" size={hover ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
                         </div>
                       )
                     })
@@ -150,12 +157,18 @@ export default function Database({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.preceptorInfo.map((x, ind) => {
+                      const [hover, setHover] = useState(false)
+
                       return (
-                        <div key={`preceptor_${ind}`} className="displayDetailRow">
-                          <p className="preceptorCol1">{x.name}</p>
-                          <p className="preceptorCol2">{x.credential}</p>
-                          <p className="preceptorCol3">{x.phone}</p>
-                          <p className="preceptorCol4">{x.email}</p>
+                        <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                          <div key={`preceptor_${ind}`} className="displayDetailRow">
+                            <p className="preceptorCol1">{x.name}</p>
+                            <p className="preceptorCol2">{x.credential}</p>
+                            <p className="preceptorCol3">{x.phone}</p>
+                            <p className="preceptorCol4">{x.email}</p>
+                          </div>
+                          <FiEdit color="#C4C4C4" size={hover ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
                         </div>
                       )
                     })
@@ -190,7 +203,11 @@ export default function Database({ data }) {
                   <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
-
+                  {
+                    data.notes.map((x, ind) => {
+                      return (<Accordion x={x} ind={ind} />)
+                    })
+                  }
                 </div>
               </div>
             </div>

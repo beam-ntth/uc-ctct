@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CosmosClient } from '@azure/cosmos';
-import { client } from '../../../api-lib/azure/azureConfig';
+import { client } from '../../api-lib/azure/azureConfig';
 
 export default function AdminInfoEdit(props) {
 
@@ -20,9 +19,9 @@ export default function AdminInfoEdit(props) {
         adminInfo.push(info)
         const replaceOperation = 
         [{ 
-        op: "replace", 
-        path: "/adminInfo", 
-        value: adminInfo
+            op: "replace", 
+            path: "/adminInfo", 
+            value: adminInfo
         }];
         const { resource: patchRes } = await container.item(props.id, props.id).patch(replaceOperation)
         props.reload()
