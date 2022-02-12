@@ -1,17 +1,18 @@
 import Head from 'next/head'
 import styles from '../../../styles/Database.module.css'
 import Link from 'next/link'
-import { CosmosClient } from '@azure/cosmos';
+// import { CosmosClient } from '@azure/cosmos';
 
 import React from 'react';
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 import { useRouter } from 'next/router';
+import { client } from '../../../api-lib/azure/azureConfig';
 
 // Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+// const endpoint = process.env.COSMOS_ENDPOINT;
+// const key = process.env.COSMOS_KEY;
+// const client = new CosmosClient({endpoint , key});
 
 export async function getServerSideProps() {
   const database = client.database("uc-ctct");
