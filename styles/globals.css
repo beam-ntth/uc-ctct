@@ -11,14 +11,14 @@ a {
   text-decoration: none;
 }
 
-.displayRow, .addRow {
+.displayRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   background-color: #fff;
   height: 3.6rem;
-  width: 90%;
+  width: 85%;
   margin: 0.4rem 0;
   border-radius: 1rem;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
@@ -30,7 +30,30 @@ a {
 
 .displayRow:hover {
   color: #079CDB;
-  width: 91%;
+  width: 86%;
+  transition: linear 0.3s;
+}
+
+.displayRegionRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  height: 3.6rem;
+  width: 80%;
+  margin: 0.4rem 0;
+  border-radius: 1rem;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.displayRegionRow:hover {
+  color: #079CDB;
+  width: 81%;
   transition: linear 0.3s;
 }
 
@@ -78,7 +101,7 @@ a {
   font-weight: bold;
 }
 
-.tag0, .tag1, .tag2, .tag3 {
+.tag0, .tag1, .tag2, .tag3, .tag4, .tag5, .tag6, .tag7, .tag8, .tag9, .tag10, .tag11, .tag12, .tag13 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -138,7 +161,7 @@ a {
 }
 
 .tag13 {
-  background-color: #fff;
+  background-color: rgb(73, 73, 73);
 }
 
 .tag {

@@ -14,6 +14,7 @@ import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
+import StatusParser from "../../../../components/shared/status";
 
 // Setting up access to API
 const endpoint = process.env.COSMOS_ENDPOINT;
@@ -24,7 +25,7 @@ export async function getServerSideProps(context) {
   const clinicName = context.query.name
   const database = client.database("uc-ctct");
   const container = database.container("Clinics");
-  const { resources: clinic_data } = await container.items.query(`SELECT * from c WHERE c.id = '${clinicName}'`).fetchAll();
+  const { resource: data } = await container.item(clinicName, clinicName).read();
 
   // const status = res.ok;
   // const errorCode = status ? false : res.status;
@@ -37,10 +38,10 @@ export async function getServerSideProps(context) {
   //   }
   // }
 
-  return { props: { clinic_data } }
+  return { props: { data } }
 }
 
-export default function Database({ clinic_data }) {
+export default function Database({ data }) {
   // if (errorCode) {
   //   return <Error statusCode={errorCode} />
   // }
@@ -49,22 +50,8 @@ export default function Database({ clinic_data }) {
   const refreshData = () => {
     router.replace(router.asPath);
   }
-  const data = clinic_data[0]  
 
-  let statusText = 'N/A'
-
-  if (data['status'] === 0) {
-    statusText = <span style={{ padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FF3E3E', color: '#fff', borderRadius: '0.5rem' }}>Need To Contact</span>
-  }
-  if (data['status'] === 1) {
-    statusText = <span style={{ padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#FFB23E', color: '#fff', borderRadius: '0.5rem' }}>Need To Follow Up</span>
-  }
-  if (data['status'] === 2) {
-    statusText = <span style={{ padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#3EDCFF', color: '#fff', borderRadius: '0.5rem' }}>Contacted</span>
-  }
-  if (data['status'] === 3) {
-    statusText = <span style={{ padding: '0.3rem 0.6rem', margin: '0', backgroundColor: '#34E23B', color: '#fff', borderRadius: '0.5rem' }}>Connected</span>
-  }
+  const statusText = StatusParser("clinics", parseInt(data.status))
 
   const [generalOpen, setGeneralOpen] = useState(false);
   const [adminOpen, setAdminOpen] = useState(false);
@@ -88,7 +75,7 @@ export default function Database({ clinic_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Clinic Details" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${data.name} - Details`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.generalBox} style={{marginTop: '3rem'}}>
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>
@@ -100,33 +87,33 @@ export default function Database({ clinic_data }) {
                 </div>
                 <Accordion x={{title: "General Information", note: null}} ind={`profile0`}>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.site}</p>
-                    <p style={{marginRight: '2rem'}}><strong>Phone Number:</strong> {data.phoneNumber}</p>
-                    <p><strong>Fax Number:</strong> {data.faxNumber}</p>
+                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.generalInformation.site}</p>
+                    <p style={{marginRight: '2rem'}}><strong>Phone Number:</strong> {data.generalInformation.phoneNumber}</p>
+                    <p><strong>Fax Number:</strong> {data.generalInformation.faxNumber}</p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.addressLine1}, ${data.addressLine2 ? `${data.addressLine2}, ` : ''}${data.city}, ${data.state}, ${data.postal}`}</p>
+                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.generalInformation.addressLine1}, ${data.generalInformation.addressLine2 ? `${data.generalInformation.addressLine2}, ` : ''}${data.generalInformation.city}, ${data.generalInformation.state}, ${data.generalInformation.postal}`}</p>
                     <p><strong>Current Status:</strong> {statusText}</p>
                   </div>
                 </Accordion>
                 <Accordion x={{title: "Clinic Details", note: null}} ind={`profile1`}>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Setting (Location):</strong> In-patient </p>
-                    <p style={{marginRight: '2rem'}}><strong>Setting (Population):</strong> Women's Health </p>
-                    <p><strong>Population:</strong> Child/Adolescent </p>
+                    <p style={{marginRight: '2rem'}}><strong>Setting (Location):</strong> {data.description.settingLocation} </p>
+                    <p style={{marginRight: '2rem'}}><strong>Setting (Population):</strong> {data.description.settingPopulation} </p>
+                    <p><strong>Population:</strong> {data.description.population} </p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Visit type:</strong> 50% In-person | 50% Video Visits</p>
-                    <p><strong>Patient Acuity:</strong> Acute Care In-patient psychiatry</p>
+                    <p style={{marginRight: '2rem'}}><strong>Visit Type:</strong> {data.description.visitType} </p>
+                    <p><strong>Patient Acuity:</strong> {data.description.patientAcuity} </p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p><strong>Documentation:</strong> Student does not document in the EMR/chart (notes provided to preceptor for in-put in the EMR/chart)</p>
+                    <p><strong>Documentation:</strong> {data.description.documentation} </p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p><strong>Orders:</strong> Student does not enter orders, preceptor must enter</p>
+                    <p><strong>Orders:</strong> {data.description.orders} </p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p><strong>Appointment template:</strong> Student has a separate template and schedule of patients</p>
+                    <p><strong>Appointment Template:</strong> {data.description.apptTemplate} </p>
                   </div>
                 </Accordion>
               </div>

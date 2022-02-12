@@ -3,11 +3,16 @@ import styles from '../../../styles/Database.module.css'
 import Link from 'next/link'
 // import { CosmosClient } from '@azure/cosmos';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 import { useRouter } from 'next/router';
+<<<<<<< HEAD
 import { client } from '../../../api-lib/azure/azureConfig';
+=======
+import { IoMdAdd } from 'react-icons/io'
+import { FiEdit } from 'react-icons/fi'
+>>>>>>> ae0177ad9e5d0a9dcd8da3ca1c0ef0af22239bf8
 
 // Setting up access to API
 // const endpoint = process.env.COSMOS_ENDPOINT;
@@ -23,6 +28,7 @@ export async function getServerSideProps() {
 
 export default function Database({ data }) {
   const router = useRouter()
+  const [hover, setHover] = useState(false)
 
   return (
     <React.Fragment>
@@ -38,23 +44,32 @@ export default function Database({ data }) {
             <Header header="Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p style={{marginLeft: '2rem', width:'80%'}}>Region Name</p>
+                <p style={{width:'70%', marginLeft: '2rem'}}>Region Name</p>
                 <p style={{width:'20%'}}>Total sites</p>
+                <IoMdAdd color="#079CDB" size={hover ? 45 : 40} style={{cursor: 'pointer', transition: '0.2s linear'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
               </div>
               {data.map((x, ind) => {
+                const [hover, setHover] = useState(false)
+
                 return (
-                  <Link href={`/sites/database/site?location=${x['id']}`}>
-                    <div className='displayRow' key={`elem_${ind}`}>
-                      <p style={{ marginLeft: '2rem', width: '88%' }}>{x['name']} Region</p>
-                      <p style={{ width: '12%' }}>{x['total_sites']}</p>
-                    </div>
-                  </Link>)
+                  <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                    <Link href={`/sites/database/site?location=${x['id']}`}>
+                      <div className='displayRegionRow' key={`elem_${ind}`}>
+                        <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']} Region</p>
+                        <p style={{ width: '25%', textAlign: 'center' }}>{x['total_sites']}</p>
+                      </div>
+                    </Link>
+                    <FiEdit color="#C4C4C4" size={hover ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                  </div>
+                  )
               })}
             </div>
           </div>
         </main>
       </div>
-      <style>
+      <style >
       </style>
     </React.Fragment>
   )
