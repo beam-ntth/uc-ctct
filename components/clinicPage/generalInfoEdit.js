@@ -2,11 +2,7 @@ import React, { useState, useEffect } from "react";
 import StatusParser from "../shared/status";
 import DescriptionGenerator from "./description";
 import { CosmosClient } from '@azure/cosmos';
-
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function ClinicInfoEdit(props) {
     const [info, setInfo] = useState(props.data)

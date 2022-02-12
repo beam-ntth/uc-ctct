@@ -1,19 +1,19 @@
+// Import React & Next modules
 import Head from 'next/head'
-import styles from '../../../styles/Visualization.module.css'
 import Link from 'next/link'
-
 import React, { useEffect } from "react";
+import styles from '../../../styles/Visualization.module.css'
+
+// Import Next Components
 import Chart from 'chart.js/auto'
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 import PieChart from '../../../components/Charts/piechart';
 import BarChart from '../../../components/Charts/barcharts';
-import { CosmosClient } from '@azure/cosmos';
 import StatusParser from '../../../components/shared/status';
 
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({ endpoint, key });
+// Import DB component
+import { client } from '../../../api-lib/azure/azureConfig';
 
 export async function getServerSideProps() {
   // console.log("CREATING CLIENT");

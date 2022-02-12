@@ -11,11 +11,6 @@ import { client } from '../../../api-lib/azure/azureConfig';
 import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
 
-// Setting up access to API
-// const endpoint = process.env.COSMOS_ENDPOINT;
-// const key = process.env.COSMOS_KEY;
-// const client = new CosmosClient({endpoint , key});
-
 export async function getServerSideProps() {
   const database = client.database("uc-ctct");
   const container = database.container("Regions");

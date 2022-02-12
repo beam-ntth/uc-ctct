@@ -1,21 +1,21 @@
+// Import Next & React modules
 import Head from 'next/head'
-import styles from '../../../styles/Database.module.css'
-import nextConnect from 'next-connect';
 import Link from 'next/link'
-import { CosmosClient } from '@azure/cosmos';
-
+import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
+import styles from '../../../styles/Database.module.css'
+
+// Import Next Components
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
-import { useRouter } from 'next/router';
 import StatusParser from '../../../components/shared/status';
+
+// Import DB component
+import { client } from '../../../api-lib/azure/azureConfig';
+
+// Import third-party icons
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
-
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
 
 export async function getServerSideProps(context) {
   const location = context.query.location

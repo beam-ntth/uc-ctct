@@ -1,14 +1,14 @@
+// Import React & Next modules
 import Head from "next/head";
 import Link from "next/link";
-import Error from 'next/error'
-
 import React, { useState } from "react";
+import { useRouter } from "next/router";
+
+// Import Next Components
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
-import { useRouter } from "next/router";
-import { CosmosClient } from '@azure/cosmos';
 import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
 import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
@@ -16,10 +16,8 @@ import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEd
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import StatusParser from "../../../../components/shared/status";
 
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+// Import DB component
+import { client } from '../../../api-lib/azure/azureConfig';
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name

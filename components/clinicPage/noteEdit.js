@@ -1,10 +1,10 @@
+// Import React modules
 import React, { useState, useEffect } from "react";
-import { CosmosClient } from '@azure/cosmos';
 
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+// Import DB modules
+import { CosmosClient } from '@azure/cosmos';
+import { client } from '../../../api-lib/azure/azureConfig';
+
 const currentdate = new Date();
 
 export default function NoteEdit(props) {

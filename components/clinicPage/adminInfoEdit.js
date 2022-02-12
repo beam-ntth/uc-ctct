@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { CosmosClient } from '@azure/cosmos';
-
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function AdminInfoEdit(props) {
 

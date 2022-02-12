@@ -1,10 +1,9 @@
+// Import React modules
 import React, { useEffect, useState } from "react";
-import { CosmosClient } from '@azure/cosmos';
 
-// Setting up access to API
-const endpoint = process.env.COSMOS_ENDPOINT;
-const key = process.env.COSMOS_KEY;
-const client = new CosmosClient({endpoint , key});
+// Import DB modules
+import { CosmosClient } from '@azure/cosmos';
+import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function PlacementInfoEdit(props) {
     const [info, setInfo] = useState(props.data.clinicPlacementDetail)
