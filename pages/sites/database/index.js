@@ -9,8 +9,7 @@ import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
 
 // Import DB operation
-import { getAllRegions, removeRegion, removeSite } from '../../../api-lib/azure/azureOps';
-import { client } from '../../../api-lib/azure/azureConfig';
+import { getAllRegions, removeRegion } from '../../../api-lib/azure/azureOps';
 
 // Importing components
 import Navbar from '../../../components/shared/navbar/navbar';
@@ -37,12 +36,8 @@ export default function Database({ data }) {
 
   async function removeElement(id) {
     console.log("ID", id);
-    // const database = client.database("uc-ctct");
-    // const container = database.container("Regions");
-    // await container.item(id, id).delete();
-    removeSite("1");
-    // removeRegion(id);
-    refreshData()
+    removeRegion(id);
+    refreshData();
     return
   }
 

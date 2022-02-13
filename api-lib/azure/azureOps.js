@@ -106,12 +106,13 @@ export const removeSite = async (id) => {
       query: getClinicsConnectedToSite,
       parameters: [{ name: "@site_id", value: id }]
     }).fetchAll();
-    console.log("CLINICS FETCHED", clinics);
+
     // Iterate through all clinics and delete
     for (const clinic of clinics) {
       console.log("Removing clinc with id", clinic.id)
       removeClinic(clinic.id);
     }
+
     // Remove site itself. 
     await Sites.item(id, id).delete();
   } catch (error) {
@@ -122,51 +123,74 @@ export const removeSite = async (id) => {
 /**
  * Deletes data in a bottom up form, i.e from clinic to site to region finally.
  * @param {String} id - ID of the region that is being removed.
+ * @throws {Error} Error if any operation is unable to be completed.
  */
 export const removeRegion = async (id) => {
-  console.log("Removing Region: ", id);
+  console.log("Passing");
   try {
-    // Get all sites connected to region to delete.
-    const { resources: sites } = await Sites.items
-      .query({
-        query: getSitesConnectedToRegion,
-        parameters: [{ name: "@region_id", value: id }],
-      })
-      .fetchAll();
+    // Fetch all sites related to the current region. 
+    const { resources: sites } = await Sites.items.query({
+      query: getSitesConnectedToRegion,
+      parameters: [{ name: "@region_id", value: id }]
+    }).fetchAll();
 
-    let clinics = [];
-    // TODO: CREATE FUNCTIONS FOR REMOVING SITE AND REMOVING REGION, THEN USE THEM HERE.
+    // Iterate through all sites and and remove accordingly. 
+    // If no sites are found no error will be thrown. 
     for (const site of sites) {
-      clinics.push();
+      removeSite(site.id);
     }
 
-    // Delete all clinics connected to relevant sites, if sites exist.
-    if (sites) {
-    }
-
-    for (const site of sites) {
-      console.log("Site id is", site.id);
-      let siteID = site.id;
-      console.log(siteID);
-      Clinics.items.query({
-        query: deleteClinicsConnectedToSite,
-        parameters: [{ name: "@site_id", value: siteID }],
-      });
-    }
-
-    console.log("Past");
-
-    // Delete all sites connected to relevant region.
-    Sites.items.query({
-      query: deleteSitesConnectedToRegion,
-      parameters: [{ name: "@region_id", value: id }],
-    });
-
-    // Delete the current site.
+    // Delete the specified region.
     await Regions.item(id, id).delete();
+
   } catch (error) {
-    console.log("Error is", error.code);
-    throw new Error(`Issue deleting region. Please contact IT.`);
-    // continue;
+    throw new Error("Issue deleting region with id", id);
   }
-};
+}
+// export const removeRegion = async (id) => {
+//   console.log("Removing Region: ", id);
+//   try {
+//     // Get all sites connected to region to delete.
+//     const { resources: sites } = await Sites.items
+//       .query({
+//         query: getSitesConnectedToRegion,
+//         parameters: [{ name: "@region_id", value: id }],
+//       })
+//       .fetchAll();
+
+//     let clinics = [];
+//     // TODO: CREATE FUNCTIONS FOR REMOVING SITE AND REMOVING REGION, THEN USE THEM HERE.
+//     for (const site of sites) {
+//       clinics.push();
+//     }
+
+//     // Delete all clinics connected to relevant sites, if sites exist.
+//     if (sites) {
+//     }
+
+//     for (const site of sites) {
+//       console.log("Site id is", site.id);
+//       let siteID = site.id;
+//       console.log(siteID);
+//       Clinics.items.query({
+//         query: deleteClinicsConnectedToSite,
+//         parameters: [{ name: "@site_id", value: siteID }],
+//       });
+//     }
+
+//     console.log("Past");
+
+//     // Delete all sites connected to relevant region.
+//     Sites.items.query({
+//       query: deleteSitesConnectedToRegion,
+//       parameters: [{ name: "@region_id", value: id }],
+//     });
+
+//     // Delete the current site.
+//     await Regions.item(id, id).delete();
+//   } catch (error) {
+//     console.log("Error is", error.code);
+//     throw new Error(`Issue deleting region. Please contact IT.`);
+//     // continue;
+//   }
+// };
