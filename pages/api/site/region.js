@@ -4,7 +4,7 @@ export default function handler(req, res) {
   setTimeout(() => {
     1000;
   });
-  
+
   // /api/site/region
   if (Object.keys(query).length === 0) {
     res.status(200).json([
@@ -28,7 +28,7 @@ export default function handler(req, res) {
   }
 
   // /api/site/region?location=north
-  
+
   if (query["location"] == "north") {
     res.status(200).json([
       {

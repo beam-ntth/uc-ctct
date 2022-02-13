@@ -2,32 +2,23 @@
 import Head from 'next/head'
 import styles from '../../../styles/Database.module.css'
 import Link from 'next/link'
-// import React, { useState } from 'react';
-// import { IoMdAdd } from 'react-icons/io'
-// import { FiEdit } from 'react-icons/fi'
-// import { useRouter } from 'next/router';
-
-// Import of components
-// import Navbar from '../../../components/shared/navbar/navbar';
-// import Header from '../../../components/shared/header/header';
-
-// Import DB operation
-import { getAllRegions, getAllSites } from '../../../api-lib/azure/azureOps';
-// import { CosmosClient } from '@azure/cosmos';
-
-import React, { useEffect, useState } from 'react';
-import Navbar from '../../../components/shared/navbar/navbar';
-import Header from '../../../components/shared/header/header';
 import { useRouter } from 'next/router';
-import { client } from '../../../api-lib/azure/azureConfig';
+import React, { useEffect, useState } from 'react';
+import { FaRegTrashAlt } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
+
+// Import DB operation
+import { getAllRegions, removeRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { client } from '../../../api-lib/azure/azureConfig';
+
+// Importing components
+import Navbar from '../../../components/shared/navbar/navbar';
+import Header from '../../../components/shared/header/header';
 import AddNewRegion from '../../../components/shared/forms/addRegion';
-import { FaRegTrashAlt } from 'react-icons/fa';
 import EditRegion from '../../../components/shared/forms/editRegion';
 
 export async function getServerSideProps() {
-  // const data = await getAllSites();
   const data = await getAllRegions();
   return { props: { data } }
 }
@@ -45,9 +36,12 @@ export default function Database({ data }) {
   }
 
   async function removeElement(id) {
-    const database = client.database("uc-ctct");
-    const container = database.container("Regions");
-    await container.item(id, id).delete();
+    console.log("ID", id);
+    // const database = client.database("uc-ctct");
+    // const container = database.container("Regions");
+    // await container.item(id, id).delete();
+    removeSite("1");
+    // removeRegion(id);
     refreshData()
     return
   }

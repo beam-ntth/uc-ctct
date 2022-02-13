@@ -8,8 +8,8 @@ handler.use(...setup);
 
 // Redirection to the public page once logged in with Google. 
 handler.get('api/auth/accepted', passport.authenticate('google'),
-  (req, res) => {
-    res.redirect('/main')
-  });
+    (req, res) => {
+        res.redirect('/main')
+    });
 
 export default handler;

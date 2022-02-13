@@ -6,21 +6,21 @@ export default function StatusParser(type, id) {
         switch (id) {
             case -1:
                 text = <React.Fragment>
-                        <option value={0}>Initial Lead</option>
-                        <option value={1}>Outreach</option>
-                        <option value={2}>Waiting For Response</option>
-                        <option value={3}>Scheduled Meeting</option>
-                        <option value={4}>TAA Request</option>
-                        <option value={5}>TAA Site Signature Pending</option>
-                        <option value={6}>TAA University Signature Pending</option>
-                        <option value={7}>Site Active TAA</option>
-                        <option value={8}>TAA Amendment Pending</option>
-                        <option value={9}>TAA Expiring Soon</option>
-                        <option value={10}>No Go</option>
-                        <option value={11}>No Go For Now - Follow Up</option>
-                        <option value={12}>Follow Up Needed</option>
-                        <option value={13}>Site Inactive</option>
-                    </React.Fragment>
+                    <option value={0}>Initial Lead</option>
+                    <option value={1}>Outreach</option>
+                    <option value={2}>Waiting For Response</option>
+                    <option value={3}>Scheduled Meeting</option>
+                    <option value={4}>TAA Request</option>
+                    <option value={5}>TAA Site Signature Pending</option>
+                    <option value={6}>TAA University Signature Pending</option>
+                    <option value={7}>Site Active TAA</option>
+                    <option value={8}>TAA Amendment Pending</option>
+                    <option value={9}>TAA Expiring Soon</option>
+                    <option value={10}>No Go</option>
+                    <option value={11}>No Go For Now - Follow Up</option>
+                    <option value={12}>Follow Up Needed</option>
+                    <option value={13}>Site Inactive</option>
+                </React.Fragment>
                 break
             case 0:
                 text = "Initial Lead"
@@ -73,17 +73,17 @@ export default function StatusParser(type, id) {
         switch (id) {
             case -1:
                 text = <React.Fragment>
-                        <option value={0}>Administrative Outreach</option>
-                        <option value={1}>Waiting For Response</option>
-                        <option value={2}>Scheduled Meeting</option>
-                        <option value={3}>No Go</option>
-                        <option value={4}>No Go For Now - Follow Up</option>
-                        <option value={5}>Follow Up Needed</option>
-                        <option value={6}>Clinic Profile in Process</option>
-                        <option value={7}>Clinic Active</option>
-                        <option value={8}>Clinic Inactive</option>
-                        <option value={9}>Site Visit Needed</option>
-                    </React.Fragment>
+                    <option value={0}>Administrative Outreach</option>
+                    <option value={1}>Waiting For Response</option>
+                    <option value={2}>Scheduled Meeting</option>
+                    <option value={3}>No Go</option>
+                    <option value={4}>No Go For Now - Follow Up</option>
+                    <option value={5}>Follow Up Needed</option>
+                    <option value={6}>Clinic Profile in Process</option>
+                    <option value={7}>Clinic Active</option>
+                    <option value={8}>Clinic Inactive</option>
+                    <option value={9}>Site Visit Needed</option>
+                </React.Fragment>
                 break
             case 0:
                 text = "Administrative Outreach"
@@ -124,17 +124,17 @@ export default function StatusParser(type, id) {
         switch (id) {
             case -1:
                 text = <React.Fragment>
-                <option value={0}>Preceptor Outreach</option>
-                <option value={1}>Preceptor Credentialing</option>
-                <option value={2}>Waiting for Response</option>
-                <option value={3}>Scheduled Meeting</option>
-                <option value={4}>Follow Up Needed</option>
-                <option value={5}>No Go</option>
-                <option value={6}>No Go For Now - Follow Up</option>
-                <option value={7}>Preceptor Active</option>
-                <option value={8}>Preceptor Inactive</option>
-                <option value={9}>Site Visit Needed</option>
-            </React.Fragment>
+                    <option value={0}>Preceptor Outreach</option>
+                    <option value={1}>Preceptor Credentialing</option>
+                    <option value={2}>Waiting for Response</option>
+                    <option value={3}>Scheduled Meeting</option>
+                    <option value={4}>Follow Up Needed</option>
+                    <option value={5}>No Go</option>
+                    <option value={6}>No Go For Now - Follow Up</option>
+                    <option value={7}>Preceptor Active</option>
+                    <option value={8}>Preceptor Inactive</option>
+                    <option value={9}>Site Visit Needed</option>
+                </React.Fragment>
                 break
             case 0:
                 text = "Preceptor Outreach"

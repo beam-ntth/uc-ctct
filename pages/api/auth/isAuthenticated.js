@@ -10,7 +10,7 @@ export const isAuthenticated = (req, res) => {
 }
 
 handler.get('/api/auth/isAuthenticated', (req, res) => {
-  (req.user ? res.json({ authenticated: true }) : res.json({ authenticated: false }));
+    (req.user ? res.json({ authenticated: true }) : res.json({ authenticated: false }));
 });
 
 export default handler;

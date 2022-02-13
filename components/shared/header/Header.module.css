@@ -1,39 +1,40 @@
 .mainHeader {
-    height: 10%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 5rem;
-    padding-left: 7rem;
+  height: 10%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 5rem;
+  padding-left: 7rem;
 }
 
 .headerName {
-    margin: 0 0 0.5rem 0;
-    font-size: 2rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
 }
 
-.headerName, .headerDate {
-    font-family: 'Lato', sans-serif;
-    font-weight: bold;
+.headerName,
+.headerDate {
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
 }
 
 .headerDate {
-    margin: 0;
-    color: #AAB2C8;
-    font-size: 1.2rem;
+  margin: 0;
+  color: #aab2c8;
+  font-size: 1.2rem;
 }
 
 .headerImg {
-    height: 100%;
-    width: auto;
-    margin: 0 5rem;
+  height: 100%;
+  width: auto;
+  margin: 0 5rem;
 }
 
 .headerImg img {
-    height: 80%;
-    width: auto;
+  height: 80%;
+  width: auto;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap");

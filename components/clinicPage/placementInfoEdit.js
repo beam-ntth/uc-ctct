@@ -6,74 +6,74 @@ import { CosmosClient } from '@azure/cosmos';
 import { client } from '../../api-lib/azure/azureConfig';
 
 export default function PlacementInfoEdit(props) {
-    const [info, setInfo] = useState(props.data.clinicPlacementDetail)
+  const [info, setInfo] = useState(props.data.clinicPlacementDetail)
 
-    async function updateInfo() {
-        const database = client.database("uc-ctct");
-        const container = database.container("Clinics");
-        const { resource: clinic_data } = await container.item(props.id, props.id).read();
-        let adminInfo = clinic_data.adminInfo
-        adminInfo = info
-        console.log(info)
-        const replaceOperation = 
-        [{ 
-            op: "replace", 
-            path: "/clinicPlacementDetail", 
-            value: adminInfo
-        }];
-        const { resource: patchRes } = await container.item(props.id, props.id).patch(replaceOperation)
-        props.reload()
-    }
+  async function updateInfo() {
+    const database = client.database("uc-ctct");
+    const container = database.container("Clinics");
+    const { resource: clinic_data } = await container.item(props.id, props.id).read();
+    let adminInfo = clinic_data.adminInfo
+    adminInfo = info
+    console.log(info)
+    const replaceOperation =
+      [{
+        op: "replace",
+        path: "/clinicPlacementDetail",
+        value: adminInfo
+      }];
+    const { resource: patchRes } = await container.item(props.id, props.id).patch(replaceOperation)
+    props.reload()
+  }
 
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    useEffect(() => {
-        document.addEventListener("keydown", e => {
-            if (e.key === 'Enter') {
-                updateInfo()
-                props.setOpen(false)
-                return
-            }
-        })
+  // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
+  useEffect(() => {
+    document.addEventListener("keydown", e => {
+      if (e.key === 'Enter') {
+        updateInfo()
+        props.setOpen(false)
+        return
+      }
     })
+  })
 
-    return (
-        <React.Fragment>
-        <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-        <div className="editScreen" onKeyPress={(e) => {console.log(e.key)}}>
-            <p className="editTitle">Edit Clinical Placement Information</p>
-            <div style={{height: 'auto', width: '90%'}}>
-                {props.data.clinicPlacementDetail.map((x, ind) => {
-                    return (
-                        <React.Fragment>
-                            <p key={`title_${ind}`}><strong>Title:</strong><input value={x.title} disabled /></p>
-                            <div key={`note_${ind}`} style={{display: 'flex'}}>
-                                <strong>Note:</strong>
-                                <textarea value={info[ind] ? info[ind].note : ""} 
-                                onChange={e => {
-                                    let newInfo = [...info]
-                                    newInfo[ind].note = (e.target.value ? e.target.value : "")
-                                    setInfo(newInfo)
-                                    return
-                                    }
-                                }
-                                ></textarea>
-                            </div>
-                        </React.Fragment>
-                    )
-                })}
-            </div>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => {
-                    updateInfo()
-                    props.setOpen(false)
-                    return
+  return (
+    <React.Fragment>
+      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="editScreen" onKeyPress={(e) => { console.log(e.key) }}>
+        <p className="editTitle">Edit Clinical Placement Information</p>
+        <div style={{ height: 'auto', width: '90%' }}>
+          {props.data.clinicPlacementDetail.map((x, ind) => {
+            return (
+              <React.Fragment>
+                <p key={`title_${ind}`}><strong>Title:</strong><input value={x.title} disabled /></p>
+                <div key={`note_${ind}`} style={{ display: 'flex' }}>
+                  <strong>Note:</strong>
+                  <textarea value={info[ind] ? info[ind].note : ""}
+                    onChange={e => {
+                      let newInfo = [...info]
+                      newInfo[ind].note = (e.target.value ? e.target.value : "")
+                      setInfo(newInfo)
+                      return
                     }
-                }>Save</div>
-            </div>
+                    }
+                  ></textarea>
+                </div>
+              </React.Fragment>
+            )
+          })}
         </div>
-        <style jsx>
-            {
-                `
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+          <div className="saveBtn" onClick={() => {
+            updateInfo()
+            props.setOpen(false)
+            return
+          }
+          }>Save</div>
+        </div>
+      </div>
+      <style jsx>
+        {
+          `
                 .backDrop {
                     height: 100vh;
                     width: 100vw;
@@ -132,8 +132,8 @@ export default function PlacementInfoEdit(props) {
                     cursor: pointer;
                 }
                 `
-            }
-        </style>
+        }
+      </style>
     </React.Fragment>
-    )
+  )
 }

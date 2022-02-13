@@ -3,56 +3,56 @@ import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function EditRegion(props) {
-    const [name, setName] = useState("")
+  const [name, setName] = useState("")
 
-    async function editElement() {
-        console.log(props.open)
-        const database = client.database("uc-ctct");
-        const container = database.container("Regions");
-        const replaceOperation = 
-        [{ 
-          op: "replace", 
-          path: "/name", 
-          value: name
-        }];
-        await container.item(props.open, props.open).patch(replaceOperation);
-        props.reload()
+  async function editElement() {
+    console.log(props.open)
+    const database = client.database("uc-ctct");
+    const container = database.container("Regions");
+    const replaceOperation =
+      [{
+        op: "replace",
+        path: "/name",
+        value: name
+      }];
+    await container.item(props.open, props.open).patch(replaceOperation);
+    props.reload()
+    return
+  }
+
+  // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
+  useEffect(() => {
+    document.addEventListener("keydown", e => {
+      if (e.key === 'Enter') {
+        editElement()
+        props.setOpen(false)
         return
       }
-
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    useEffect(() => {
-        document.addEventListener("keydown", e => {
-            if (e.key === 'Enter') {
-                editElement()
-                props.setOpen(false)
-                return
-            }
-        })
     })
+  })
 
-    return (
-        <React.Fragment>
-        <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-        <div className="editScreen">
-            <p className="editTitle">Edit Region Name</p>
-            <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="New Region Name" onChange={(e) => {
-                    setName(e.target.value)
-                    return
-                }} /> </p>
-            </div>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => {
-                editElement()
-                props.setOpen(false)
-                return
-            }}>Save</div>
-            </div>
+  return (
+    <React.Fragment>
+      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="editScreen">
+        <p className="editTitle">Edit Region Name</p>
+        <div style={{ width: '90%' }}>
+          <p><strong>Name:</strong><input placeholder="New Region Name" onChange={(e) => {
+            setName(e.target.value)
+            return
+          }} /> </p>
         </div>
-        <style jsx>
-            {
-                `
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+          <div className="saveBtn" onClick={() => {
+            editElement()
+            props.setOpen(false)
+            return
+          }}>Save</div>
+        </div>
+      </div>
+      <style jsx>
+        {
+          `
                 .backDrop {
                     height: 100vh;
                     width: 100vw;
@@ -106,8 +106,8 @@ export default function EditRegion(props) {
                     cursor: pointer;
                 }
                 `
-            }
-        </style>
+        }
+      </style>
     </React.Fragment>
-    )
+  )
 }

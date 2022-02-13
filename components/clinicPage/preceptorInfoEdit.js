@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 
 export default function PreceptorInfoEdit(props) {
-    return (
-        <React.Fragment>
-        <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-        <div className="editScreen">
-            <p className="editTitle">Add Preceptor Contact Information</p>
-            <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="First Last" /> </p>
-                <p><strong>Position:</strong><input placeholder="Position" /></p>
-                <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
-                <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
-            </div>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
-            </div>
+  return (
+    <React.Fragment>
+      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="editScreen">
+        <p className="editTitle">Add Preceptor Contact Information</p>
+        <div style={{ width: '90%' }}>
+          <p><strong>Name:</strong><input placeholder="First Last" /> </p>
+          <p><strong>Position:</strong><input placeholder="Position" /></p>
+          <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
+          <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
         </div>
-        <style jsx>
-            {
-                `
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+          <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
+        </div>
+      </div>
+      <style jsx>
+        {
+          `
                 .backDrop {
                     height: 100vh;
                     width: 100vw;
@@ -72,8 +72,8 @@ export default function PreceptorInfoEdit(props) {
                     cursor: pointer;
                 }
                 `
-            }
-        </style>
+        }
+      </style>
     </React.Fragment>
-    )
+  )
 }
