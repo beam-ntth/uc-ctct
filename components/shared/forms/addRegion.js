@@ -13,15 +13,15 @@ export default function AddNewRegion(props) {
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    useEffect(() => {
-        document.addEventListener("keydown", e => {
-            if (e.key === 'Enter') {
-                createNewRegion()
-                props.setOpen(false)
-                return
-            }
-        })
-    })
+    // useEffect(() => {
+    //     document.addEventListener("keydown", e => {
+    //         if (e.key === 'Enter') {
+    //             createNewRegion()
+    //             props.setOpen(false)
+    //             return
+    //         }
+    //     })
+    // })
 
     return (
         <React.Fragment>
