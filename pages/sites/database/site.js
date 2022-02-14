@@ -11,20 +11,18 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { client } from '../../../api-lib/azure/azureConfig';
-
+import { getRegion, getSitesFromRegion } from '../../../api-lib/azure/azureOps';
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
 
 export async function getServerSideProps(context) {
+  // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
-  const database = client.database("uc-ctct");
-  const region_container = database.container("Regions");
-  const container = database.container("Sites");
-  const { resource: region_data } = await region_container.item(location, location).read();
-  const { resources: data } = await container.items.query(`SELECT * from c WHERE c.region_id = '${location}'`).fetchAll();
+  // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
+  const region_data = await getRegion(location);
+  const data = await getSitesFromRegion(location);
   return { props: { data, region_data } }
 }
 
@@ -48,60 +46,60 @@ export default function Database({ data, region_data }) {
             <Header header={`${region_data.name} Region - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className='row1Sites' style={{marginLeft: '2rem'}}>Site Name</p>
+                <p className='row1Sites' style={{ marginLeft: '2rem' }}>Site Name</p>
                 <p className='row2Sites'>Affiliation</p>
                 <p className='row3Sites'>Total Clinics</p>
                 <p className='row4Sites'>Status</p>
-                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{cursor: 'pointer', transition: '0.2s linear'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
               </div>
               {data.map((x, ind) => {
                 const statusText = StatusParser("sites", x.status)
 
                 return (
-                  <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <Link href={`/sites/database/clinics?location=${x.id}`}>
-                    <div key={`site_${ind}`} className='displayRow'>
-                      <div className='rowContentClinics'>
-                        <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                        <p className='row2Sites'>{x['affiliation']}</p>
-                        <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['total_clinics']}</p>
-                        <p className="row4Sites">{statusText}</p>
+                  <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Link href={`/sites/database/clinics?location=${x.id}`}>
+                      <div key={`site_${ind}`} className='displayRow'>
+                        <div className='rowContentClinics'>
+                          <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                          <p className='row2Sites'>{x['affiliation']}</p>
+                          <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['total_clinics']}</p>
+                          <p className="row4Sites">{statusText}</p>
+                        </div>
+                        <div className={`tag${x['status']}`}></div>
                       </div>
-                      <div className={`tag${x['status']}`}></div>
-                    </div>
-                  </Link>
-                  <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35} 
-                    style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                    onMouseEnter={() => {
-                      let newStatus = [...editHover]
-                      newStatus[ind] = true
-                      setEditHover(newStatus)
-                      return
+                    </Link>
+                    <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
+                      style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                      onMouseEnter={() => {
+                        let newStatus = [...editHover]
+                        newStatus[ind] = true
+                        setEditHover(newStatus)
+                        return
                       }
-                    } onMouseLeave={() => {
-                      let newStatus = [...editHover]
-                      newStatus[ind] = false
-                      setEditHover(newStatus)
-                      return
+                      } onMouseLeave={() => {
+                        let newStatus = [...editHover]
+                        newStatus[ind] = false
+                        setEditHover(newStatus)
+                        return
                       }
-                    }
-                    onClick={() => setOpenEditForm(x.id)} />
-                  <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35} 
-                    style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                    onMouseEnter={() => {
-                      let newStatus = [...trashHover]
-                      newStatus[ind] = true
-                      setTrashHover(newStatus)
-                      return
                       }
-                    } onMouseLeave={() => {
-                      let newStatus = [...trashHover]
-                      newStatus[ind] = false
-                      setTrashHover(newStatus)
-                      return
+                      onClick={() => setOpenEditForm(x.id)} />
+                    <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
+                      style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                      onMouseEnter={() => {
+                        let newStatus = [...trashHover]
+                        newStatus[ind] = true
+                        setTrashHover(newStatus)
+                        return
                       }
-                    } onClick={() => removeElement(x.id)} />
+                      } onMouseLeave={() => {
+                        let newStatus = [...trashHover]
+                        newStatus[ind] = false
+                        setTrashHover(newStatus)
+                        return
+                      }
+                      } onClick={() => removeElement(x.id)} />
                   </div>
                 )
               })}

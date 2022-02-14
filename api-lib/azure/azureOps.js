@@ -10,8 +10,6 @@ const Clinics = db.container("Clinics");
 
 // SQL Query Literals
 const selectAll = "SELECT * FROM c";
-const deleteSitesConnectedToRegion =
-  "DELETE * FROM c WHERE c.region_id = @region_id";
 const getSitesConnectedToRegion =
   "SELECT * FROM c WHERE c.region_id = @region_id";
 const getClinicsConnectedToSite =
@@ -40,19 +38,6 @@ export const getAllSites = async () => {
   }
 };
 
-/**
- *
- * @param {String} id - UUID of site
- */
-export const getSite = async (id) => {
-  try {
-    const { resources: data } = await Sites.item(id, id).read();
-    return data;
-  } catch (error) {
-    console.log("Error is: ", error.code);
-    throw new Error("Issue with fetching the site: ", id);
-  }
-};
 
 export const getAllClinics = async () => {
   try {
@@ -65,12 +50,26 @@ export const getAllClinics = async () => {
 };
 
 /**
- *
- * @param {String} id - UUID of clinic
+ * Query for singular region.
+ * @param {String} id - UUID of region to query. 
+ */
+export const getRegion = async (id) => {
+  try {
+    const { resource: data } = await Regions.item(id, id).read();
+    return data;
+  } catch (error) {
+    console.log("Error is", error);
+    throw new Error("Issue fetching region with id", id);
+  }
+}
+
+/**
+ * Query for singular clinic.
+ * @param {String} id - UUID of clinic to query.
  */
 export const getClinic = async (id) => {
   try {
-    const { resources: data } = await Regions.item(id, id).read();
+    const { resources: data } = await Clinics.item(id, id).read();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -78,6 +77,48 @@ export const getClinic = async (id) => {
   }
 }
 
+export const getClinicsFromSite = async (id) => {
+  try {
+    const { resources: data } = await Clinics.items.query({
+      query: getClinicsConnectedToSite,
+      parameters: [{ name: "@site_id", value: id }]
+    }).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error(`Issue fetching clinics connected to site ${id}`);
+  }
+}
+
+/**
+ * Query for singular site.
+ * @param {String} id - UUID of site to query.
+ */
+export const getSite = async (id) => {
+  try {
+    const { resources: data } = await Sites.item(id, id).read();
+    return data;
+  } catch (error) {
+    console.log("Error is: ", error.code);
+    throw new Error("Issue with fetching the site: ", id);
+  }
+};
+
+/**
+ * Get all sites connected to a specfic region.
+ * @param {String} id - UUID of region to query get all sites from. 
+ */
+export const getSitesFromRegion = async (id) => {
+  try {
+    const { resources: data } = await Sites.items.query({
+      query: getSitesConnectedToRegion,
+      parameters: [{ name: "@region_id", value: id }]
+    }).fetchAll();
+    return data;
+  } catch (error) {
+    console.log();
+    throw new Error(`Issue getting sites with region_id ${id}.`);
+  }
+}
 
 /** DELETION OPERATIONS */
 
@@ -102,10 +143,11 @@ export const removeClinic = async (id) => {
 export const removeSite = async (id) => {
   try {
     // Query all related clinics
-    const { resources: clinics } = await Clinics.items.query({
-      query: getClinicsConnectedToSite,
-      parameters: [{ name: "@site_id", value: id }]
-    }).fetchAll();
+    const clinics = await getClinicsFromSite(id);
+    // const { resources: clinics } = await Clinics.items.query({
+    //   query: getClinicsConnectedToSite,
+    //   parameters: [{ name: "@site_id", value: id }]
+    // }).fetchAll();
 
     // Iterate through all clinics and delete
     for (const clinic of clinics) {
@@ -129,10 +171,12 @@ export const removeRegion = async (id) => {
   console.log("Passing");
   try {
     // Fetch all sites related to the current region. 
-    const { resources: sites } = await Sites.items.query({
-      query: getSitesConnectedToRegion,
-      parameters: [{ name: "@region_id", value: id }]
-    }).fetchAll();
+    const sites = await getSitesFromRegion(id);
+
+    // const { resources: sites } = await Sites.items.query({
+    //   query: getSitesConnectedToRegion,
+    //   parameters: [{ name: "@region_id", value: id }]
+    // }).fetchAll();
 
     // Iterate through all sites and and remove accordingly. 
     // If no sites are found no error will be thrown. 
@@ -147,50 +191,3 @@ export const removeRegion = async (id) => {
     throw new Error("Issue deleting region with id", id);
   }
 }
-// export const removeRegion = async (id) => {
-//   console.log("Removing Region: ", id);
-//   try {
-//     // Get all sites connected to region to delete.
-//     const { resources: sites } = await Sites.items
-//       .query({
-//         query: getSitesConnectedToRegion,
-//         parameters: [{ name: "@region_id", value: id }],
-//       })
-//       .fetchAll();
-
-//     let clinics = [];
-//     // TODO: CREATE FUNCTIONS FOR REMOVING SITE AND REMOVING REGION, THEN USE THEM HERE.
-//     for (const site of sites) {
-//       clinics.push();
-//     }
-
-//     // Delete all clinics connected to relevant sites, if sites exist.
-//     if (sites) {
-//     }
-
-//     for (const site of sites) {
-//       console.log("Site id is", site.id);
-//       let siteID = site.id;
-//       console.log(siteID);
-//       Clinics.items.query({
-//         query: deleteClinicsConnectedToSite,
-//         parameters: [{ name: "@site_id", value: siteID }],
-//       });
-//     }
-
-//     console.log("Past");
-
-//     // Delete all sites connected to relevant region.
-//     Sites.items.query({
-//       query: deleteSitesConnectedToRegion,
-//       parameters: [{ name: "@region_id", value: id }],
-//     });
-
-//     // Delete the current site.
-//     await Regions.item(id, id).delete();
-//   } catch (error) {
-//     console.log("Error is", error.code);
-//     throw new Error(`Issue deleting region. Please contact IT.`);
-//     // continue;
-//   }
-// };
