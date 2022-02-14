@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
   return { props: { data, region_data } }
 }
 
-export default function Database({ data, region_data }) {
+export default function SiteDetails({ data, region_data }) {
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);

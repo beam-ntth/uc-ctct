@@ -71,7 +71,7 @@ export default function AddNewRegion(props) {
                     z-index: 901;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: flex-start;
                     border-radius: 1rem;
                     padding: 2rem;

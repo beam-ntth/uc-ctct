@@ -18,6 +18,9 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
+import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
+import AddNewClinic from "../../../../components/shared/forms/addClinic";
+import { removeClinic } from "../../../../api-lib/azure/azureOps";
 
 export async function getServerSideProps(context) {
     const location = context.query.location;
@@ -29,8 +32,12 @@ export async function getServerSideProps(context) {
     return { props: { data, note_data } }
 }
 
+
+
 export default function Clinics({ data, note_data }) {
     const [openNote, setOpenNote] = useState(false)
+    const [openEditForm, setOpenEditForm] = useState(false)
+    const [openAddClinic, setOpenAddClinic] = useState(false)
 
     const router = useRouter()
     const [hover, setHover] = useState(false)
@@ -39,9 +46,35 @@ export default function Clinics({ data, note_data }) {
         router.replace(router.asPath);
     }
 
+    async function removeNoteEntry(remove_index) {
+        const database = client.database("uc-ctct");
+        const site_container = database.container("Sites");
+        console.log("Remove index is:", remove_index)
+        note_data.notes.splice(remove_index, 1)
+        console.log(note_data.notes)
+        const replaceOperation =
+        [
+            {
+            op: "replace",
+            path: "/notes",
+            value: note_data.notes
+            }
+        ]
+        await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
+        setTimeout(() => refreshData(), 300)
+    }
+
+    async function removeElement(id) {
+        removeClinic(id, note_data.id)
+        setTimeout(() => refreshData(), 400)
+        return
+    }
+
     return (
         <React.Fragment>
             {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
+            {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
+            {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null}
             <div className={styles.container}>
                 <Head>
                     <title>UC-CTCT: Site Management Systems</title>
@@ -65,7 +98,7 @@ export default function Clinics({ data, note_data }) {
                                 </div>
                                 {
                                     note_data.notes.map((x, ind) => {
-                                        return (<Accordion x={x} ind={ind} />)
+                                        return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={note_data.id} remove={removeNoteEntry} />)
                                     })
                                 }
                             </div>
@@ -76,7 +109,7 @@ export default function Clinics({ data, note_data }) {
                                 <p className="row2Clinics">Last Updated</p>
                                 <p className="row3Clinics">Status</p>
                                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />
                             </div >
                             {
                                 data.map((x, ind) => {

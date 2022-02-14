@@ -19,6 +19,7 @@ import StatusParser from "../../../../components/shared/status";
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
@@ -40,7 +41,7 @@ export async function getServerSideProps(context) {
   return { props: { data } }
 }
 
-export default function Database({ data }) {
+export default function ClinicDetails({ data }) {
   // if (errorCode) {
   //   return <Error statusCode={errorCode} />
   // }
@@ -57,6 +58,11 @@ export default function Database({ data }) {
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
+
+  const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
+  const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
+  const [precepEditHover, setPrecepEditHover] = useState(Array(data.preceptorInfo.length).fill(false))
+  const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
 
   return (
     <React.Fragment>
@@ -84,7 +90,7 @@ export default function Database({ data }) {
                   </div>
                   <div className={styles.editButton} onClick={() => setGeneralOpen(true)}>Edit Information</div>
                 </div>
-                <Accordion x={{title: "General Information", note: null}} ind={`profile0`}>
+                <Accordion x={{title: "General Information", note: null}} ind={`profile0`} disabledEdit disabledTrash>
                   <div className={styles.generalDetail}>
                     <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.generalInformation.site}</p>
                     <p style={{marginRight: '2rem'}}><strong>Phone Number:</strong> {data.generalInformation.phoneNumber}</p>
@@ -95,7 +101,7 @@ export default function Database({ data }) {
                     <p><strong>Current Status:</strong> {statusText}</p>
                   </div>
                 </Accordion>
-                <Accordion x={{title: "Clinic Details", note: null}} ind={`profile1`}>
+                <Accordion x={{title: "Clinic Details", note: null}} ind={`profile1`} disabledEdit disabledTrash>
                   <div className={styles.generalDetail}>
                     <p style={{marginRight: '2rem'}}><strong>Setting (Location):</strong> {data.description.settingLocation} </p>
                     <p style={{marginRight: '2rem'}}><strong>Setting (Population):</strong> {data.description.settingPopulation} </p>
@@ -128,8 +134,6 @@ export default function Database({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.adminInfo.map((x, ind) => {
-                      const [hover, setHover] = useState(false)
-
                       return (
                         <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                           <div key={`admin_${ind}`} className="displayDetailRow">
@@ -137,8 +141,34 @@ export default function Database({ data }) {
                             <p className="adminCol2">{x.phone}</p>
                             <p className="adminCol3">{x.email}</p>
                           </div>
-                          <FiEdit color="#C4C4C4" size={hover ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                          <FiEdit color={adminEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={adminEditHover[ind] ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                          onMouseEnter={() => {
+                            let newStatus = [...adminEditHover]
+                            newStatus[ind] = true
+                            setAdminEditHover(newStatus)
+                            return
+                          }
+                          } onMouseLeave={() => {
+                            let newStatus = [...adminEditHover]
+                            newStatus[ind] = false
+                            setAdminEditHover(newStatus)
+                            return
+                          }} />
+                          <FaRegTrashAlt color={adminTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={adminTrashHover[ind] ? 38 : 35}
+                          style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                          onMouseEnter={() => {
+                            let newStatus = [...adminTrashHover]
+                            newStatus[ind] = true
+                            setAdminTrashHover(newStatus)
+                            return
+                          }
+                          } onMouseLeave={() => {
+                            let newStatus = [...adminTrashHover]
+                            newStatus[ind] = false
+                            setAdminTrashHover(newStatus)
+                            return
+                          }
+                          } onClick={() => removeElement(x.id, region_data.id)} />
                         </div>
                       )
                     })
@@ -157,8 +187,6 @@ export default function Database({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.preceptorInfo.map((x, ind) => {
-                      const [hover, setHover] = useState(false)
-
                       return (
                         <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                           <div key={`preceptor_${ind}`} className="displayDetailRow">
@@ -167,8 +195,34 @@ export default function Database({ data }) {
                             <p className="preceptorCol3">{x.phone}</p>
                             <p className="preceptorCol4">{x.email}</p>
                           </div>
-                          <FiEdit color="#C4C4C4" size={hover ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
+                          onMouseEnter={() => {
+                            let newStatus = [...precepEditHover]
+                            newStatus[ind] = true
+                            setPrecepEditHover(newStatus)
+                            return
+                          }
+                          } onMouseLeave={() => {
+                            let newStatus = [...precepEditHover]
+                            newStatus[ind] = false
+                            setPrecepEditHover(newStatus)
+                            return
+                          }} />
+                          <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
+                          style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                          onMouseEnter={() => {
+                            let newStatus = [...precepTrashHover]
+                            newStatus[ind] = true
+                            setPrecepTrashHover(newStatus)
+                            return
+                          }
+                          } onMouseLeave={() => {
+                            let newStatus = [...precepTrashHover]
+                            newStatus[ind] = false
+                            setPrecepTrashHover(newStatus)
+                            return
+                          }
+                          } onClick={() => removeElement(x.id, region_data.id)} />
                         </div>
                       )
                     })
@@ -187,9 +241,8 @@ export default function Database({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.clinicPlacementDetail.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} />)
-                    }
-                    )
+                      return (<Accordion x={x} ind={ind} disabledEdit disabledTrash />)
+                    })
                   }
                 </div>
               </div>
@@ -229,59 +282,59 @@ export default function Database({ data }) {
       <style jsx>
         {
           `
-                    .displayDetailRow {
-                        display: flex;
-                        flex-direction: row;
-                        justify-content: flex-start;
-                        align-items: center;
-                        background-color: #fff;
-                        height: auto;
-                        width: 100%;
-                        margin: 0.4rem 0;
-                        border-radius: 1rem;
-                        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-                        font-family: 'Lato', sans-serif;
-                        font-weight: 500;
-                        font-size: 1rem;
-                        // padding: 0.4rem 0;
-                    }
+            .displayDetailRow {
+                display: flex;
+                flex-direction: row;
+                justify-content: flex-start;
+                align-items: center;
+                background-color: #fff;
+                height: auto;
+                width: 100%;
+                margin: 0.4rem 0;
+                border-radius: 1rem;
+                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+                font-family: 'Lato', sans-serif;
+                font-weight: 500;
+                font-size: 1rem;
+                // padding: 0.4rem 0;
+            }
 
-                    .adminCol1 {
-                        width: 50%;
-                    }
-                    
-                    .adminCol2 {
-                        width: 25%;
-                    }
-                    
-                    .adminCol3 {
-                        width: 25%;
-                    }
-                    
-                    .preceptorCol1 {
-                        width: 40%;
-                    }
-                    
-                    .preceptorCol2 {
-                        width: 10%
-                    }
-                    
-                    .preceptorCol3 {
-                        width: 25%;
-                    }
-                    
-                    .preceptorCol4 {
-                        width: 25%;
-                    }
-                    
-                    .placementCol1 {
-                        width: 80%;
-                    }
-                    
-                    .adminCol1, .preceptorCol1 {
-                        padding-left: 2rem;
-                    }
-                    `
+            .adminCol1 {
+                width: 50%;
+            }
+            
+            .adminCol2 {
+                width: 25%;
+            }
+            
+            .adminCol3 {
+                width: 25%;
+            }
+            
+            .preceptorCol1 {
+                width: 40%;
+            }
+            
+            .preceptorCol2 {
+                width: 10%
+            }
+            
+            .preceptorCol3 {
+                width: 25%;
+            }
+            
+            .preceptorCol4 {
+                width: 25%;
+            }
+            
+            .placementCol1 {
+                width: 80%;
+            }
+            
+            .adminCol1, .preceptorCol1 {
+                padding-left: 2rem;
+            }
+            `
         }
       </style>
     </React.Fragment>

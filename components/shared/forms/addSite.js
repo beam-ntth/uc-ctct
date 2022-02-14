@@ -6,7 +6,7 @@ import StatusParser from "../status";
 export default function AddNewSite(props) {
     const [site, setSite] = useState({ id: uuidv4().toString(), region_id: props.regionId, affiliation: 'No Affiliation', name: '', total_clinics: 0, status: 0})
 
-    async function editSite() {
+    async function addSite() {
         const database = client.database("uc-ctct");
         const region_container = database.container("Regions");
         const { resource: previous_num_sites} = await region_container.item(props.regionId, props.regionId).read()
@@ -65,7 +65,7 @@ export default function AddNewSite(props) {
             </div>
             <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
                 <div className="saveBtn" onClick={() => {
-                editSite()
+                addSite()
                 props.setOpen(false)
                 return
             }}>Create Site</div>
@@ -98,7 +98,7 @@ export default function AddNewSite(props) {
                     z-index: 901;
                     display: flex;
                     flex-direction: column;
-                    justify-content: center;
+                    justify-content: flex-start;
                     align-items: flex-start;
                     border-radius: 1rem;
                     padding: 2rem;

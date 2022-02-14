@@ -126,12 +126,23 @@ export const getSitesFromRegion = async (id) => {
  * Removes clinic with passed in ID.
  * @param {String} id - UUID of clinic that is being removed
  */
-export const removeClinic = async (id) => {
+export const removeClinic = async (id, siteId) => {
   try {
     await Clinics.item(id, id).delete();
+
+    // Update total number of clinics
+    const { resource: previous_num_clinics} = await Sites.item(siteId, siteId).read()
+    const replaceOperation =
+        [{
+          op: "replace",
+          path: "/total_clinics",
+          value: previous_num_clinics["total_clinics"] - 1
+        }]
+    await Sites.item(siteId, siteId).patch(replaceOperation)
+
   } catch (error) {
     console.log("Error is", error.code);
-    throw new Error("Issue deleting clinc with id", id);
+    throw new Error("Issue deleting clinic with id", id);
   }
 }
 

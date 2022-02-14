@@ -2,45 +2,31 @@ import React, { useState, useEffect } from "react";
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 
-export default function EditSite(props) {
-    const [site, setSite] = useState("")
-
-    async function getCurrentData() {
-        const database = client.database("uc-ctct");
-        const site_container = database.container("Sites")
-        const { resource: data } = await site_container.item(props.open, props.open).read()
-        setSite(data)
-    }
+export default function EditSiteNote(props) {
+    const [id, index, data] = props.open
+    const [siteNote, setSiteNote] = useState("")
+    // Filled in the form with pre-existing data
+    useEffect(() => {
+        setSiteNote(data)
+    }, [])
 
     async function editElement() {
         const database = client.database("uc-ctct");
         const site_container = database.container("Sites");
+        const { resource: prev_data } = await site_container.item(id, id).read();
+        let new_data = prev_data.notes
+        new_data[index] = siteNote
         const replaceOperation =
         [
             {
-            op: "replace",
-            path: "/name",
-            value: site.name
-            },
-            {
-            op: "replace",
-            path: "/affiliation",
-            value: site.affiliation
-            },
-            {
-            op: "replace",
-            path: "/status",
-            value: site.status
-            },
+                op: "replace",
+                path: "/notes",
+                value: new_data
+            }
         ];
-        await site_container.item(props.open, props.open).patch(replaceOperation);
+        await site_container.item(id, id).patch(replaceOperation);
         setTimeout(() => props.reload(), 300)
     }
-
-    // Filled in the form with pre-existing data
-    useEffect(() => {
-        getCurrentData()
-    }, [])
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
     // useEffect(() => {
@@ -59,33 +45,20 @@ export default function EditSite(props) {
         <div className="editScreen">
         <p className="editTitle">Edit Region Name</p>
         <div style={{ width: '90%' }}>
-            <p><strong>Name:</strong><input value={site.name} onChange={(e) => {
-            let newSite = {...site}
-            newSite.name = e.target.value
-            setSite(newSite)
+            <p><strong>Title:</strong><input value={siteNote.title} onChange={(e) => {
+            let newSite = {...siteNote}
+            newSite.title = e.target.value
+            setSiteNote(newSite)
             return
             }} /> </p>
         </div>
-        <div style={{ width: '90%' }}>
-            <p><strong>Affiliation:</strong><input value={site.affiliation} onChange={(e) => {
-            let newSite = {...site}
-            newSite.affiliation = e.target.value
-            setSite(newSite)
+        <div style={{ width: '90%'}}>
+            <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={siteNote.note} onChange={(e) => {
+            let newSite = {...siteNote}
+            newSite.note = e.target.value
+            setSiteNote(newSite)
             return
             }} /> </p>
-        </div>
-        <div style={{ width: '90%' }}>
-            <p>
-                <strong>Status:</strong>
-                <select value={site.status} onChange={(e) => {
-                    let newSite = {...site}
-                    newSite.status = e.target.value
-                    setSite(newSite)
-                    return 
-                }}>
-                    { StatusParser("sites", -1) }
-                </select> 
-            </p>
         </div>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
             <div className="saveBtn" onClick={() => {
@@ -113,7 +86,7 @@ export default function EditSite(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 45vh;
+                    height: 65vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
@@ -129,12 +102,21 @@ export default function EditSite(props) {
                     overflow-y: scroll;
                 }
                 
-                .editScreen input, .editScreen select {
+                .editScreen input {
                     margin-left: 0.4rem;
                     border-radius: 0.5rem;
                     border: solid 1px #c4c4c4;
                     padding: 0.5rem;
                     width: 50%;
+                }
+                
+                .editScreen textarea {
+                    margin-left: 0.4rem;
+                    border-radius: 0.5rem;
+                    border: solid 1px #c4c4c4;
+                    padding: 0.5rem;
+                    width: 80%;
+                    height: 15rem;
                 }
                 
                 .saveBtn {
