@@ -11,11 +11,14 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { getRegion, getSitesFromRegion } from '../../../api-lib/azure/azureOps';
+import { getRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import AddNewSite from '../../../components/shared/forms/addSite';
+import EditSite from '../../../components/shared/forms/editSite';
 
 export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
@@ -28,12 +31,27 @@ export async function getServerSideProps(context) {
 
 export default function Database({ data, region_data }) {
   const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
   const [hover, setHover] = useState(false)
+  const [openForm, setOpenForm] = useState(false)
+  const [openEditForm, setOpenEditForm] = useState(false)
   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
+  async function removeElement(id, regionId) {
+    console.log("ID", id);
+    removeSite(id, regionId);
+    setTimeout(() => refreshData(), 500)
+    return
+  }
+
   return (
     <React.Fragment>
+      {openForm ? <AddNewSite open={openForm} setOpen={setOpenForm} reload={refreshData} regionId={region_data.id} /> : null}
+      {openEditForm ? <EditSite open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -51,10 +69,10 @@ export default function Database({ data, region_data }) {
                 <p className='row3Sites'>Total Clinics</p>
                 <p className='row4Sites'>Status</p>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
               </div>
               {data.map((x, ind) => {
-                const statusText = StatusParser("sites", x.status)
+                const statusText = StatusParser("sites", parseInt(x.status))
 
                 return (
                   <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -99,7 +117,7 @@ export default function Database({ data, region_data }) {
                         setTrashHover(newStatus)
                         return
                       }
-                      } onClick={() => removeElement(x.id)} />
+                      } onClick={() => removeElement(x.id, region_data.id)} />
                   </div>
                 )
               })}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function EditRegion(props) {
