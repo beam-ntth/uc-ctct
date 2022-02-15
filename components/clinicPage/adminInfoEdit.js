@@ -4,131 +4,132 @@ import { client } from "../../api-lib/azure/azureConfig";
 import { getClinic, getSite } from "../../api-lib/azure/azureOps";
 
 export default function AdminInfoEdit(props) {
-    const [hover, setHover] = useState(false)
-    const [info, setInfo] = useState({
-        name: null,
-        position: null,
-        phone: null,
-        email: null,
+  const [hover, setHover] = useState(false)
+  const [info, setInfo] = useState({
+    name: null,
+    position: null,
+    phone: null,
+    email: null,
+  });
+
+  async function updateInfo() {
+    // const database = client.database("uc-ctct");
+    // const container = database.container("Clinics");
+    // const { resource: clinic_data } = await container.item(props.id, props.id).read();
+    const clinic_data = await getClinic(props.id);
+    console.log("Clinic data", clinic_data);
+    let adminInfo = clinic_data.adminInfo;
+    adminInfo.push(info);
+    const replaceOperation = [
+      {
+        op: "replace",
+        path: "/adminInfo",
+        value: adminInfo,
+      },
+    ];
+    const { resource: patchRes } = await container
+      .item(props.id, props.id)
+      .patch(replaceOperation);
+    props.reload();
+  }
+
+  // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        updateInfo();
+        props.setOpen(false);
+        return;
+      }
     });
+  });
 
-    async function updateInfo() {
-        const database = client.database("uc-ctct");
-        const container = database.container("Clinics");
-        const { resource: clinic_data } = await container.item(props.id, props.id).read();
-        // const clinic_data = getClinic(props.id);
-        let adminInfo = clinic_data.adminInfo;
-        adminInfo.push(info);
-        const replaceOperation = [
-            {
-                op: "replace",
-                path: "/adminInfo",
-                value: adminInfo,
-            },
-        ];
-        const { resource: patchRes } = await container
-            .item(props.id, props.id)
-            .patch(replaceOperation);
-        props.reload();
-    }
-
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    useEffect(() => {
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-                updateInfo();
-                props.setOpen(false);
+  return (
+    <React.Fragment>
+      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="editScreen">
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+          <p className="editTitle">Add Contact Information</p>
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+        </div>
+        <div style={{ width: "90%" }}>
+          <p>
+            <strong>Name:</strong>
+            <input
+              placeholder="First Last"
+              onChange={(e) => {
+                let newInfo = { ...info };
+                newInfo.name = e.target.value;
+                setInfo(newInfo);
                 return;
-            }
-        });
-    });
-
-    return (
-        <React.Fragment>
-            <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-            <div className="editScreen">
-                <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                    <p className="editTitle">Add Contact Information</p>
-                    <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-                </div>
-                <div style={{ width: "90%" }}>
-                    <p>
-                        <strong>Name:</strong>
-                        <input
-                            placeholder="First Last"
-                            onChange={(e) => {
-                                let newInfo = { ...info };
-                                newInfo.name = e.target.value;
-                                setInfo(newInfo);
-                                return;
-                            }}
-                        />{" "}
-                    </p>
-                    <p>
-                        <strong>Position:</strong>
-                        <input
-                            placeholder="Position"
-                            onChange={(e) => {
-                                let newInfo = { ...info };
-                                newInfo.position = e.target.value;
-                                setInfo(newInfo);
-                                return;
-                            }}
-                        />
-                    </p>
-                    <p>
-                        <strong>Phone Number:</strong>
-                        <input
-                            placeholder="0000000000"
-                            value={info.phone}
-                            onChange={(e) => {
-                                let newInfo = { ...info };
-                                newInfo.phone = e.target.value
-                                    .replace(/\D/g, "")
-                                    .substring(0, 10);
-                                setInfo(newInfo);
-                                return;
-                            }}
-                        />
-                    </p>
-                    <p>
-                        <strong>Email Address:</strong>
-                        <input
-                            placeholder="Email Address"
-                            type={"email"}
-                            onChange={(e) => {
-                                let newInfo = { ...info };
-                                newInfo.email = e.target.value;
-                                setInfo(newInfo);
-                                return;
-                            }}
-                        />
-                    </p>
-                </div>
-                <div
-                    style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "center",
-                        marginTop: "1rem",
-                    }}
-                >
-                    <div
-                        className="saveBtn"
-                        onClick={() => {
-                            updateInfo();
-                            props.setOpen(false);
-                            return;
-                        }}
-                    >
-                        Add Contact
-                    </div>
-                </div>
-            </div>
-            <style jsx>
-                {`
+              }}
+            />{" "}
+          </p>
+          <p>
+            <strong>Position:</strong>
+            <input
+              placeholder="Position"
+              onChange={(e) => {
+                let newInfo = { ...info };
+                newInfo.position = e.target.value;
+                setInfo(newInfo);
+                return;
+              }}
+            />
+          </p>
+          <p>
+            <strong>Phone Number:</strong>
+            <input
+              placeholder="0000000000"
+              value={info.phone}
+              onChange={(e) => {
+                let newInfo = { ...info };
+                newInfo.phone = e.target.value
+                  .replace(/\D/g, "")
+                  .substring(0, 10);
+                setInfo(newInfo);
+                return;
+              }}
+            />
+          </p>
+          <p>
+            <strong>Email Address:</strong>
+            <input
+              placeholder="Email Address"
+              type={"email"}
+              onChange={(e) => {
+                let newInfo = { ...info };
+                newInfo.email = e.target.value;
+                setInfo(newInfo);
+                return;
+              }}
+            />
+          </p>
+        </div>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            marginTop: "1rem",
+          }}
+        >
+          <div
+            className="saveBtn"
+            onClick={() => {
+              updateInfo();
+              props.setOpen(false);
+              return;
+            }}
+          >
+            Add Contact
+          </div>
+        </div>
+      </div>
+      <style jsx>
+        {`
           .backDrop {
             height: 100vh;
             width: 100vw;
@@ -182,7 +183,7 @@ export default function AdminInfoEdit(props) {
             cursor: pointer;
           }
         `}
-            </style>
-        </React.Fragment>
-    );
+      </style>
+    </React.Fragment>
+  );
 }

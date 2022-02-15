@@ -20,12 +20,14 @@ import StatusParser from "../../../../components/shared/status";
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { getClinic } from "../../../../api-lib/azure/azureOps";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const database = client.database("uc-ctct");
-  const container = database.container("Clinics");
-  const { resource: data } = await container.item(clinicName, clinicName).read();
+  // const database = client.database("uc-ctct");
+  // const container = database.container("Clinics");
+  // const { resource: data } = await container.item(clinicName, clinicName).read();
+  const data = await getClinic(clinicName);
 
   // const status = res.ok;
   // const errorCode = status ? false : res.status;
@@ -81,7 +83,7 @@ export default function ClinicDetails({ data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header={`${data.name} - Details`} imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.generalBox} style={{marginTop: '3rem'}}>
+            <div className={styles.generalBox} style={{ marginTop: '3rem' }}>
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>
                   <div>
@@ -90,25 +92,25 @@ export default function ClinicDetails({ data }) {
                   </div>
                   <div className={styles.editButton} onClick={() => setGeneralOpen(true)}>Edit Information</div>
                 </div>
-                <Accordion x={{title: "General Information", note: null}} ind={`profile0`} disabledEdit disabledTrash>
+                <Accordion x={{ title: "General Information", note: null }} ind={`profile0`} disabledEdit disabledTrash>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Site:</strong> {data.generalInformation.site}</p>
-                    <p style={{marginRight: '2rem'}}><strong>Phone Number:</strong> {data.generalInformation.phoneNumber}</p>
+                    <p style={{ marginRight: '2rem' }}><strong>Site:</strong> {data.generalInformation.site}</p>
+                    <p style={{ marginRight: '2rem' }}><strong>Phone Number:</strong> {data.generalInformation.phoneNumber}</p>
                     <p><strong>Fax Number:</strong> {data.generalInformation.faxNumber}</p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Address:</strong> {`${data.generalInformation.addressLine1}, ${data.generalInformation.addressLine2 ? `${data.generalInformation.addressLine2}, ` : ''}${data.generalInformation.city}, ${data.generalInformation.state}, ${data.generalInformation.postal}`}</p>
+                    <p style={{ marginRight: '2rem' }}><strong>Address:</strong> {`${data.generalInformation.addressLine1}, ${data.generalInformation.addressLine2 ? `${data.generalInformation.addressLine2}, ` : ''}${data.generalInformation.city}, ${data.generalInformation.state}, ${data.generalInformation.postal}`}</p>
                     <p><strong>Current Status:</strong> {statusText}</p>
                   </div>
                 </Accordion>
-                <Accordion x={{title: "Clinic Details", note: null}} ind={`profile1`} disabledEdit disabledTrash>
+                <Accordion x={{ title: "Clinic Details", note: null }} ind={`profile1`} disabledEdit disabledTrash>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Setting (Location):</strong> {data.description.settingLocation} </p>
-                    <p style={{marginRight: '2rem'}}><strong>Setting (Population):</strong> {data.description.settingPopulation} </p>
+                    <p style={{ marginRight: '2rem' }}><strong>Setting (Location):</strong> {data.description.settingLocation} </p>
+                    <p style={{ marginRight: '2rem' }}><strong>Setting (Population):</strong> {data.description.settingPopulation} </p>
                     <p><strong>Population:</strong> {data.description.population} </p>
                   </div>
                   <div className={styles.generalDetail}>
-                    <p style={{marginRight: '2rem'}}><strong>Visit Type:</strong> {data.description.visitType} </p>
+                    <p style={{ marginRight: '2rem' }}><strong>Visit Type:</strong> {data.description.visitType} </p>
                     <p><strong>Patient Acuity:</strong> {data.description.patientAcuity} </p>
                   </div>
                   <div className={styles.generalDetail}>
@@ -135,40 +137,40 @@ export default function ClinicDetails({ data }) {
                   {
                     data.adminInfo.map((x, ind) => {
                       return (
-                        <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <div key={`admin_${ind}`} className="displayDetailRow">
                             <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
                             <p className="adminCol2">{x.phone}</p>
                             <p className="adminCol3">{x.email}</p>
                           </div>
-                          <FiEdit color={adminEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={adminEditHover[ind] ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                          onMouseEnter={() => {
-                            let newStatus = [...adminEditHover]
-                            newStatus[ind] = true
-                            setAdminEditHover(newStatus)
-                            return
-                          }
-                          } onMouseLeave={() => {
-                            let newStatus = [...adminEditHover]
-                            newStatus[ind] = false
-                            setAdminEditHover(newStatus)
-                            return
-                          }} />
+                          <FiEdit color={adminEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={adminEditHover[ind] ? 40 : 35} style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...adminEditHover]
+                              newStatus[ind] = true
+                              setAdminEditHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...adminEditHover]
+                              newStatus[ind] = false
+                              setAdminEditHover(newStatus)
+                              return
+                            }} />
                           <FaRegTrashAlt color={adminTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={adminTrashHover[ind] ? 38 : 35}
-                          style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                          onMouseEnter={() => {
-                            let newStatus = [...adminTrashHover]
-                            newStatus[ind] = true
-                            setAdminTrashHover(newStatus)
-                            return
-                          }
-                          } onMouseLeave={() => {
-                            let newStatus = [...adminTrashHover]
-                            newStatus[ind] = false
-                            setAdminTrashHover(newStatus)
-                            return
-                          }
-                          } onClick={() => removeElement(x.id, region_data.id)} />
+                            style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...adminTrashHover]
+                              newStatus[ind] = true
+                              setAdminTrashHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...adminTrashHover]
+                              newStatus[ind] = false
+                              setAdminTrashHover(newStatus)
+                              return
+                            }
+                            } onClick={() => removeElement(x.id, region_data.id)} />
                         </div>
                       )
                     })
@@ -188,41 +190,41 @@ export default function ClinicDetails({ data }) {
                   {
                     data.preceptorInfo.map((x, ind) => {
                       return (
-                        <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                           <div key={`preceptor_${ind}`} className="displayDetailRow">
                             <p className="preceptorCol1">{x.name}</p>
                             <p className="preceptorCol2">{x.credential}</p>
                             <p className="preceptorCol3">{x.phone}</p>
                             <p className="preceptorCol4">{x.email}</p>
                           </div>
-                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} style={{cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem'}} 
-                          onMouseEnter={() => {
-                            let newStatus = [...precepEditHover]
-                            newStatus[ind] = true
-                            setPrecepEditHover(newStatus)
-                            return
-                          }
-                          } onMouseLeave={() => {
-                            let newStatus = [...precepEditHover]
-                            newStatus[ind] = false
-                            setPrecepEditHover(newStatus)
-                            return
-                          }} />
+                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...precepEditHover]
+                              newStatus[ind] = true
+                              setPrecepEditHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...precepEditHover]
+                              newStatus[ind] = false
+                              setPrecepEditHover(newStatus)
+                              return
+                            }} />
                           <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
-                          style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                          onMouseEnter={() => {
-                            let newStatus = [...precepTrashHover]
-                            newStatus[ind] = true
-                            setPrecepTrashHover(newStatus)
-                            return
-                          }
-                          } onMouseLeave={() => {
-                            let newStatus = [...precepTrashHover]
-                            newStatus[ind] = false
-                            setPrecepTrashHover(newStatus)
-                            return
-                          }
-                          } onClick={() => removeElement(x.id, region_data.id)} />
+                            style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...precepTrashHover]
+                              newStatus[ind] = true
+                              setPrecepTrashHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...precepTrashHover]
+                              newStatus[ind] = false
+                              setPrecepTrashHover(newStatus)
+                              return
+                            }
+                            } onClick={() => removeElement(x.id, region_data.id)} />
                         </div>
                       )
                     })
