@@ -13,11 +13,10 @@ export default function AdminInfoEdit(props) {
   });
 
   async function updateInfo() {
-    // const database = client.database("uc-ctct");
-    // const container = database.container("Clinics");
+    const database = client.database("uc-ctct");
+    const container = database.container("Clinics");
     // const { resource: clinic_data } = await container.item(props.id, props.id).read();
     const clinic_data = await getClinic(props.id);
-    console.log("Clinic data", clinic_data);
     let adminInfo = clinic_data.adminInfo;
     adminInfo.push(info);
     const replaceOperation = [
