@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { IoClose } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 
 export default function AddNewSite(props) {
+    const [hover, setHover] = useState(false)
     const [site, setSite] = useState({ id: uuidv4().toString(), region_id: props.regionId, affiliation: 'No Affiliation', name: '', total_clinics: 0, status: 0, notes: []})
 
     async function addSite() {
@@ -37,7 +39,11 @@ export default function AddNewSite(props) {
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
-            <p className="editTitle">Add New Region</p>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+                <p className="editTitle">Add New Region</p>
+                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+            </div>
             <div style={{width: '90%'}}>
                 <p><strong>Name:</strong><input placeholder="Site Name" onChange={(e) => {
                     let newSite = {...site}

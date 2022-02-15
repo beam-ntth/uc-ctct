@@ -3,8 +3,10 @@ import StatusParser from "../shared/status";
 import DescriptionGenerator from "./description";
 import { CosmosClient } from '@azure/cosmos';
 import { client } from '../../api-lib/azure/azureConfig';
+import { IoClose } from "react-icons/io5";
 
 export default function ClinicInfoEdit(props) {
+  const [hover, setHover] = useState(false)
   const [info, setInfo] = useState(props.data)
   const [generalInfo, setGeneralInfo] = useState(props.data.generalInformation)
   const [descriptionInfo, setDescriptionInfo] = useState(props.data.description)
@@ -48,7 +50,11 @@ export default function ClinicInfoEdit(props) {
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <p className="editTitle">General Information</p>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+            <p className="editTitle">General Information</p>
+            <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+        </div>
         <div style={{ width: "100%" }}>
           <p style={{ marginRight: '2rem', width: "90%" }}><strong>Site:</strong><input style={{ width: "80%" }} value={generalInfo.site} onChange={(e) => {
             let newInfo = { ...generalInfo }

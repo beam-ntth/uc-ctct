@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 // Import DB modules
 import { CosmosClient } from '@azure/cosmos';
 import { client } from '../../api-lib/azure/azureConfig';
+import { IoClose } from "react-icons/io5";
 
 export default function PlacementInfoEdit(props) {
+  const [hover, setHover] = useState(false)
   const [info, setInfo] = useState(props.data.clinicPlacementDetail)
 
   async function updateInfo() {
@@ -40,7 +42,11 @@ export default function PlacementInfoEdit(props) {
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen" onKeyPress={(e) => { console.log(e.key) }}>
-        <p className="editTitle">Edit Clinical Placement Information</p>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+          <p className="editTitle">Edit Clinical Placement Information</p>
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+        </div>
         <div style={{ height: 'auto', width: '90%' }}>
           {props.data.clinicPlacementDetail.map((x, ind) => {
             return (

@@ -1,5 +1,6 @@
 // Import React modules
 import React, { useState, useEffect } from "react";
+import { IoClose } from "react-icons/io5";
 
 // Import DB modules
 import { client } from '../../api-lib/azure/azureConfig';
@@ -7,6 +8,7 @@ import { client } from '../../api-lib/azure/azureConfig';
 const currentdate = new Date();
 
 export default function NoteEdit(props) {
+  const [hover, setHover] = useState(false)
   const [note, setNote] = useState({
     title: "",
     note: ""
@@ -44,7 +46,11 @@ export default function NoteEdit(props) {
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <p className="editTitle">Add Additional Clinical Notes</p>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+          <p className="editTitle">Add Additional Clinical Notes</p>
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+        </div>
         <div style={{ height: 'auto', width: '90%' }}>
           <p><strong>Title:</strong><input placeholder="Add Title Here" onChange={(x) => {
             let newValue = { ...note }

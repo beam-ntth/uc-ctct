@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { IoClose } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import DescriptionGenerator from "../../clinicPage/description";
@@ -10,6 +11,7 @@ export default function AddNewClinic(props) {
         "July", "August", "September", "October", "November", "December"];
     const datetime = `${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, ${currentdate.getFullYear()}`
     
+    const [hover, setHover] = useState(false)
     const [clinic, setClinic] = useState({ 
         id: uuidv4().toString(), 
         site_id: props.siteId, 
@@ -99,7 +101,11 @@ export default function AddNewClinic(props) {
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
-            <p className="editTitle">Add New Clinic</p>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+                <p className="editTitle">Add New Clinic</p>
+                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+            </div>
             <div style={{width: '90%'}}>
                 <p><strong>Name:</strong><input placeholder="Clinic Name" onChange={(e) => {
                     let newClinic = {...clinic}

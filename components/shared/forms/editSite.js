@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 
 export default function EditSite(props) {
+    const [hover, setHover] = useState(false)
     const [site, setSite] = useState("")
 
     async function getCurrentData() {
@@ -57,7 +59,11 @@ export default function EditSite(props) {
     <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
-        <p className="editTitle">Edit Region Name</p>
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+            <p className="editTitle">Edit Region Name</p>
+            <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+        </div>
         <div style={{ width: '90%' }}>
             <p><strong>Name:</strong><input value={site.name} onChange={(e) => {
             let newSite = {...site}
