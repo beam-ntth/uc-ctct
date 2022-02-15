@@ -4,7 +4,7 @@ import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 
 export default function AddNewSite(props) {
-    const [site, setSite] = useState({ id: uuidv4().toString(), region_id: props.regionId, affiliation: 'No Affiliation', name: '', total_clinics: 0, status: 0})
+    const [site, setSite] = useState({ id: uuidv4().toString(), region_id: props.regionId, affiliation: 'No Affiliation', name: '', total_clinics: 0, status: 0, notes: []})
 
     async function addSite() {
         const database = client.database("uc-ctct");
