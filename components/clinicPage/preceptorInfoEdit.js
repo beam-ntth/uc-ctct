@@ -1,24 +1,31 @@
 import React, { useState } from "react";
+import { IoClose } from "react-icons/io5";
 
 export default function PreceptorInfoEdit(props) {
-    return (
-        <React.Fragment>
-        <div className="backDrop" onClick={() => props.setOpen(false)}></div>
-        <div className="editScreen">
-            <p className="editTitle">Add Preceptor Contact Information</p>
-            <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="First Last" /> </p>
-                <p><strong>Position:</strong><input placeholder="Position" /></p>
-                <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
-                <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
-            </div>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
-            </div>
+  const [hover, setHover] = useState(false)
+
+  return (
+    <React.Fragment>
+      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="editScreen">
+        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+          <p className="editTitle">Add Preceptor Contact Information</p>
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
         </div>
-        <style jsx>
-            {
-                `
+        <div style={{ width: '90%' }}>
+          <p><strong>Name:</strong><input placeholder="First Last" /> </p>
+          <p><strong>Position:</strong><input placeholder="Position" /></p>
+          <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
+          <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
+        </div>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+          <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
+        </div>
+      </div>
+      <style jsx>
+        {
+          `
                 .backDrop {
                     height: 100vh;
                     width: 100vw;
@@ -72,8 +79,8 @@ export default function PreceptorInfoEdit(props) {
                     cursor: pointer;
                 }
                 `
-            }
-        </style>
+        }
+      </style>
     </React.Fragment>
-    )
+  )
 }

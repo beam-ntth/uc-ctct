@@ -11,14 +11,14 @@ a {
   text-decoration: none;
 }
 
-.displayRow, .addRow {
+.displayRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   background-color: #fff;
   height: 3.6rem;
-  width: 95%;
+  width: 85%;
   margin: 0.4rem 0;
   border-radius: 1rem;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
@@ -30,21 +30,49 @@ a {
 
 .displayRow:hover {
   color: #079CDB;
-  width: 91%;
+  width: 86%;
+  transition: linear 0.3s;
+}
+
+.displayRegionRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  height: 3.6rem;
+  width: 80%;
+  margin: 0.4rem 0;
+  border-radius: 1rem;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.displayRegionRow:hover {
+  color: #079CDB;
+  width: 81%;
   transition: linear 0.3s;
 }
 
 .row1Sites {
-  width: 50%;
+  width: 40%;
 }
 
 .row2Sites {
-  width: 30%;
+  width: 20%;
 }
 
 .row3Sites {
   width: 20%;
 }
+
+.row4Sites {
+  width: 15%;
+}
+
 
 .row1Clinics {
   width: 50%;
@@ -67,7 +95,13 @@ a {
   height: 100%;
 }
 
-.tag0, .tag1, .tag2, .tag3 {
+.titleClinics {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.tag0, .tag1, .tag2, .tag3, .tag4, .tag5, .tag6, .tag7, .tag8, .tag9, .tag10, .tag11, .tag12, .tag13 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -90,8 +124,68 @@ a {
   background-color: #34E23B;
 }
 
+.tag4 {
+  background-color: #8B97FF;
+}
+
+.tag5 {
+  background-color: #CC8BFF;
+}
+
+.tag6 {
+  background-color: #FF8BE6;
+}
+
+.tag7 {
+  background-color: #FDFF8B;
+}
+
+.tag8 {
+  background-color: #814242;
+}
+
+.tag9 {
+  background-color: #816F42;
+}
+
+.tag10 {
+  background-color: #438142;
+}
+
+.tag11 {
+  background-color: #425381;
+}
+
+.tag12 {
+  background-color: #c4c4c4;
+}
+
+.tag13 {
+  background-color: rgb(73, 73, 73);
+}
+
+.tag {
+  background-color: #000;
+}
+
+.editButton {
+  height: 3rem;
+  width: 10rem;
+  background-color: #fff;
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: #1AACFE;
+  border: solid 2px #1AACFE;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  z-index: 100;
+}
+
 * {
   box-sizing: border-box;
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
+/* DO NOT IMPORT GOOGLE FONTS HERE! Chrome threw a lot of errors for no reason */

@@ -20,6 +20,10 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## Team Development Standards
 
+### Future Features
+
+Raised by Maria: Implement a pop-up in `pages/sites/database/index.js` when the total number of sites is 0. Ask the user "Are you sure you want to delete this region?"
+
 ### Workflow
 
 Repo Organization

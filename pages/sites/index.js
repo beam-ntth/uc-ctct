@@ -6,7 +6,7 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 import { FaChartPie, FaDatabase } from 'react-icons/fa';
 
-export default function Sites() {
+export default function SiteMgmt() {
     return (
         <div className={styles.container}>
             <Head>
@@ -17,7 +17,7 @@ export default function Sites() {
             <main className={styles.main}>
                 <Navbar icons={[false, true, false, false, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Site Management Tools" date="Today: Febuary 2, 2022" imgSrc="/asset/images/user-image.png" />
+                    <Header header="Site Management Tools" imgSrc="/asset/images/user-image.png" />
                     <div className={styles.menu}>
                         <Link href="/sites/visual">
                             <div className={styles.menuOption}>
