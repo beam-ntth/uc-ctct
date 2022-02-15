@@ -13,17 +13,11 @@ export default function AdminInfoEdit(props) {
     });
 
     async function updateInfo() {
-        // const database = client.database("uc-ctct");
-        // const container = database.container("Clinics");
-        // const { resource: clinic_data } = await container.item(props.id, props.id).read();
-        const clinic_data = getClinic(props.id);
+        const database = client.database("uc-ctct");
+        const container = database.container("Clinics");
+        const { resource: clinic_data } = await container.item(props.id, props.id).read();
+        // const clinic_data = getClinic(props.id);
         let adminInfo = clinic_data.adminInfo;
-        info.phone =
-            info.phone.substring(0, 3) +
-            "-" +
-            info.phone.substring(3, 6) +
-            "-" +
-            info.phone.substring(6, 10);
         adminInfo.push(info);
         const replaceOperation = [
             {

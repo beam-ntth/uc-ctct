@@ -69,7 +69,7 @@ export const getRegion = async (id) => {
  */
 export const getClinic = async (id) => {
   try {
-    const { resources: data } = await Clinics.item(id, id).read();
+    const { resource: data } = await Clinics.item(id, id).read();
     return data;
   } catch (error) {
     console.log("Error is", error.code);

@@ -47,6 +47,7 @@ export default function EditRegion(props) {
             return
           }} /> </p>
         </div>
+        <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
           <div className="saveBtn" onClick={() => {
             editElement()
