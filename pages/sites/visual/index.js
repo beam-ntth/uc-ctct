@@ -1,7 +1,7 @@
 // Import React & Next modules
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from '../../../styles/Visualization.module.css'
 
 // Import Next Components
@@ -14,23 +14,27 @@ import StatusParser from '../../../components/shared/status';
 
 // Import DB component
 import { client } from '../../../api-lib/azure/azureConfig';
+import { IoSearch } from 'react-icons/io5';
+import { IoIosArrowDown } from 'react-icons/io'
 
 export async function getServerSideProps() {
   // console.log("CREATING CLIENT");
   // const database = client.database({ id: "Test Database" });
   const { database } = await client.databases.createIfNotExists({ id: "Test DB" });
-  console.log(database.id);
   // const container = await database.container.createIfNotExists({ id: "Test Container 1" });
   const { container } = await database.containers.createIfNotExists({ id: "Test Container 1" });
-  console.log("Creating", container);
   // console.log(database);
   const res = await fetch(`${process.env.LOCAL_URL}/api/clinic`)
   const data = await res.json()
-  console.log(data);
   return { props: { data } }
 }
 
 export default function Visualization({ data }) {
+  const [searchClinic, setSearchClinic] = useState(true)
+  const [showRegionForm, setShowRegionForm] = useState(false)
+  const [showSiteForm, setShowSiteForm] = useState(false)
+  const [showStatusForm, setShowStatusForm] = useState(false)
+
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -44,6 +48,50 @@ export default function Visualization({ data }) {
           <div className={styles.content}>
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
+              <div className={styles.toggleRow}>
+                <p className={styles.toggleTitle} 
+                style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
+                onClick={() => setSearchClinic(true)} > Clinic </p>
+                <p className={styles.toggleTitle} 
+                style={searchClinic ? { opacity: '60%'} : { fontWeight: 'bold', opacity: '100%' }}
+                onClick={() => setSearchClinic(false)} > Preceptor </p>
+              </div>
+              <div className={styles.filterRow}>
+                <div className={styles.searchBar}>
+                  <input className={styles.searchInput} placeholder={searchClinic ? "Enter Clinic Name ..." : "Enter Preceptor Name ..."} />
+                  <div className={styles.searchBtn}>
+                    <IoSearch color='#fff' />
+                  </div>
+                </div>
+                <div className={styles.regionForm}>
+                  <div className={styles.formTitle}>
+                    <p>Region</p>
+                    <IoIosArrowDown color='#079CDB' />
+                  </div>
+                  {showRegionForm ? <form>
+                    <input type='checkbox' name='region1' />
+                    <label for='region1'>Region 1</label>
+                    <input type='checkbox' name='region2' />
+                    <label for='region2'>Region 2</label>
+                    <input type='checkbox' name='region3' />
+                    <label for='region3'>Region 3</label>
+                  </form> : null}
+                </div>
+                <div className={styles.siteForm}>
+                  <div className={styles.formTitle}>
+                    <p>Site</p>
+                    <IoIosArrowDown color='#079CDB' />
+                  </div>
+                  <form></form>
+                </div>
+                <div className={styles.statusForm}>
+                  <div className={styles.formTitle}>
+                    <p>Status</p>
+                    <IoIosArrowDown color='#079CDB' />
+                  </div>
+                  <form></form>
+                </div>
+              </div>
               <div className={styles.row}>
                 <p className={styles.view1}>Clinics</p>
                 <p className={styles.view2}>Preceptors</p>
@@ -70,24 +118,6 @@ export default function Visualization({ data }) {
                 )
               })
               }
-            </div>
-            <div className={styles.mainCharts}>
-              <div className={styles.chart}>
-                <div className={styles.chartTitle}>
-                  <p>Clinic Regions</p>
-                </div>
-                <div style={{ height: '90%', width: 'auto' }}>
-                  <PieChart />
-                </div>
-              </div>
-              <div className={styles.chart}>
-                <div className={styles.chartTitle}>
-                  <p>Training Types</p>
-                </div>
-                <div style={{ height: '90%', width: 'auto' }}>
-                  <PieChart />
-                </div>
-              </div>
             </div>
           </div>
         </main>
