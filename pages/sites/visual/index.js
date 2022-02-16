@@ -45,7 +45,11 @@ export default function Visualization({ data }) {
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p className={styles.titleCol1} style={{ marginLeft: '2rem' }}>Clinic Name</p>
+                <p className={styles.view1}>Clinics</p>
+                <p className={styles.view2}>Preceptors</p>
+              </div>
+              <div className={styles.row}>
+                <p className={styles.titleCol1}>Clinic Name</p>
                 <p className={styles.titleCol2}>Affiliation</p>
                 <p className={styles.titleCol3}>Region</p>
                 <p className={styles.titleCol4}>Status</p>
