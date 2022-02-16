@@ -11,6 +11,7 @@ import Header from '../../../components/shared/header/header';
 import PieChart from '../../../components/Charts/piechart';
 import BarChart from '../../../components/Charts/barcharts';
 import StatusParser from '../../../components/shared/status';
+import Dropdown from '../../../components/visualPage/dropdown';
 
 // Import DB component
 import { client } from '../../../api-lib/azure/azureConfig';
@@ -49,12 +50,12 @@ export default function Visualization({ data }) {
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
-                onClick={() => setSearchClinic(true)} > Clinic </p>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { opacity: '60%'} : { fontWeight: 'bold', opacity: '100%' }}
-                onClick={() => setSearchClinic(false)} > Preceptor </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
+                  onClick={() => setSearchClinic(true)} > Clinic </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { opacity: '60%' } : { fontWeight: 'bold', opacity: '100%' }}
+                  onClick={() => setSearchClinic(false)} > Preceptor </p>
               </div>
               <div className={styles.filterRow}>
                 <div className={styles.searchBar}>
@@ -63,6 +64,17 @@ export default function Visualization({ data }) {
                     <IoSearch color='#fff' />
                   </div>
                 </div>
+                <Dropdown>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    Dropdown Button
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle}>
                     <p>Region</p>
@@ -92,10 +104,10 @@ export default function Visualization({ data }) {
                   <form></form>
                 </div>
               </div>
-              <div className={styles.row}>
+              {/* <div className={styles.row}>
                 <p className={styles.view1}>Clinics</p>
                 <p className={styles.view2}>Preceptors</p>
-              </div>
+              </div> */}
               <div className={styles.row}>
                 <p className={styles.titleCol1}>Clinic Name</p>
                 <p className={styles.titleCol2}>Affiliation</p>
