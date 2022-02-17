@@ -21,6 +21,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
 import { removeClinic } from "../../../../api-lib/azure/azureOps";
+import SearchString from "../../../../components/shared/search";
 
 export async function getServerSideProps(context) {
     const location = context.query.location;
@@ -35,6 +36,7 @@ export async function getServerSideProps(context) {
 
 
 export default function Clinics({ data, note_data }) {
+    const [filteredData, setFilteredData] = useState(data)
     const [openNote, setOpenNote] = useState(false)
     const [openEditForm, setOpenEditForm] = useState(false)
     const [openAddClinic, setOpenAddClinic] = useState(false)
@@ -68,6 +70,10 @@ export default function Clinics({ data, note_data }) {
         removeClinic(id, note_data.id)
         setTimeout(() => refreshData(), 400)
         return
+    }
+
+    function searchClinicName(substr) {
+        setFilteredData(SearchString(data, substr))
     }
 
     return (
@@ -104,6 +110,9 @@ export default function Clinics({ data, note_data }) {
                             </div>
                         </div>
                         <div className={styles.data}>
+                            <div className={styles.searchBar}>
+                                <input className={styles.searchInput} placeholder="Search Clinic Name..." onChange={(x) => searchClinicName(x.target.value)} />
+                            </div>
                             <div className={styles.row}>
                                 <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
                                 <p className="row2Clinics">Last Updated</p>
@@ -112,7 +121,7 @@ export default function Clinics({ data, note_data }) {
                                     onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />
                             </div >
                             {
-                                data.map((x, ind) => {
+                                filteredData.map((x, ind) => {
                                     const statusText = StatusParser("clinics", parseInt(x.status))
 
                                     return (
