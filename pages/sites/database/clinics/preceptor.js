@@ -100,13 +100,19 @@ export default function Preceptors({ data, note_data }) {
                                     <p>Name: </p>
                                     <p>Clinic: </p>
                                     <p>Status: </p>
+                                    <p>Credentials: </p>
+                                    <p>Position: </p>
+                                    <p>Email: </p>
+                                    <p>Phone Number: </p>
+
+
                                 </div>
                             </div>
                         </div>
                         <div className={styles.noteData}>
                             <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
                                 <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
-                                    <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Site Notes</p>
+                                    <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Preceptor Notes</p>
                                     <div style={{ width: '20%', display: 'flex', justifyContent: 'center' }}>
                                         <div className='editButton' onClick={() => setOpenNote(true)}>+ Add Note</div>
                                     </div>

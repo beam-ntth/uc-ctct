@@ -1,7 +1,8 @@
 // Import React & Next modules
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect, useState } from "react";
+import dynamic from 'next/dynamic'
+import React, { useEffect, useState, Component } from "react";
 import styles from '../../../styles/Visualization.module.css'
 
 // Import Next Components
@@ -19,14 +20,11 @@ import { IoSearch } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io'
 
 export async function getServerSideProps() {
-  // console.log("CREATING CLIENT");
-  // const database = client.database({ id: "Test Database" });
-  const { database } = await client.databases.createIfNotExists({ id: "Test DB" });
-  // const container = await database.container.createIfNotExists({ id: "Test Container 1" });
-  const { container } = await database.containers.createIfNotExists({ id: "Test Container 1" });
-  // console.log(database);
-  const res = await fetch(`${process.env.LOCAL_URL}/api/clinic`)
-  const data = await res.json()
+  const database = client.database("uc-ctct");
+  const container = database.container("Clinics");
+  const preceptor_container = database.container("Preceptors");
+  const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
+  const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
   return { props: { data } }
 }
 
@@ -35,6 +33,69 @@ export default function Visualization({ data }) {
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
+
+  const DropdownMultiple = dynamic(
+    async () => {
+      const module = await import('reactjs-dropdown-component');
+      const DDM = module.DropdownMultiple;
+  
+      return ({ forwardedRef, ...props }) => <DDM ref={forwardedRef} {...props} />;
+    },
+    { ssr: false },
+  );
+
+  const clinicData = <React.Fragment>
+    <div className={styles.row}>
+        <p className={styles.titleCol1}>Clinic Name</p>
+        <p className={styles.titleCol2}>Affiliation</p>
+        <p className={styles.titleCol3}>Region</p>
+        <p className={styles.titleCol4}>Status</p>
+    </div>  
+    {data.map((x, ind) => {
+      const statusText = StatusParser("clinics", x.status)
+      return (
+        <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
+          <div key={`clinics_${ind}`} className='displayRow'>
+              <div className="rowContentClinics">
+                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                <p className={styles.dataCol2}>{x.affiliation}</p>
+                <p className={styles.dataCol3}>{x.region}</p>
+                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+              </div>
+            <div className={`tag${x['status']}`}></div>
+          </div>
+      </Link>
+      )}
+      )
+    }
+    </React.Fragment>
+
+    const preceptorData = <React.Fragment>
+      <div className={styles.row}>
+          <p className={styles.titleCol1}>Preceptor Name</p>
+          <p className={styles.titleCol2}>Position</p>
+          <p className={styles.titleCol3}>Credential</p>
+          <p className={styles.titleCol4}>Clinic</p>
+      </div>
+      {preceptor_data.map((x, ind) => {
+      const statusText = StatusParser("preceptors", x.status)
+      return (
+        <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
+          <div key={`clinics_${ind}`} className='displayRow'>
+              <div className="rowContentClinics">
+                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                <p className={styles.dataCol2}>{x.affiliation}</p>
+                <p className={styles.dataCol3}>{x.region}</p>
+                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+              </div>
+            <div className={`tag${x['status']}`}></div>
+          </div>
+      </Link>
+      )}
+      )
+    }
+      
+      </React.Fragment>
 
   return (
     <React.Fragment>
@@ -50,12 +111,12 @@ export default function Visualization({ data }) {
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
-                onClick={() => setSearchClinic(true)} > Clinic </p>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { opacity: '60%'} : { fontWeight: 'bold', opacity: '100%' }}
-                onClick={() => setSearchClinic(false)} > Preceptor </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
+                  onClick={() => setSearchClinic(true)} > Clinic </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { opacity: '60%' } : { fontWeight: 'bold', opacity: '100%' }}
+                  onClick={() => setSearchClinic(false)} > Preceptor </p>
               </div>
               <div className={styles.filterRow}>
                 <div className={styles.searchBar}>
@@ -65,18 +126,25 @@ export default function Visualization({ data }) {
                   </div>
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle}>
-                    <p>Region</p>
-                    <IoIosArrowDown color='#079CDB' />
-                  </div>
-                  {showRegionForm ? <form>
-                    <input type='checkbox' name='region1' />
-                    <label for='region1'>Region 1</label>
-                    <input type='checkbox' name='region2' />
-                    <label for='region2'>Region 2</label>
-                    <input type='checkbox' name='region3' />
-                    <label for='region3'>Region 3</label>
-                  </form> : null}
+                  <DropdownMultiple
+                    name="locations"
+                    searchable={['Search for location', 'No matching location']}
+                    titleSingular="Location"
+                    title="Select locations"
+                    list={"Region 1", "Region 2", "Region 3"}
+                    styles={{
+                      headerTitle: {
+                        fontSize: '1rem'
+                      },
+                      wrapper: {
+                        height: '100%',
+                        width: 'auto',
+                        backgroundColor: '#fff',
+                        borderRadius: '0.6rem',
+                        border: '1px solid #C4C4C4'
+                      }
+                    }}
+                  />
                 </div>
                 <div className={styles.siteForm}>
                   <div className={styles.formTitle}>
@@ -93,36 +161,12 @@ export default function Visualization({ data }) {
                   <form></form>
                 </div>
               </div>
-              {/* <div className={styles.row}>
-                <p className={styles.view1}>Clinics</p>
-                <p className={styles.view2}>Preceptors</p>
-              </div> */}
-              <div className={styles.row}>
-                <p className={styles.titleCol1}>Clinic Name</p>
-                <p className={styles.titleCol2}>Affiliation</p>
-                <p className={styles.titleCol3}>Region</p>
-                <p className={styles.titleCol4}>Status</p>
+              {searchClinic ? clinicData : preceptorData}
               </div>
-
-              {data.map((x, ind) => {
-                const statusText = StatusParser("clinics", x.status)
-                return (
-                  <div className='displayRow' key={`elem_${ind}`}>
-                    <div className="rowContentClinics">
-                      <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                      <p className={styles.dataCol2}>{x.affiliation}</p>
-                      <p className={styles.dataCol3}>{x.region}</p>
-                      <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
-                    </div>
-                    <div className={`tag${x['status']}`}></div>
-                  </div>
-                )
-              })
-              }
             </div>
-          </div>
         </main>
       </div>
     </React.Fragment>
   )
 }
+
