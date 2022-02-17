@@ -96,7 +96,7 @@ export default function Preceptors({ data, note_data }) {
                                 <div className={styles.profileImg}>
                                     <img src="/asset/images/user-image.png" />
                                 </div>
-                                <div>
+                                <div className={styles.profileInfo}>
                                     <p>Name: </p>
                                     <p>Clinic: </p>
                                     <p>Status: </p>

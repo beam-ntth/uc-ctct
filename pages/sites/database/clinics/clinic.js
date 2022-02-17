@@ -24,9 +24,9 @@ import { getClinic } from "../../../../api-lib/azure/azureOps";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  // const database = client.database("uc-ctct");
-  // const container = database.container("Clinics");
-  // const { resource: data } = await container.item(clinicName, clinicName).read();
+  const database = client.database("uc-ctct");
+  const container = database.container("Preceptors");
+  const { resources: preceptor_data } = await container.items.query('SELECT * FROM c WHERE c.clinics')
   const data = await getClinic(clinicName);
 
   // const status = res.ok;

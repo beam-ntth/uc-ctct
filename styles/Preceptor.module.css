@@ -58,6 +58,11 @@
     width: 100%;
 }
 
+.profileInfo {
+    height: auto;
+    width: 85%;
+}
+
 .bioTitle {
     display: flex;
     flex-direction: row;
