@@ -29,17 +29,6 @@ export async function getServerSideProps(context) {
   const { resources: preceptor_data } = await container.items.query('SELECT * FROM c WHERE c.clinics')
   const data = await getClinic(clinicName);
 
-  // const status = res.ok;
-  // const errorCode = status ? false : res.status;
-  // console.log("Error code", errorCode)
-  // const data = await res.json()
-  // if (errorCode) {
-  //   console.log("FOUND ERROR", errorCode)
-  //   return {
-  //     props: { errorCode }
-  //   }
-  // }
-
   return { props: { data } }
 }
 

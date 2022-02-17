@@ -18,6 +18,7 @@ import StatusParser from '../../../components/shared/status';
 import { client } from '../../../api-lib/azure/azureConfig';
 import { IoSearch } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io'
+import SearchString from '../../../components/shared/search';
 
 export async function getServerSideProps() {
   const database = client.database("uc-ctct");
@@ -25,11 +26,13 @@ export async function getServerSideProps() {
   const preceptor_container = database.container("Preceptors");
   const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
   const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
-  return { props: { data } }
+  return { props: { data, preceptor_data } }
 }
 
-export default function Visualization({ data }) {
+export default function Visualization({ data, preceptor_data }) {
   const [searchClinic, setSearchClinic] = useState(true)
+  const [filteredClinicData, setFilteredClinicData] = useState(data)
+  const [filteredPrecepData, setFilteredPrecepData] = useState(data)
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
@@ -44,6 +47,14 @@ export default function Visualization({ data }) {
     { ssr: false },
   );
 
+  function searchClinicName(substr) {
+    setFilteredClinicData(SearchString(data, substr))
+  }
+
+  function searchPreceptorName(substr) {
+    setFilteredPrecepData(SearchString(data, substr))
+  }
+
   const clinicData = <React.Fragment>
     <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
@@ -51,8 +62,8 @@ export default function Visualization({ data }) {
         <p className={styles.titleCol3}>Region</p>
         <p className={styles.titleCol4}>Status</p>
     </div>  
-    {data.map((x, ind) => {
-      const statusText = StatusParser("clinics", x.status)
+    {filteredClinicData.map((x, ind) => {
+      const statusText = StatusParser("clinics", parseInt(x.status))
       return (
         <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
           <div key={`clinics_${ind}`} className='displayRow'>
@@ -70,32 +81,31 @@ export default function Visualization({ data }) {
     }
     </React.Fragment>
 
-    const preceptorData = <React.Fragment>
-      <div className={styles.row}>
-          <p className={styles.titleCol1}>Preceptor Name</p>
-          <p className={styles.titleCol2}>Position</p>
-          <p className={styles.titleCol3}>Credential</p>
-          <p className={styles.titleCol4}>Clinic</p>
-      </div>
-      {preceptor_data.map((x, ind) => {
-      const statusText = StatusParser("preceptors", x.status)
-      return (
-        <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
-          <div key={`clinics_${ind}`} className='displayRow'>
-              <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                <p className={styles.dataCol2}>{x.affiliation}</p>
-                <p className={styles.dataCol3}>{x.region}</p>
-                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
-              </div>
-            <div className={`tag${x['status']}`}></div>
-          </div>
-      </Link>
-      )}
-      )
-    }
-      
-      </React.Fragment>
+  const preceptorData = <React.Fragment>
+    <div className={styles.row}>
+        <p className={styles.titleCol1}>Preceptor Name</p>
+        <p className={styles.titleCol2}>Position</p>
+        <p className={styles.titleCol3}>Credential</p>
+        <p className={styles.titleCol4}>Status</p>
+    </div>
+    {filteredPrecepData.map((x, ind) => {
+    const statusText = StatusParser("preceptors", parseInt(x.status))
+    return (
+      <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
+        <div key={`clinics_${ind}`} className='displayRow'>
+            <div className="rowContentClinics">
+              <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+              <p className={styles.dataCol2}>{x.position}</p>
+              <p className={styles.dataCol3}>{x.credential}</p>
+              <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+            </div>
+          <div className={`tag${x['status']}`}></div>
+        </div>
+    </Link>
+    )}
+    )
+  }
+  </React.Fragment>
 
   return (
     <React.Fragment>
@@ -120,17 +130,17 @@ export default function Visualization({ data }) {
               </div>
               <div className={styles.filterRow}>
                 <div className={styles.searchBar}>
-                  <input className={styles.searchInput} placeholder={searchClinic ? "Enter Clinic Name ..." : "Enter Preceptor Name ..."} />
-                  <div className={styles.searchBtn}>
+                  <input className={styles.searchInput} placeholder={searchClinic ? "Enter Clinic Name ..." : "Enter Preceptor Name ..."} onChange={(x) => searchClinicName(x.target.value)} />
+                  {/* <div className={styles.searchBtn}>
                     <IoSearch color='#fff' />
-                  </div>
+                  </div> */}
                 </div>
                 <div className={styles.regionForm}>
                   <DropdownMultiple
                     name="locations"
                     searchable={['Search for location', 'No matching location']}
                     titleSingular="Location"
-                    title="Select locations"
+                    title="Regions"
                     list={"Region 1", "Region 2", "Region 3"}
                     styles={{
                       headerTitle: {
