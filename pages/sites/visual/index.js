@@ -20,14 +20,11 @@ import { IoSearch } from 'react-icons/io5';
 import { IoIosArrowDown } from 'react-icons/io'
 
 export async function getServerSideProps() {
-  // console.log("CREATING CLIENT");
-  // const database = client.database({ id: "Test Database" });
-  const { database } = await client.databases.createIfNotExists({ id: "Test DB" });
-  // const container = await database.container.createIfNotExists({ id: "Test Container 1" });
-  const { container } = await database.containers.createIfNotExists({ id: "Test Container 1" });
-  // console.log(database);
-  const res = await fetch(`${process.env.LOCAL_URL}/api/clinic`)
-  const data = await res.json()
+  const database = client.database("uc-ctct");
+  const container = database.container("Clinics");
+  const preceptor_container = database.container("Preceptors");
+  const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
+  const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
   return { props: { data } }
 }
 
@@ -46,6 +43,59 @@ export default function Visualization({ data }) {
     },
     { ssr: false },
   );
+
+  const clinicData = <React.Fragment>
+    <div className={styles.row}>
+        <p className={styles.titleCol1}>Clinic Name</p>
+        <p className={styles.titleCol2}>Affiliation</p>
+        <p className={styles.titleCol3}>Region</p>
+        <p className={styles.titleCol4}>Status</p>
+    </div>  
+    {data.map((x, ind) => {
+      const statusText = StatusParser("clinics", x.status)
+      return (
+        <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
+          <div key={`clinics_${ind}`} className='displayRow'>
+              <div className="rowContentClinics">
+                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                <p className={styles.dataCol2}>{x.affiliation}</p>
+                <p className={styles.dataCol3}>{x.region}</p>
+                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+              </div>
+            <div className={`tag${x['status']}`}></div>
+          </div>
+      </Link>
+      )}
+      )
+    }
+    </React.Fragment>
+
+    const preceptorData = <React.Fragment>
+      <div className={styles.row}>
+          <p className={styles.titleCol1}>Preceptor Name</p>
+          <p className={styles.titleCol2}>Position</p>
+          <p className={styles.titleCol3}>Credential</p>
+          <p className={styles.titleCol4}>Clinic</p>
+      </div>
+      {preceptor_data.map((x, ind) => {
+      const statusText = StatusParser("preceptors", x.status)
+      return (
+        <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
+          <div key={`clinics_${ind}`} className='displayRow'>
+              <div className="rowContentClinics">
+                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                <p className={styles.dataCol2}>{x.affiliation}</p>
+                <p className={styles.dataCol3}>{x.region}</p>
+                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+              </div>
+            <div className={`tag${x['status']}`}></div>
+          </div>
+      </Link>
+      )}
+      )
+    }
+      
+      </React.Fragment>
 
   return (
     <React.Fragment>
@@ -111,36 +161,12 @@ export default function Visualization({ data }) {
                   <form></form>
                 </div>
               </div>
-              {/* <div className={styles.row}>
-                <p className={styles.view1}>Clinics</p>
-                <p className={styles.view2}>Preceptors</p>
-              </div> */}
-              <div className={styles.row}>
-                <p className={styles.titleCol1}>Clinic Name</p>
-                <p className={styles.titleCol2}>Affiliation</p>
-                <p className={styles.titleCol3}>Region</p>
-                <p className={styles.titleCol4}>Status</p>
+              {searchClinic ? clinicData : preceptorData}
               </div>
-
-              {data.map((x, ind) => {
-                const statusText = StatusParser("clinics", x.status)
-                return (
-                  <div className='displayRow' key={`elem_${ind}`}>
-                    <div className="rowContentClinics">
-                      <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                      <p className={styles.dataCol2}>{x.affiliation}</p>
-                      <p className={styles.dataCol3}>{x.region}</p>
-                      <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
-                    </div>
-                    <div className={`tag${x['status']}`}></div>
-                  </div>
-                )
-              })
-              }
             </div>
-          </div>
         </main>
       </div>
     </React.Fragment>
   )
 }
+
