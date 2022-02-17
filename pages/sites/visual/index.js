@@ -36,16 +36,36 @@ export default function Visualization({ data }) {
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
+  const [value,setValue]=useState('');
+
+  const regions = [
+    {
+      label: 'Region 1',
+      value: 'reg1',
+    },
+    {
+      label: 'Region 2',
+      value: 'reg2',
+    },
+    {
+      label: 'Region 3',
+      value: 'reg3',
+    }
+  ]
 
   const DropdownMultiple = dynamic(
     async () => {
       const module = await import('reactjs-dropdown-component');
       const DDM = module.DropdownMultiple;
-  
+
       return ({ forwardedRef, ...props }) => <DDM ref={forwardedRef} {...props} />;
     },
     { ssr: false },
   );
+
+  const handleSelect=(e)=>{
+    console.log(e);
+  }
 
   return (
     <React.Fragment>
@@ -76,12 +96,18 @@ export default function Visualization({ data }) {
                   </div>
                 </div>
                 <div className={styles.regionForm}>
+                  <div>
+                    <div>
+
+                    </div>
+                  </div>
                   <DropdownMultiple
                     name="locations"
                     searchable={['Search for location', 'No matching location']}
                     titleSingular="Location"
-                    title="Select locations"
-                    list={"Region 1", "Region 2", "Region 3"}
+                    title="Regions"
+                    list={regions}
+                    onSelect={handleSelect}
                     styles={{
                       headerTitle: {
                         fontSize: '1rem'
