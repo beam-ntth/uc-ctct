@@ -36,7 +36,6 @@ export default function Visualization({ data }) {
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
-  const [value,setValue]=useState('');
 
   const regions = [
     {
@@ -57,15 +56,11 @@ export default function Visualization({ data }) {
     async () => {
       const module = await import('reactjs-dropdown-component');
       const DDM = module.DropdownMultiple;
-
+  
       return ({ forwardedRef, ...props }) => <DDM ref={forwardedRef} {...props} />;
     },
     { ssr: false },
   );
-
-  const handleSelect=(e)=>{
-    console.log(e);
-  }
 
   return (
     <React.Fragment>
@@ -107,7 +102,6 @@ export default function Visualization({ data }) {
                     titleSingular="Location"
                     title="Regions"
                     list={regions}
-                    onSelect={handleSelect}
                     styles={{
                       headerTitle: {
                         fontSize: '1rem'
