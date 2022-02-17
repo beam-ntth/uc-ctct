@@ -161,7 +161,7 @@ export default function Visualization({ data, preceptor_data }) {
                     searchable={['Search for location', 'No matching location']}
                     titleSingular="Location"
                     title="Regions"
-                    list={"Region 1", "Region 2", "Region 3"}
+                    list={regions}
                     styles={{
                       headerTitle: {
                         fontSize: '1rem'
