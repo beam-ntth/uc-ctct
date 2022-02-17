@@ -1,7 +1,8 @@
 // Import React & Next modules
 import Head from 'next/head'
 import Link from 'next/link'
-import React, { useEffect, useState } from "react";
+import dynamic from 'next/dynamic'
+import React, { useEffect, useState, Component } from "react";
 import styles from '../../../styles/Visualization.module.css'
 
 // Import Next Components
@@ -36,6 +37,16 @@ export default function Visualization({ data }) {
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
 
+  const DropdownMultiple = dynamic(
+    async () => {
+      const module = await import('reactjs-dropdown-component');
+      const DDM = module.DropdownMultiple;
+  
+      return ({ forwardedRef, ...props }) => <DDM ref={forwardedRef} {...props} />;
+    },
+    { ssr: false },
+  );
+
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -50,12 +61,12 @@ export default function Visualization({ data }) {
             <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
-                onClick={() => setSearchClinic(true)} > Clinic </p>
-                <p className={styles.toggleTitle} 
-                style={searchClinic ? { opacity: '60%'} : { fontWeight: 'bold', opacity: '100%' }}
-                onClick={() => setSearchClinic(false)} > Preceptor </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '5rem', opacity: '60%' }}
+                  onClick={() => setSearchClinic(true)} > Clinic </p>
+                <p className={styles.toggleTitle}
+                  style={searchClinic ? { opacity: '60%' } : { fontWeight: 'bold', opacity: '100%' }}
+                  onClick={() => setSearchClinic(false)} > Preceptor </p>
               </div>
               <div className={styles.filterRow}>
                 <div className={styles.searchBar}>
@@ -65,18 +76,25 @@ export default function Visualization({ data }) {
                   </div>
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle}>
-                    <p>Region</p>
-                    <IoIosArrowDown color='#079CDB' />
-                  </div>
-                  {showRegionForm ? <form>
-                    <input type='checkbox' name='region1' />
-                    <label for='region1'>Region 1</label>
-                    <input type='checkbox' name='region2' />
-                    <label for='region2'>Region 2</label>
-                    <input type='checkbox' name='region3' />
-                    <label for='region3'>Region 3</label>
-                  </form> : null}
+                  <DropdownMultiple
+                    name="locations"
+                    searchable={['Search for location', 'No matching location']}
+                    titleSingular="Location"
+                    title="Select locations"
+                    list={"Region 1", "Region 2", "Region 3"}
+                    styles={{
+                      headerTitle: {
+                        fontSize: '1rem'
+                      },
+                      wrapper: {
+                        height: '100%',
+                        width: 'auto',
+                        backgroundColor: '#fff',
+                        borderRadius: '0.6rem',
+                        border: '1px solid #C4C4C4'
+                      }
+                    }}
+                  />
                 </div>
                 <div className={styles.siteForm}>
                   <div className={styles.formTitle}>
