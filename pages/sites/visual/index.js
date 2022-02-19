@@ -36,6 +36,11 @@ export default function Visualization({ data, preceptor_data }) {
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
+  const [value,setValue]=useState('');
+  const handleSelect=(e)=>{
+    console.log(e);
+    setValue(e)
+  }
 
   const regions = [
     {
@@ -162,6 +167,7 @@ export default function Visualization({ data, preceptor_data }) {
                     titleSingular="Location"
                     title="Regions"
                     list={regions}
+                    onSelect={handleSelect}
                     styles={{
                       headerTitle: {
                         fontSize: '1rem'
