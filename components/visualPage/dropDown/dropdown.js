@@ -14,7 +14,7 @@ export default function Dropdown(props) {
   return (
     <React.Fragment>
       <div className={styles.dropDownMain} style={props.open ? {opacity: 1, transform: 'translateY(0px)'} : {opacity: 0, transform: 'translateY(-50px)'}}>
-        <input className={styles.searchBar} placeholder='Search...' />
+        <input className={styles.dropDownSearchBar} placeholder='Search...' />
         <div className={styles.dropDownSelect}>
           <div className={styles.dropDownValue}>
             <input type='checkbox' value="site1" />

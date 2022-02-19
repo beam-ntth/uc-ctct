@@ -1,17 +1,12 @@
 // Import React & Next modules
 import Head from 'next/head'
 import Link from 'next/link'
-import dynamic from 'next/dynamic'
 import React, { useEffect, useState, Component } from "react";
 import styles from '../../../styles/Visualization.module.css'
 
 // Import Next Components
-import Chart from 'chart.js/auto'
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
-import PieChart from '../../../components/Charts/piechart';
-import BarChart from '../../../components/Charts/barcharts';
-import StatusParser from '../../../components/shared/status';
 
 // Import DB component
 import { client } from '../../../api-lib/azure/azureConfig';
@@ -19,16 +14,18 @@ import DisplayClinic from '../../../components/visualPage/displayClinic';
 import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
-// export async function getServerSideProps() {
-//   const database = client.database("uc-ctct");
-//   const container = database.container("Clinics");
-//   const preceptor_container = database.container("Preceptors");
-//   const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
-//   const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
-//   return { props: { data, preceptor_data } }
-// }
+export async function getServerSideProps() {
+  const database = client.database("uc-ctct");
+  const site_container = database.container("Sites");
+  const clinic_container = database.container("Clinics");
+  const preceptor_container = database.container("Preceptors");
+  const { resources: site_data } = await site_container.items.query("SELECT * FROM c").fetchAll();
+  const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
+  const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
+  return { props: { site_data, clinic_data, preceptor_data } }
+}
 
-export default function Visualization({ data, preceptor_data }) {
+export default function Visualization({ site_data, clinic_data, preceptor_data }) {
   // 0 is site, 1 is clinic, 2 is preceptor
   const [searchSetting, setSearchSetting] = useState(0)
 
@@ -60,9 +57,9 @@ export default function Visualization({ data, preceptor_data }) {
                   style={searchSetting === 2 ? { fontWeight: 'bold', opacity: '100%' } : { opacity: '60%' }}
                   onClick={() => setSearchSetting(2)} > Preceptor </p>
               </div>
-              {/* {searchSetting === 1 ? <DisplaySite /> : null}
-              {searchSetting === 1 ? <DisplayClinic /> : null}
-              {searchSetting === 2 ? <DisplayPreceptor /> : null} */}
+              {searchSetting === 0 ? <DisplaySite data={site_data} /> : null}
+              {searchSetting === 1 ? <DisplayClinic data={clinic_data} /> : null}
+              {searchSetting === 2 ? <DisplayPreceptor data={preceptor_data} /> : null}
             </div>
           </div>
         </main>

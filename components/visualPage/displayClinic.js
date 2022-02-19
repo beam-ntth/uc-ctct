@@ -1,18 +1,13 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from './DisplayClinic.module.css'
-import Dropdown from './dropdown';
+import styles from '../../styles/DisplayClinic.module.css'
+import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
+import StatusParser from '../shared/status';
 
-export async function getServerSideProps() {
-    const database = client.database("uc-ctct");
-    const container = database.container("Clinics");
-    const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
-    return { props: { data } }
-}
-
-export default function DisplayClinic ({ data }) {
-    const [filteredClinicData, setFilteredClinicData] = useState(data)
+export default function DisplayClinic (props) {
+    const [filteredClinicData, setFilteredClinicData] = useState(props.data)
     const [showSiteDropdown, setShowSiteDropdown] = useState(false)
 
     function searchClinicName(substr) {
@@ -30,6 +25,27 @@ export default function DisplayClinic ({ data }) {
                         <p>Region</p>
                         <IoIosArrowDown color='#079CDB' />
                     </div>
+                    <div className={styles.dropDownMain} style={props.open ? {opacity: 1, transform: 'translateY(0px)'} : {opacity: 0, transform: 'translateY(-50px)'}}>
+                        <input className={styles.searchBar} placeholder='Search...' />
+                        <div className={styles.dropDownSelect}>
+                        <div className={styles.dropDownValue}>
+                            <input type='checkbox' value="site1" />
+                            <label for="site1">Site 1</label>
+                        </div>
+                        <div className={styles.dropDownValue}>
+                            <input type='checkbox' value="site2" />
+                            <label for="site2">Site 2</label>
+                        </div>
+                        <div className={styles.dropDownValue}>
+                            <input type='checkbox' value="site3" />
+                            <label for="site3">Site 3</label>
+                        </div>
+                        <div className={styles.dropDownValue}>
+                            <input type='checkbox' value="site4" />
+                            <label for="site4">Site 4</label>
+                        </div>
+                        </div>
+                    </div>
                 </div>
                 <div className={styles.siteForm}>
                   <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
@@ -43,7 +59,7 @@ export default function DisplayClinic ({ data }) {
                     <p>Status</p>
                     <IoIosArrowDown color='#079CDB' />
                   </div>
-                  <Dropdown />
+                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} />
                 </div>
             </div>
             <div className={styles.row}>
@@ -66,8 +82,7 @@ export default function DisplayClinic ({ data }) {
                     <div className={`tag${x['status']}`}></div>
                 </div>
             </Link>
-            )}
-            )
+                )})
             }
         </React.Fragment>
     )

@@ -1,18 +1,13 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from './DisplayClinic.module.css'
-import Dropdown from './dropdown';
+import styles from '../../styles/DisplayClinic.module.css'
+import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
+import StatusParser from '../shared/status';
 
-export async function getServerSideProps() {
-    const database = client.database("uc-ctct");
-    const container = database.container("Preceptors");
-    const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
-    return { props: { data } }
-}
-
-export default function DisplayPreceptor ({ data }) {
-    const [filteredPrecepData, setFilteredPrecepData] = useState(preceptor_data)
+export default function DisplayPreceptor (props) {
+    const [filteredPrecepData, setFilteredPrecepData] = useState(props.data)
     const [showSiteDropdown, setShowSiteDropdown] = useState(false)
 
     function searchPreceptorName(substr) {

@@ -1,22 +1,18 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from './DisplayClinic.module.css'
-import Dropdown from './dropdown';
+import styles from '../../styles/DisplayClinic.module.css'
 import SearchString from '../shared/search'
+import StatusParser from '../shared/status';
+import Dropdown from './dropDown/dropdown';
 
-export async function getServerSideProps() {
-    const database = client.database("uc-ctct");
-    const container = database.container("Preceptors");
-    const { resources: data } = await container.items.query("SELECT * FROM c").fetchAll();
-    return { props: { data } }
-}
-
-export default function DisplaySite ({ data }) {
-    const [filteredPrecepData, setFilteredPrecepData] = useState(preceptor_data)
+export default function DisplaySite (props) {
+    const [filteredData, setFilteredData] = useState(props.data)
+    const [showRegionDropdown, setShowRegionDropdown] = useState(false)
     const [showSiteDropdown, setShowSiteDropdown] = useState(false)
 
     function searchPreceptorName(substr) {
-        setFilteredPrecepData(SearchString(preceptor_data, substr))
+        setFilteredData(SearchString(data, substr))
     }
 
     return (
@@ -26,6 +22,11 @@ export default function DisplaySite ({ data }) {
                     <input className={styles.searchInput} placeholder="Enter Site Name ..." onChange={(x) => searchPreceptorName(x.target.value)} />
                 </div>
                 <div className={styles.regionForm}>
+                    <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
+                        <p>Region</p>
+                        <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
+                    </div>
+                    <Dropdown open={showRegionDropdown} setOpen={setShowRegionDropdown} />
                 </div>
                 <div className={styles.siteForm}>
                   <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
@@ -39,7 +40,7 @@ export default function DisplaySite ({ data }) {
                     <p>Status</p>
                     <IoIosArrowDown color='#079CDB' />
                   </div>
-                  <form></form>
+                  <Dropdown/>
                 </div>
             </div>
             <div className={styles.row}>
@@ -48,7 +49,7 @@ export default function DisplaySite ({ data }) {
                 <p className={styles.titleCol3}>Affiliation</p>
                 <p className={styles.titleCol4}>Status</p>
             </div>
-            {filteredPrecepData.map((x, ind) => {
+            {filteredData.map((x, ind) => {
             const statusText = StatusParser("preceptors", parseInt(x.status))
             return (
             <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
@@ -64,7 +65,7 @@ export default function DisplaySite ({ data }) {
             </Link>
             )}
             )
-        }
+            }
       </React.Fragment>
     )
 }
