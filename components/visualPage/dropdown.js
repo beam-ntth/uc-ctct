@@ -12,16 +12,28 @@ export default function Dropdown(props) {
   const [showStatusForm, setShowStatusForm] = useState(false)
 
   return (
-    <Dropdown>
-      <Dropdown.Toggle variant="success" id="dropdown-basic">
-        Dropdown Button
-      </Dropdown.Toggle>
-
-      <Dropdown.Menu>
-        <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-        <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-        <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-      </Dropdown.Menu>
-    </Dropdown>
+    <React.Fragment>
+      <div className={styles.dropDownMain} style={props.open ? {opacity: 1, transform: 'translateY(0px)'} : {opacity: 0, transform: 'translateY(-50px)'}}>
+        <input className={styles.searchBar} placeholder='Search...' />
+        <div className={styles.dropDownSelect}>
+          <div className={styles.dropDownValue}>
+            <input type='checkbox' value="site1" />
+            <label for="site1">Site 1</label>
+          </div>
+          <div className={styles.dropDownValue}>
+            <input type='checkbox' value="site2" />
+            <label for="site2">Site 2</label>
+          </div>
+          <div className={styles.dropDownValue}>
+            <input type='checkbox' value="site3" />
+            <label for="site3">Site 3</label>
+          </div>
+          <div className={styles.dropDownValue}>
+            <input type='checkbox' value="site4" />
+            <label for="site4">Site 4</label>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
   )
 }

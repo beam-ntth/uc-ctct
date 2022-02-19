@@ -1,0 +1,40 @@
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    /* margin: 4rem 2rem 1rem 2rem; */
+    /* margin: 2rem 2rem 0 2rem; */
+    /* margin-left: 2.5rem; */
+    height: 10%;
+    width: 90%;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.titleCol1 {
+    width: 40%;
+}
+.titleCol2 {
+    width: 20%;
+}
+.titleCol3 {
+    width: 15%;
+}
+.titleCol4 {
+    width: 25%;
+}
+
+.dataCol1 {
+    width: 40%;
+}
+.dataCol2 {
+    width: 20%;
+}
+.dataCol3 {
+    width: 15%;
+}
+.dataCol4 {
+    width: 20%;
+}
