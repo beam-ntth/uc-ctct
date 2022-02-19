@@ -140,26 +140,28 @@
 .regionForm, .siteForm, .statusForm {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  /* height: 100%;
-  width: auto;
+  height: 100%;
+  width: 15%;
   background-color: #fff;
   border-radius: 0.6rem;
-  border: 1px solid #C4C4C4; */
+  border: 1px solid #C4C4C4;
 }
 
 .formTitle {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   width: 100%;
-  padding: 0 1.5rem;
+  margin-top: 0.3rem;
+  cursor: pointer;
+  z-index: 20;
 }
 
 .formTitle p {
-  margin: 0 1rem 0 0;
+  margin: 0 0.5rem 0 0;
 }
 
 .row {

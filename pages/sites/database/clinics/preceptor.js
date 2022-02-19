@@ -35,7 +35,7 @@ import { removeClinic } from "../../../../api-lib/azure/azureOps";
 
 
 export default function Preceptors({ data, note_data }) {
-    // const [openNote, setOpenNote] = useState(false)
+    const [openNote, setOpenNote] = useState(false)
     // const [openEditForm, setOpenEditForm] = useState(false)
     // const [openAddClinic, setOpenAddClinic] = useState(false)
 
@@ -72,8 +72,8 @@ export default function Preceptors({ data, note_data }) {
 
     return (
         <React.Fragment>
-            {/* {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
-            {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
+            {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
+            {/* {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
             {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null} */}
             <div className={styles.container}>
                 <Head>
@@ -97,15 +97,19 @@ export default function Preceptors({ data, note_data }) {
                                     <img src="/asset/images/user-image.png" />
                                 </div>
                                 <div className={styles.profileInfo}>
-                                    <p>Name: </p>
-                                    <p>Clinic: </p>
-                                    <p>Status: </p>
-                                    <p>Credentials: </p>
-                                    <p>Position: </p>
-                                    <p>Email: </p>
-                                    <p>Phone Number: </p>
-
-
+                                    <div className={styles.infoRow}>
+                                        <p style={{marginRight: '2.5rem'}}><strong>Name:</strong> </p>
+                                        <p><strong>Clinic:</strong> </p>
+                                    </div>
+                                    <div className={styles.infoRow}>
+                                        <p style={{marginRight: '2.5rem'}}><strong>Status:</strong> </p>
+                                        <p><strong>Credentials:</strong> </p>
+                                    </div>
+                                    <div className={styles.infoRow}>
+                                        <p style={{marginRight: '2.5rem'}}><strong>Position:</strong> </p>
+                                        <p><strong>Email:</strong> </p>
+                                    </div>
+                                    <p><strong>Phone Number:</strong> </p>
                                 </div>
                             </div>
                         </div>
