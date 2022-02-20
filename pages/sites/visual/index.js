@@ -14,6 +14,7 @@ import DisplayClinic from '../../../components/visualPage/displayClinic';
 import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
+
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes, getAllClinicStatusTypes } from '../../../api-lib/azure/azureOps'
 
@@ -39,6 +40,11 @@ export default function Visualization({ site_data, clinic_data, preceptor_data, 
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
+  const [value,setValue]=useState('');
+  const handleSelect=(e)=>{
+    console.log(e);
+    setValue(e)
+  }
 
   return (
     <React.Fragment>
