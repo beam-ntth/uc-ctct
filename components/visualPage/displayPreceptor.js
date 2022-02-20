@@ -11,7 +11,7 @@ export default function DisplayPreceptor (props) {
     const [showSiteDropdown, setShowSiteDropdown] = useState(false)
 
     function searchPreceptorName(substr) {
-        setFilteredPrecepData(SearchString(preceptor_data, substr))
+        setFilteredPrecepData(SearchString(props.data, substr))
     }
 
     return (
@@ -21,20 +21,25 @@ export default function DisplayPreceptor (props) {
                     <input className={styles.searchInput} placeholder="Enter Preceptor Name ..." onChange={(x) => searchPreceptorName(x.target.value)} />
                 </div>
                 <div className={styles.regionForm}>
+                  <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
+                    <p>Position</p>
+                    <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
+                  </div>
+                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={props.choices} />
                 </div>
                 <div className={styles.siteForm}>
                   <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
-                    <p>Site</p>
+                    <p>Credential</p>
                     <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
                   </div>
-                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} />
+                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={props.choices} />
                 </div>
                 <div className={styles.statusForm}>
                   <div className={styles.formTitle}>
                     <p>Status</p>
                     <IoIosArrowDown color='#079CDB' />
                   </div>
-                  <form></form>
+                  
                 </div>
             </div>
             <div className={styles.row}>

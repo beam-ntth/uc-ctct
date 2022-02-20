@@ -46,7 +46,7 @@ export const getAllSites = async () => {
 
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
+    const { resources: data } = await Clinics.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);

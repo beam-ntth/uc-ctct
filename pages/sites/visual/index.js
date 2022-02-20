@@ -16,7 +16,7 @@ import DisplaySite from '../../../components/visualPage/displaySite';
 
 
 // Import DB ops.
-import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes, getAllClinicStatusTypes } from '../../../api-lib/azure/azureOps'
+import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes, getAllRegions } from '../../../api-lib/azure/azureOps'
 
 export async function getServerSideProps() {
   // const database = client.database("uc-ctct");
@@ -27,14 +27,14 @@ export async function getServerSideProps() {
   // const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
   // const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
   const preceptor_data = await getAllPreceptors();
+  const region_data = await getAllRegions();
   const site_data = await getAllSites();
   const clinic_data = await getAllClinics();
   const region_choices = await getAllRegionTypes();
-  const clinic_status_choices = await getAllClinicStatusTypes();
-  return { props: { site_data, clinic_data, preceptor_data, region_choices } }
+  return { props: { region_data, site_data, clinic_data, preceptor_data, region_choices } }
 }
 
-export default function Visualization({ site_data, clinic_data, preceptor_data, region_choices }) {
+export default function Visualization({ region_data, site_data, clinic_data, preceptor_data, region_choices }) {
   // 0 is site, 1 is clinic, 2 is preceptor
   const [searchSetting, setSearchSetting] = useState(0)
   const [showRegionForm, setShowRegionForm] = useState(false)
@@ -70,9 +70,9 @@ export default function Visualization({ site_data, clinic_data, preceptor_data, 
                   style={searchSetting === 2 ? { fontWeight: 'bold', opacity: '100%' } : { opacity: '60%' }}
                   onClick={() => setSearchSetting(2)} > Preceptor </p>
               </div>
-              {searchSetting === 0 ? <DisplaySite data={site_data} region_choices={region_choices} /> : null}
+              {searchSetting === 0 ? <DisplaySite region_data={region_data} data={site_data} region_choices={region_choices} /> : null}
               {searchSetting === 1 ? <DisplayClinic data={clinic_data} /> : null}
-              {searchSetting === 2 ? <DisplayPreceptor data={preceptor_data} /> : null}
+              {searchSetting === 2 ? <DisplayPreceptor data={preceptor_data} choices={region_choices} /> : null}
             </div>
           </div>
         </main>

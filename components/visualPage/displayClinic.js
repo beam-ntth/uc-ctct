@@ -9,10 +9,12 @@ import StatusParser from '../shared/status';
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
   const [showSiteDropdown, setShowSiteDropdown] = useState(false);
-  const [showRegionDropdown, setShowRegionDropdown] = useState(false);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
-    setFilteredClinicData(SearchString(data, substr))
+    setFilteredClinicData(SearchString(props.data, substr))
   }
 
   return (
@@ -56,11 +58,11 @@ export default function DisplayClinic(props) {
           {/* <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} /> */}
         </div>
         <div className={styles.statusForm}>
-          <div className={styles.formTitle}>
+          <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
-            <IoIosArrowDown color='#079CDB' />
+            <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          {/* <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} /> */}
+          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div>
       </div>
       <div className={styles.row}>
@@ -71,6 +73,7 @@ export default function DisplayClinic(props) {
       </div>
       {filteredClinicData.map((x, ind) => {
         const statusText = StatusParser("clinics", parseInt(x.status))
+        
         return (
           <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>

@@ -33,15 +33,15 @@ export default function AdminInfoEdit(props) {
   }
 
   // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-  useEffect(() => {
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        updateInfo();
-        props.setOpen(false);
-        return;
-      }
-    });
-  });
+  // useEffect(() => {
+  //   document.addEventListener("keydown", (e) => {
+  //     if (e.key === "Enter") {
+  //       updateInfo();
+  //       props.setOpen(false);
+  //       return;
+  //     }
+  //   });
+  // });
 
   return (
     <React.Fragment>

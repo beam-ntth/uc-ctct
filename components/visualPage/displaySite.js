@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import styles from '../../styles/DisplayClinic.module.css'
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import Dropdown from './dropDown/dropdown';
+import { getRegion } from '../../api-lib/azure/azureOps';
+
 
 export default function DisplaySite(props) {
   const [filteredData, setFilteredData] = useState(props.data)
@@ -18,13 +20,12 @@ export default function DisplaySite(props) {
   // const regionChoices = ['Region 1', 'Region 2', 'Region 3', 'Region 4']
   const regionChoices = props.region_choices;
   // console.log("REGION CHOICES", );
-  const siteChoices = ['Site 1', 'Site 2', 'Site 3', 'Site 4']
-  const statusChoices = ['Status 1', 'Status 2', 'Status 3', 'Status 4']
+  const affiChoices = ['UCSF', 'None']
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((x) => StatusParser('sites', x))
 
   function searchPreceptorName(substr) {
     setFilteredData(SearchString(props.data, substr))
   }
-
 
   return (
     <React.Fragment>
@@ -41,10 +42,10 @@ export default function DisplaySite(props) {
         </div>
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
-            <p>Site</p>
+            <p>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={siteChoices} />
+          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={affiChoices} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
@@ -62,13 +63,14 @@ export default function DisplaySite(props) {
       </div>
       {filteredData.map((x, ind) => {
         const statusText = StatusParser("preceptors", parseInt(x.status))
+        const regionName = props.region_data.filter((r) => r.id == x.region_id)
         return (
           <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
                 <p className={styles.dataCol1} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.name}</p>
-                <p className={styles.dataCol2} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.position + "sfljowefhsjf laldjfl"}</p>
-                <p className={styles.dataCol3} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.credential + "lsjffajd fgfdlsaflksjad fasjflsadfjad jlsdfasd"}</p>
+                <p className={styles.dataCol2} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{regionName[0].name}</p>
+                <p className={styles.dataCol3} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.affiliation}</p>
                 <p className={styles.dataCol4} style={{ marginRight: '2rem', flexWrap: 'wrap' }}>{statusText}</p>
               </div>
               <div className={`tag${x['status']}`}></div>

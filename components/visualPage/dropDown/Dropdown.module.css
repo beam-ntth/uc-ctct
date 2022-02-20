@@ -18,18 +18,22 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    height: 2.3rem;
+    height: 3rem;
     padding-left: 0.5rem;
 }
 
 .dropDownValue input {
-    margin-right: 0.5rem;
+    margin-right: 0.7rem;
 }
 
 .dropDownSelect {
     width: 100%;
     height: 7rem;
     overflow-y: scroll;
+}
+
+.dropDownSelect label {
+    font-size: 0.7rem;
 }
 
 .dropDownSearchBar {
