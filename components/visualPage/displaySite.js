@@ -23,7 +23,6 @@ export default function DisplaySite (props) {
         setFilteredData(SearchString(data, substr))
     }
 
-
     return (
         <React.Fragment>
             <div className={styles.filterRow}>
