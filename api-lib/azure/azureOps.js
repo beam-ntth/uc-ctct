@@ -17,6 +17,8 @@ const getSitesConnectedToRegion =
 const getClinicsConnectedToSite =
   "SELECT * FROM c where c.site_id = @site_id";
 const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
+const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
+const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 
 /** GETTERS */
 
@@ -138,6 +140,15 @@ export const getAllRegionTypes = async () => {
     return data;
   } catch (Error) {
     throw new Error("Issue getting all region types.");
+  }
+}
+
+export const getAllClinicStatusTypes = async () => {
+  try {
+    const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
+    return data;
+  } catch (Error) {
+    throw new Error("Issue getting all clinic status types.");
   }
 }
 

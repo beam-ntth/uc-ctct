@@ -47,7 +47,7 @@ export default function Main() {
         {/* <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/> */}
       </Head>
       <main className={styles.main}>
-        <Navbar icons={[true, false, false, false, false]}/> 
+        <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
           <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
@@ -55,7 +55,7 @@ export default function Main() {
               <div className={styles.chartTitle}>
                 <p>Chart 1: Detail</p>
               </div>
-              <div style={{height: '90%', width: 'auto'}}>
+              <div style={{ height: '90%', width: 'auto' }}>
                 <BarChart />
               </div>
             </div>
@@ -63,7 +63,7 @@ export default function Main() {
               <div className={styles.chartTitle}>
                 <p>Chart 2: Detail</p>
               </div>
-              <div style={{height: '90%', width: 'auto'}}>
+              <div style={{ height: '90%', width: 'auto' }}>
                 <PieChart />
               </div>
             </div>

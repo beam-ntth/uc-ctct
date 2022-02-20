@@ -7,8 +7,9 @@ import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 
 export default function DisplayClinic(props) {
-  const [filteredClinicData, setFilteredClinicData] = useState(props.data)
-  const [showSiteDropdown, setShowSiteDropdown] = useState(false)
+  const [filteredClinicData, setFilteredClinicData] = useState(props.data);
+  const [showSiteDropdown, setShowSiteDropdown] = useState(false);
+  const [showRegionDropdown, setShowRegionDropdown] = useState(false);
 
   function searchClinicName(substr) {
     setFilteredClinicData(SearchString(data, substr))
@@ -52,14 +53,14 @@ export default function DisplayClinic(props) {
             <p>Site</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} />
+          {/* <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} /> */}
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' />
           </div>
-          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} />
+          {/* <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} /> */}
         </div>
       </div>
       <div className={styles.row}>

@@ -15,7 +15,7 @@ import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
 // Import DB ops.
-import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes } from '../../../api-lib/azure/azureOps'
+import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes, getAllClinicStatusTypes } from '../../../api-lib/azure/azureOps'
 
 export async function getServerSideProps() {
   // const database = client.database("uc-ctct");
@@ -29,6 +29,7 @@ export async function getServerSideProps() {
   const site_data = await getAllSites();
   const clinic_data = await getAllClinics();
   const region_choices = await getAllRegionTypes();
+  const clinic_status_choices = await getAllClinicStatusTypes();
   return { props: { site_data, clinic_data, preceptor_data, region_choices } }
 }
 
