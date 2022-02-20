@@ -10,17 +10,19 @@ const Preceptors = db.container("Preceptors");
 // console.log("Getting sites: ", sites);
 
 // SQL Query Literals
-const selectAll = "SELECT * FROM c";
+// TODO: Get better naming scheme to differentiate literals from the functions.
+const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
   "SELECT * FROM c WHERE c.region_id = @region_id";
 const getClinicsConnectedToSite =
   "SELECT * FROM c where c.site_id = @site_id";
+const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 
 /** GETTERS */
 
 export const getAllRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAll).fetchAll();
+    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -31,7 +33,7 @@ export const getAllRegions = async () => {
 
 export const getAllSites = async () => {
   try {
-    const { resources: data } = await Sites.items.query(selectAll).fetchAll();
+    const { resources: data } = await Sites.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is: ", error.code);
@@ -42,7 +44,7 @@ export const getAllSites = async () => {
 
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAll).fetchAll();
+    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -123,10 +125,19 @@ export const getSitesFromRegion = async (id) => {
 
 export const getAllPreceptors = async () => {
   try {
-    const { resources: data } = await Preceptors.items.query(selectAll).fetchAll();
+    const { resources: data } = await Preceptors.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error("Issue getting all preceptors.");
+  }
+}
+
+export const getAllRegionTypes = async () => {
+  try {
+    const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
+    return data;
+  } catch (Error) {
+    throw new Error("Issue getting all region types.");
   }
 }
 

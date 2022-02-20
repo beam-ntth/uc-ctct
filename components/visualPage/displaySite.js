@@ -15,7 +15,9 @@ export default function DisplaySite(props) {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
 
   // Dropdown Choices
-  const regionChoices = ['Region 1', 'Region 2', 'Region 3', 'Region 4']
+  // const regionChoices = ['Region 1', 'Region 2', 'Region 3', 'Region 4']
+  const regionChoices = props.region_choices;
+  // console.log("REGION CHOICES", );
   const siteChoices = ['Site 1', 'Site 2', 'Site 3', 'Site 4']
   const statusChoices = ['Status 1', 'Status 2', 'Status 3', 'Status 4']
 
