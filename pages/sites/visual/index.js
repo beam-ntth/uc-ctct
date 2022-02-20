@@ -15,7 +15,7 @@ import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
 // Import DB ops.
-import { getAllClinics, getAllSites, getAllPreceptors } from '../../../api-lib/azure/azureOps'
+import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes } from '../../../api-lib/azure/azureOps'
 
 export async function getServerSideProps() {
   // const database = client.database("uc-ctct");
@@ -28,10 +28,11 @@ export async function getServerSideProps() {
   const preceptor_data = await getAllPreceptors();
   const site_data = await getAllSites();
   const clinic_data = await getAllClinics();
-  return { props: { site_data, clinic_data, preceptor_data } }
+  const region_choices = await getAllRegionTypes();
+  return { props: { site_data, clinic_data, preceptor_data, region_choices } }
 }
 
-export default function Visualization({ site_data, clinic_data, preceptor_data }) {
+export default function Visualization({ site_data, clinic_data, preceptor_data, region_choices }) {
   // 0 is site, 1 is clinic, 2 is preceptor
   const [searchSetting, setSearchSetting] = useState(0)
   const [showRegionForm, setShowRegionForm] = useState(false)
@@ -67,7 +68,7 @@ export default function Visualization({ site_data, clinic_data, preceptor_data }
                   style={searchSetting === 2 ? { fontWeight: 'bold', opacity: '100%' } : { opacity: '60%' }}
                   onClick={() => setSearchSetting(2)} > Preceptor </p>
               </div>
-              {searchSetting === 0 ? <DisplaySite data={site_data} /> : null}
+              {searchSetting === 0 ? <DisplaySite data={site_data} region_choices={region_choices} /> : null}
               {searchSetting === 1 ? <DisplayClinic data={clinic_data} /> : null}
               {searchSetting === 2 ? <DisplayPreceptor data={preceptor_data} /> : null}
             </div>
