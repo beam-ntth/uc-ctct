@@ -5,6 +5,7 @@ const db = client.database("uc-ctct");
 const Regions = db.container("Regions");
 const Sites = db.container("Sites");
 const Clinics = db.container("Clinics");
+const Preceptors = db.container("Preceptors");
 
 // console.log("Getting sites: ", sites);
 
@@ -120,6 +121,15 @@ export const getSitesFromRegion = async (id) => {
   }
 }
 
+export const getAllPreceptors = async () => {
+  try {
+    const { resources: data } = await Preceptors.items.query(selectAll).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting all preceptors.");
+  }
+}
+
 /** DELETION OPERATIONS */
 
 /**
@@ -131,13 +141,13 @@ export const removeClinic = async (id, siteId) => {
     await Clinics.item(id, id).delete();
 
     // Update total number of clinics
-    const { resource: previous_num_clinics} = await Sites.item(siteId, siteId).read()
+    const { resource: previous_num_clinics } = await Sites.item(siteId, siteId).read()
     const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_clinics",
-          value: previous_num_clinics["total_clinics"] - 1
-        }]
+      [{
+        op: "replace",
+        path: "/total_clinics",
+        value: previous_num_clinics["total_clinics"] - 1
+      }]
     await Sites.item(siteId, siteId).patch(replaceOperation)
 
   } catch (error) {
@@ -170,13 +180,13 @@ export const removeSite = async (id, regionId) => {
     await Sites.item(id, id).delete();
 
     // Update number of sites left in region
-    const { resource: previous_num_sites} = await Regions.item(regionId, regionId).read()
+    const { resource: previous_num_sites } = await Regions.item(regionId, regionId).read()
     const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_sites",
-          value: previous_num_sites["total_sites"] - 1
-        }]
+      [{
+        op: "replace",
+        path: "/total_sites",
+        value: previous_num_sites["total_sites"] - 1
+      }]
     await Regions.item(regionId, regionId).patch(replaceOperation)
 
   } catch (error) {

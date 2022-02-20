@@ -14,21 +14,26 @@ import DisplayClinic from '../../../components/visualPage/displayClinic';
 import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
+// Import DB ops.
+import { getAllClinics, getAllSites, getAllPreceptors } from '../../../api-lib/azure/azureOps'
+
 export async function getServerSideProps() {
-  const database = client.database("uc-ctct");
-  const site_container = database.container("Sites");
-  const clinic_container = database.container("Clinics");
-  const preceptor_container = database.container("Preceptors");
-  const { resources: site_data } = await site_container.items.query("SELECT * FROM c").fetchAll();
-  const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
-  const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
+  // const database = client.database("uc-ctct");
+  // const site_container = database.container("Sites");
+  // const clinic_container = database.container("Clinics");
+  // const preceptor_container = database.container("Preceptors");
+  // const { resources: site_data } = await site_container.items.query("SELECT * FROM c").fetchAll();
+  // const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
+  // const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
+  const preceptor_data = await getAllPreceptors();
+  const site_data = await getAllSites();
+  const clinic_data = await getAllClinics();
   return { props: { site_data, clinic_data, preceptor_data } }
 }
 
 export default function Visualization({ site_data, clinic_data, preceptor_data }) {
   // 0 is site, 1 is clinic, 2 is preceptor
   const [searchSetting, setSearchSetting] = useState(0)
-
   const [showRegionForm, setShowRegionForm] = useState(false)
   const [showSiteForm, setShowSiteForm] = useState(false)
   const [showStatusForm, setShowStatusForm] = useState(false)
