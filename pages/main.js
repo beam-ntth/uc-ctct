@@ -14,6 +14,7 @@ import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
+import React, { useState } from 'react'
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -34,10 +35,12 @@ import PieChart from '../components/Charts/piechart';
 //     props: { user: req.user },
 //   };
 // }
+// 0 is site, 1 is clinic, 2 is preceptor
 
 
 export default function Main() {
 
+  const [searchSetting, setSearchSetting] = useState(0)
   return (
     <div className={styles.container}>
       <Head>
@@ -70,7 +73,15 @@ export default function Main() {
           </div>
           <div className={styles.activities}>
             <div className={styles.activityBox}>
-              <h1 className={styles.actTitle}>Most Recent Activites</h1>
+              <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
+            </div>
+            <div className={styles.toggleRow}>
+            <p className={styles.toggleTitle}
+                  style={searchSetting === 1 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                  onClick={() => setSearchSetting(1)} > Clinic </p>
+            <p className={styles.toggleTitle}
+                  style={searchSetting === 2 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                  onClick={() => setSearchSetting(2)}> Student </p>
             </div>
           </div>
         </div>

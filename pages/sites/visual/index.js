@@ -14,6 +14,7 @@ import DisplayClinic from '../../../components/visualPage/displayClinic';
 import DisplayPreceptor from '../../../components/visualPage/displayPreceptor';
 import DisplaySite from '../../../components/visualPage/displaySite';
 
+
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getAllRegionTypes } from '../../../api-lib/azure/azureOps'
 
