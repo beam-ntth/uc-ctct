@@ -5,21 +5,26 @@ const db = client.database("uc-ctct");
 const Regions = db.container("Regions");
 const Sites = db.container("Sites");
 const Clinics = db.container("Clinics");
+const Preceptors = db.container("Preceptors");
 
 // console.log("Getting sites: ", sites);
 
 // SQL Query Literals
-const selectAll = "SELECT * FROM c";
+// TODO: Get better naming scheme to differentiate literals from the functions.
+const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
   "SELECT * FROM c WHERE c.region_id = @region_id";
 const getClinicsConnectedToSite =
   "SELECT * FROM c where c.site_id = @site_id";
+const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
+const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
+const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 
 /** GETTERS */
 
 export const getAllRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAll).fetchAll();
+    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -30,7 +35,7 @@ export const getAllRegions = async () => {
 
 export const getAllSites = async () => {
   try {
-    const { resources: data } = await Sites.items.query(selectAll).fetchAll();
+    const { resources: data } = await Sites.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is: ", error.code);
@@ -41,7 +46,7 @@ export const getAllSites = async () => {
 
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAll).fetchAll();
+    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -120,6 +125,33 @@ export const getSitesFromRegion = async (id) => {
   }
 }
 
+export const getAllPreceptors = async () => {
+  try {
+    const { resources: data } = await Preceptors.items.query(selectAllQuery).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting all preceptors.");
+  }
+}
+
+export const getAllRegionTypes = async () => {
+  try {
+    const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
+    return data;
+  } catch (Error) {
+    throw new Error("Issue getting all region types.");
+  }
+}
+
+export const getAllClinicStatusTypes = async () => {
+  try {
+    const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
+    return data;
+  } catch (Error) {
+    throw new Error("Issue getting all clinic status types.");
+  }
+}
+
 /** DELETION OPERATIONS */
 
 /**
@@ -131,13 +163,13 @@ export const removeClinic = async (id, siteId) => {
     await Clinics.item(id, id).delete();
 
     // Update total number of clinics
-    const { resource: previous_num_clinics} = await Sites.item(siteId, siteId).read()
+    const { resource: previous_num_clinics } = await Sites.item(siteId, siteId).read()
     const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_clinics",
-          value: previous_num_clinics["total_clinics"] - 1
-        }]
+      [{
+        op: "replace",
+        path: "/total_clinics",
+        value: previous_num_clinics["total_clinics"] - 1
+      }]
     await Sites.item(siteId, siteId).patch(replaceOperation)
 
   } catch (error) {
@@ -170,13 +202,13 @@ export const removeSite = async (id, regionId) => {
     await Sites.item(id, id).delete();
 
     // Update number of sites left in region
-    const { resource: previous_num_sites} = await Regions.item(regionId, regionId).read()
+    const { resource: previous_num_sites } = await Regions.item(regionId, regionId).read()
     const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_sites",
-          value: previous_num_sites["total_sites"] - 1
-        }]
+      [{
+        op: "replace",
+        path: "/total_sites",
+        value: previous_num_sites["total_sites"] - 1
+      }]
     await Regions.item(regionId, regionId).patch(replaceOperation)
 
   } catch (error) {

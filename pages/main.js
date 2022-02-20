@@ -14,6 +14,7 @@ import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
+import React, { useState } from 'react'
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -34,10 +35,12 @@ import PieChart from '../components/Charts/piechart';
 //     props: { user: req.user },
 //   };
 // }
+// 0 is site, 1 is clinic, 2 is preceptor
 
 
 export default function Main() {
 
+  const [searchSetting, setSearchSetting] = useState(0)
   return (
     <div className={styles.container}>
       <Head>
@@ -47,7 +50,7 @@ export default function Main() {
         {/* <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/> */}
       </Head>
       <main className={styles.main}>
-        <Navbar icons={[true, false, false, false, false]}/> 
+        <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
           <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
@@ -55,7 +58,7 @@ export default function Main() {
               <div className={styles.chartTitle}>
                 <p>Chart 1: Detail</p>
               </div>
-              <div style={{height: '90%', width: 'auto'}}>
+              <div style={{ height: '90%', width: 'auto' }}>
                 <BarChart />
               </div>
             </div>
@@ -63,14 +66,22 @@ export default function Main() {
               <div className={styles.chartTitle}>
                 <p>Chart 2: Detail</p>
               </div>
-              <div style={{height: '90%', width: 'auto'}}>
+              <div style={{ height: '90%', width: 'auto' }}>
                 <PieChart />
               </div>
             </div>
           </div>
           <div className={styles.activities}>
             <div className={styles.activityBox}>
-              <h1 className={styles.actTitle}>Most Recent Activites</h1>
+              <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
+            </div>
+            <div className={styles.toggleRow}>
+            <p className={styles.toggleTitle}
+                  style={searchSetting === 1 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                  onClick={() => setSearchSetting(1)} > Clinic </p>
+            <p className={styles.toggleTitle}
+                  style={searchSetting === 2 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                  onClick={() => setSearchSetting(2)}> Student </p>
             </div>
           </div>
         </div>
