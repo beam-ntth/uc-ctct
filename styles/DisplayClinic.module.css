@@ -82,13 +82,17 @@
 
 .dataCol1 {
     width: 40%;
+    inline-size: 200px;
 }
 .dataCol2 {
     width: 20%;
+    inline-size: 150px;
 }
 .dataCol3 {
     width: 15%;
+    inline-size: 150px;
 }
 .dataCol4 {
     width: 20%;
+    inline-size: 150px;
 }
