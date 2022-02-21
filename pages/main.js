@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import styles from '../styles/Main.module.css'
+import GoogleMapReact from 'google-map-react';
 // import '../styles/fonts.css'
 
 // Authentication Packages
@@ -14,7 +15,7 @@ import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -39,8 +40,16 @@ import React, { useState } from 'react'
 
 
 export default function Main() {
-
   const [searchSetting, setSearchSetting] = useState(0)
+
+  const center = {
+    lat: 13.7481902,
+    lng: 100.5188778
+  }
+  const zoom = 11
+
+  const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
+  
   return (
     <div className={styles.container}>
       <Head>
@@ -74,14 +83,23 @@ export default function Main() {
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
-            </div>
-            <div className={styles.toggleRow}>
-            <p className={styles.toggleTitle}
-                  style={searchSetting === 1 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
-                  onClick={() => setSearchSetting(1)} > Clinic </p>
-            <p className={styles.toggleTitle}
-                  style={searchSetting === 2 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
-                  onClick={() => setSearchSetting(2)}> Student </p>
+              <div className={styles.toggleRow}>
+                <p className={styles.toggleTitle}
+                      style={searchSetting === 1 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                      onClick={() => setSearchSetting(1)} > Clinic </p>
+                <p className={styles.toggleTitle}
+                      style={searchSetting === 2 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
+                      onClick={() => setSearchSetting(2)}> Student </p>
+              </div>
+
+              <GoogleMapReact bootstrapURLKeys={{ key: "" }} defaultCenter={center} defaultZoom={zoom} >
+                <Marker
+                  lat={13.7481902}
+                  lng={100.5188778}
+                  text="HERE"
+                />
+              </GoogleMapReact>
+
             </div>
           </div>
         </div>

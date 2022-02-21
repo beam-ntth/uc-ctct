@@ -64,7 +64,7 @@ export default function DisplaySite(props) {
         const statusText = StatusParser("preceptors", parseInt(x.status))
         const regionName = props.region_data.filter((r) => r.id == x.region_id)
         return (
-          <Link href={`/sites/database/clinics/preceptor?${x.id}`}>
+          <Link href={`/sites/database/clinics?location=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
                 <p className={styles.dataCol1} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.name}</p>
