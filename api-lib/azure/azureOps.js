@@ -19,6 +19,11 @@ const getClinicsConnectedToSite =
 const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
+const distinctAffiliationQuery = "SELECT DISTINCT VALUE c.affiliation from c ORDER by c.affiliation ASC"
+
+
+// TODO: CREATE BETTER METHOD OF ERROR HANDLING. 
+// PERHAPS RETURN THE RESPONSE CODE AS WELL AS DATA, THEN CHECK THE CODE TO SEE IF NEEDING TO RENDER ERROR PAGE.
 
 /** GETTERS */
 
@@ -134,22 +139,51 @@ export const getAllPreceptors = async () => {
   }
 }
 
-export const getAllRegionTypes = async () => {
+/**
+ * Returns all distinct region names in Region container.
+ * Useful for avoding hardcoding possible region names for use in filters, etc.
+ * @returns List of all distinct regions.
+ */
+export const getDistinctRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
+    const res = await Regions.items.query(regionTypeQuery).fetchAll();
+    const data = res.resources;
+    console.log("Getting all distinct regions", res);
+    // const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
     return data;
   } catch (Error) {
-    throw new Error("Issue getting all region types.");
+    throw new Error("Issue getting all distinct regions.");
   }
 }
 
-export const getAllClinicStatusTypes = async () => {
+export const getDistinctClinicStatuses = async () => {
   try {
     const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
     return data;
   } catch (Error) {
-    throw new Error("Issue getting all clinic status types.");
+    throw new Error("Issue getting all distinct clinic statuses.");
   }
+}
+
+export const getDistinctSiteAffiliations = async () => {
+  try {
+    const { resources: data } = await Sites.items.query(distinctAffiliationQuery).fetchAll();
+    console.log("Getting distinct affiliations: ", data);
+    return data;
+  } catch (Error) {
+    throw new Error("Issue getting all distinct site affiliations.");
+  }
+}
+
+
+
+/** PUT OPERATIONS */
+
+/** */
+
+// TODO: CREATE BETTER FUNCTION FOR ADDING NEW CLINIC. 
+export const addClinic = async (clinic_data, site_id) => {
+
 }
 
 /** DELETION OPERATIONS */

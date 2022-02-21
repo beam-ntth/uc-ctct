@@ -5,8 +5,6 @@ import styles from '../../styles/DisplayClinic.module.css'
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import Dropdown from './dropDown/dropdown';
-import { getRegion } from '../../api-lib/azure/azureOps';
-
 
 export default function DisplaySite(props) {
   const [filteredData, setFilteredData] = useState(props.data)
@@ -20,7 +18,8 @@ export default function DisplaySite(props) {
   // const regionChoices = ['Region 1', 'Region 2', 'Region 3', 'Region 4']
   const regionChoices = props.region_choices;
   // console.log("REGION CHOICES", );
-  const affiChoices = ['UCSF', 'None']
+  // const affiChoices = ['UCSF', 'None']
+  const affiChoices = props.affiliation_choices;
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((x) => StatusParser('sites', x))
 
   function searchPreceptorName(substr) {
