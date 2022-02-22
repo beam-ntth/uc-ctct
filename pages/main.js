@@ -52,7 +52,7 @@ export default function Main() {
   // const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
   const StudentMarker = () => <img height='30px' width="auto" src="/asset/images/student-pin.png" />
   // const StudentMarker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FF0000', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
-  
+
   return (
     <div className={styles.container}>
       <Head>
@@ -71,7 +71,7 @@ export default function Main() {
               <h4>Red Marker is Clinic and Green marker is student</h4>
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
-                  <GoogleMapReact bootstrapURLKeys={{ key: "" }} defaultCenter={center} defaultZoom={zoom} >
+                  <GoogleMapReact bootstrapURLKeys={{ key: "AIzaSyD4thU64XFMgC5JCzNtfLbiOA00xaHDOoo" }} defaultCenter={center} defaultZoom={zoom} >
                     <Marker
                       lat={38.5568118}
                       lng={-121.7699631}
