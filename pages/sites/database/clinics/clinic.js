@@ -26,13 +26,17 @@ export async function getServerSideProps(context) {
   const clinicName = context.query.name
   const database = client.database("uc-ctct");
   const container = database.container("Preceptors");
-  const { resources: preceptor_data } = await container.items.query('SELECT * FROM c WHERE c.clinics')
   const data = await getClinic(clinicName);
-
-  return { props: { data } }
+  let all_preceptor_data = []
+  for (let i = 0; i < data.preceptorInfo.length; i++) {
+    const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
+    all_preceptor_data.push(preceptor_data)
+  }
+  
+  return { props: { data, all_preceptor_data } }
 }
 
-export default function ClinicDetails({ data }) {
+export default function ClinicDetails({ data, all_preceptor_data }) {
   // if (errorCode) {
   //   return <Error statusCode={errorCode} />
   // }
@@ -177,44 +181,33 @@ export default function ClinicDetails({ data }) {
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
-                    data.preceptorInfo.map((x, ind) => {
+                    all_preceptor_data.map((x, ind) => {
                       return (
-                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <div key={`preceptor_${ind}`} className="displayDetailRow">
-                            <p className="preceptorCol1">{x.name}</p>
-                            <p className="preceptorCol2">{x.credential}</p>
-                            <p className="preceptorCol3">{x.phone}</p>
-                            <p className="preceptorCol4">{x.email}</p>
+                        <Link href={`/sites/database/clinics/preceptor?name=${x.id}`}>
+                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div key={`preceptor_${ind}`} className="displayPrecepRow">
+                              <p className="preceptorCol1">{x.name}</p>
+                              <p className="preceptorCol2">{x.credential}</p>
+                              <p className="preceptorCol3">{x.phoneNumber}</p>
+                              <p className="preceptorCol4">{x.email}</p>
+                            </div>
+                            <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
+                              style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                              onMouseEnter={() => {
+                                let newStatus = [...precepTrashHover]
+                                newStatus[ind] = true
+                                setPrecepTrashHover(newStatus)
+                                return
+                              }
+                              } onMouseLeave={() => {
+                                let newStatus = [...precepTrashHover]
+                                newStatus[ind] = false
+                                setPrecepTrashHover(newStatus)
+                                return
+                              }
+                              } onClick={() => removeElement(x.id, region_data.id)} />
                           </div>
-                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                            onMouseEnter={() => {
-                              let newStatus = [...precepEditHover]
-                              newStatus[ind] = true
-                              setPrecepEditHover(newStatus)
-                              return
-                            }
-                            } onMouseLeave={() => {
-                              let newStatus = [...precepEditHover]
-                              newStatus[ind] = false
-                              setPrecepEditHover(newStatus)
-                              return
-                            }} />
-                          <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
-                            style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                            onMouseEnter={() => {
-                              let newStatus = [...precepTrashHover]
-                              newStatus[ind] = true
-                              setPrecepTrashHover(newStatus)
-                              return
-                            }
-                            } onMouseLeave={() => {
-                              let newStatus = [...precepTrashHover]
-                              newStatus[ind] = false
-                              setPrecepTrashHover(newStatus)
-                              return
-                            }
-                            } onClick={() => removeElement(x.id, region_data.id)} />
-                        </div>
+                        </Link>
                       )
                     })
                   }
@@ -273,21 +266,29 @@ export default function ClinicDetails({ data }) {
       <style jsx>
         {
           `
-            .displayDetailRow {
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                background-color: #fff;
-                height: auto;
-                width: 100%;
-                margin: 0.4rem 0;
-                border-radius: 1rem;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-                font-family: 'Lato', sans-serif;
-                font-weight: 500;
-                font-size: 1rem;
-                // padding: 0.4rem 0;
+            .displayDetailRow, .displayPrecepRow {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              background-color: #fff;
+              height: auto;
+              width: 100%;
+              margin: 0.4rem 0;
+              border-radius: 1rem;
+              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+              font-family: 'Lato', sans-serif;
+              font-weight: 500;
+              font-size: 1rem;
+            }
+
+            .displayPrecepRow {
+              cursor: pointer;
+              transition: 0.2s linear;
+            }
+
+            .displayPrecepRow:hover {
+              color: #079CDB;
             }
 
             .adminCol1 {
