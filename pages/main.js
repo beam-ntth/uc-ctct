@@ -43,12 +43,15 @@ export default function Main() {
   const [searchSetting, setSearchSetting] = useState(0)
 
   const center = {
-    lat: 13.7481902,
-    lng: 100.5188778
+    lat: 38.5568118,
+    lng: -121.7699631
   }
-  const zoom = 11
+  const zoom = 12
 
-  const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
+  const Marker = () => <img height='30px' width="auto" src="/asset/images/clinic-pin.png" />
+  // const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
+  const StudentMarker = () => <img height='30px' width="auto" src="/asset/images/student-pin.png" />
+  // const StudentMarker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FF0000', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
   
   return (
     <div className={styles.container}>
@@ -62,6 +65,26 @@ export default function Main() {
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
           <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
+          <div className={styles.activities}>
+            <div className={styles.activityBox}>
+              <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
+              <h4>Red Marker is Clinic and Green marker is student</h4>
+              <div className={styles.mapFrame}>
+                <div className={styles.mapContainer}>
+                  <GoogleMapReact bootstrapURLKeys={{ key: "" }} defaultCenter={center} defaultZoom={zoom} >
+                    <Marker
+                      lat={38.5568118}
+                      lng={-121.7699631}
+                    />
+                    <StudentMarker
+                      lat={38.540895}
+                      lng={-121.773334}
+                    />
+                  </GoogleMapReact>
+                </div>
+              </div>
+            </div>
+          </div>
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
@@ -78,28 +101,6 @@ export default function Main() {
               <div style={{ height: '90%', width: 'auto' }}>
                 <PieChart />
               </div>
-            </div>
-          </div>
-          <div className={styles.activities}>
-            <div className={styles.activityBox}>
-              <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
-              <div className={styles.toggleRow}>
-                <p className={styles.toggleTitle}
-                      style={searchSetting === 1 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
-                      onClick={() => setSearchSetting(1)} > Clinic </p>
-                <p className={styles.toggleTitle}
-                      style={searchSetting === 2 ? { marginRight: '5rem', fontWeight: 'bold', opacity: '100%' } : { marginRight: '1rem', opacity: '60%' }}
-                      onClick={() => setSearchSetting(2)}> Student </p>
-              </div>
-
-              <GoogleMapReact bootstrapURLKeys={{ key: "" }} defaultCenter={center} defaultZoom={zoom} >
-                <Marker
-                  lat={13.7481902}
-                  lng={100.5188778}
-                  text="HERE"
-                />
-              </GoogleMapReact>
-
             </div>
           </div>
         </div>
