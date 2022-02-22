@@ -46,7 +46,7 @@ export default function Main() {
     lat: 38.5568118,
     lng: -121.7699631
   }
-  const zoom = 12
+  const zoom = 10
 
   const Marker = () => <img height='30px' width="auto" src="/asset/images/clinic-pin.png" />
   // const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
@@ -68,18 +68,19 @@ export default function Main() {
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics/Students</h1>
-              <h4>Red Marker is Clinic and Green marker is student</h4>
+              <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> is Clinic and <img src='/asset/images/student-pin.png' /> is Student</h4>
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
-                    <Marker
-                      lat={38.5568118}
-                      lng={-121.7699631}
-                    />
-                    <StudentMarker
-                      lat={38.540895}
-                      lng={-121.773334}
-                    />
+                      <Marker lat={38.5568118} lng={-121.7699631} />
+                      <Marker lat={38.5368118} lng={-121.7689631} />
+                      <Marker lat={38.5168118} lng={-121.7799631} />
+                      <Marker lat={38.4968118} lng={-121.7609631} />
+                      <Marker lat={38.4768118} lng={-121.7669631} />
+                      <StudentMarker lat={38.540895} lng={-121.753334} />
+                      <StudentMarker lat={38.560895} lng={-121.763334} />
+                      <StudentMarker lat={38.520895} lng={-121.733334} />
+                      <StudentMarker lat={38.500895} lng={-121.713334} />
                   </GoogleMapReact>
                 </div>
               </div>

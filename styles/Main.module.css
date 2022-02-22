@@ -69,6 +69,16 @@
     background-color: #F5F5F5;
 }
 
+.legend {
+    margin: 0;
+    padding-left: 2rem;
+}
+
+.legend img {
+    height: 20px;
+    width: auto;
+}
+
 .mapFrame {
     padding: 0 2rem;
     width: 100%;
@@ -88,6 +98,7 @@
     font-weight: 500;
     padding: 2rem;
     margin: auto;
+    width: 100%;
 }
 
 
