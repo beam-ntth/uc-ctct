@@ -71,7 +71,7 @@ export default function Main() {
               <h4>Red Marker is Clinic and Green marker is student</h4>
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
-                  <GoogleMapReact bootstrapURLKeys={{ key: "AIzaSyD4thU64XFMgC5JCzNtfLbiOA00xaHDOoo" }} defaultCenter={center} defaultZoom={zoom} >
+                  <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
                     <Marker
                       lat={38.5568118}
                       lng={-121.7699631}
