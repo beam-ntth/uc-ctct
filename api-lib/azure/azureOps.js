@@ -19,8 +19,8 @@ const getClinicsConnectedToSite =
 const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
-const distinctAffiliationQuery = "SELECT DISTINCT VALUE c.affiliation from c ORDER by c.affiliation ASC"
-
+const distinctAffiliationQuery = "SELECT DISTINCT VALUE c.affiliation from c ORDER by c.affiliation ASC";
+const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
 
 // TODO: CREATE BETTER METHOD OF ERROR HANDLING. 
 // PERHAPS RETURN THE RESPONSE CODE AS WELL AS DATA, THEN CHECK THE CODE TO SEE IF NEEDING TO RENDER ERROR PAGE.
@@ -36,7 +36,6 @@ export const getAllRegions = async () => {
     throw new Error("Issue fetching Regions");
   }
 };
-
 
 export const getAllSites = async () => {
   try {
@@ -136,6 +135,15 @@ export const getAllPreceptors = async () => {
     return data;
   } catch (error) {
     throw new Error("Issue getting all preceptors.");
+  }
+}
+
+export const getPreceptor = async (id) => {
+  try {
+    const { resource: data } = await Preceptors.item(id, id).read();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting preceptor with id", id);
   }
 }
 
