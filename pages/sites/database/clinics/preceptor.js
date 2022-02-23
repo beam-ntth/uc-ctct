@@ -20,7 +20,7 @@ import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClini, getPreceptor } from "../../../../api-lib/azure/azureOps";
+import { removeClini, getPreceptor, getClinic } from "../../../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 
@@ -36,7 +36,12 @@ import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEd
 
 export async function getServerSideProps(context) {
   const preceptor = await getPreceptor(context.query.preceptor_id);
-  return { props: { preceptor } }
+  const all_clinics = []
+  for (let i = 0; i < preceptor.clinics.length; i++) {
+    all_clinics.push(await getClinic(preceptor.clinics[i]))
+  }
+  // const all_clinics = await getClinic(preceptor.clinics[0])
+  return { props: { preceptor, all_clinics } }
 }
 
 
@@ -63,15 +68,16 @@ export async function getServerSideProps(context) {
 // if (errorCode) {
 
 
-export default function Preceptors({ preceptor }) {
+export default function Preceptors({ preceptor, all_clinics }) {
   const [openNote, setOpenNote] = useState(false)
-  //const data = await getClinic(clinicName);
+  // const data = await getClinic(clinicName);
   // const [openEditForm, setOpenEditForm] = useState(false)
   // const [openAddClinic, setOpenAddClinic] = useState(false)
 
   const router = useRouter()
   // const [hover, setHover] = useState(false)
   // const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+  
   const refreshData = () => {
     router.replace(router.asPath);
   }
@@ -117,7 +123,7 @@ export default function Preceptors({ preceptor }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`Preceptor: `} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`Preceptor: ${preceptor.firstname} ${preceptor.lastname}`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>
@@ -128,18 +134,24 @@ export default function Preceptors({ preceptor }) {
                 </div>
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> </p>
-                    <p><strong>Clinic:</strong> </p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {preceptor.firstname} {preceptor.lastname}</p>
+                    
                   </div>
                   <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Status:</strong> </p>
-                    <p><strong>Credentials:</strong> </p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Status:</strong> {StatusParser('preceptors', preceptor.status)}</p>
+                    <p><strong>Credentials:</strong> {preceptor.credential}</p>
                   </div>
                   <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Position:</strong> </p>
-                    <p><strong>Email:</strong> </p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Position:</strong> {preceptor.position}</p>
+                    <p><strong>Email:</strong> {preceptor.email}</p>
                   </div>
-                  <p><strong>Phone Number:</strong> </p>
+                  <p><strong>Phone Number:</strong> {preceptor.phoneNumber}</p>
+                  <p>
+                    <strong>Clinic (s):</strong>
+                    {
+                      all_clinics.map(x => <p style={{margin: '0.4rem 0'}}>{x.name}</p>)
+                    }
+                  </p>
                 </div>
               </div>
             </div>
@@ -151,11 +163,11 @@ export default function Preceptors({ preceptor }) {
                     <div className={"editButton"} onClick={() => setOpenNote(true)}>+ Add Notes</div>
                   </div>
                 </div>
-                <div style={{ marginTop: '2rem' }}>
+                <div>
                   {
-                    preceptor.notes.map((x, ind) => {
+                    preceptor.notes.length !== 0 ? preceptor.notes.map((x, ind) => {
                       return (<Accordion x={x} ind={ind} />)
-                    })
+                    }) : <p style={{width: '100%', textAlign: 'center'}}>Currently, you do not have any notes!</p>
                   }
                 </div>
 

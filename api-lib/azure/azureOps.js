@@ -287,3 +287,68 @@ export const removeRegion = async (id) => {
     throw new Error("Issue deleting region with id", id);
   }
 }
+
+/**
+ * Deletes admin contact information from Clinics container.
+ * @param {String} id - ID of the clinic that the admin belongs to.
+ * @param {String} index - Index of the admin in the list.
+ * @throws {Error} Error if any operation is unable to be completed.
+ */
+export const removeAdmin = async (id, index) => {
+  try {
+    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    let clinic_admins = [...clinic_obj.adminInfo]
+    clinic_admins.splice(index, 1)
+    const replaceOperation =
+      [{
+        op: "replace",
+        path: "/adminInfo",
+        value: clinic_admins
+      }]
+    await Clinics.item(id, id).patch(replaceOperation)
+    return
+
+  } catch (error) {
+    throw new Error(`Issue deleting clinic admin with id ${id} at position ${index}`);
+  }
+}
+
+/**
+ * Deletes preceptor contact information from Clinics container 
+ * AND deletes clinic from Preceptors container.
+ * @param {String} id - ID of the clinic that the admin belongs to.
+ * @param {String} index - Index of the preceptor in the list.
+ * @throws {Error} Error if any operation is unable to be completed.
+ */
+export const removePreceptor = async (id, index) => {
+  try {
+    // EDIT Clinic Information
+    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    const preceptor_id = clinic_obj.preceptorInfo[index]
+    let clinic_preceptors = [...clinic_obj.preceptorInfo]
+    clinic_preceptors.splice(index, 1)
+    const replaceClinicOperation =
+      [{
+        op: "replace",
+        path: "/preceptorInfo",
+        value: clinic_preceptors
+      }]
+    await Clinics.item(id, id).patch(replaceClinicOperation)
+
+    // EDIT Preceptor Information
+    const { resource: precep_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
+    let preceptor_clinics = [...precep_obj.clinics]
+    const index_to_remove = preceptor_clinics.indexOf(id)
+    preceptor_clinics.splice(index_to_remove, 1)
+    const replacePreceptorOperation =
+      [{
+        op: "replace",
+        path: "/clinics",
+        value: preceptor_clinics
+      }]
+    await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
+    return
+  } catch (error) {
+    throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic`);
+  }
+}

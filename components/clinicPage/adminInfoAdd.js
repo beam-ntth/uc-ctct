@@ -3,8 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { client } from "../../api-lib/azure/azureConfig";
 import { getClinic, getSite } from "../../api-lib/azure/azureOps";
 
-export default function AdminInfoEdit(props) {
-  const [_, index] = props.open
+export default function AdminInfoAdd(props) {
   const [hover, setHover] = useState(false)
   const [info, setInfo] = useState({
     name: null,
@@ -13,19 +12,12 @@ export default function AdminInfoEdit(props) {
     email: null,
   });
 
-  async function getInitialInfo() {
-    const clinic_data = await getClinic(props.id);
-    setInfo(clinic_data.adminInfo[index])
-  }
-
-  useEffect(() => getInitialInfo(), [])
-
   async function updateInfo() {
     const database = client.database("uc-ctct");
     const container = database.container("Clinics");
     const clinic_data = await getClinic(props.id);
     let adminInfo = clinic_data.adminInfo;
-    adminInfo[index] = info
+    adminInfo.push(info);
     const replaceOperation = [
       {
         op: "replace",
@@ -34,7 +26,7 @@ export default function AdminInfoEdit(props) {
       },
     ];
     await container.item(props.id, props.id).patch(replaceOperation);
-    setTimeout(() => props.reload(), 700)
+    props.reload();
   }
 
   // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -53,7 +45,7 @@ export default function AdminInfoEdit(props) {
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
         <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-          <p className="editTitle">Edit Admin Information</p>
+          <p className="editTitle">Add Contact Information</p>
           <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
             onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
         </div>
@@ -61,7 +53,7 @@ export default function AdminInfoEdit(props) {
           <p>
             <strong>Name:</strong>
             <input
-              value={info.name}
+              placeholder="First Last"
               onChange={(e) => {
                 let newInfo = { ...info };
                 newInfo.name = e.target.value;
@@ -73,7 +65,7 @@ export default function AdminInfoEdit(props) {
           <p>
             <strong>Position:</strong>
             <input
-              value={info.position}
+              placeholder="Position"
               onChange={(e) => {
                 let newInfo = { ...info };
                 newInfo.position = e.target.value;
@@ -85,6 +77,7 @@ export default function AdminInfoEdit(props) {
           <p>
             <strong>Phone Number:</strong>
             <input
+              placeholder="0000000000"
               value={info.phone}
               onChange={(e) => {
                 let newInfo = { ...info };
@@ -99,7 +92,7 @@ export default function AdminInfoEdit(props) {
           <p>
             <strong>Email Address:</strong>
             <input
-              value={info.email}
+              placeholder="Email Address"
               type={"email"}
               onChange={(e) => {
                 let newInfo = { ...info };
@@ -127,7 +120,7 @@ export default function AdminInfoEdit(props) {
               return;
             }}
           >
-            Edit Contact
+            Add Contact
           </div>
         </div>
       </div>

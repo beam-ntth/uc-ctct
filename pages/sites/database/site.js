@@ -50,7 +50,7 @@ export default function SiteDetails({ data, region_data }) {
   async function removeElement(id, regionId) {
     console.log("ID", id);
     removeSite(id, regionId);
-    setTimeout(() => refreshData(), 500)
+    setTimeout(() => refreshData(), 700)
     return
   }
 

@@ -14,7 +14,7 @@ export default function DisplayPreceptor(props) {
 
   const positionChoices = props.data.map(x => x.position);
   const credentialChoices = props.data.map(x => x.credential);
-  const statusChoices = [0].map((x) => StatusParser('preceptors', x))
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('preceptors', x))
 
   function searchPreceptorName(substr) {
     setFilteredPrecepData(SearchString(props.data, substr))
@@ -60,7 +60,7 @@ export default function DisplayPreceptor(props) {
           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ paddingLeft: '2rem' }}>{x.name}</p>
+                <p className={styles.dataCol1} style={{ paddingLeft: '2rem' }}>{x.firstname} {x.lastname}</p>
                 <p className={styles.dataCol2} style={{ paddingLeft: '2rem' }}>{x.position}</p>
                 <p className={styles.dataCol3}>{x.credential}</p>
                 <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
