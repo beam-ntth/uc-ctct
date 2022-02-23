@@ -1,26 +1,77 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { addPreceptorFromClinicsPage } from "../../api-lib/azure/azureOps";
 
 export default function PreceptorInfoEdit(props) {
-  const [hover, setHover] = useState(false)
+  const [hover, setHover] = useState(false);
+  const [name, setName] = useState(null);
+  const [position, setPostion] = useState(null);
+  const [number, setNumber] = useState(null);
+  const [email, setEmail] = useState(null);
+
+  // Used to hold info of the state of inputs.
+  // const [info, setInfo] = useState({
+  //   name: null,
+  //   position: null,
+  //   phone: null,
+  //   email: null
+  // });
+
+  // TODO - JT Change position to credential.
+
+  async function updateInfo() {
+    const preceptor = {
+      name: name,
+      position: position,
+      phone: number,
+      email: email
+    }
+
+    await addPreceptorFromClinicsPage(props.id, preceptor);
+
+    props.reload();
+  }
 
   return (
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
           <p className="editTitle">Add Preceptor Contact Information</p>
-          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
         </div>
         <div style={{ width: '90%' }}>
-          <p><strong>Name:</strong><input placeholder="First Last" /> </p>
-          <p><strong>Position:</strong><input placeholder="Position" /></p>
-          <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
-          <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
+          <p><strong>Name:</strong><input placeholder="First Last"
+            onChange={(e) => {
+              setName(e.target.value);
+              return;
+            }} />
+          </p>
+          <p><strong>Position:</strong><input placeholder="Position"
+            onChange={(e) => {
+              setPostion(e.target.value);
+              return;
+            }} />
+          </p>
+          <p><strong>Phone Number:</strong><input placeholder="000-000-0000"
+            onChange={(e) => {
+              setNumber(e.target.value);
+              return;
+            }} />
+          </p>
+          <p><strong>Email Address:</strong><input placeholder="Email Address"
+            onChange={(e) => {
+              setEmail(e.target.value);
+              return;
+            }} />
+          </p>
         </div>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-          <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
+          <div className="saveBtn" onClick={async () => {
+            await updateInfo();
+            props.setOpen(false);
+          }}>Add Contact</div>
         </div>
       </div>
       <style jsx>

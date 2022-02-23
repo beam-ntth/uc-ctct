@@ -1,5 +1,6 @@
 "use strict";
 import { client } from "./azureConfig";
+import { v4 as uuidv4 } from "uuid";
 
 const db = client.database("uc-ctct");
 const Regions = db.container("Regions");
@@ -185,12 +186,71 @@ export const getDistinctSiteAffiliations = async () => {
 
 
 
-/** PUT OPERATIONS */
+/** CREATE OPERATIONS */
 
 /** */
 
 // TODO: CREATE BETTER FUNCTION FOR ADDING NEW CLINIC. 
 export const addClinic = async (clinic_data, site_id) => {
+  // Get the clinic info with all ids attached. 
+}
+
+/**
+ * Expects JSON of preceptor_info with name, position, phone, and email.
+ * @param  preceptor Information about the preceptor, created before the function call.
+ * @param preceptor.name {String} - Name attached.
+ * @returns preceptor - Preceptor that was recently added to Preceptors container.
+ */
+const createNewPreceptor = async (clinic_id, preceptor) => {
+  const id = uuidv4().toString();
+  let name = preceptor.name.trim();
+  const names = name.split(' ');
+  console.log(names);
+  // const firstName = preceptor.name.trim()
+  const actualPreceptor = {
+    id: id,
+    firstname: names[0],
+    lastname: names[1],
+    credential: preceptor.position,
+    phoneNumber: preceptor.phone,
+    email: preceptor.email,
+    clinics: [clinic_id]
+  }
+  await Preceptors.items.create(actualPreceptor);
+  return actualPreceptor;
+}
+
+/**
+ * Adds a preceptor to both a clinics document and creates a new preceptor in Preceptors container.
+ * @param id - ID of the clinic you are adding a preceptor to.
+ * @param 
+ */
+export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
+  // Need to check if the preceptor has already been created before. If it has, then only patch the clinics by adding new clinic id.
+
+  // Create new preceptor doc with passed in preceptor.
+  const preceptor = await createNewPreceptor(id, preceptor_info);
+  console.log("New preceptor is", preceptor);
+
+  // Get clinic data to access array of preceptors.
+  let clinic = await getClinic(id);
+  let preceptors = clinic.preceptorInfo;
+
+  // Add new id of the recently created preceptor to array. 
+  preceptors.push(preceptor.id);
+  const replaceOperation = [
+    {
+      op: "replace",
+      path: "/preceptorInfo",
+      value: preceptors
+    },
+  ];
+
+  // Replace and update with newly added preceptor id.
+  const { resource: patchRes } = await Clinics
+    .item(id, id)
+    .patch(replaceOperation);
+
 
 }
 

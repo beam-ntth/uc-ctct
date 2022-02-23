@@ -117,8 +117,8 @@ export default function AdminInfoEdit(props) {
         >
           <div
             className="saveBtn"
-            onClick={() => {
-              updateInfo();
+            onClick={async () => {
+              await updateInfo();
               props.setOpen(false);
               return;
             }}

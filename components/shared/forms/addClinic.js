@@ -76,7 +76,7 @@ export default function AddNewClinic(props) {
     const site_container = database.container("Sites");
     const { resource: previous_num_clinics } = await site_container.item(props.siteId, props.siteId).read()
     const clinic_container = database.container("Clinics");
-    clinic_container.items.create(clinic)
+    await clinic_container.items.create(clinic)
     const replaceOperation =
       [{
         op: "replace",

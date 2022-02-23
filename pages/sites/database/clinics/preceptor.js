@@ -20,7 +20,7 @@ import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClini, getPreceptor } from "../../../../api-lib/azure/azureOps";
+import { removeClinic, getPreceptor } from "../../../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 
