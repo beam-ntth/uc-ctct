@@ -10,7 +10,7 @@ import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
 import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
-import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
+import AdminInfoAdd from "../../../../components/clinicPage/adminInfoAdd";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
@@ -20,7 +20,8 @@ import StatusParser from "../../../../components/shared/status";
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic } from "../../../../api-lib/azure/azureOps";
+import { getClinic, removeAdmin } from "../../../../api-lib/azure/azureOps";
+import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
@@ -37,10 +38,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function ClinicDetails({ data, all_preceptor_data }) {
-  // if (errorCode) {
-  //   return <Error statusCode={errorCode} />
-  // }
-
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
@@ -49,20 +46,31 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
   const statusText = StatusParser("clinics", parseInt(data.status))
 
   const [generalOpen, setGeneralOpen] = useState(false);
-  const [adminOpen, setAdminOpen] = useState(false);
+  const [adminAddOpen, setAdminAddOpen] = useState(false);
+  const [adminEditOpen, setAdminEditOpen] = useState(false);
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
-  const [precepEditHover, setPrecepEditHover] = useState(Array(data.preceptorInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
+
+  function removeAdminElement(index) {
+    removeAdmin(data.id, index)
+    setTimeout(() => refreshData(), 400)
+    return
+  }
+
+  function removePreceptorElement(index) {
+
+  }
 
   return (
     <React.Fragment>
       {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} id={data.id} /> : null}
-      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} id={data.id} /> : null}
+      {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={refreshData} id={data.id} /> : null}
+      {adminEditOpen ? <AdminInfoEdit open={adminEditOpen} setOpen={setAdminEditOpen} reload={refreshData} id={data.id} /> : null}
       {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
       {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} type="Clinics" id={data.id} /> : null}
@@ -124,7 +132,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setAdminOpen(true)}>+ Add Information</div>
+                  <div className={styles.editButton} onClick={() => setAdminAddOpen(true)}>+ Add Information</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
@@ -148,7 +156,8 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                               newStatus[ind] = false
                               setAdminEditHover(newStatus)
                               return
-                            }} />
+                            }}
+                            onClick={() => setAdminEditOpen([true, ind])} />
                           <FaRegTrashAlt color={adminTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={adminTrashHover[ind] ? 38 : 35}
                             style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                             onMouseEnter={() => {
@@ -163,7 +172,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                               setAdminTrashHover(newStatus)
                               return
                             }
-                            } onClick={() => removeElement(x.id, region_data.id)} />
+                            } onClick={() => removeAdminElement(ind)} />
                         </div>
                       )
                     })
@@ -187,6 +196,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <div key={`preceptor_${ind}`} className="displayPrecepRow">
                               <p className="preceptorCol1">{x.firstname + " " + x.lastname}</p>
+                              <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
                               <p className="preceptorCol2">{x.credential}</p>
                               <p className="preceptorCol3">{x.phoneNumber}</p>
                               <p className="preceptorCol4">{x.email}</p>

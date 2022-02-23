@@ -48,7 +48,7 @@ export default function Student({ data }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-          <Navbar icons={[false, true, false, false, false]} />
+          <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
             <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>

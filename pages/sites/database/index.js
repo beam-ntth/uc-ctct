@@ -35,7 +35,6 @@ export default function Database({ data }) {
   }
 
   async function removeElement(id) {
-    console.log("ID", id);
     removeRegion(id);
     setTimeout(() => refreshData(), 500)
     return

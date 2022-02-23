@@ -68,8 +68,7 @@ export default function Main() {
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
-              <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> Clinic</h4> 
-              <h4 className={styles.legend}><img src='/asset/images/student-pin.png' />  Student</h4>
+              <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} /> <img src='/asset/images/student-pin.png' />  Student</h4>
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
