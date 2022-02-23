@@ -5,6 +5,7 @@ import styles from '../../styles/DisplayClinic.module.css'
 import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
+import { getAllSites } from '../../api-lib/azure/azureOps';
 
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
@@ -13,6 +14,7 @@ export default function DisplayClinic(props) {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
   const regionChoices = props.region_choices;
+  const allSiteNames = props.sites.map(x => x.name);
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
@@ -58,7 +60,7 @@ export default function DisplayClinic(props) {
             <p>Site</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          {/* <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} /> */}
+          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={allSiteNames} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>

@@ -86,20 +86,27 @@
 
 .dataCol1 {
     width: 40%;
+    margin-left: 2rem;
     inline-size: 200px;
     flex-wrap: wrap;
 }
 .dataCol2 {
     width: 20%;
+    /* margin-left: 4rem; */
+    padding-left: 3rem;
     inline-size: 200px;
     flex-wrap: wrap;
 }
 .dataCol3 {
     width: 15%;
+    /* margin-left: 4rem; */
+    padding-left: 4rem;
     inline-size: 200px;
     flex-wrap: wrap;
 }
 .dataCol4 {
     width: 20%;
+    margin-right: 2rem;
     inline-size: 150px;
+    flex-wrap: wrap;
 }

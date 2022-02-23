@@ -67,10 +67,10 @@ export default function DisplaySite(props) {
           <Link href={`/sites/database/clinics?location=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.name}</p>
-                <p className={styles.dataCol2} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{regionName[0].name}</p>
-                <p className={styles.dataCol3} style={{ marginLeft: '2rem', flexWrap: 'wrap' }}>{x.affiliation}</p>
-                <p className={styles.dataCol4} style={{ marginRight: '2rem', flexWrap: 'wrap' }}>{statusText}</p>
+                <p className={styles.dataCol1}>{x.name}</p>
+                <p className={styles.dataCol2}>{regionName[0].name}</p>
+                <p className={styles.dataCol3}>{x.affiliation}</p>
+                <p className={styles.dataCol4}>{statusText}</p>
               </div>
               <div className={`tag${x['status']}`}></div>
             </div>
