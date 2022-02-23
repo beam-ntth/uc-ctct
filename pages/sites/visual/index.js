@@ -71,7 +71,7 @@ export default function Visualization({ region_data, site_data, clinic_data, pre
               </div>
               {searchSetting === 0 ? <DisplaySite region_data={region_data} data={site_data}
                 region_choices={region_choices} affiliation_choices={affiliation_choices} /> : null}
-              {searchSetting === 1 ? <DisplayClinic data={clinic_data} /> : null}
+              {searchSetting === 1 ? <DisplayClinic data={clinic_data} region_choices={region_choices}/> : null}
               {searchSetting === 2 ? <DisplayPreceptor data={preceptor_data} choices={region_choices} /> : null}
             </div>
           </div>

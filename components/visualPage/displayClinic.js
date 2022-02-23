@@ -8,9 +8,11 @@ import StatusParser from '../shared/status';
 
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
+  const [showRegionDropdown, setShowRegionDropdown] = useState(false);
   const [showSiteDropdown, setShowSiteDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
+  const regionChoices = props.region_choices;
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
@@ -24,10 +26,11 @@ export default function DisplayClinic(props) {
           <input className={styles.searchInput} placeholder="Enter Clinic Name ..." onChange={(x) => searchClinicName(x.target.value)} />
         </div>
         <div className={styles.regionForm}>
-          <div className={styles.formTitle}>
+          <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
             <p>Region</p>
-            <IoIosArrowDown color='#079CDB' />
+            <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
+          <Dropdown open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
           <div className={styles.dropDownMain} style={props.open ? { opacity: 1, transform: 'translateY(0px)' } : { opacity: 0, transform: 'translateY(-50px)' }}>
             <input className={styles.searchBar} placeholder='Search...' />
             <div className={styles.dropDownSelect}>
