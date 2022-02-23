@@ -63,7 +63,7 @@ export async function getServerSideProps(context) {
 // if (errorCode) {
 
 
-export default function Preceptors({ data, note_data }) {
+export default function Preceptors({ preceptor }) {
   const [openNote, setOpenNote] = useState(false)
   //const data = await getClinic(clinicName);
   // const [openEditForm, setOpenEditForm] = useState(false)
@@ -91,7 +91,7 @@ export default function Preceptors({ data, note_data }) {
         }
       ]
     await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
-    setTimeout(() => refreshData(), 300)
+    setTimeout(() => refreshData(), 400)
   }
 
   async function removeElement(id) {
@@ -102,7 +102,7 @@ export default function Preceptors({ data, note_data }) {
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
+      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Preceptors" id={preceptor.id} /> : null}
       {/* {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
             {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null} */}
       <div className={styles.container}>
@@ -148,19 +148,15 @@ export default function Preceptors({ data, note_data }) {
                 <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
                   <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Preceptor Notes</p>
                   <div style={{ width: '20%', display: 'flex', justifyContent: 'center' }}>
-                    <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
-                    <div>
-                      <div style={{ marginTop: '2rem' }}>
-
-                        {/*  {
-                                        data.notes.map((x, ind) => {
-                                        return (<Accordion x={x} ind={ind} />)
-                                        })
-                                    } */}
-                      </div>
-                    </div>
+                    <div className={"editButton"} onClick={() => setOpenNote(true)}>+ Add Notes</div>
                   </div>
-
+                </div>
+                <div style={{ marginTop: '2rem' }}>
+                  {
+                    preceptor.notes.map((x, ind) => {
+                      return (<Accordion x={x} ind={ind} />)
+                    })
+                  }
                 </div>
 
               </div>
