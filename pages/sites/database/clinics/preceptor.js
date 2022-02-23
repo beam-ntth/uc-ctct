@@ -21,6 +21,8 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
 import { removeClinic } from "../../../../api-lib/azure/azureOps";
+import { getClinic } from "../../../../api-lib/azure/azureOps";
+import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 
 // export async function getServerSideProps(context) {
     // const location = context.query.location;
@@ -33,9 +35,32 @@ import { removeClinic } from "../../../../api-lib/azure/azureOps";
 // }
 
 
+/* export async function getServerSideProps(context) {
+    const clinicName = context.query.name
+    const database = client.database("uc-ctct");
+    const container = database.container("Preceptors");
+    const data = await getClinic(clinicName);
+    let all_preceptor_data = []
+    for (let i = 0; i < data.preceptorInfo.length; i++) {
+      const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
+      all_preceptor_data.push(preceptor_data)
+    }
+    
+    return { props: { data, all_preceptor_data } }
+  } */
+  
+  //export default function ClinicDetails({ data, all_preceptor_data }) {
+    // if (errorCode) {
+    //   return <Error statusCode={errorCode} />
+    // }
+
+//export default function ClinicDetails({ data, all_preceptor_data }) {
+  // if (errorCode) {
+
 
 export default function Preceptors({ data, note_data }) {
     const [openNote, setOpenNote] = useState(false)
+    //const data = await getClinic(clinicName);
     // const [openEditForm, setOpenEditForm] = useState(false)
     // const [openAddClinic, setOpenAddClinic] = useState(false)
 
@@ -118,14 +143,21 @@ export default function Preceptors({ data, note_data }) {
                                 <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
                                     <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Preceptor Notes</p>
                                     <div style={{ width: '20%', display: 'flex', justifyContent: 'center' }}>
-                                        <div className='editButton' onClick={() => setOpenNote(true)}>+ Add Note</div>
+                                    <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
+                                    <div>
+                                    <div style={{ marginTop: '2rem' }}>
+                                    
+                                   {/*  {
+                                        data.notes.map((x, ind) => {
+                                        return (<Accordion x={x} ind={ind} />)
+                                        })
+                                    } */}
+                                    </div>
                                     </div>
                                 </div>
-                                {/* {
-                                    note_data.notes.map((x, ind) => {
-                                        return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={note_data.id} remove={removeNoteEntry} />)
-                                    })
-                                } */}
+                                   
+                                    </div>
+                                    
                             </div>
                         </div>
                     </div >
@@ -134,3 +166,6 @@ export default function Preceptors({ data, note_data }) {
         </React.Fragment >
     );
 }
+
+
+////<div className='editButton' onClick={() => setOpenNote(true)}>+ Add Note</div>
