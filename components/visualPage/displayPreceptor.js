@@ -8,7 +8,13 @@ import StatusParser from '../shared/status';
 
 export default function DisplayPreceptor (props) {
     const [filteredPrecepData, setFilteredPrecepData] = useState(props.data)
-    const [showSiteDropdown, setShowSiteDropdown] = useState(false)
+    const [showPositionDropdown, setShowPositionDropdown] = useState(false);
+    const [showCredDropdown, setShowCredDropdown] = useState(false);
+    const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+
+    const positionChoices = props.data.map(x => x.position);
+    const credentialChoices = props.data.map(x => x.credential);
+    const statusChoices = [0].map((x) => StatusParser('preceptors', x))
 
     function searchPreceptorName(substr) {
         setFilteredPrecepData(SearchString(props.data, substr))
@@ -20,26 +26,26 @@ export default function DisplayPreceptor (props) {
                 <div className={styles.searchBar}>
                     <input className={styles.searchInput} placeholder="Enter Preceptor Name ..." onChange={(x) => searchPreceptorName(x.target.value)} />
                 </div>
-                <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
+                <div className={styles.positionForm}>
+                  <div className={styles.formTitle} onClick={() => setShowPositionDropdown(!showPositionDropdown)}>
                     <p>Position</p>
-                    <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
+                    <IoIosArrowDown color='#079CDB' style={showPositionDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
                   </div>
-                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={props.choices} />
+                  <Dropdown open={showPositionDropdown} setOpen={setShowPositionDropdown} choices={positionChoices} />
                 </div>
-                <div className={styles.siteForm}>
-                  <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
+                <div className={styles.credsForm}>
+                  <div className={styles.formTitle} onClick={() => setShowCredDropdown(!showCredDropdown)}>
                     <p>Credential</p>
-                    <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
+                    <IoIosArrowDown color='#079CDB' style={showCredDropdown ? {transform: 'rotate(180deg)', transition: '0.3s linear'} : {transform: 'rotate(0deg)', transition: '0.3s linear'}} />
                   </div>
-                  <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={props.choices} />
+                  <Dropdown open={showCredDropdown} setOpen={setShowCredDropdown} choices={credentialChoices} />
                 </div>
                 <div className={styles.statusForm}>
-                  <div className={styles.formTitle}>
+                  <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
                     <p>Status</p>
-                    <IoIosArrowDown color='#079CDB' />
+                    <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  
+                  <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
                 </div>
             </div>
             <div className={styles.row}>

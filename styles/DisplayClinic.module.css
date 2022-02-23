@@ -1,4 +1,4 @@
-.regionForm, .siteForm, .statusForm {
+.regionForm, .siteForm, .statusForm, .positionForm, .credsForm {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
