@@ -30,6 +30,32 @@ export default function DisplaySite(props) {
     setFilteredData(SearchString(props.data, substr))
   }
 
+  function download_csv_file() {
+    const downloadable = props.data.map(x => {
+      return {
+        firstname: x.firstname,
+        lastname: x.lastname,
+        position: x.position,
+        credential: x.credential,
+        email: x.email,
+        npi: x.npi,
+        phoneNumber: x.phoneNumber,
+        status: StatusParser('preceptors', parseInt(x.status)) ,
+        notes: x.notes,
+        clinics: x.clinics
+      }
+    })
+
+    const csv = parse(downloadable)
+ 
+    var hiddenElement = document.createElement('a');  
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+    hiddenElement.target = '_blank';  
+    const currentdate = new Date();
+    hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
+    hiddenElement.click();  
+  }  
+
   return (
     <React.Fragment>
       <div className={styles.filterRow}>
@@ -57,7 +83,7 @@ export default function DisplaySite(props) {
           </div>
           <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div>
-        <div className={styles.download}>
+        <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
           <p>Download CSV</p>
         </div>

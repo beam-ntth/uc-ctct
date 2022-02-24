@@ -43,8 +43,6 @@ export default function DisplayPreceptor(props) {
     var hiddenElement = document.createElement('a');  
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
     hiddenElement.target = '_blank';  
-      
-    //provide the name for the CSV file to be downloaded
     const currentdate = new Date();
     hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
     hiddenElement.click();  
