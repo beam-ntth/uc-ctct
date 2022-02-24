@@ -6,6 +6,7 @@ import styles from '../../styles/DisplayClinic.module.css'
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import Dropdown from './dropDown/dropdown';
+import { parse } from 'json2csv';
 
 export default function DisplaySite(props) {
   const [filteredData, setFilteredData] = useState(props.data)
@@ -31,28 +32,13 @@ export default function DisplaySite(props) {
   }
 
   function download_csv_file() {
-    const downloadable = props.data.map(x => {
-      return {
-        firstname: x.firstname,
-        lastname: x.lastname,
-        position: x.position,
-        credential: x.credential,
-        email: x.email,
-        npi: x.npi,
-        phoneNumber: x.phoneNumber,
-        status: StatusParser('preceptors', parseInt(x.status)) ,
-        notes: x.notes,
-        clinics: x.clinics
-      }
-    })
-
-    const csv = parse(downloadable)
+    const csv = parse(props.data)
  
     var hiddenElement = document.createElement('a');  
     hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
     hiddenElement.target = '_blank';  
     const currentdate = new Date();
-    hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
+    hiddenElement.download = `site-details-${currentdate.getFullYear()}.csv`;  
     hiddenElement.click();  
   }  
 

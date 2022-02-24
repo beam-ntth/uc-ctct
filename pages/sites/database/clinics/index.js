@@ -140,7 +140,7 @@ export default function Clinics({ data, note_data }) {
                             <p className="row2Clinics" >{x['last_updated']}</p>
                             <p className="row3Clinics">{statusText}</p>
                           </div>
-                          <div className={`tag${parseInt(x.status)}`}></div>
+                          <div className={`clinicTag${parseInt(x.status)}`}></div>
                         </div>
                       </Link>
                       <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
