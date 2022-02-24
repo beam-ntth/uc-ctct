@@ -14,9 +14,9 @@ const Preceptors = db.container("Preceptors");
 // TODO: Get better naming scheme to differentiate literals from the functions.
 const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
-  "SELECT * FROM c WHERE c.region_id = @region_id";
+  "SELECT * FROM c WHERE c.region_id = @region_id ORDER BY c.name ASC";
 const getClinicsConnectedToSite =
-  "SELECT * FROM c where c.site_id = @site_id";
+  "SELECT * FROM c where c.site_id = @site_id ORDER BY c.name ASC";
 const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
 const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
@@ -30,7 +30,7 @@ const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
 
 export const getAllRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(selectAllQuery).fetchAll();
+    const { resources: data } = await Regions.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
@@ -40,7 +40,7 @@ export const getAllRegions = async () => {
 
 export const getAllSites = async () => {
   try {
-    const { resources: data } = await Sites.items.query(selectAllQuery).fetchAll();
+    const { resources: data } = await Sites.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is: ", error.code);
@@ -51,13 +51,22 @@ export const getAllSites = async () => {
 
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Clinics.items.query(selectAllQuery).fetchAll();
+    const { resources: data } = await Clinics.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     console.log("Error is", error.code);
     throw new Error("Issue fetching Clinics");
   }
 };
+
+export const getAllPreceptors = async () => {
+  try {
+    const { resources: data } = await Preceptors.items.query(`${selectAllQuery} ORDER BY c.lastname ASC`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting all preceptors.");
+  }
+}
 
 /**
  * Query for singular region.
@@ -127,15 +136,6 @@ export const getSitesFromRegion = async (id) => {
   } catch (error) {
     console.log();
     throw new Error(`Issue getting sites with region_id ${id}.`);
-  }
-}
-
-export const getAllPreceptors = async () => {
-  try {
-    const { resources: data } = await Preceptors.items.query(selectAllQuery).fetchAll();
-    return data;
-  } catch (error) {
-    throw new Error("Issue getting all preceptors.");
   }
 }
 

@@ -168,6 +168,57 @@ a {
   background-color: #000;
 }
 
+.clinicTag0, .clinicTag1, .clinicTag2, .clinicTag3, .clinicTag4, .clinicTag5, .clinicTag6, .clinicTag7, .clinicTag8, .clinicTag9, .clinicTag10, .clinicTag11, .clinicTag12, .clinicTag13 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem; 
+}
+
+.clinicTag0 {
+  background-color: #B7DEE8;
+}
+
+.clinicTag1 {
+  background-color: #4BACC6;
+}
+
+.clinicTag2 {
+  background-color: #31869B;
+}
+
+.clinicTag3 {
+  background-color: #E4DFEC;
+}
+
+.clinicTag4 {
+  background-color: #CCC0DA;
+}
+
+.clinicTag5 {
+  background-color: #FFFFCC;
+}
+
+.clinicTag6 {
+  background-color: #FCD5B4;
+}
+
+.clinicTag7 {
+  background-color: #FABF8F;
+}
+
+.clinicTag8 {
+  background-color: #A9D08E;
+}
+
+.clinicTag9 {
+  background-color: #DA9694;
+}
+
+.clinicTag, .clinicTagundefined {
+  background-color: #000;
+}
+
 .editButton {
   height: 3rem;
   width: 10rem;
