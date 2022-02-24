@@ -20,7 +20,7 @@ import StatusParser from "../../../../components/shared/status";
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic, removeAdmin } from "../../../../api-lib/azure/azureOps";
+import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 
 export async function getServerSideProps(context) {
@@ -63,7 +63,9 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
   }
 
   function removePreceptorElement(index) {
-
+    removePreceptor(data.id, index)
+    setTimeout(() => refreshData(), 400)
+    return
   }
 
   return (
@@ -132,7 +134,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setAdminAddOpen(true)}>+ Add Information</div>
+                  <div className={styles.editButton} onClick={() => setAdminAddOpen(true)}>+ Add New Admin</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
@@ -186,21 +188,25 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Preceptors Information</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setPreceptorOpen(true)}>+ Add Information</div>
+                  <div className={styles.editButton} style={{width: '12rem'}} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
                     all_preceptor_data.map((x, ind) => {
+                      const status = StatusParser('preceptors', parseInt(x.status))
                       return (
-                        <Link href={`/sites/database/clinics/preceptor?name=${x.id}`}>
+                        <React.Fragment>
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <div key={`preceptor_${ind}`} className="displayPrecepRow">
-                              <p className="preceptorCol1">{x.firstname + " " + x.lastname}</p>
-                              <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
-                              <p className="preceptorCol2">{x.credential}</p>
-                              <p className="preceptorCol3">{x.phoneNumber}</p>
-                              <p className="preceptorCol4">{x.email}</p>
-                            </div>
+                            <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
+                              <div key={`preceptor_${ind}`} className="displayPrecepRow">
+                                <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
+                                <p className="preceptorCol2">{x.credential}</p>
+                                <p className="preceptorCol3">{x.phoneNumber}</p>
+                                <p className="preceptorCol4">{x.email}</p>
+                                <p className="preceptorCol5">{status}</p>
+                                <div className={`tag${x['status']}`}></div>
+                              </div>
+                            </Link>
                             <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
                               style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                               onMouseEnter={() => {
@@ -215,9 +221,9 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                                 setPrecepTrashHover(newStatus)
                                 return
                               }
-                              } onClick={() => removeElement(x.id, region_data.id)} />
+                              } onClick={() => removePreceptorElement(ind)} />
                           </div>
-                        </Link>
+                        </React.Fragment>
                       )
                     })
                   }
@@ -293,6 +299,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
             }
 
             .displayPrecepRow {
+              height: 3.1rem;
               cursor: pointer;
               transition: 0.2s linear;
             }
@@ -314,7 +321,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
             }
             
             .preceptorCol1 {
-                width: 40%;
+                width: 25%;
             }
             
             .preceptorCol2 {
@@ -322,10 +329,14 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
             }
             
             .preceptorCol3 {
-                width: 25%;
+                width: 15%;
             }
             
             .preceptorCol4 {
+                width: 25%;
+            }
+
+            .preceptorCol5 {
                 width: 25%;
             }
             

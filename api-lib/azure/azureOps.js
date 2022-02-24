@@ -201,20 +201,11 @@ export const addClinic = async (clinic_data, site_id) => {
  * @param preceptor.name {String} - Name attached.
  * @returns preceptor - Preceptor that was recently added to Preceptors container.
  */
-const createNewPreceptor = async (clinic_id, preceptor) => {
+const createNewPreceptor = async (preceptor) => {
   const id = uuidv4().toString();
-  let name = preceptor.name.trim();
-  const names = name.split(' ');
-  console.log(names);
-  // const firstName = preceptor.name.trim()
   const actualPreceptor = {
     id: id,
-    firstname: names[0],
-    lastname: names[1],
-    credential: preceptor.position,
-    phoneNumber: preceptor.phone,
-    email: preceptor.email,
-    clinics: [clinic_id]
+    ...preceptor
   }
   await Preceptors.items.create(actualPreceptor);
   return actualPreceptor;
@@ -226,14 +217,11 @@ const createNewPreceptor = async (clinic_id, preceptor) => {
  * @param 
  */
 export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
-  // Need to check if the preceptor has already been created before. If it has, then only patch the clinics by adding new clinic id.
-
   // Create new preceptor doc with passed in preceptor.
-  const preceptor = await createNewPreceptor(id, preceptor_info);
-  console.log("New preceptor is", preceptor);
+  const preceptor = await createNewPreceptor(preceptor_info);
 
   // Get clinic data to access array of preceptors.
-  let clinic = await getClinic(id);
+  const clinic = await getClinic(id);
   let preceptors = clinic.preceptorInfo;
 
   // Add new id of the recently created preceptor to array. 
@@ -247,11 +235,8 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
   ];
 
   // Replace and update with newly added preceptor id.
-  const { resource: patchRes } = await Clinics
-    .item(id, id)
-    .patch(replaceOperation);
-
-
+  await Clinics.item(id, id).patch(replaceOperation);
+  return
 }
 
 /** DELETION OPERATIONS */
@@ -381,7 +366,7 @@ export const removeAdmin = async (id, index) => {
  * @throws {Error} Error if any operation is unable to be completed.
  */
 export const removePreceptor = async (id, index) => {
-  try {
+  // try {
     // EDIT Clinic Information
     const { resource: clinic_obj } = await Clinics.item(id, id).read()
     const preceptor_id = clinic_obj.preceptorInfo[index]
@@ -400,15 +385,19 @@ export const removePreceptor = async (id, index) => {
     let preceptor_clinics = [...precep_obj.clinics]
     const index_to_remove = preceptor_clinics.indexOf(id)
     preceptor_clinics.splice(index_to_remove, 1)
-    const replacePreceptorOperation =
-      [{
-        op: "replace",
-        path: "/clinics",
-        value: preceptor_clinics
-      }]
-    await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
+    if (preceptor_clinics.length === 0) {
+      await Preceptors.item(preceptor_id, preceptor_id).delete()
+    } else {
+      const replacePreceptorOperation =
+        [{
+          op: "replace",
+          path: "/clinics",
+          value: preceptor_clinics
+        }]
+      await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
+    }
     return
-  } catch (error) {
-    throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic`);
-  }
+  // } catch (error) {
+  //   throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic`);
+  // }
 }
