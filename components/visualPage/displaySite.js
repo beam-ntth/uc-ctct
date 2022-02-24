@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
+import { AiOutlineDownload } from 'react-icons/ai'
 import styles from '../../styles/DisplayClinic.module.css'
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
@@ -55,6 +56,10 @@ export default function DisplaySite(props) {
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+        </div>
+        <div className={styles.download}>
+          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <p>Download CSV</p>
         </div>
       </div>
       <div className={styles.row}>

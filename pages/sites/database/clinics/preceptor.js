@@ -40,33 +40,8 @@ export async function getServerSideProps(context) {
   for (let i = 0; i < preceptor.clinics.length; i++) {
     all_clinics.push(await getClinic(preceptor.clinics[i]))
   }
-  // const all_clinics = await getClinic(preceptor.clinics[0])
   return { props: { preceptor, all_clinics } }
 }
-
-
-/* export async function getServerSideProps(context) {
-    const clinicName = context.query.name
-    const database = client.database("uc-ctct");
-    const container = database.container("Preceptors");
-    const data = await getClinic(clinicName);
-    let all_preceptor_data = []
-    for (let i = 0; i < data.preceptorInfo.length; i++) {
-      const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
-      all_preceptor_data.push(preceptor_data)
-    }
-    
-    return { props: { data, all_preceptor_data } }
-  } */
-
-//export default function ClinicDetails({ data, all_preceptor_data }) {
-// if (errorCode) {
-//   return <Error statusCode={errorCode} />
-// }
-
-//export default function ClinicDetails({ data, all_preceptor_data }) {
-// if (errorCode) {
-
 
 export default function Preceptors({ preceptor, all_clinics }) {
   const [openNote, setOpenNote] = useState(false)
@@ -135,7 +110,7 @@ export default function Preceptors({ preceptor, all_clinics }) {
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {preceptor.firstname} {preceptor.lastname}</p>
-
+                    <p><strong>National Provider Identifier (NPI):</strong> {preceptor.npi}</p>
                   </div>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Status:</strong> {StatusParser('preceptors', preceptor.status)}</p>

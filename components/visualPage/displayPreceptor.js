@@ -5,6 +5,8 @@ import styles from '../../styles/DisplayClinic.module.css'
 import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
+import { AiOutlineDownload } from 'react-icons/ai';
+import { parse } from 'json2csv';
 
 export default function DisplayPreceptor(props) {
   const [filteredPrecepData, setFilteredPrecepData] = useState(props.data)
@@ -19,6 +21,34 @@ export default function DisplayPreceptor(props) {
   function searchPreceptorName(substr) {
     setFilteredPrecepData(SearchString(props.data, substr))
   }
+
+  function download_csv_file() {
+    const downloadable = props.data.map(x => {
+      return {
+        firstname: x.firstname,
+        lastname: x.lastname,
+        position: x.position,
+        credential: x.credential,
+        email: x.email,
+        npi: x.npi,
+        phoneNumber: x.phoneNumber,
+        status: StatusParser('preceptors', parseInt(x.status)) ,
+        notes: x.notes,
+        clinics: x.clinics
+      }
+    })
+
+    const csv = parse(downloadable)
+ 
+    var hiddenElement = document.createElement('a');  
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+    hiddenElement.target = '_blank';  
+      
+    //provide the name for the CSV file to be downloaded
+    const currentdate = new Date();
+    hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
+    hiddenElement.click();  
+  }  
 
   return (
     <React.Fragment>
@@ -46,6 +76,10 @@ export default function DisplayPreceptor(props) {
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+        </div>
+        <div className={styles.download} onClick={download_csv_file}>
+          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <p>Download CSV</p>
         </div>
       </div>
       <div className={styles.row}>

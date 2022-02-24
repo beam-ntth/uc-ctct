@@ -8,6 +8,7 @@
     background-color: #fff;
     border-radius: 0.6rem;
     border: 1px solid #C4C4C4;
+    margin-right: 0.5rem;
 }
 
 .formTitle {
@@ -53,7 +54,7 @@
     justify-content: flex-start;
     align-items: center;
     height: 100%;
-    width: 50%;
+    width: 40%;
 }
   
 .searchInput {
@@ -109,4 +110,23 @@
     margin-right: 2rem;
     inline-size: 150px;
     flex-wrap: wrap;
+}
+
+.download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 15%;
+    background-color: #fff;
+    border-radius: 0.6rem;
+    font-size: 0.8rem;
+    border: 1px solid #C4C4C4;
+    transition: 0.2s linear;
+    cursor: pointer;
+}
+
+.download:hover {
+    color: rgb(35, 158, 62);
+    font-size: 0.85rem;
 }
