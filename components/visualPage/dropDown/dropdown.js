@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchString from '../../shared/search';
 import styles from './Dropdown.module.css'
 
@@ -16,7 +16,18 @@ export default function Dropdown(props) {
         <div className={styles.dropDownSelect}>
           {
             filteredData.map((x, ind) => <div className={styles.dropDownValue}>
-                <input type='checkbox' id={x} key={ind} value={x} />
+                <input type='checkbox' id={x} key={`${x}_${ind}`} 
+                // value={dropDownFilter[ind]} 
+                // onChange={() => {
+                //   let newDropDown = [...dropDownFilter]
+                //   if (newDropDown[ind] === "") {
+                //     newDropDown[ind] = x
+                //   } else {
+                //     newDropDown[ind] = ""
+                //   }
+                //   setDropDownFilter(newDropDown)
+                // }} 
+                />
                 <label htmlFor={x} key={ind}>{x}</label>
               </div>
             )

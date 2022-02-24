@@ -15,13 +15,16 @@ export default function DisplaySite(props) {
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
 
   // Dropdown Choices
-  // const regionChoices = ['Region 1', 'Region 2', 'Region 3', 'Region 4']
   const regionChoices = props.region_choices;
-  // console.log("REGION CHOICES", );
-  // const affiChoices = ['UCSF', 'None']
   const affiChoices = props.affiliation_choices;
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('sites', x))
 
+  // Dropdown Filtered States
+  const [regionFilter, setRegionFilter] = useState(Array(regionChoices.length).fill(""))
+  const [affiFilter, setAffiFilter] = useState(Array(affiChoices.length).fill(""))
+  const [statusFilter, setStatusFilter] = useState(Array(statusChoices.length).fill(""))
+
+  // Search Functionality
   function searchPreceptorName(substr) {
     setFilteredData(SearchString(props.data, substr))
   }
