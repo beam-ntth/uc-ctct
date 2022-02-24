@@ -195,8 +195,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                         <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <div key={`preceptor_${ind}`} className="displayPrecepRow">
-                              <p className="preceptorCol1">{x.firstname + " " + x.lastname}</p>
-                              <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
+                              <p className="preceptorCol1">{x.firstname + " " + x.lastname}</p> 
                               <p className="preceptorCol2">{x.credential}</p>
                               <p className="preceptorCol3">{x.phoneNumber}</p>
                               <p className="preceptorCol4">{x.email}</p>
