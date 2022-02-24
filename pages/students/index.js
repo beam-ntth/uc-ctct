@@ -1,6 +1,6 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../../styles/Database.module.css'
+import styles from '../../styles/Database.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -9,41 +9,38 @@ import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
 
 // Import DB operation
-import { getAllRegions, removeRegion } from '../../../api-lib/azure/azureOps';
+
 
 // Importing components
-import Navbar from '../../../components/shared/navbar/navbar';
-import Header from '../../../components/shared/header/header';
-import AddNewRegion from '../../../components/shared/forms/addRegion';
-import EditRegion from '../../../components/shared/forms/editRegion';
+import Navbar from '../../components/shared/navbar/navbar';
+import Header from '../../components/shared/header/header';
+import AddNewRegion from '../../components/shared/forms/addRegion';
+import EditRegion from '../../components/shared/forms/editRegion';
 
-export async function getServerSideProps() {
-  const data = await getAllRegions();
-  return { props: { data } }
-}
+// export async function getServerSideProps() {
+  
+//   return { props: { data } }
+// }
 
-export default function Database({ data }) {
-  const [openForm, setOpenForm] = useState(false)
-  const [openEditForm, setOpenEditForm] = useState(false)
-  const [hover, setHover] = useState(false)
-  const [editHover, setEditHover] = useState(Array(data.length).fill(false))
-  const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+export default function Student({ data }) {
+//   const [openForm, setOpenForm] = useState(false)
+//   const [openEditForm, setOpenEditForm] = useState(false)
+//   const [hover, setHover] = useState(false)
+//   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
+//   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
 
-  async function removeElement(id) {
-    removeRegion(id);
-    setTimeout(() => refreshData(), 500)
-    return
-  }
+//   async function removeElement(id) {
+//     setTimeout(() => refreshData(), 500)
+//     return
+//   }
 
   return (
     <React.Fragment>
-      {openEditForm ? <EditRegion open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
-      {openForm ? <AddNewRegion open={openForm} setOpen={setOpenForm} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -51,17 +48,17 @@ export default function Database({ data }) {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <main className={styles.main}>
-          <Navbar icons={[false, true, false, false, false]} />
+          <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p style={{ width: '70%', marginLeft: '2rem' }}>Region Name</p>
-                <p style={{ width: '20%' }}>Total sites</p>
-                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
+                <p style={{ width: '70%', marginLeft: '2rem' }}>Student Name</p>
+                <p style={{ width: '20%' }}>Clinic Assigned</p>
+                {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
               </div >
-              {
+              {/* {
                 data.map((x, ind) => {
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -105,7 +102,7 @@ export default function Database({ data }) {
                     </div >
                   )
                 })
-              }
+              } */}
             </div >
           </div >
         </main >

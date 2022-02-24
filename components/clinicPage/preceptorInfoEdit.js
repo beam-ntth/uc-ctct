@@ -1,26 +1,106 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { addPreceptorFromClinicsPage } from "../../api-lib/azure/azureOps";
+import StatusParser from "../shared/status";
 
 export default function PreceptorInfoEdit(props) {
-  const [hover, setHover] = useState(false)
+  const [hover, setHover] = useState(false);
+
+  const [info, setInfo] = useState({
+    "firstname": null,
+    "lastname": null,
+    "position": null,
+    "credential": null,
+    "email": null,
+    "phoneNumber": null,
+    "status": 0,
+    "notes": [],
+    "clinics": [
+      props.id
+    ]
+  });
+
+  async function updateInfo() {
+    await addPreceptorFromClinicsPage(props.id, info);
+    setTimeout(() => props.reload(), 600)
+  }
 
   return (
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
           <p className="editTitle">Add Preceptor Contact Information</p>
-          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
         </div>
         <div style={{ width: '90%' }}>
-          <p><strong>Name:</strong><input placeholder="First Last" /> </p>
-          <p><strong>Position:</strong><input placeholder="Position" /></p>
-          <p><strong>Phone Number:</strong><input placeholder="000-000-0000" /></p>
-          <p><strong>Email Address:</strong><input placeholder="Email Address" /></p>
+          <p><strong>First Name:</strong><input placeholder="Ex: John"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.firstname = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Last Name:</strong><input placeholder="Ex: Doe"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.lastname = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Position:</strong><input placeholder="Position"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.position = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Credential:</strong><input placeholder="Credential"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.credential = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Phone Number:</strong><input placeholder="0000000000"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.phoneNumber = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Email Address:</strong><input placeholder="Email Address"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.email = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>Status:</strong>
+            <select
+              value={info.status}
+              onChange={(e) => {
+                let newInfo = {...info}
+                newInfo.status = e.target.value
+                setInfo(newInfo);
+                return;
+              }} >
+              { StatusParser('preceptors', -1) }
+            </select>
+          </p>
         </div>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-          <div className="saveBtn" onClick={() => props.setOpen(false)}>Add Contact</div>
+          <div className="saveBtn" onClick={async () => {
+            await updateInfo();
+            props.setOpen(false);
+          }}>Add Contact</div>
         </div>
       </div>
       <style jsx>
@@ -41,11 +121,11 @@ export default function PreceptorInfoEdit(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 45vh;
+                    height: 70vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
-                    top: 20vh;
+                    top: 10vh;
                     left: 25vw;
                     z-index: 901;
                     display: flex;
@@ -57,7 +137,7 @@ export default function PreceptorInfoEdit(props) {
                     overflow-y: scroll;
                 }
                 
-                .editScreen input {
+                .editScreen input, .editScreen select {
                     margin-left: 0.4rem;
                     border-radius: 0.5rem;
                     border: solid 1px #c4c4c4;

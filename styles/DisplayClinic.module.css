@@ -1,0 +1,112 @@
+.regionForm, .siteForm, .statusForm, .positionForm, .credsForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 15%;
+    background-color: #fff;
+    border-radius: 0.6rem;
+    border: 1px solid #C4C4C4;
+}
+
+.formTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.3rem;
+    cursor: pointer;
+    z-index: 20;
+}
+  
+.formTitle p {
+    margin: 0 0.5rem 0 0;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 10%;
+    width: 90%;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.filterRow {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 85%;
+    height: 2rem;
+    margin: 1rem 0;
+}
+  
+.searchBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: 50%;
+}
+  
+.searchInput {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 90%;
+    border: 1px solid #C4C4C4;
+    border-radius: 0.3rem;
+    padding-left: 0.5rem;
+}
+
+.titleCol1 {
+    width: 40%;
+    margin-left: 4rem;
+}
+.titleCol2 {
+    width: 20%;
+    margin-right: 7rem;
+}
+.titleCol3 {
+    width: 15%;
+    margin-right: 7rem;
+}
+.titleCol4 {
+    width: 25%;
+    margin-right: 3rem;
+}
+
+.dataCol1 {
+    width: 40%;
+    margin-left: 2rem;
+    inline-size: 200px;
+    flex-wrap: wrap;
+}
+.dataCol2 {
+    width: 20%;
+    /* margin-left: 4rem; */
+    padding-left: 3rem;
+    inline-size: 200px;
+    flex-wrap: wrap;
+}
+.dataCol3 {
+    width: 15%;
+    /* margin-left: 4rem; */
+    padding-left: 4rem;
+    inline-size: 200px;
+    flex-wrap: wrap;
+}
+.dataCol4 {
+    width: 20%;
+    margin-right: 2rem;
+    inline-size: 150px;
+    flex-wrap: wrap;
+}

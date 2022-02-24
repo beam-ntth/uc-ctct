@@ -10,7 +10,7 @@ import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
 import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
-import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
+import AdminInfoAdd from "../../../../components/clinicPage/adminInfoAdd";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
@@ -20,34 +20,24 @@ import StatusParser from "../../../../components/shared/status";
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic } from "../../../../api-lib/azure/azureOps";
+import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
+import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  // const database = client.database("uc-ctct");
-  // const container = database.container("Clinics");
-  // const { resource: data } = await container.item(clinicName, clinicName).read();
+  const database = client.database("uc-ctct");
+  const container = database.container("Preceptors");
   const data = await getClinic(clinicName);
+  let all_preceptor_data = []
+  for (let i = 0; i < data.preceptorInfo.length; i++) {
+    const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
+    all_preceptor_data.push(preceptor_data)
+  }
 
-  // const status = res.ok;
-  // const errorCode = status ? false : res.status;
-  // console.log("Error code", errorCode)
-  // const data = await res.json()
-  // if (errorCode) {
-  //   console.log("FOUND ERROR", errorCode)
-  //   return {
-  //     props: { errorCode }
-  //   }
-  // }
-
-  return { props: { data } }
+  return { props: { data, all_preceptor_data } }
 }
 
-export default function ClinicDetails({ data }) {
-  // if (errorCode) {
-  //   return <Error statusCode={errorCode} />
-  // }
-
+export default function ClinicDetails({ data, all_preceptor_data }) {
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
@@ -56,20 +46,33 @@ export default function ClinicDetails({ data }) {
   const statusText = StatusParser("clinics", parseInt(data.status))
 
   const [generalOpen, setGeneralOpen] = useState(false);
-  const [adminOpen, setAdminOpen] = useState(false);
+  const [adminAddOpen, setAdminAddOpen] = useState(false);
+  const [adminEditOpen, setAdminEditOpen] = useState(false);
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
 
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
-  const [precepEditHover, setPrecepEditHover] = useState(Array(data.preceptorInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
+
+  function removeAdminElement(index) {
+    removeAdmin(data.id, index)
+    setTimeout(() => refreshData(), 400)
+    return
+  }
+
+  function removePreceptorElement(index) {
+    removePreceptor(data.id, index)
+    setTimeout(() => refreshData(), 400)
+    return
+  }
 
   return (
     <React.Fragment>
       {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} id={data.id} /> : null}
-      {adminOpen ? <AdminInfoEdit open={adminOpen} setOpen={setAdminOpen} reload={refreshData} id={data.id} /> : null}
+      {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={refreshData} id={data.id} /> : null}
+      {adminEditOpen ? <AdminInfoEdit open={adminEditOpen} setOpen={setAdminEditOpen} reload={refreshData} id={data.id} /> : null}
       {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
       {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} type="Clinics" id={data.id} /> : null}
@@ -131,7 +134,7 @@ export default function ClinicDetails({ data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Administrative and Other Contact Information</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setAdminOpen(true)}>+ Add Information</div>
+                  <div className={styles.editButton} onClick={() => setAdminAddOpen(true)}>+ Add New Admin</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
@@ -155,7 +158,8 @@ export default function ClinicDetails({ data }) {
                               newStatus[ind] = false
                               setAdminEditHover(newStatus)
                               return
-                            }} />
+                            }}
+                            onClick={() => setAdminEditOpen([true, ind])} />
                           <FaRegTrashAlt color={adminTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={adminTrashHover[ind] ? 38 : 35}
                             style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                             onMouseEnter={() => {
@@ -170,7 +174,7 @@ export default function ClinicDetails({ data }) {
                               setAdminTrashHover(newStatus)
                               return
                             }
-                            } onClick={() => removeElement(x.id, region_data.id)} />
+                            } onClick={() => removeAdminElement(ind)} />
                         </div>
                       )
                     })
@@ -184,48 +188,42 @@ export default function ClinicDetails({ data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Preceptors Information</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setPreceptorOpen(true)}>+ Add Information</div>
+                  <div className={styles.editButton} style={{width: '12rem'}} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
-                    data.preceptorInfo.map((x, ind) => {
+                    all_preceptor_data.map((x, ind) => {
+                      const status = StatusParser('preceptors', parseInt(x.status))
                       return (
-                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <div key={`preceptor_${ind}`} className="displayDetailRow">
-                            <p className="preceptorCol1">{x.name}</p>
-                            <p className="preceptorCol2">{x.credential}</p>
-                            <p className="preceptorCol3">{x.phone}</p>
-                            <p className="preceptorCol4">{x.email}</p>
+                        <React.Fragment>
+                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
+                              <div key={`preceptor_${ind}`} className="displayPrecepRow">
+                                <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
+                                <p className="preceptorCol2">{x.credential}</p>
+                                <p className="preceptorCol3">{x.phoneNumber}</p>
+                                <p className="preceptorCol4">{x.email}</p>
+                                <p className="preceptorCol5">{status}</p>
+                                <div className={`tag${x['status']}`}></div>
+                              </div>
+                            </Link>
+                            <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
+                              style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                              onMouseEnter={() => {
+                                let newStatus = [...precepTrashHover]
+                                newStatus[ind] = true
+                                setPrecepTrashHover(newStatus)
+                                return
+                              }
+                              } onMouseLeave={() => {
+                                let newStatus = [...precepTrashHover]
+                                newStatus[ind] = false
+                                setPrecepTrashHover(newStatus)
+                                return
+                              }
+                              } onClick={() => removePreceptorElement(ind)} />
                           </div>
-                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                            onMouseEnter={() => {
-                              let newStatus = [...precepEditHover]
-                              newStatus[ind] = true
-                              setPrecepEditHover(newStatus)
-                              return
-                            }
-                            } onMouseLeave={() => {
-                              let newStatus = [...precepEditHover]
-                              newStatus[ind] = false
-                              setPrecepEditHover(newStatus)
-                              return
-                            }} />
-                          <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
-                            style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                            onMouseEnter={() => {
-                              let newStatus = [...precepTrashHover]
-                              newStatus[ind] = true
-                              setPrecepTrashHover(newStatus)
-                              return
-                            }
-                            } onMouseLeave={() => {
-                              let newStatus = [...precepTrashHover]
-                              newStatus[ind] = false
-                              setPrecepTrashHover(newStatus)
-                              return
-                            }
-                            } onClick={() => removeElement(x.id, region_data.id)} />
-                        </div>
+                        </React.Fragment>
                       )
                     })
                   }
@@ -284,21 +282,30 @@ export default function ClinicDetails({ data }) {
       <style jsx>
         {
           `
-            .displayDetailRow {
-                display: flex;
-                flex-direction: row;
-                justify-content: flex-start;
-                align-items: center;
-                background-color: #fff;
-                height: auto;
-                width: 100%;
-                margin: 0.4rem 0;
-                border-radius: 1rem;
-                box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-                font-family: 'Lato', sans-serif;
-                font-weight: 500;
-                font-size: 1rem;
-                // padding: 0.4rem 0;
+            .displayDetailRow, .displayPrecepRow {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              background-color: #fff;
+              height: auto;
+              width: 100%;
+              margin: 0.4rem 0;
+              border-radius: 1rem;
+              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+              font-family: 'Lato', sans-serif;
+              font-weight: 500;
+              font-size: 1rem;
+            }
+
+            .displayPrecepRow {
+              height: 3.1rem;
+              cursor: pointer;
+              transition: 0.2s linear;
+            }
+
+            .displayPrecepRow:hover {
+              color: #079CDB;
             }
 
             .adminCol1 {
@@ -314,7 +321,7 @@ export default function ClinicDetails({ data }) {
             }
             
             .preceptorCol1 {
-                width: 40%;
+                width: 25%;
             }
             
             .preceptorCol2 {
@@ -322,10 +329,14 @@ export default function ClinicDetails({ data }) {
             }
             
             .preceptorCol3 {
-                width: 25%;
+                width: 15%;
             }
             
             .preceptorCol4 {
+                width: 25%;
+            }
+
+            .preceptorCol5 {
                 width: 25%;
             }
             

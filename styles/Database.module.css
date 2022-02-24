@@ -42,13 +42,34 @@
     font-size: 1.5rem;
 }
 
-/* .row > p {
-  padding-left: 2.5rem;
-} */
+.searchBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 2.5rem;
+    width: 90%;
+    margin-top: 2rem;
+}
+
+.searchInput {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 90%;
+    border: 1px solid #C4C4C4;
+    border-radius: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.searchInput:active {
+    border: 1px solid #079CDB;
+}
 
 .data {
     background-color: #F5F6FA;
-    margin: 5rem 5rem 0 7rem;
+    margin: 2rem 5rem 0 7rem;
     border-radius: 2rem;
     display: flex;
     flex-direction: column;

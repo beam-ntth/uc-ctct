@@ -14,6 +14,7 @@ export default function NoteEdit(props) {
     note: ""
   })
 
+  // TODO: JT - CREATE A FUNCTION FOR PATCHING TO NOTES WITH THIS CAPABILITY.
   async function updateInfo() {
     const database = client.database("uc-ctct");
     const container = database.container(props.type);
@@ -46,10 +47,10 @@ export default function NoteEdit(props) {
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
           <p className="editTitle">Add Additional Clinical Notes</p>
-          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
         </div>
         <div style={{ height: 'auto', width: '90%' }}>
           <p><strong>Title:</strong><input placeholder="Add Title Here" onChange={(x) => {

@@ -31,10 +31,10 @@ export default function Navbar(props) {
             <p style={{ textAlign: 'center' }}>Site<br />Management</p>
           </div>
         </Link>
-        <Link href="/404">
+        <Link href="/students">
           <div className={styles.dashboard}>
             <IoPerson size={icons[2] ? 40 : 30} color={icons[2] ? '#079CDB' : '#E0E0E0'} />
-            <p style={{ textAlign: 'center' }}>Client<br />Management</p>
+            <p style={{ textAlign: 'center' }}>Student<br />Management</p>
           </div>
         </Link>
         <Link href="/404">

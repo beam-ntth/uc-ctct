@@ -19,6 +19,7 @@ import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import AddNewSite from '../../../components/shared/forms/addSite';
 import EditSite from '../../../components/shared/forms/editSite';
+import SearchString from '../../../components/shared/search';
 
 export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
@@ -30,23 +31,32 @@ export async function getServerSideProps(context) {
 }
 
 export default function SiteDetails({ data, region_data }) {
-  const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
-
+  const [filteredData, setFilteredData] = useState(data)
   const [hover, setHover] = useState(false)
   const [openForm, setOpenForm] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
+  const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
+  function searchSiteName(substr) {
+    setFilteredData(SearchString(data, substr))
+  }
+
   async function removeElement(id, regionId) {
-    console.log("ID", id);
-    removeSite(id, regionId);
-    setTimeout(() => refreshData(), 500)
+    await removeSite(id, regionId);
+    refreshData()
     return
   }
+
+  // Reinitialized displayed data when there are any changes to the DB data
+  useEffect(() => {
+    setFilteredData(data)
+  }, [data])
 
   return (
     <React.Fragment>
@@ -63,6 +73,9 @@ export default function SiteDetails({ data, region_data }) {
           <div className={styles.content}>
             <Header header={`${region_data.name} Region - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
+              <div className={styles.searchBar}>
+                <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
+              </div>
               <div className={styles.row}>
                 <p className='row1Sites' style={{ marginLeft: '2rem' }}>Site Name</p>
                 <p className='row2Sites'>Affiliation</p>
@@ -71,7 +84,7 @@ export default function SiteDetails({ data, region_data }) {
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
               </div>
-              {data.map((x, ind) => {
+              {filteredData.map((x, ind) => {
                 const statusText = StatusParser("sites", parseInt(x.status))
 
                 return (
