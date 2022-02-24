@@ -6,6 +6,7 @@ import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import { getAllSites } from '../../api-lib/azure/azureOps';
+import { AiOutlineDownload } from 'react-icons/ai';
 
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
@@ -21,6 +22,32 @@ export default function DisplayClinic(props) {
     setFilteredClinicData(SearchString(props.data, substr))
   }
 
+  function download_csv_file() {
+    const downloadable = props.data.map(x => {
+      return {
+        firstname: x.firstname,
+        lastname: x.lastname,
+        position: x.position,
+        credential: x.credential,
+        email: x.email,
+        npi: x.npi,
+        phoneNumber: x.phoneNumber,
+        status: StatusParser('preceptors', parseInt(x.status)) ,
+        notes: x.notes,
+        clinics: x.clinics
+      }
+    })
+
+    const csv = parse(downloadable)
+ 
+    var hiddenElement = document.createElement('a');  
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
+    hiddenElement.target = '_blank';  
+    const currentdate = new Date();
+    hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
+    hiddenElement.click();  
+  }  
+
   return (
     <React.Fragment>
       <div className={styles.filterRow}>
@@ -33,27 +60,6 @@ export default function DisplayClinic(props) {
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
-          <div className={styles.dropDownMain} style={props.open ? { opacity: 1, transform: 'translateY(0px)' } : { opacity: 0, transform: 'translateY(-50px)' }}>
-            <input className={styles.searchBar} placeholder='Search...' />
-            <div className={styles.dropDownSelect}>
-              <div className={styles.dropDownValue}>
-                <input type='checkbox' value="site1" />
-                <label for="site1">Site 1</label>
-              </div>
-              <div className={styles.dropDownValue}>
-                <input type='checkbox' value="site2" />
-                <label for="site2">Site 2</label>
-              </div>
-              <div className={styles.dropDownValue}>
-                <input type='checkbox' value="site3" />
-                <label for="site3">Site 3</label>
-              </div>
-              <div className={styles.dropDownValue}>
-                <input type='checkbox' value="site4" />
-                <label for="site4">Site 4</label>
-              </div>
-            </div>
-          </div>
         </div>
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
@@ -68,6 +74,10 @@ export default function DisplayClinic(props) {
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+        </div>
+        <div className={styles.download} onClick={download_csv_file}>
+          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <p>Download CSV</p>
         </div>
       </div>
       <div className={styles.row}>

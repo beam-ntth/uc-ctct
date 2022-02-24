@@ -12,6 +12,7 @@ export default function PreceptorInfoEdit(props) {
     "position": null,
     "credential": null,
     "email": null,
+    "npi": "",
     "phoneNumber": null,
     "status": 0,
     "notes": [],
@@ -63,6 +64,14 @@ export default function PreceptorInfoEdit(props) {
             onChange={(e) => {
               let newInfo = {...info}
               newInfo.credential = e.target.value
+              setInfo(newInfo);
+              return;
+            }} />
+          </p>
+          <p><strong>National Provider Identifier (NPI):</strong><input placeholder="NPI: (0000000000)"
+            onChange={(e) => {
+              let newInfo = {...info}
+              newInfo.npi = e.target.value
               setInfo(newInfo);
               return;
             }} />
