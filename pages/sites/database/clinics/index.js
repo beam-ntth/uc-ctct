@@ -2,7 +2,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../../../styles/Database.module.css";
 
 // Import Next Components
@@ -64,18 +64,24 @@ export default function Clinics({ data, note_data }) {
         }
       ]
     await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
-    setTimeout(() => refreshData(), 300)
+    refreshData()
+    return 
   }
 
   async function removeElement(id) {
-    removeClinic(id, note_data.id)
-    setTimeout(() => refreshData(), 400)
+    await removeClinic(id, note_data.id)
+    refreshData()
     return
   }
 
   function searchClinicName(substr) {
     setFilteredData(SearchString(data, substr))
   }
+
+  // Reinitialized displayed data when there are any changes to the DB data
+  useEffect(() => {
+    setFilteredData(data)
+  }, [data])
 
   return (
     <React.Fragment>

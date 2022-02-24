@@ -267,7 +267,7 @@ export default function AddNewClinic(props) {
               </React.Fragment>
             )
           })}
-          <p className="editSubTitle">Map Direction</p>
+          {/* <p className="editSubTitle">Map Direction</p>
           <p>
             <strong>Map Code:</strong>
             <input placeholder="<iframe> ... </iframe>" onChange={(e) => {
@@ -277,7 +277,7 @@ export default function AddNewClinic(props) {
               return
             }} />
           </p>
-          <span style={{ marginTop: '0.4rem', fontSize: '0.8rem' }}>Learn how to extract code from Google Map <a>HERE</a></span>
+          <span style={{ marginTop: '0.4rem', fontSize: '0.8rem' }}>Learn how to extract code from Google Map <a>HERE</a></span> */}
         </div>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
           <div className="saveBtn" onClick={() => {

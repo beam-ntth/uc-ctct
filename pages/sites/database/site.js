@@ -31,11 +31,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function SiteDetails({ data, region_data }) {
-  const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
-
   const [filteredData, setFilteredData] = useState(data)
   const [hover, setHover] = useState(false)
   const [openForm, setOpenForm] = useState(false)
@@ -43,16 +38,25 @@ export default function SiteDetails({ data, region_data }) {
   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
+  const router = useRouter()
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
   function searchSiteName(substr) {
     setFilteredData(SearchString(data, substr))
   }
 
   async function removeElement(id, regionId) {
-    console.log("ID", id);
-    removeSite(id, regionId);
-    setTimeout(() => refreshData(), 700)
+    await removeSite(id, regionId);
+    refreshData()
     return
   }
+
+  // Reinitialized displayed data when there are any changes to the DB data
+  useEffect(() => {
+    setFilteredData(data)
+  }, [data])
 
   return (
     <React.Fragment>
