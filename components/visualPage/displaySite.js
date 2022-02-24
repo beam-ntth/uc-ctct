@@ -20,7 +20,7 @@ export default function DisplaySite(props) {
   // console.log("REGION CHOICES", );
   // const affiChoices = ['UCSF', 'None']
   const affiChoices = props.affiliation_choices;
-  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((x) => StatusParser('sites', x))
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('sites', x))
 
   function searchPreceptorName(substr) {
     setFilteredData(SearchString(props.data, substr))
