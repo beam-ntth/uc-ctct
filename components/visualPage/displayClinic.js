@@ -45,21 +45,21 @@ export default function DisplayClinic(props) {
             <p>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
+          <Dropdown displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
             <p>Site</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={allSiteNames} />
+          <Dropdown displayOnly open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={allSiteNames} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+          <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div>
         <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />

@@ -27,10 +27,39 @@ export default function DisplaySite(props) {
   const [statusFilter, setStatusFilter] = useState(Array(statusChoices.length).fill(""))
 
   // Search Functionality
-  function searchPreceptorName(substr) {
-    setFilteredData(SearchString(props.data, substr))
+  function searchSiteData(substr) {
+    let finalSearch = SearchString(props.data, substr)
+    // If all the elements are "", means we're not filtering anything
+    const allEqual = arr => arr.every( v => v === "" )
+    // Check region
+    if (!allEqual(regionFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        const regionName = props.region_data.filter((r) => r.id == d.region_id)[0].name
+        console.log(regionName)
+        return regionFilter.includes(regionName)
+      })
+    }
+    // Check affiliation
+    if (!allEqual(affiFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return affiFilter.includes(d.affiliation)
+      })
+    }
+    // Check status
+    if (!allEqual(statusFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return statusFilter.includes(StatusParser("sites", parseInt(d.status)))
+      })
+    }
+    setFilteredData(finalSearch)
   }
 
+  // Call filtering when there is search from dropdown
+  useEffect(() => {
+    searchSiteData('')
+  }, [regionFilter, affiFilter, statusFilter])
+
+  // Download CSV
   function download_csv_file() {
     const csv = parse(props.data)
  
@@ -46,28 +75,31 @@ export default function DisplaySite(props) {
     <React.Fragment>
       <div className={styles.filterRow}>
         <div className={styles.searchBar}>
-          <input className={styles.searchInput} placeholder="Enter Site Name ..." onChange={(x) => searchPreceptorName(x.target.value)} />
+          <input className={styles.searchInput} placeholder="Enter Site Name ..." onChange={(x) => searchSiteData(x.target.value)} />
         </div>
         <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
             <p>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
+          <Dropdown disableSearch open={showRegionDropdown} setOpen={setShowRegionDropdown} 
+          choices={regionChoices} ddFilter={regionFilter} setddFilter={setRegionFilter} />
         </div>
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
             <p>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={affiChoices} />
+          <Dropdown disableSearch open={showSiteDropdown} setOpen={setShowSiteDropdown} 
+          choices={affiChoices} ddFilter={affiFilter} setddFilter={setAffiFilter} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} 
+          choices={statusChoices} ddFilter={statusFilter} setddFilter={setStatusFilter} />
         </div>
         <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
@@ -81,7 +113,7 @@ export default function DisplaySite(props) {
         <p className={styles.titleCol4}>Status</p>
       </div>
       {filteredData.map((x, ind) => {
-        const statusText = StatusParser("preceptors", parseInt(x.status))
+        const statusText = StatusParser("sites", parseInt(x.status))
         const regionName = props.region_data.filter((r) => r.id == x.region_id)
         return (
           <Link href={`/sites/database/clinics?location=${x.id}`}>
