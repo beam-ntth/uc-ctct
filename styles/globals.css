@@ -11,6 +11,10 @@ a {
   text-decoration: none;
 }
 
+#nprogress .bar {
+  height: 4px !important;
+}
+
 .displayRow {
   display: flex;
   flex-direction: row;
