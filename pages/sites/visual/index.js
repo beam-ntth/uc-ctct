@@ -14,7 +14,8 @@ import DisplaySite from '../../../components/visualPage/displaySite';
 
 
 // Import DB ops.
-import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions, getAllRegions, getDistinctSiteAffiliations } from '../../../api-lib/azure/azureOps'
+import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions,
+   getAllRegions, getDistinctSiteAffiliations } from '../../../api-lib/azure/azureOps'
 
 export async function getServerSideProps() {
   // const database = client.database("uc-ctct");
@@ -34,16 +35,10 @@ export async function getServerSideProps() {
 }
 
 export default function Visualization({ region_data, site_data, clinic_data, preceptor_data, region_choices, affiliation_choices }) {
-  // 0 is site, 1 is clinic, 2 is preceptor
+  /**
+   * Status of search setting; 0 = Sites, 1 = Clinics, 2 = Preceptors
+   */
   const [searchSetting, setSearchSetting] = useState(0)
-  const [showRegionForm, setShowRegionForm] = useState(false)
-  const [showSiteForm, setShowSiteForm] = useState(false)
-  const [showStatusForm, setShowStatusForm] = useState(false)
-  const [value, setValue] = useState('');
-  const handleSelect = (e) => {
-    console.log(e);
-    setValue(e)
-  }
 
   return (
     <React.Fragment>

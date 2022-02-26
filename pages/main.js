@@ -40,8 +40,6 @@ import React, { useState, useCallback } from 'react'
 
 
 export default function Main() {
-  const [searchSetting, setSearchSetting] = useState(0)
-
   const center = {
     lat: 38.5568118,
     lng: -121.7699631

@@ -23,20 +23,37 @@ export async function getServerSideProps() {
 }
 
 export default function Database({ data }) {
+  /**
+   * Status of all the forms in this page
+   * true = open form, false = close form
+   */ 
   const [openForm, setOpenForm] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
+  
+  /**
+   * Status of all the buttons, whether the user hovers over it
+   * true = display as active, false = display as inactive
+   */
   const [hover, setHover] = useState(false)
   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
+  /**
+   * Create a refresh data function to reload page when there 
+   * is any changes to the database
+   */
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
 
+  /**
+   * Remove site element and update total number of sites in the region
+   * @param {String} id - UUID of region to remove. 
+   */
   async function removeElement(id) {
-    removeRegion(id);
-    setTimeout(() => refreshData(), 500)
+    await removeRegion(id);
+    refreshData()
     return
   }
 

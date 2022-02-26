@@ -31,29 +31,59 @@ export async function getServerSideProps(context) {
 }
 
 export default function SiteDetails({ data, region_data }) {
+  /**
+   * Global state of the current displayed data
+   * - Initialized with all the site data
+   */
   const [filteredData, setFilteredData] = useState(data)
-  const [hover, setHover] = useState(false)
-  const [openForm, setOpenForm] = useState(false)
-  const [openEditForm, setOpenEditForm] = useState(false)
+  
+  /**
+   * Status of all the buttons, whether the user hovers over it
+   * true = display as active, false = display as inactive
+   */
+  const [addHover, setAddHover] = useState(false)
   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+  
+  /**
+   * Status of all the forms in this page
+   * true = open form, false = close form
+   */
+  const [openForm, setOpenForm] = useState(false)
+  const [openEditForm, setOpenEditForm] = useState(false)
 
+  /**
+   * Create a refresh data function to reload page when there 
+   * is any changes to the database
+   */
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
 
+  /**
+   * Filter displayed data via name
+   * @param {String} substr - search string inputted by the user 
+   */
   function searchSiteName(substr) {
     setFilteredData(SearchString(data, substr))
   }
 
+  /**
+   * Remove site element and update total number of sites in the region
+   * @param {String} id - UUID of site to remove. 
+   * @param {String} regionId - UUID of region to update total number of sites. 
+   */
   async function removeElement(id, regionId) {
     await removeSite(id, regionId);
     refreshData()
     return
   }
 
-  // Reinitialized displayed data when there are any changes to the DB data
+  /**
+   * This function take in 'effect' by reinitialize filteredData with data from DB
+   * when there is any changes to the DB data
+   */
   useEffect(() => {
     setFilteredData(data)
   }, [data])
@@ -81,59 +111,59 @@ export default function SiteDetails({ data, region_data }) {
                 <p className='row2Sites'>Affiliation</p>
                 <p className='row3Sites'>Total Clinics</p>
                 <p className='row4Sites'>Status</p>
-                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
+                <IoMdAdd color={addHover ? "#079CDB" : "#C4C4C4"} size={addHover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
+                  onMouseEnter={() => setAddHover(true)} onMouseLeave={() => setAddHover(false)} onClick={() => setOpenForm(true)} />
               </div>
-              {filteredData.map((x, ind) => {
-                const statusText = StatusParser("sites", parseInt(x.status))
-
-                return (
-                  <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Link href={`/sites/database/clinics?location=${x.id}`}>
-                      <div key={`site_${ind}`} className='displayRow'>
-                        <div className='rowContentClinics'>
-                          <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                          <p className='row2Sites'>{x['affiliation']}</p>
-                          <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['total_clinics']}</p>
-                          <p className="row4Sites">{statusText}</p>
+              {
+                filteredData.map((x, ind) => {
+                  const statusText = StatusParser("sites", parseInt(x.status))
+                  return (
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Link href={`/sites/database/clinics?location=${x.id}`}>
+                        <div key={`site_${ind}`} className='displayRow'>
+                          <div className='rowContentClinics'>
+                            <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
+                            <p className='row2Sites'>{x['affiliation']}</p>
+                            <p className='row3Sites' style={{ paddingLeft: '3rem' }}>{x['total_clinics']}</p>
+                            <p className="row4Sites">{statusText}</p>
+                          </div>
+                          <div className={`tag${x['status']}`}></div>
                         </div>
-                        <div className={`tag${x['status']}`}></div>
-                      </div>
-                    </Link>
-                    <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
-                      style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                      onMouseEnter={() => {
-                        let newStatus = [...editHover]
-                        newStatus[ind] = true
-                        setEditHover(newStatus)
-                        return
-                      }
-                      } onMouseLeave={() => {
-                        let newStatus = [...editHover]
-                        newStatus[ind] = false
-                        setEditHover(newStatus)
-                        return
-                      }
-                      }
-                      onClick={() => setOpenEditForm(x.id)} />
-                    <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
-                      style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                      onMouseEnter={() => {
-                        let newStatus = [...trashHover]
-                        newStatus[ind] = true
-                        setTrashHover(newStatus)
-                        return
-                      }
-                      } onMouseLeave={() => {
-                        let newStatus = [...trashHover]
-                        newStatus[ind] = false
-                        setTrashHover(newStatus)
-                        return
-                      }
-                      } onClick={() => removeElement(x.id, region_data.id)} />
-                  </div>
-                )
-              })}
+                      </Link>
+                      <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
+                        style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                        onMouseEnter={() => {
+                          let newStatus = [...editHover]
+                          newStatus[ind] = true
+                          setEditHover(newStatus)
+                          return
+                        }} 
+                        onMouseLeave={() => {
+                          let newStatus = [...editHover]
+                          newStatus[ind] = false
+                          setEditHover(newStatus)
+                          return
+                        }}
+                        onClick={() => setOpenEditForm(x.id)} />
+                      <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
+                        style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                        onMouseEnter={() => {
+                          let newStatus = [...trashHover]
+                          newStatus[ind] = true
+                          setTrashHover(newStatus)
+                          return
+                        }} 
+                        onMouseLeave={() => {
+                          let newStatus = [...trashHover]
+                          newStatus[ind] = false
+                          setTrashHover(newStatus)
+                          return
+                        }} 
+                        onClick={() => removeElement(x.id, region_data.id)} />
+                    </div>
+                  )
+                })
+              }
             </div>
           </div>
         </main>
