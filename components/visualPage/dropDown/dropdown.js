@@ -12,22 +12,26 @@ export default function Dropdown(props) {
   return (
     <React.Fragment>
       <div className={styles.dropDownMain} style={props.open ? { opacity: 1, transform: 'translateY(0px)' } : { opacity: 0, transform: 'translateY(-50px)' }}>
-        <input className={styles.dropDownSearchBar} placeholder='Search...' onChange={(x) => searchName(x.target.value)} />
+        {props.disableSearch ? null : <input className={styles.dropDownSearchBar} placeholder='Search...' onChange={(x) => searchName(x.target.value)} />}
         <div className={styles.dropDownSelect}>
           {
             filteredData.map((x, ind) => <div className={styles.dropDownValue}>
-                <input type='checkbox' id={x} key={`${x}_${ind}`} 
-                // value={dropDownFilter[ind]} 
-                // onChange={() => {
-                //   let newDropDown = [...dropDownFilter]
-                //   if (newDropDown[ind] === "") {
-                //     newDropDown[ind] = x
-                //   } else {
-                //     newDropDown[ind] = ""
-                //   }
-                //   setDropDownFilter(newDropDown)
-                // }} 
-                />
+                {
+                  // Temporary since not all dropdowns are implemented with search functionality
+                  props.displayOnly ? <input type='checkbox' id={x} key={`${x}_${ind}`} /> :
+                  <input type='checkbox' id={x} key={`${x}_${ind}`} 
+                  value={props.ddFilter[ind]} 
+                  onChange={() => {
+                    let newDropDown = [...props.ddFilter]
+                    if (newDropDown[ind] === "") {
+                      newDropDown[ind] = x
+                    } else {
+                      newDropDown[ind] = ""
+                    }
+                    props.setddFilter(newDropDown)
+                  }} 
+                  />
+                }
                 <label htmlFor={x} key={ind}>{x}</label>
               </div>
             )

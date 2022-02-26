@@ -33,38 +33,61 @@ export async function getServerSideProps(context) {
     const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
     all_preceptor_data.push(preceptor_data)
   }
-
   return { props: { data, all_preceptor_data } }
 }
 
 export default function ClinicDetails({ data, all_preceptor_data }) {
+  /**
+   * Create a refresh data function to reload page when there 
+   * is any changes to the database
+   */
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
 
+  /**
+   * Convert the encoded status to text
+   */
   const statusText = StatusParser("clinics", parseInt(data.status))
 
+  /**
+   * Status of all the forms in this page
+   * true = open form, false = close form
+   */
   const [generalOpen, setGeneralOpen] = useState(false);
   const [adminAddOpen, setAdminAddOpen] = useState(false);
   const [adminEditOpen, setAdminEditOpen] = useState(false);
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
-
+  
+  /**
+   * Status of all the forms in this page
+   * true = open form, false = close form
+   */ 
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
 
-  function removeAdminElement(index) {
-    removeAdmin(data.id, index)
-    setTimeout(() => refreshData(), 400)
+  /**
+   * Remove admin data from clinic
+   * @param {String} index - index of the admin in the list
+   */
+  async function removeAdminElement(index) {
+    await removeAdmin(data.id, index)
+    refreshData()
     return
   }
 
-  function removePreceptorElement(index) {
-    removePreceptor(data.id, index)
-    setTimeout(() => refreshData(), 400)
+  /**
+   * Remove preceptor data from clinic
+   * @param {String} index - index of the preceptor in the list
+   * @
+   */
+  async function removePreceptorElement(index) {
+    await removePreceptor(data.id, index)
+    refreshData()
     return
   }
 

@@ -34,21 +34,41 @@ export async function getServerSideProps(context) {
   return { props: { data, note_data } }
 }
 
-
-
 export default function Clinics({ data, note_data }) {
+  /**
+   * Global state of the current displayed data
+   * - Initialized with all the site data
+   */
   const [filteredData, setFilteredData] = useState(data)
+  
+  /**
+   * Status of all the forms in this page
+   * true = open form, false = close form
+   */
   const [openNote, setOpenNote] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
   const [openAddClinic, setOpenAddClinic] = useState(false)
 
-  const router = useRouter()
+  /**
+   * Status of all the buttons, whether the user hovers over it
+   * true = display as active, false = display as inactive
+   */
   const [hover, setHover] = useState(false)
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+
+  /**
+   * Create a refresh data function to reload page when there 
+   * is any changes to the database
+   */
+  const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
   }
 
+  /**
+   * Remove clinic element and update total number of clinics in the site
+   * @param {String} remove_index - UUID of clinic to remove. 
+   */
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
     const site_container = database.container("Sites");
@@ -68,17 +88,28 @@ export default function Clinics({ data, note_data }) {
     return 
   }
 
+  /**
+   * Remove clinic element and update total number of clinics in the site
+   * @param {String} id - UUID of clinic to remove. 
+   */
   async function removeElement(id) {
     await removeClinic(id, note_data.id)
     refreshData()
     return
   }
 
+  /**
+   * Filter displayed data via name
+   * @param {String} substr - search string inputted by the user 
+   */
   function searchClinicName(substr) {
     setFilteredData(SearchString(data, substr))
   }
 
-  // Reinitialized displayed data when there are any changes to the DB data
+  /**
+   * This function take in 'effect' by reinitialize filteredData with data from DB
+   * when there is any changes to the DB data
+   */
   useEffect(() => {
     setFilteredData(data)
   }, [data])
