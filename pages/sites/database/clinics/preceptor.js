@@ -2,7 +2,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../../../styles/Preceptor.module.css";
 
 // Import Next Components
@@ -36,14 +36,10 @@ import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEd
 
 export async function getServerSideProps(context) {
   const preceptor = await getPreceptor(context.query.preceptor_id);
-  const all_clinics = []
-  for (let i = 0; i < preceptor.clinics.length; i++) {
-    all_clinics.push(await getClinic(preceptor.clinics[i]))
-  }
-  return { props: { preceptor, all_clinics } }
+  return { props: { preceptor } }
 }
 
-export default function Preceptors({ preceptor, all_clinics }) {
+export default function Preceptors({ preceptor }) {
   const [openNote, setOpenNote] = useState(false)
   // const data = await getClinic(clinicName);
   // const [openEditForm, setOpenEditForm] = useState(false)
@@ -52,6 +48,16 @@ export default function Preceptors({ preceptor, all_clinics }) {
   const router = useRouter()
   // const [hover, setHover] = useState(false)
   // const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+
+  const [allClinics, setAllClinics] = useState(null)
+  async function lazyLoadClinic() {
+    const all_clinics = []
+    for (let i = 0; i < preceptor.clinics.length; i++) {
+      all_clinics.push(await getClinic(preceptor.clinics[i]))
+    }
+    setAllClinics(all_clinics)
+  }
+  useEffect(() => lazyLoadClinic(), [])
 
   const refreshData = () => {
     router.replace(router.asPath);
@@ -124,7 +130,7 @@ export default function Preceptors({ preceptor, all_clinics }) {
                   <p>
                     <strong>Clinic (s):</strong>
                     {
-                      all_clinics.map(x => <p style={{ margin: '0.4rem 0' }}>{x.name}</p>)
+                      (allClinics == null ? <p>Loading...</p> : allClinics.map(x => <p style={{ margin: '0.4rem 0' }}>{x.name}</p>))
                     }
                   </p>
                 </div>

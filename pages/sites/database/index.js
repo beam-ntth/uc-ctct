@@ -1,12 +1,13 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../../styles/Database.module.css'
 import Link from 'next/link'
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
+import styles from '../../../styles/Database.module.css'
 
 // Import DB operation
 import { getAllRegions, removeRegion } from '../../../api-lib/azure/azureOps';
@@ -14,8 +15,10 @@ import { getAllRegions, removeRegion } from '../../../api-lib/azure/azureOps';
 // Importing components
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
-import AddNewRegion from '../../../components/shared/forms/addRegion';
-import EditRegion from '../../../components/shared/forms/editRegion';
+
+// Only load when user clicks on it to improve performance
+const AddNewRegion = dynamic(() => import('../../../components/shared/forms/addRegion'));
+const EditRegion = dynamic(() => import('../../../components/shared/forms/editRegion'));
 
 export async function getServerSideProps() {
   const data = await getAllRegions();

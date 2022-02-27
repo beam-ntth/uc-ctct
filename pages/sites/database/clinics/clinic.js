@@ -1,6 +1,7 @@
 // Import React & Next modules
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
 
@@ -9,11 +10,13 @@ import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
-import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
-import AdminInfoAdd from "../../../../components/clinicPage/adminInfoAdd";
-import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
-import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
-import NoteEdit from "../../../../components/clinicPage/noteEdit";
+
+const ClinicInfoEdit = dynamic(() => import("../../../../components/clinicPage/generalInfoEdit"));
+const AdminInfoAdd = dynamic(() => import("../../../../components/clinicPage/adminInfoAdd"));
+const PreceptorInfoEdit = dynamic(() => import("../../../../components/clinicPage/preceptorInfoEdit"));
+const PlacementInfoEdit = dynamic(() => import("../../../../components/clinicPage/placementInfoEdit"));
+const NoteEdit = dynamic(() => import("../../../../components/clinicPage/noteEdit"));
+
 import StatusParser from "../../../../components/shared/status";
 
 // Import DB component
@@ -22,6 +25,7 @@ import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
+
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name

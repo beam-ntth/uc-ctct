@@ -15,6 +15,8 @@ export default function DisplaySite(props) {
    */
   const [filteredData, setFilteredData] = useState(props.data)
 
+  useEffect(() => setFilteredData(props.data), [props.data, props.region_data])
+
   /**
    * States of all the dropdown buttoons
    * true = display dropdown, false = hide dropdown
@@ -49,7 +51,7 @@ export default function DisplaySite(props) {
     // Check region
     if (!allEqual(regionFilter)) {
       finalSearch = finalSearch.filter(d => {
-        const regionName = props.region_data.filter((r) => r.id == d.region_id)[0].name
+        const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == d.region_id)[0].name)
         console.log(regionName)
         return regionFilter.includes(regionName)
       })
@@ -138,13 +140,13 @@ export default function DisplaySite(props) {
       {
         filteredData.map((x, ind) => {
           const statusText = StatusParser("sites", parseInt(x.status))
-          const regionName = props.region_data.filter((r) => r.id == x.region_id)
+          const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           return (
             <Link href={`/sites/database/clinics?location=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayRow'>
                 <div className="rowContentClinics">
                   <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{regionName[0].name}</p>
+                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
                   <p className={styles.dataCol3}>{x.affiliation}</p>
                   <p className={styles.dataCol4}>{statusText}</p>
                 </div>

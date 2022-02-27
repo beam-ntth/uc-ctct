@@ -1,6 +1,7 @@
 // Import Next & React modules
 import Head from 'next/head'
 import Link from 'next/link'
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import styles from '../../../styles/Database.module.css'
@@ -17,9 +18,11 @@ import { getRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azur
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
-import AddNewSite from '../../../components/shared/forms/addSite';
-import EditSite from '../../../components/shared/forms/editSite';
-import SearchString from '../../../components/shared/search';
+
+// Only load when user clicks on it to improve performance
+const AddNewSite = dynamic(() => import('../../../components/shared/forms/addSite'));
+const EditSite = dynamic(() => import('../../../components/shared/forms/editSite'));
+const SearchString = dynamic(() => import('../../../components/shared/search'));
 
 export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
