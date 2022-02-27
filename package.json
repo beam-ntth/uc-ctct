@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "@azure/cosmos": "^3.15.1",
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.4.3",
     "chart.js": "^3.7.0",
     "cookie-session": "^2.0.0",
     "google-map-react": "^2.1.10",

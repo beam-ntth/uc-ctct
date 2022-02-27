@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from "../../api-lib/azure/azureConfig";
@@ -48,88 +49,102 @@ export default function AdminInfoEdit(props) {
   //   });
   // });
 
+  const [submittingForm, setSubmittingForm] = useState(false)
+
   return (
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-          <p className="editTitle">Edit Admin Information</p>
-          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
-            onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-        </div>
-        <div style={{ width: "90%" }}>
-          <p>
-            <strong>Name:</strong>
-            <input
-              value={info.name}
-              onChange={(e) => {
-                let newInfo = { ...info };
-                newInfo.name = e.target.value;
-                setInfo(newInfo);
-                return;
-              }}
-            />
-          </p>
-          <p>
-            <strong>Position:</strong>
-            <input
-              value={info.position}
-              onChange={(e) => {
-                let newInfo = { ...info };
-                newInfo.position = e.target.value;
-                setInfo(newInfo);
-                return;
-              }}
-            />
-          </p>
-          <p>
-            <strong>Phone Number:</strong>
-            <input
-              value={info.phone}
-              onChange={(e) => {
-                let newInfo = { ...info };
-                newInfo.phone = e.target.value
-                  .replace(/\D/g, "")
-                  .substring(0, 10);
-                setInfo(newInfo);
-                return;
-              }}
-            />
-          </p>
-          <p>
-            <strong>Email Address:</strong>
-            <input
-              value={info.email}
-              type={"email"}
-              onChange={(e) => {
-                let newInfo = { ...info };
-                newInfo.email = e.target.value;
-                setInfo(newInfo);
-                return;
-              }}
-            />
-          </p>
-        </div>
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            marginTop: "1rem",
-          }}
-        >
-          <div
-            className="saveBtn"
-            onClick={async () => {
-              await updateInfo();
-              props.setOpen(false);
-              return;
-            }}
-          >
-            Edit Contact
+        {
+          submittingForm ?
+          <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
+            <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+              <CircularProgress color="primary" size={120} />
+            </div>
+            <p style={{textAlign: 'center'}}>Submitting the form. Please wait.</p>
           </div>
-        </div>
+          :
+          (<React.Fragment>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+              <p className="editTitle">Edit Admin Information</p>
+              <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+            </div>
+            <div style={{ width: "90%" }}>
+              <p>
+                <strong>Name:</strong>
+                <input
+                  value={info.name}
+                  onChange={(e) => {
+                    let newInfo = { ...info };
+                    newInfo.name = e.target.value;
+                    setInfo(newInfo);
+                    return;
+                  }}
+                />
+              </p>
+              <p>
+                <strong>Position:</strong>
+                <input
+                  value={info.position}
+                  onChange={(e) => {
+                    let newInfo = { ...info };
+                    newInfo.position = e.target.value;
+                    setInfo(newInfo);
+                    return;
+                  }}
+                />
+              </p>
+              <p>
+                <strong>Phone Number:</strong>
+                <input
+                  value={info.phone}
+                  onChange={(e) => {
+                    let newInfo = { ...info };
+                    newInfo.phone = e.target.value
+                      .replace(/\D/g, "")
+                      .substring(0, 10);
+                    setInfo(newInfo);
+                    return;
+                  }}
+                />
+              </p>
+              <p>
+                <strong>Email Address:</strong>
+                <input
+                  value={info.email}
+                  type={"email"}
+                  onChange={(e) => {
+                    let newInfo = { ...info };
+                    newInfo.email = e.target.value;
+                    setInfo(newInfo);
+                    return;
+                  }}
+                />
+              </p>
+            </div>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+                marginTop: "1rem",
+              }}
+            >
+              <div
+                className="saveBtn"
+                onClick={async () => {
+                  await updateInfo();
+                  props.setOpen(false);
+                  return;
+                }}
+              >
+                Edit Contact
+              </div>
+            </div>
+          </React.Fragment>)
+        }
       </div>
       <style jsx>
         {`

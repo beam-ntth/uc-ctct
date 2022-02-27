@@ -1,13 +1,15 @@
+import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 
 export default function EditRegion(props) {
+  const [regionId, regionName] = props.open
   const [hover, setHover] = useState(false)
-  const [name, setName] = useState("")
+  const [name, setName] = useState(regionName)
 
   async function editElement() {
-    console.log(props.open)
+    console.log(regionId)
     const database = client.database("uc-ctct");
     const container = database.container("Regions");
     const replaceOperation =
@@ -16,7 +18,8 @@ export default function EditRegion(props) {
         path: "/name",
         value: name
       }];
-    await container.item(props.open, props.open).patch(replaceOperation);
+    await container.item(regionId, regionId).patch(replaceOperation);
+    props.setOpen(false)
     props.reload()
     return
   }
@@ -32,29 +35,43 @@ export default function EditRegion(props) {
   //   })
   // })
 
+  const [submittingForm, setSubmittingForm] = useState(false)
+
   return (
     <React.Fragment>
       <div className="backDrop" onClick={() => props.setOpen(false)}></div>
       <div className="editScreen">
-        <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-          <p className="editTitle">Edit Region Name</p>
-          <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-        </div>
-        <div style={{ width: '90%' }}>
-          <p><strong>Name:</strong><input placeholder="New Region Name" onChange={(e) => {
-            setName(e.target.value)
-            return
-          }} /> </p>
-        </div>
-        <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-          <div className="saveBtn" onClick={() => {
-            editElement()
-            props.setOpen(false)
-            return
-          }}>Save</div>
-        </div>
+        {
+          submittingForm ?
+          <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
+            <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+            <CircularProgress color="primary" size={120} />
+            </div>
+            <p style={{textAlign: 'center'}}>Submitting the form. Please wait.</p>
+          </div>
+          :
+          (<React.Fragment>
+            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+              <p className="editTitle">Edit Region Name</p>
+              <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                      onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+            </div>
+            <div style={{ width: '90%' }}>
+              <p><strong>Name:</strong><input value={name} onChange={(e) => {
+                setName(e.target.value)
+                return
+              }} /> </p>
+            </div>
+            <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+              <div className="saveBtn" onClick={() => {
+                editElement()
+                setSubmittingForm(true)
+                return
+              }}>Save</div>
+            </div>
+          </React.Fragment>)
+        }
       </div>
       <style jsx>
         {
@@ -74,7 +91,7 @@ export default function EditRegion(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 30vh;
+                    height: 40vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
