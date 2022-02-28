@@ -223,6 +223,103 @@ a {
   background-color: #000;
 }
 
+/*added*/
+
+.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7, .siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem; 
+}
+
+.siteTag0 {
+  background-color: #B7DEE8;
+}
+
+.siteTag1 {
+  background-color: #4BACC6;
+}
+
+.siteTag2 {
+  background-color: #31869B;
+}
+
+.siteTag3 {
+  background-color: #E4DFEC;
+}
+
+.siteTag4 {
+  background-color: #CCC0DA;
+}
+
+.siteTag5 {
+  background-color: #FFFFCC;
+}
+
+.siteTag6 {
+  background-color: #FCD5B4;
+}
+
+.siteTag7 {
+  background-color: #FABF8F;
+}
+
+.siteTag8 {
+  background-color: #A9D08E;
+}
+
+.siteTag9 {
+  background-color: #DA9694;
+}
+
+.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9, .preceptorTag10, .preceptorTag11, .preceptorTag12, .preeptorTag13 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem; 
+}
+
+.precptorTag0 {
+  background-color: #B7DEE8;
+}
+
+.preceptorTag1 {
+  background-color: #4BACC6;
+}
+
+.preceptorTag2 {
+  background-color: #31869B;
+}
+
+.preceptorTag3 {
+  background-color: #E4DFEC;
+}
+
+.preceptorTag4 {
+  background-color: #CCC0DA;
+}
+
+.preceptorTag5 {
+  background-color: #FFFFCC;
+}
+
+.preceptorTag6 {
+  background-color: #FCD5B4;
+}
+
+.preceptorTag7 {
+  background-color: #FABF8F;
+}
+
+.preceptorTag8 {
+  background-color: #A9D08E;
+}
+
+.preceptorTag9 {
+  background-color: #DA9694;
+}
+
+
 .editButton {
   height: 3rem;
   width: 10rem;

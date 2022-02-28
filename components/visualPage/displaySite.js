@@ -150,7 +150,7 @@ export default function DisplaySite(props) {
                   <p className={styles.dataCol3}>{x.affiliation}</p>
                   <p className={styles.dataCol4}>{statusText}</p>
                 </div>
-                <div className={`tag${x['status']}`}></div>
+                <div className={`siteTag${x['status']}`}></div>
               </div>
             </Link>
           )

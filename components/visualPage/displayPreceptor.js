@@ -97,7 +97,7 @@ export default function DisplayPreceptor(props) {
                 <p className={styles.dataCol3}>{x.credential}</p>
                 <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
               </div>
-              <div className={`tag${x['status']}`}></div>
+              <div className={`preceptorTag${x['status']}`}></div>
             </div>
           </Link>
         )
