@@ -51,35 +51,35 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
-            <p>Region</p>
+          <p style={{fontSize: '0.7rem'}}>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
-            <p style={{fontSize: '0.8rem'}}>Setting Location</p>
+            <p style={{fontSize: '0.71rem', marginRight: 0}}>Setting Location</p>
             <IoIosArrowDown color='#079CDB' style={showSetLocationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetLocationDropdown} setOpen={setShowSetLocationDropdown} choices={setLocationChoices} />
         </div>
         <div className={styles.sPopForm}>
           <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
-            <p style={{fontSize: '0.8rem'}}>Setting Population</p>
+            <p style={{fontSize: '0.7rem', marginRight: 0}}>Setting Population</p>
             <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />
         </div>
         <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-            <p>Population</p>
+          <p style={{fontSize: '0.71rem'}}>Patient</p>
             <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />
         </div>
         <div className={styles.acuityForm}>
           <div className={styles.formTitle} onClick={() => setShowAcuityDropdown(!showAcuityDropdown)}>
-            <p>Patient Acuity</p>
+          <p style={{fontSize: '0.71rem'}}>Patient Acuity</p>
             <IoIosArrowDown color='#079CDB' style={showAcuityDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showAcuityDropdown} setOpen={setShowAcuityDropdown} choices={patientAcuityChoices} />
