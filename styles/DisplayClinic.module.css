@@ -1,4 +1,4 @@
-.regionForm, .siteForm, .statusForm, .positionForm, .credsForm, .sLocationForm, .sPopForm, .popForm, .acuityForm {
+.regionForm, .siteForm, .statusForm, .positionForm, .credsForm, .sLocationForm, .sPopForm, .popForm, .acuityForm, .expForm {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

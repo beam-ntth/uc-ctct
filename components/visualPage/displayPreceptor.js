@@ -8,14 +8,20 @@ import StatusParser from '../shared/status';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { parse } from 'json2csv';
 
+/* TODO: preceptor no search in the dropdowns */
+
 export default function DisplayPreceptor(props) {
-  const [filteredPrecepData, setFilteredPrecepData] = useState(props.data)
+  const [filteredPrecepData, setFilteredPrecepData] = useState(props.data);
+    // const [showCredDropdown, setShowCredDropdown] = useState(false);
   const [showPositionDropdown, setShowPositionDropdown] = useState(false);
-  const [showCredDropdown, setShowCredDropdown] = useState(false);
+  const [showPopulationDropdown, setShowPopulationDropdown] = useState(false);
+  const [showExperienceDropdown, setShowExperienceDropdown] = useState(false);
   const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
   const positionChoices = props.data.map(x => x.position);
-  const credentialChoices = props.data.map(x => x.credential);
+  // const credentialChoices = props.data.map(x => x.credential);
+  const populationChoices = [... new Set(props.data.map(x => x.description.population))];
+  const experienceChoices = [... new Set(props.data.map(x => x.description.experience))];
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('preceptors', x))
 
   function searchPreceptorName(substr) {
@@ -61,12 +67,26 @@ export default function DisplayPreceptor(props) {
           </div>
           <Dropdown displayOnly open={showPositionDropdown} setOpen={setShowPositionDropdown} choices={positionChoices} />
         </div>
-        <div className={styles.credsForm}>
+        {/* <div className={styles.credsForm}>
           <div className={styles.formTitle} onClick={() => setShowCredDropdown(!showCredDropdown)}>
             <p>Credential</p>
             <IoIosArrowDown color='#079CDB' style={showCredDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showCredDropdown} setOpen={setShowCredDropdown} choices={credentialChoices} />
+        </div> */}
+          <div className={styles.popForm}>
+          <div className={styles.formTitle} onClick={() => setShowPopulationDropdown(!showPopulationDropdown)}>
+            <p>Population</p>
+            <IoIosArrowDown color='#079CDB' style={showPopulationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showPopulationDropdown} setOpen={setShowPopulationDropdown} choices={populationChoices} />
+        </div>
+        <div className={styles.expForm}>
+          <div className={styles.formTitle} onClick={() => setShowExperienceDropdown(!showExperienceDropdown)}>
+            <p>Experience</p>
+            <IoIosArrowDown color='#079CDB' style={showExperienceDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showExperienceDropdown} setOpen={setShowExperienceDropdown} choices={experienceChoices} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
@@ -97,7 +117,7 @@ export default function DisplayPreceptor(props) {
                 <p className={styles.dataCol3}>{x.credential}</p>
                 <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
               </div>
-              <div className={`preceptorTag${x['status']}`}></div>
+              <div className={`tag${x['status']}`}></div>
             </div>
           </Link>
         )
