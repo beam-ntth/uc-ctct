@@ -130,7 +130,7 @@ export default function Preceptors({ preceptor }) {
                   <p>
                     <strong>Clinic (s):</strong>
                     {
-                      (allClinics == null ? <p>Loading...</p> : allClinics.map(x => <p style={{ margin: '0.4rem 0' }}>{x.name}</p>))
+                      (allClinics == null ? <p>Loading...</p> : allClinics.map(x => x ? <p style={{ margin: '0.4rem 0' }}>{x.name}</p> : <p>Clinic Unknown</p>))
                     }
                   </p>
                 </div>

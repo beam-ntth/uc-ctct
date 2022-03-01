@@ -63,7 +63,19 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
   /**
    * Activate loading on the client-side, [] means only load once
    */
-  useEffect(() => lazyLoadData(), [])
+  useEffect(() => {
+    lazyLoadData()
+    const stickyValue = window.localStorage.getItem('pageSetting');
+    stickyValue !== null ? setSearchSetting(JSON.parse(stickyValue)) : setSearchSetting(0)
+  }, [])
+
+  /**
+   * Save user's last state in local storage, so when they click 'go back' button
+   * in the browser, they don't have tp re-choose the page again
+   */
+  useEffect(() => {
+    window.localStorage.setItem('pageSetting', JSON.stringify(searchSetting))
+  }, [searchSetting])
 
   return (
     <React.Fragment>
