@@ -22,10 +22,10 @@ export default function DisplayClinic(props) {
 
   const regionChoices = props.region_choices;
   // const allSiteNames = props.sites.map(x => x.name);
-  const setLocationChoices = props.data.map(x => x.description.settingLocation);
-  const settingPopChoices = props.data.map(x => x.description.settingPopulation);
-  const populationChoices = props.data.map(x => x.description.population);
-  const patientAcuityChoices = props.data.map(x => x.description.patientAcuity);
+  const setLocationChoices = [... new Set(props.data.map(x => x.description.settingLocation))];
+  const settingPopChoices = [... new Set(props.data.map(x => x.description.settingPopulation))];
+  const populationChoices = [... new Set(props.data.map(x => x.description.population))];
+  const patientAcuityChoices = [... new Set(props.data.map(x => x.description.patientAcuity))];
   // const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
@@ -58,14 +58,14 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
-            <p>Setting Location</p>
+            <p style={{fontSize: '0.8rem'}}>Setting Location</p>
             <IoIosArrowDown color='#079CDB' style={showSetLocationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetLocationDropdown} setOpen={setShowSetLocationDropdown} choices={setLocationChoices} />
         </div>
         <div className={styles.sPopForm}>
           <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
-            <p>Setting Population</p>
+            <p style={{fontSize: '0.8rem'}}>Setting Population</p>
             <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />

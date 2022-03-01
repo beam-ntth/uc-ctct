@@ -70,7 +70,7 @@ export default function ClinicDetails({ data }) {
    * Call useEffect() to initiate loading
    */ 
   const [preceptorData, setPreceptorData] = useState(null)
-  async function lazyLoadPreceptor() {
+  async function clientLoadPreceptor() {
     const database = client.database("uc-ctct");
     const container = database.container("Preceptors");
     let all_preceptor_data = []
@@ -80,7 +80,7 @@ export default function ClinicDetails({ data }) {
     }
     setPreceptorData(all_preceptor_data)
   }
-  useEffect(() => lazyLoadPreceptor(), [])
+  useEffect(() => clientLoadPreceptor(), [data])
 
   /**
    * Remove admin data from clinic
