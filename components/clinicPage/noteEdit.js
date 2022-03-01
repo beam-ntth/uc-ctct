@@ -53,44 +53,44 @@ export default function NoteEdit(props) {
       <div className="editScreen">
         {
           submittingForm ?
-          <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
-            <div style={{textAlign: 'center', marginBottom: '1rem'}}>
-              <CircularProgress color="primary" size={120} />
+            <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center" }}>
+              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <CircularProgress color="primary" size={120} />
+              </div>
+              <p style={{ textAlign: 'center' }}>Adding new note. Please wait.</p>
             </div>
-            <p style={{textAlign: 'center'}}>Adding new note. Please wait.</p>
-          </div>
-          :
-          (<React.Fragment>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-              <p className="editTitle">Add Additional Clinical Notes</p>
-              <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-            </div>
-            <div style={{ height: 'auto', width: '90%' }}>
-              <p><strong>Title:</strong><input placeholder="Add Title Here" onChange={(x) => {
-                let newValue = { ...note }
-                newValue.title = x.target.value + ` | Added: ${currentdate.getMonth()}/${currentdate.getDate()}/${currentdate.getFullYear()}`
-                setNote(newValue)
-                return
-              }} /></p>
-              <div style={{ display: 'flex' }}>
-                <strong>Note:</strong>
-                <textarea placeholder="Add Notes Here" onChange={(x) => {
+            :
+            (<React.Fragment>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                <p className="editTitle">Add Additional Clinical Notes</p>
+                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+              </div>
+              <div style={{ height: 'auto', width: '90%' }}>
+                <p><strong>Title:</strong><input placeholder="Add Title Here" onChange={(x) => {
                   let newValue = { ...note }
-                  newValue.note = x.target.value
+                  newValue.title = x.target.value + ` | Added: ${currentdate.getMonth()}/${currentdate.getDate()}/${currentdate.getFullYear()}`
                   setNote(newValue)
                   return
-                }}></textarea>
+                }} /></p>
+                <div style={{ display: 'flex' }}>
+                  <strong>Note:</strong>
+                  <textarea placeholder="Add Notes Here" onChange={(x) => {
+                    let newValue = { ...note }
+                    newValue.note = x.target.value
+                    setNote(newValue)
+                    return
+                  }}></textarea>
+                </div>
               </div>
-            </div>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-              <div className="saveBtn" onClick={() => {
-                updateInfo()
-                setSubmittingForm(true)
-                return
-              }}>Add Note</div>
-            </div>
-          </React.Fragment>)}
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+                <div className="saveBtn" onClick={async () => {
+                  await updateInfo()
+                  setSubmittingForm(true)
+                  return
+                }}>Add Note</div>
+              </div>
+            </React.Fragment>)}
       </div>
       <style jsx>
         {

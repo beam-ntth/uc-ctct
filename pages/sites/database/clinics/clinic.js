@@ -56,11 +56,11 @@ export default function ClinicDetails({ data }) {
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
-  
+
   /**
    * Status of all the forms in this page
    * true = open form, false = close form
-   */ 
+   */
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
@@ -68,7 +68,7 @@ export default function ClinicDetails({ data }) {
   /**
    * Lazy loading preceptor data to speed up clinic page
    * Call useEffect() to initiate loading
-   */ 
+   */
   const [preceptorData, setPreceptorData] = useState(null)
   async function clientLoadPreceptor() {
     const database = client.database("uc-ctct");
@@ -223,7 +223,7 @@ export default function ClinicDetails({ data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Preceptors Information</p>
                   </div>
-                  <div className={styles.editButton} style={{width: '12rem'}} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
+                  <div className={styles.editButton} style={{ width: '12rem' }} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
