@@ -54,7 +54,7 @@ export default function DisplayClinic(props) {
             <p>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
+          <Dropdown disableSearch displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>

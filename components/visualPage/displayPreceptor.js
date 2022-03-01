@@ -65,7 +65,7 @@ export default function DisplayPreceptor(props) {
             <p>Position</p>
             <IoIosArrowDown color='#079CDB' style={showPositionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showPositionDropdown} setOpen={setShowPositionDropdown} choices={positionChoices} />
+          <Dropdown disableSearch displayOnly open={showPositionDropdown} setOpen={setShowPositionDropdown} choices={positionChoices} />
         </div>
         {/* <div className={styles.credsForm}>
           <div className={styles.formTitle} onClick={() => setShowCredDropdown(!showCredDropdown)}>
@@ -79,21 +79,21 @@ export default function DisplayPreceptor(props) {
             <p>Population</p>
             <IoIosArrowDown color='#079CDB' style={showPopulationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showPopulationDropdown} setOpen={setShowPopulationDropdown} choices={populationChoices} />
+          <Dropdown disableSearch displayOnly open={showPopulationDropdown} setOpen={setShowPopulationDropdown} choices={populationChoices} />
         </div>
         <div className={styles.expForm}>
           <div className={styles.formTitle} onClick={() => setShowExperienceDropdown(!showExperienceDropdown)}>
             <p>Experience</p>
             <IoIosArrowDown color='#079CDB' style={showExperienceDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showExperienceDropdown} setOpen={setShowExperienceDropdown} choices={experienceChoices} />
+          <Dropdown disableSearch displayOnly open={showExperienceDropdown} setOpen={setShowExperienceDropdown} choices={experienceChoices} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+          <Dropdown disableSearch displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div>
         <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
