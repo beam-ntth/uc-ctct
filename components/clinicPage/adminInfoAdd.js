@@ -50,94 +50,94 @@ export default function AdminInfoAdd(props) {
       <div className="editScreen">
         {
           submittingForm ?
-          <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
-            <div style={{textAlign: 'center', marginBottom: '1rem'}}>
-              <CircularProgress color="primary" size={120} />
+            <div style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center" }}>
+              <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                <CircularProgress color="primary" size={120} />
+              </div>
+              <p style={{ textAlign: 'center' }}>Submitting the form. Please wait.</p>
             </div>
-            <p style={{textAlign: 'center'}}>Submitting the form. Please wait.</p>
-          </div>
-          :
-          (<React.Fragment>
-            <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
-              <p className="editTitle">Add Contact Information</p>
-              <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-            </div>
-            <div style={{ width: "90%" }}>
-              <p>
-                <strong>Name:</strong>
-                <input
-                  placeholder="First Last"
-                  onChange={(e) => {
-                    let newInfo = { ...info };
-                    newInfo.name = e.target.value;
-                    setInfo(newInfo);
-                    return;
-                  }}
-                />
-              </p>
-              <p>
-                <strong>Position:</strong>
-                <input
-                  placeholder="Position"
-                  onChange={(e) => {
-                    let newInfo = { ...info };
-                    newInfo.position = e.target.value;
-                    setInfo(newInfo);
-                    return;
-                  }}
-                />
-              </p>
-              <p>
-                <strong>Phone Number:</strong>
-                <input
-                  placeholder="0000000000"
-                  value={info.phone}
-                  onChange={(e) => {
-                    let newInfo = { ...info };
-                    newInfo.phone = e.target.value
-                      .replace(/\D/g, "")
-                      .substring(0, 10);
-                    setInfo(newInfo);
-                    return;
-                  }}
-                />
-              </p>
-              <p>
-                <strong>Email Address:</strong>
-                <input
-                  placeholder="Email Address"
-                  type={"email"}
-                  onChange={(e) => {
-                    let newInfo = { ...info };
-                    newInfo.email = e.target.value;
-                    setInfo(newInfo);
-                    return;
-                  }}
-                />
-              </p>
-            </div>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "center",
-                marginTop: "1rem",
-              }}
-            >
+            :
+            (<React.Fragment>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem' }}>
+                <p className="editTitle">Add Contact Information</p>
+                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+              </div>
+              <div style={{ width: "90%" }}>
+                <p>
+                  <strong>Name:</strong>
+                  <input
+                    placeholder="First Last"
+                    onChange={(e) => {
+                      let newInfo = { ...info };
+                      newInfo.name = e.target.value;
+                      setInfo(newInfo);
+                      return;
+                    }}
+                  />
+                </p>
+                <p>
+                  <strong>Position:</strong>
+                  <input
+                    placeholder="Position"
+                    onChange={(e) => {
+                      let newInfo = { ...info };
+                      newInfo.position = e.target.value;
+                      setInfo(newInfo);
+                      return;
+                    }}
+                  />
+                </p>
+                <p>
+                  <strong>Phone Number:</strong>
+                  <input
+                    placeholder="0000000000"
+                    value={info.phone}
+                    onChange={(e) => {
+                      let newInfo = { ...info };
+                      newInfo.phone = e.target.value
+                        .replace(/\D/g, "")
+                        .substring(0, 10);
+                      setInfo(newInfo);
+                      return;
+                    }}
+                  />
+                </p>
+                <p>
+                  <strong>Email Address:</strong>
+                  <input
+                    placeholder="Email Address"
+                    type={"email"}
+                    onChange={(e) => {
+                      let newInfo = { ...info };
+                      newInfo.email = e.target.value;
+                      setInfo(newInfo);
+                      return;
+                    }}
+                  />
+                </p>
+              </div>
               <div
-                className="saveBtn"
-                onClick={() => {
-                  updateInfo();
-                  setSubmittingForm(true)
-                  return;
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  alignItems: "center",
+                  marginTop: "1rem",
                 }}
               >
-                Add Contact
+                <div
+                  className="saveBtn"
+                  onClick={async () => {
+                    await updateInfo();
+                    setSubmittingForm(true)
+                    return;
+                  }}
+                >
+                  Add Contact
+                </div>
               </div>
-            </div>
-          </React.Fragment>)
+            </React.Fragment>)
         }
       </div>
       <style jsx>
