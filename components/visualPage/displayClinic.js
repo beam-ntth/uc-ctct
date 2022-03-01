@@ -114,7 +114,7 @@ export default function DisplayClinic(props) {
                 <p className={styles.dataCol3}>{x.region}</p>
                 {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
               </div>
-              {/* <div className={`clinicTag${x['status']}`}></div> */}
+              <div className={`clinicTag${x['status']}`}></div> 
             </div>
           </Link>
         )
