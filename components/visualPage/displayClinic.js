@@ -12,12 +12,21 @@ import { parse } from 'json2csv';
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
   const [showRegionDropdown, setShowRegionDropdown] = useState(false);
-  const [showSiteDropdown, setShowSiteDropdown] = useState(false);
-  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+  // const [showSiteDropdown, setShowSiteDropdown] = useState(false);
+  const [showSetLocationDropdown, setShowSetLocationDropdown] = useState(false);
+  const [showSetPopDropdown, setShowSetPopDropdown] = useState(false);
+  const [showPopDropdown, setShowPopDropdown] = useState(false);
+  const [showAcuityDropdown, setShowAcuityDropdown] = useState(false);
+
+  // const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
   const regionChoices = props.region_choices;
-  const allSiteNames = props.sites.map(x => x.name);
-  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
+  // const allSiteNames = props.sites.map(x => x.name);
+  const setLocationChoices = props.data.map(x => x.description.settingLocation);
+  const settingPopChoices = props.data.map(x => x.description.settingPopulation);
+  const populationChoices = props.data.map(x => x.description.population);
+  const patientAcuityChoices = props.data.map(x => x.description.patientAcuity);
+  // const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
     setFilteredClinicData(SearchString(props.data, substr))
@@ -47,20 +56,41 @@ export default function DisplayClinic(props) {
           </div>
           <Dropdown displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
-        <div className={styles.siteForm}>
-          <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
-            <p>Site</p>
-            <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+        <div className={styles.sLocationForm}>
+          <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
+            <p>Setting Location</p>
+            <IoIosArrowDown color='#079CDB' style={showSetLocationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown displayOnly open={showSiteDropdown} setOpen={setShowSiteDropdown} choices={allSiteNames} />
+          <Dropdown displayOnly open={showSetLocationDropdown} setOpen={setShowSetLocationDropdown} choices={setLocationChoices} />
         </div>
-        <div className={styles.statusForm}>
+        <div className={styles.sPopForm}>
+          <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
+            <p>Setting Population</p>
+            <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />
+        </div>
+        <div className={styles.popForm}>
+          <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
+            <p>Population</p>
+            <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />
+        </div>
+        <div className={styles.acuityForm}>
+          <div className={styles.formTitle} onClick={() => setShowAcuityDropdown(!showAcuityDropdown)}>
+            <p>Patient Acuity</p>
+            <IoIosArrowDown color='#079CDB' style={showAcuityDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showAcuityDropdown} setOpen={setShowAcuityDropdown} choices={patientAcuityChoices} />
+        </div>
+        {/* <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
-        </div>
+        </div> */}
         <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
           <p>Download CSV</p>
@@ -73,7 +103,7 @@ export default function DisplayClinic(props) {
         <p className={styles.titleCol4}>Status</p>
       </div>
       {filteredClinicData.map((x, ind) => {
-        const statusText = StatusParser("clinics", parseInt(x.status))
+        // const statusText = StatusParser("clinics", parseInt(x.status))
         
         return (
           <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
@@ -82,9 +112,9 @@ export default function DisplayClinic(props) {
                 <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
                 <p className={styles.dataCol2}>{x.affiliation}</p>
                 <p className={styles.dataCol3}>{x.region}</p>
-                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+                {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
               </div>
-              <div className={`clinicTag${x['status']}`}></div>
+              <div className={`clinicTag${x['status']}`}></div> 
             </div>
           </Link>
         )
