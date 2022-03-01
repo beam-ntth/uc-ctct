@@ -72,7 +72,7 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-          <p style={{fontSize: '0.71rem'}}>Patient</p>
+          <p style={{fontSize: '0.71rem'}}>Population</p>
             <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />

@@ -103,7 +103,8 @@ export default function DisplayPreceptor(props) {
       <div className={styles.row}>
         <p className={styles.titleCol1}>Preceptor Name</p>
         <p className={styles.titleCol2} style={{ paddingLeft: '2rem' }}>Position</p>
-        <p className={styles.titleCol3} style={{ paddingRight: '1rem' }}>Credential</p>
+        <p className={styles.titleCol3} style={{ paddingRight: '1rem' }}>Population</p>
+        <p className={styles.titleCol3} style={{ paddingRight: '1rem' }}>Experience</p>
         <p className={styles.titleCol4}>Status</p>
       </div>
       {filteredPrecepData.map((x, ind) => {
@@ -117,7 +118,7 @@ export default function DisplayPreceptor(props) {
                 <p className={styles.dataCol3}>{x.credential}</p>
                 <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
               </div>
-              <div className={`tag${x['status']}`}></div>
+              <div className={`preceptorTag${x['status']}`}></div>
             </div>
           </Link>
         )
