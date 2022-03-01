@@ -26,7 +26,7 @@ export default function DisplayClinic(props) {
   const settingPopChoices = [... new Set(props.data.map(x => x.description.settingPopulation))];
   const populationChoices = [... new Set(props.data.map(x => x.description.population))];
   const patientAcuityChoices = [... new Set(props.data.map(x => x.description.patientAcuity))];
-  // const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
     setFilteredClinicData(SearchString(props.data, substr))
@@ -98,9 +98,11 @@ export default function DisplayClinic(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol2}>Affiliation</p>
-        <p className={styles.titleCol3}>Region</p>
-        <p className={styles.titleCol4}>Status</p>
+        <p className={styles.titleCol5}>Region</p>
+        <p className={styles.titleCol2}>Setting Location</p>
+        <p className={styles.titleCol3}>Setting Population</p>
+        <p className={styles.titleCol4}>Population</p>
+        <p className={styles.titleCol6}>Patient Acuity</p>
       </div>
       {filteredClinicData.map((x, ind) => {
         // const statusText = StatusParser("clinics", parseInt(x.status))
