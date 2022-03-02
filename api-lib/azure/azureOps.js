@@ -114,7 +114,8 @@ export const getClinicsFromSite = async (id) => {
  */
 export const getSite = async (id) => {
   try {
-    const { resources: data } = await Sites.item(id, id).read();
+    const { resource: data } = await Sites.item(id, id).read();
+    console.log("Fetching site", data);
     return data;
   } catch (error) {
     console.log("Error is: ", error.code);
@@ -237,6 +238,23 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
   // Replace and update with newly added preceptor id.
   await Clinics.item(id, id).patch(replaceOperation);
   return
+}
+
+/**
+ * Updates a site's note with newly inputted data. 
+ * @param {String} id UUID of site where note is attached.
+ * @param {JSON} note_data New JSON data of the note to patch to the DB.
+ */
+export async function updateSiteNote(id, note_data) {
+  const replaceOperation =
+        [
+            {
+                op: "replace",
+                path: "/notes",
+                value: note_data
+            }
+        ];
+        await Sites.item(id, id).patch(replaceOperation);
 }
 
 /** DELETION OPERATIONS */

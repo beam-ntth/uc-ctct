@@ -2,33 +2,32 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
+import { getSite, updateSiteNote } from "../../../api-lib/azure/azureOps";
 import StatusParser from "../status";
 
 export default function EditSiteNote(props) {
     const [hover, setHover] = useState(false)
     const [id, index, data] = props.open
     const [siteNote, setSiteNote] = useState("")
-    // Filled in the form with pre-existing data
+    // Filled in the form with pre-existing data.
+
+    // Needed to correctly update a note after it has been updated. 
+    // Updates when state has been updated, i.e props.open. 
     useEffect(() => {
+        console.log("Prop open", props.open);
         setSiteNote(data)
     }, [])
 
     async function editElement() {
-        const database = client.database("uc-ctct");
-        const site_container = database.container("Sites");
-        const { resource: prev_data } = await site_container.item(id, id).read();
-        let new_data = prev_data.notes
-        new_data[index] = siteNote
-        const replaceOperation =
-        [
-            {
-                op: "replace",
-                path: "/notes",
-                value: new_data
-            }
-        ];
-        await site_container.item(id, id).patch(replaceOperation);
-        props.reload()
+      // Get the site object where note is stored. 
+      const site = await getSite(id);
+      // Access the notes.
+      const new_data = site.notes;
+      // Get correct note from array of notes. 
+      new_data[index] = siteNote
+      // Patch operation to the DB. 
+      await updateSiteNote(id, new_data);
+      props.reload()
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -80,8 +79,8 @@ export default function EditSiteNote(props) {
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-                        <div className="saveBtn" onClick={() => {
-                        editElement()
+                        <div className="saveBtn" onClick={async () => {
+                        await editElement()
                         props.setOpen(false)
                         return
                         }}>Save</div>
