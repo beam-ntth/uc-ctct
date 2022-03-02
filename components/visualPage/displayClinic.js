@@ -31,6 +31,45 @@ export default function DisplayClinic(props) {
   function searchClinicName(substr) {
     setFilteredClinicData(SearchString(props.data, substr))
   }
+  
+  function searchSiteData(substr) {
+    let finalSearch = SearchString(props.data, substr)
+    // If all the elements are "", means we're not filtering anything
+    const allEqual = arr => arr.every( v => v === "" )
+    // Check region
+    if (!allEqual(regionFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == d.region_id)[0].name)
+        console.log(regionName)
+        return regionFilter.includes(regionName)
+      })
+    }
+    // Check setting locatiom
+    if (!allEqual(slFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return slFilter.includes(d.settingLocation)
+      })
+    }
+     // Check setting population
+     if (!allEqual(spFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return spFilter.includes(d.settingPopulation)
+      })
+    }
+      // Check  population
+      if (!allEqual(populationFilter)) {
+        finalSearch = finalSearch.filter(d => {
+          return populationFilter.includes(d.population)
+        })
+      }
+        // Check patient acuity
+     if (!allEqual(acuityFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return acuityFilter.includes(d.patientAcuity)
+      })
+    }
+    setFilteredData(finalSearch)
+  }
 
   function download_csv_file() {
     const csv = parse(props.data)
@@ -104,9 +143,11 @@ export default function DisplayClinic(props) {
         <p className={styles.titleCol4}>Population</p>
         <p className={styles.titleCol6}>Patient Acuity</p>
       </div>
-      {filteredClinicData.map((x, ind) => {
-        // const statusText = StatusParser("clinics", parseInt(x.status))
-        
+      
+      {
+      filteredClinicData.map((x, ind) => {
+      //const population = Parser("clinics", parseInt(x.population))
+      const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
         return (
           <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
