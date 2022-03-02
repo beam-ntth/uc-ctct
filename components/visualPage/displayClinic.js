@@ -27,10 +27,49 @@ export default function DisplayClinic(props) {
   const settingPopChoices = [... new Set(props.data.map(x => x.description.settingPopulation))];
   const populationChoices = [... new Set(props.data.map(x => x.description.population))];
   const patientAcuityChoices = [... new Set(props.data.map(x => x.description.patientAcuity))];
-  // const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
+  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
     setFilteredClinicData(SearchString(props.data, substr))
+  }
+
+  function searchSiteData(substr) {
+    let finalSearch = SearchString(props.data, substr)
+    // If all the elements are "", means we're not filtering anything
+    const allEqual = arr => arr.every(v => v === "")
+    // Check region
+    if (!allEqual(regionFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == d.region_id)[0].name)
+        console.log(regionName)
+        return regionFilter.includes(regionName)
+      })
+    }
+    // Check setting locatiom
+    if (!allEqual(slFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return slFilter.includes(d.settingLocation)
+      })
+    }
+    // Check setting population
+    if (!allEqual(spFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return spFilter.includes(d.settingPopulation)
+      })
+    }
+    // Check  population
+    if (!allEqual(populationFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return populationFilter.includes(d.population)
+      })
+    }
+    // Check patient acuity
+    if (!allEqual(acuityFilter)) {
+      finalSearch = finalSearch.filter(d => {
+        return acuityFilter.includes(d.patientAcuity)
+      })
+    }
+    setFilteredData(finalSearch)
   }
 
   function download_csv_file() {
@@ -66,7 +105,7 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-            <p style={{ fontSize: '0.71rem' }}>Patient</p>
+            <p style={{ fontSize: '0.71rem' }}>Population</p>
             <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />
@@ -92,28 +131,39 @@ export default function DisplayClinic(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol2}>Affiliation</p>
-        <p className={styles.titleCol3}>Region</p>
-        <p className={styles.titleCol4}>Status</p>
+        <p className={styles.titleCol5}>Region</p>
+        <p className={styles.titleCol2}>Setting Location</p>
+        <p className={styles.titleCol3}>Setting Population</p>
+        <p className={styles.titleCol4}>Population</p>
+        <p className={styles.titleCol6}>Patient Acuity</p>
       </div>
-      {filteredClinicData.map((x, ind) => {
-        // const statusText = StatusParser("clinics", parseInt(x.status))
+<<<<<<< HEAD
+  {
+    filteredClinicData.map((x, ind) => {
+      // const statusText = StatusParser("clinics", parseInt(x.status))
 
-        return (
-          <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
-            <div key={`clinics_${ind}`} className='displayRow'>
-              <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                <p className={styles.dataCol2}>{x.affiliation}</p>
-                <p className={styles.dataCol3}>{x.region}</p>
-                {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
-              </div>
-              <div className={`clinicTag${x['status']}`}></div>
+=======
+
+      {
+      filteredClinicData.map((x, ind) => {
+      //const population = Parser("clinics", parseInt(x.population))
+      const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
+>>>>>>> 599a0f8e6f8fc86c106e10443e76e369feee107d
+      return (
+        <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
+          <div key={`clinics_${ind}`} className='displayRow'>
+            <div className="rowContentClinics">
+              <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+              <p className={styles.dataCol2}>{x.affiliation}</p>
+              <p className={styles.dataCol3}>{x.region}</p>
+              {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
             </div>
-          </Link>
-        )
-      })
-      }
-    </React.Fragment>
+            <div className={`clinicTag${x['status']}`}></div>
+          </div>
+        </Link>
+      )
+    })
+  }
+    </React.Fragment >
   )
 }
