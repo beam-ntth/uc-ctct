@@ -7,6 +7,7 @@ import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import Dropdown from './dropDown/dropdown';
 import { parse } from 'json2csv';
+import { createDownloadLink } from './csvParser';
 
 export default function DisplaySite(props) {
   /**
@@ -47,7 +48,7 @@ export default function DisplaySite(props) {
   function searchSiteData(substr) {
     let finalSearch = SearchString(props.data, substr)
     // If all the elements are "", means we're not filtering anything
-    const allEqual = arr => arr.every( v => v === "" )
+    const allEqual = arr => arr.every(v => v === "")
     // Check region
     if (!allEqual(regionFilter)) {
       finalSearch = finalSearch.filter(d => {
@@ -84,17 +85,8 @@ export default function DisplaySite(props) {
    * Converts JSON data to CSV data, then create a file for the user to download
    */
   function download_csv_file() {
-    // Turn JSON to CSV
-    const csv = parse(props.data)
-    // Create mock element to download
-    var hiddenElement = document.createElement('a');  
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
-    hiddenElement.target = '_blank';  
-    const currentdate = new Date();
-    hiddenElement.download = `site-details-${currentdate.getFullYear()}.csv`;
-    // Download the file
-    hiddenElement.click();  
-  }  
+    createDownloadLink(props.data, "site-overview");
+  }
 
   return (
     <React.Fragment>
@@ -107,27 +99,27 @@ export default function DisplaySite(props) {
             <p>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown disableSearch open={showRegionDropdown} setOpen={setShowRegionDropdown} 
-          choices={regionChoices} ddFilter={regionFilter} setddFilter={setRegionFilter} />
+          <Dropdown disableSearch open={showRegionDropdown} setOpen={setShowRegionDropdown}
+            choices={regionChoices} ddFilter={regionFilter} setddFilter={setRegionFilter} />
         </div>
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
             <p>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown disableSearch open={showSiteDropdown} setOpen={setShowSiteDropdown} 
-          choices={affiChoices} ddFilter={affiFilter} setddFilter={setAffiFilter} />
+          <Dropdown disableSearch open={showSiteDropdown} setOpen={setShowSiteDropdown}
+            choices={affiChoices} ddFilter={affiFilter} setddFilter={setAffiFilter} />
         </div>
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
             <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
-          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown} 
-          choices={statusChoices} ddFilter={statusFilter} setddFilter={setStatusFilter} />
+          <Dropdown open={showStatusDropdown} setOpen={setShowStatusDropdown}
+            choices={statusChoices} ddFilter={statusFilter} setddFilter={setStatusFilter} />
         </div>
         <div className={styles.download} onClick={download_csv_file}>
-          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <AiOutlineDownload size={25} style={{ marginRight: '0.2rem' }} />
           <p>Download CSV</p>
         </div>
       </div>

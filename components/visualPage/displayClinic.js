@@ -7,7 +7,8 @@ import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import { getAllSites } from '../../api-lib/azure/azureOps';
 import { AiOutlineDownload } from 'react-icons/ai';
-import { parse } from 'json2csv';
+import { createDownloadLink } from './csvParser';
+
 
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
@@ -33,15 +34,8 @@ export default function DisplayClinic(props) {
   }
 
   function download_csv_file() {
-    const csv = parse(props.data)
- 
-    var hiddenElement = document.createElement('a');  
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
-    hiddenElement.target = '_blank';  
-    const currentdate = new Date();
-    hiddenElement.download = `clinic-details-${currentdate.getFullYear()}.csv`;  
-    hiddenElement.click();  
-  }  
+    createDownloadLink(props.data, "clinic-overview");
+  }
 
   return (
     <React.Fragment>
@@ -51,35 +45,35 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
-          <p style={{fontSize: '0.7rem'}}>Region</p>
+            <p style={{ fontSize: '0.7rem' }}>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
-            <p style={{fontSize: '0.71rem', marginRight: 0}}>Setting Location</p>
+            <p style={{ fontSize: '0.71rem', marginRight: 0 }}>Setting Location</p>
             <IoIosArrowDown color='#079CDB' style={showSetLocationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetLocationDropdown} setOpen={setShowSetLocationDropdown} choices={setLocationChoices} />
         </div>
         <div className={styles.sPopForm}>
           <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
-            <p style={{fontSize: '0.7rem', marginRight: 0}}>Setting Population</p>
+            <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Setting Population</p>
             <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />
         </div>
         <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-          <p style={{fontSize: '0.71rem'}}>Patient</p>
+            <p style={{ fontSize: '0.71rem' }}>Patient</p>
             <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />
         </div>
         <div className={styles.acuityForm}>
           <div className={styles.formTitle} onClick={() => setShowAcuityDropdown(!showAcuityDropdown)}>
-          <p style={{fontSize: '0.71rem'}}>Patient Acuity</p>
+            <p style={{ fontSize: '0.71rem' }}>Patient Acuity</p>
             <IoIosArrowDown color='#079CDB' style={showAcuityDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showAcuityDropdown} setOpen={setShowAcuityDropdown} choices={patientAcuityChoices} />
@@ -92,7 +86,7 @@ export default function DisplayClinic(props) {
           <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div> */}
         <div className={styles.download} onClick={download_csv_file}>
-          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <AiOutlineDownload size={25} style={{ marginRight: '0.2rem' }} />
           <p>Download CSV</p>
         </div>
       </div>
@@ -104,7 +98,7 @@ export default function DisplayClinic(props) {
       </div>
       {filteredClinicData.map((x, ind) => {
         // const statusText = StatusParser("clinics", parseInt(x.status))
-        
+
         return (
           <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
@@ -114,7 +108,7 @@ export default function DisplayClinic(props) {
                 <p className={styles.dataCol3}>{x.region}</p>
                 {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
               </div>
-              <div className={`clinicTag${x['status']}`}></div> 
+              <div className={`clinicTag${x['status']}`}></div>
             </div>
           </Link>
         )

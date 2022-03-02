@@ -7,12 +7,13 @@ import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { parse } from 'json2csv';
+import { createDownloadLink } from './csvParser';
 
 /* TODO: preceptor no search in the dropdowns */
 
 export default function DisplayPreceptor(props) {
   const [filteredPrecepData, setFilteredPrecepData] = useState(props.data);
-    // const [showCredDropdown, setShowCredDropdown] = useState(false);
+  // const [showCredDropdown, setShowCredDropdown] = useState(false);
   const [showPositionDropdown, setShowPositionDropdown] = useState(false);
   const [showPopulationDropdown, setShowPopulationDropdown] = useState(false);
   const [showExperienceDropdown, setShowExperienceDropdown] = useState(false);
@@ -29,7 +30,7 @@ export default function DisplayPreceptor(props) {
   }
 
   function download_csv_file() {
-    const downloadable = props.data.map(x => {
+    const parsedPreceptorData = props.data.map(x => {
       return {
         firstname: x.firstname,
         lastname: x.lastname,
@@ -38,21 +39,14 @@ export default function DisplayPreceptor(props) {
         email: x.email,
         npi: x.npi,
         phoneNumber: x.phoneNumber,
-        status: StatusParser('preceptors', parseInt(x.status)) ,
+        status: StatusParser('preceptors', parseInt(x.status)),
         notes: x.notes,
         clinics: x.clinics
       }
     })
 
-    const csv = parse(downloadable)
- 
-    var hiddenElement = document.createElement('a');  
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);  
-    hiddenElement.target = '_blank';  
-    const currentdate = new Date();
-    hiddenElement.download = `preceptor-details-${currentdate.getFullYear()}.csv`;  
-    hiddenElement.click();  
-  }  
+    createDownloadLink(parsedPreceptorData, "preceptors-overview");
+  }
 
   return (
     <React.Fragment>
@@ -74,7 +68,7 @@ export default function DisplayPreceptor(props) {
           </div>
           <Dropdown displayOnly open={showCredDropdown} setOpen={setShowCredDropdown} choices={credentialChoices} />
         </div> */}
-          <div className={styles.popForm}>
+        <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopulationDropdown(!showPopulationDropdown)}>
             <p>Population</p>
             <IoIosArrowDown color='#079CDB' style={showPopulationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
@@ -96,7 +90,7 @@ export default function DisplayPreceptor(props) {
           <Dropdown disableSearch displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
         </div>
         <div className={styles.download} onClick={download_csv_file}>
-          <AiOutlineDownload size={25} style={{marginRight: '0.2rem'}} />
+          <AiOutlineDownload size={25} style={{ marginRight: '0.2rem' }} />
           <p>Download CSV</p>
         </div>
       </div>
