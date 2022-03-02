@@ -147,8 +147,12 @@ export default function DisplayClinic(props) {
           <div key={`clinics_${ind}`} className='displayRow'>
             <div className="rowContentClinics">
               <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-              <p className={styles.dataCol2}>{x.affiliation}</p>
-              <p className={styles.dataCol3}>{x.region}</p>
+              {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
+              <p className={styles.dataCol2}>{x.region}</p>
+              <p className={styles.dataCol3} >{x.description.settingLocation}</p>
+              <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
+              <p className={styles.dataCol3}>{x.description.population}</p>
+              <p className={styles.dataCol3}>{x.description.patientAcuity}</p>
               {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
             </div>
             <div className={`clinicTag${x['status']}`}></div>
