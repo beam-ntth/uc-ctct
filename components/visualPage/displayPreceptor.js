@@ -107,10 +107,12 @@ export default function DisplayPreceptor(props) {
           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ paddingLeft: '2rem' }}>{x.firstname} {x.lastname}</p>
-                <p className={styles.dataCol2} style={{ paddingLeft: '2rem' }}>{x.position}</p>
-                <p className={styles.dataCol3}>{x.credential}</p>
-                <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p>
+                <p className={styles.dataCol1} style={{ marginLeft: '3rem' }}>{x.firstname} {x.lastname}</p>
+                <p className={styles.dataCol2} style={{ marginRight: '5rem' }}>{x.position}</p>
+                {/* <p className={styles.dataCol3}>{x.credential}</p> */}
+                <p className={styles.dataCol3} style={{ marginRight: '8rem' }}>{x.description.population}</p>
+                <p className={styles.dataCol4} style={{ marginRight: '5rem' }}>{x.description.experience}</p>
+                <p className={styles.dataCol5} style={{ marginRight: '2rem' }}>{statusText}</p>
               </div>
               <div className={`preceptorTag${x['status']}`}></div>
             </div>

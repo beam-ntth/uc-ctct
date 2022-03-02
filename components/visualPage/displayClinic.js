@@ -137,18 +137,11 @@ export default function DisplayClinic(props) {
         <p className={styles.titleCol4}>Population</p>
         <p className={styles.titleCol6}>Patient Acuity</p>
       </div>
-<<<<<<< HEAD
-  {
-    filteredClinicData.map((x, ind) => {
-      // const statusText = StatusParser("clinics", parseInt(x.status))
-
-=======
 
       {
       filteredClinicData.map((x, ind) => {
       //const population = Parser("clinics", parseInt(x.population))
       const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
->>>>>>> 599a0f8e6f8fc86c106e10443e76e369feee107d
       return (
         <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
           <div key={`clinics_${ind}`} className='displayRow'>
