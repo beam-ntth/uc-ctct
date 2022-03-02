@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from '../../styles/DisplayClinic.module.css'
+import styles from './DisplayClinic.module.css'
 import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
@@ -95,10 +95,10 @@ export default function DisplayPreceptor(props) {
         </div>
       </div>
       <div className={styles.row}>
-        <p className={styles.titleCol1}>Preceptor Name</p>
-        <p className={styles.titleCol2} style={{ paddingLeft: '2rem' }}>Position</p>
-        <p className={styles.titleCol3} style={{ paddingRight: '1rem' }}>Population</p>
-        <p className={styles.titleCol3} style={{ paddingRight: '1rem' }}>Experience</p>
+        <p className={styles.titleCol1} style={{ paddingRight: '4rem' }}>Preceptor Name</p>
+        <p className={styles.titleCol2} style={{ marginRight: '9rem' }}>Position</p>
+        <p className={styles.titleCol3} style={{ marginRight: '9rem' }}>Population</p>
+        <p className={styles.titleCol3} style={{ marginRight: '9rem' }}>Experience</p>
         <p className={styles.titleCol4}>Status</p>
       </div>
       {filteredPrecepData.map((x, ind) => {
@@ -108,11 +108,11 @@ export default function DisplayPreceptor(props) {
             <div key={`clinics_${ind}`} className='displayRow'>
               <div className="rowContentClinics">
                 <p className={styles.dataCol1} style={{ marginLeft: '3rem' }}>{x.firstname} {x.lastname}</p>
-                <p className={styles.dataCol2} style={{ marginRight: '5rem' }}>{x.position}</p>
+                <p className={styles.dataCol2} style={{ marginRight: '7rem' }}>{x.position}</p>
                 {/* <p className={styles.dataCol3}>{x.credential}</p> */}
-                <p className={styles.dataCol3} style={{ marginRight: '8rem' }}>{x.description.population}</p>
-                <p className={styles.dataCol4} style={{ marginRight: '5rem' }}>{x.description.experience}</p>
-                <p className={styles.dataCol5} style={{ marginRight: '2rem' }}>{statusText}</p>
+                <p className={styles.dataCol3} style={{ marginRight: '7rem' }}>{x.description.population}</p>
+                <p className={styles.dataCol4} style={{ paddingRight: '3rem' }}>{x.description.experience}</p>
+                <p className={styles.dataCol5} style={{ marginRight: '1rem' }}>{statusText}</p>
               </div>
               <div className={`preceptorTag${x['status']}`}></div>
             </div>

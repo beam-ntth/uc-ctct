@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import { AiOutlineDownload } from 'react-icons/ai'
-import styles from '../../styles/DisplayClinic.module.css'
+import styles from './DisplayClinic.module.css'
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
 import Dropdown from './dropDown/dropdown';
@@ -125,9 +125,9 @@ export default function DisplaySite(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Site Name</p>
-        <p className={styles.titleCol2}>Region</p>
-        <p className={styles.titleCol3}>Affiliation</p>
-        <p className={styles.titleCol4}>Status</p>
+        <p className={styles.titleCol2} style={{ marginRight: '9rem' }}>Region</p>
+        <p className={styles.titleCol3} style={{ paddingRight: '15rem' }}>Affiliation</p>
+        <p className={styles.titleCol4} style={{ paddingRight: '0.5rem' }}>Status</p>
       </div>
       {
         filteredData.map((x, ind) => {
@@ -137,10 +137,10 @@ export default function DisplaySite(props) {
             <Link href={`/sites/database/clinics?location=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayRow'>
                 <div className="rowContentClinics">
-                  <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
+                  <p className={styles.dataCol1}style={{marginRight: '-2rem' }}>{x.name}</p>
+                  <p className={styles.dataCol2}style={{ marginRight: '2rem' }}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
                   <p className={styles.dataCol3}>{x.affiliation}</p>
-                  <p className={styles.dataCol4}>{statusText}</p>
+                  <p className={styles.dataCol4}style={{ marginRight: '2rem' }}>{statusText}</p>
                 </div>
                 <div className={`siteTag${x['status']}`}></div>
               </div>

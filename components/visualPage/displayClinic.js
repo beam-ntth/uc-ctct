@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from '../../styles/DisplayClinic.module.css'
+import styles from './DisplayClinic.module.css'
 import Dropdown from './dropDown/dropdown';
 import SearchString from '../shared/search'
 import StatusParser from '../shared/status';
@@ -131,10 +131,10 @@ export default function DisplayClinic(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol5}>Region</p>
-        <p className={styles.titleCol2}>Setting Location</p>
-        <p className={styles.titleCol3}>Setting Population</p>
-        <p className={styles.titleCol4}>Population</p>
+        <p className={styles.titleCol2}>Region</p>
+        <p className={styles.titleCol3}>Setting Location</p>
+        <p className={styles.titleCol4}>Setting Population</p>
+        <p className={styles.titleCol5}>Population</p>
         <p className={styles.titleCol6}>Patient Acuity</p>
       </div>
 
@@ -151,8 +151,8 @@ export default function DisplayClinic(props) {
               <p className={styles.dataCol2}>{x.region}</p>
               <p className={styles.dataCol3} >{x.description.settingLocation}</p>
               <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
-              <p className={styles.dataCol3}>{x.description.population}</p>
-              <p className={styles.dataCol3}>{x.description.patientAcuity}</p>
+              <p className={styles.dataCol5}>{x.description.population}</p>
+              <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
               {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
             </div>
             <div className={`clinicTag${x['status']}`}></div>

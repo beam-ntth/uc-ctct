@@ -20,7 +20,7 @@
 
 .data {
   background-color: #f5f6fa;
-  margin: 3rem 2rem 0 3rem;
+  margin: 3rem 3rem 0 1rem;
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
@@ -28,7 +28,7 @@
   align-items: center;
 
   /* height: 550px; */
-  width: 94%;
+  width: 98%;
   margin-bottom: 3rem;
   padding-bottom: 4rem;
   /* padding: 1rem; */
