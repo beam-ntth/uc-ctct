@@ -148,7 +148,7 @@ export default function DisplayClinic(props) {
             <div className="rowContentClinics">
               <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
               {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
-              <p className={styles.dataCol2}>{x.region}</p>
+              <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
               <p className={styles.dataCol3} >{x.description.settingLocation}</p>
               <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
               <p className={styles.dataCol5}>{x.description.population}</p>

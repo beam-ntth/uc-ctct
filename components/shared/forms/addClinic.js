@@ -13,10 +13,11 @@ export default function AddNewClinic(props) {
   const datetime = `${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, ${currentdate.getFullYear()}`
 
   const [hover, setHover] = useState(false)
+
   const [clinic, setClinic] = useState({
     id: uuidv4().toString(),
     site_id: props.siteId,
-    name: '',
+    region_id: props.regionId,
     last_updated: datetime,
     total_clinics: 0,
     status: 0,
