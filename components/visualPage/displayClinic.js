@@ -139,28 +139,55 @@ export default function DisplayClinic(props) {
       </div>
 
       {
-      filteredClinicData.map((x, ind) => {
-      //const population = Parser("clinics", parseInt(x.population))
-      const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
-      return (
-        <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
-          <div key={`clinics_${ind}`} className='displayRow'>
-            <div className="rowContentClinics">
-              <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-              {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
-              <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-              <p className={styles.dataCol3} >{x.description.settingLocation}</p>
-              <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
-              <p className={styles.dataCol5}>{x.description.population}</p>
-              <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
-              {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
+        filteredClinicData.map((x, ind) => {
+        //const population = Parser("clinics", parseInt(x.population))
+        const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
+        return (
+          <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
+            <div key={`clinics_${ind}`} className='displayVizRow'>
+              <div className="rowContentClinics">
+                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
+                <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
+                <p className={styles.dataCol3} >{x.description.settingLocation}</p>
+                <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
+                <p className={styles.dataCol5}>{x.description.population}</p>
+                <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
+                {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
+              </div>
+              <div className={`clinicTag${x['status']}`}></div>
             </div>
-            <div className={`clinicTag${x['status']}`}></div>
-          </div>
-        </Link>
-      )
-    })
-  }
+          </Link>
+        )})
+      }
+      <styles jsx>
+        {
+          `
+            .displayVizRow {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              background-color: #fff;
+              height: 3.6rem;
+              width: 95%;
+              margin: 0.4rem 0;
+              border-radius: 1rem;
+              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+              font-family: 'Lato', sans-serif;
+              font-weight: 600;
+              font-size: 1rem;
+              cursor: pointer;
+            }
+            
+            .displayVizRow:hover {
+              color: #079CDB;
+              width: 96%;
+              transition: linear 0.3s;
+            }
+          `
+        }
+      </styles>
     </React.Fragment >
   )
 }

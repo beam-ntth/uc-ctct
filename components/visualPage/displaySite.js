@@ -135,7 +135,7 @@ export default function DisplaySite(props) {
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           return (
             <Link href={`/sites/database/clinics?location=${x.id}`}>
-              <div key={`clinics_${ind}`} className='displayRow'>
+              <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
                   <p className={styles.dataCol1}style={{marginRight: '-2rem' }}>{x.name}</p>
                   <p className={styles.dataCol2}style={{ marginRight: '2rem' }}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
@@ -148,6 +148,34 @@ export default function DisplaySite(props) {
           )
         })
       }
+      <styles jsx>
+        {
+          `
+            .displayVizRow {
+              display: flex;
+              flex-direction: row;
+              justify-content: flex-start;
+              align-items: center;
+              background-color: #fff;
+              height: 3.6rem;
+              width: 95%;
+              margin: 0.4rem 0;
+              border-radius: 1rem;
+              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+              font-family: 'Lato', sans-serif;
+              font-weight: 600;
+              font-size: 1rem;
+              cursor: pointer;
+            }
+            
+            .displayVizRow:hover {
+              color: #079CDB;
+              width: 96%;
+              transition: linear 0.3s;
+            }
+          `
+        }
+      </styles>
     </React.Fragment>
   )
 }

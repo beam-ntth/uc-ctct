@@ -105,7 +105,7 @@ export default function DisplayPreceptor(props) {
         const statusText = StatusParser("preceptors", parseInt(x.status))
         return (
           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
-            <div key={`clinics_${ind}`} className='displayRow'>
+            <div key={`clinics_${ind}`} className='displayVizRow'>
               <div className="rowContentClinics">
                 <p className={styles.dataCol1} style={{ marginLeft: '3rem' }}>{x.firstname} {x.lastname}</p>
                 <p className={styles.dataCol2} style={{ marginRight: '7rem' }}>{x.position}</p>

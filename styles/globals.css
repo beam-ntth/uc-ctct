@@ -15,14 +15,13 @@ a {
   height: 4px !important;
 }
 
-.displayRow {
+.displayRow, .displayVizRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
   background-color: #fff;
   height: 3.6rem;
-  width: 95%;
   margin: 0.4rem 0;
   border-radius: 1rem;
   box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
@@ -32,10 +31,26 @@ a {
   cursor: pointer;
 }
 
-.displayRow:hover {
+.displayRow {
+  width: 85%;
+}
+
+.displayVizRow {
+  width: 95%;
+}
+
+.displayRow:hover, .displayVizRow:hover {
   color: #079CDB;
-  width: 96%;
   transition: linear 0.3s;
+}
+
+.displayRow:hover {
+  width: 86%;
+}
+
+
+.displayVizRow:hover {
+  width: 96%;
 }
 
 .displayRegionRow {
