@@ -29,6 +29,7 @@ a {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
+  z-index: 100;
 }
 
 .displayRow {
@@ -47,7 +48,6 @@ a {
 .displayRow:hover {
   width: 86%;
 }
-
 
 .displayVizRow:hover {
   width: 96%;

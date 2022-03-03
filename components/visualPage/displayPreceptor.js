@@ -101,7 +101,8 @@ export default function DisplayPreceptor(props) {
         <p className={styles.titleCol3} style={{ marginRight: '9rem' }}>Experience</p>
         <p className={styles.titleCol4}>Status</p>
       </div>
-      {filteredPrecepData.map((x, ind) => {
+      {
+        filteredPrecepData.map((x, ind) => {
         const statusText = StatusParser("preceptors", parseInt(x.status))
         return (
           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
@@ -117,9 +118,7 @@ export default function DisplayPreceptor(props) {
               <div className={`preceptorTag${x['status']}`}></div>
             </div>
           </Link>
-        )
-      }
-      )
+        )})
       }
     </React.Fragment>
   )

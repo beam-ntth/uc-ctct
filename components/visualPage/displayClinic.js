@@ -160,34 +160,6 @@ export default function DisplayClinic(props) {
           </Link>
         )})
       }
-      <styles jsx>
-        {
-          `
-            .displayVizRow {
-              display: flex;
-              flex-direction: row;
-              justify-content: flex-start;
-              align-items: center;
-              background-color: #fff;
-              height: 3.6rem;
-              width: 95%;
-              margin: 0.4rem 0;
-              border-radius: 1rem;
-              box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-              font-family: 'Lato', sans-serif;
-              font-weight: 600;
-              font-size: 1rem;
-              cursor: pointer;
-            }
-            
-            .displayVizRow:hover {
-              color: #079CDB;
-              width: 96%;
-              transition: linear 0.3s;
-            }
-          `
-        }
-      </styles>
     </React.Fragment >
   )
 }
