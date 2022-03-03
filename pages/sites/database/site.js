@@ -130,7 +130,7 @@ export default function SiteDetails({ data, region_data }) {
                             <p className='row3Sites' style={{ paddingRight: '9rem' }}>{x['total_clinics']}</p>
                             <p className="row4Sites">{statusText}</p>
                           </div>
-                          <div className={`tag${x['status']}`}></div>
+                          <div className={`siteTag${x['status']}`}></div>
                         </div>
                       </Link>
                       <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}

@@ -239,7 +239,7 @@ export default function ClinicDetails({ data }) {
                                 <p className="preceptorCol3">{x.phoneNumber}</p>
                                 <p className="preceptorCol4">{x.email}</p>
                                 <p className="preceptorCol5">{status}</p>
-                                <div className={`tag${x['status']}`}></div>
+                                <div className={`clinicTag${x['status']}`}></div>
                               </div>
                             </Link>
                             <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
