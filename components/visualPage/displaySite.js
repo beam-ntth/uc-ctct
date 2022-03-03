@@ -135,7 +135,7 @@ export default function DisplaySite(props) {
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           return (
             <Link href={`/sites/database/clinics?location=${x.id}`}>
-              <div key={`clinics_${ind}`} className='displayVizRow'>
+              <div key={`clinics_${ind}`} className='displayRow'>
                 <div className="rowContentClinics">
                   <p className={styles.dataCol1}style={{marginRight: '-2rem' }}>{x.name}</p>
                   <p className={styles.dataCol2}style={{ marginRight: '2rem' }}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>

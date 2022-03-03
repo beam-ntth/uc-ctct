@@ -154,8 +154,8 @@ export default function Clinics({ data, site_data }) {
               </div>
               <div className={styles.row}>
                 <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
-                <p className="row2Clinics">Last Updated</p>
-                <p className="row3Clinics">Status</p>
+                <p className="row2Clinics" style={{ marginRight: '2rem' }}>Last Updated</p>
+                <p className="row3Clinics" style={{ marginLeft: '2rem' }}>Status</p>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />
               </div >
