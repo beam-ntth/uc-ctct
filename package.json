@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "@azure/cosmos": "^3.15.1",
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@mui/material": "^5.4.3",
     "chart.js": "^3.7.0",
     "cookie-session": "^2.0.0",
     "google-map-react": "^2.1.10",
@@ -23,10 +26,12 @@
     "react-chartjs-2": "^4.0.1",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "eslint": "8.7.0",
-    "eslint-config-next": "^0.2.4"
+    "eslint-config-next": "^0.2.4",
+    "eslint-plugin-react-hooks": "^4.3.0"
   }
 }

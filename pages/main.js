@@ -16,6 +16,7 @@ import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
 import React, { useState, useCallback } from 'react'
+import Marker from '../components/shared/marker/marker';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -46,11 +47,6 @@ export default function Main() {
   }
   const zoom = 10
 
-  const Marker = () => <img height='30px' width="auto" src="/asset/images/clinic-pin.png" />
-  // const Marker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FFF', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
-  const StudentMarker = () => <img height='30px' width="auto" src="/asset/images/student-pin.png" />
-  // const StudentMarker = ({ text }) => <div style={{width: '30px', height: '30px', borderRadius: '30px', backgroundColor: '#FF0000', display: "flex", alignItems: 'center', justifyContent: 'center'}}>{text}</div>;
-
   return (
     <div className={styles.container}>
       <Head>
@@ -70,15 +66,15 @@ export default function Main() {
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
-                      <Marker lat={38.5568118} lng={-121.7699631} />
-                      <Marker lat={38.5368118} lng={-121.7689631} />
-                      <Marker lat={38.5168118} lng={-121.7799631} />
-                      <Marker lat={38.4968118} lng={-121.7609631} />
-                      <Marker lat={38.4768118} lng={-121.7669631} />
-                      <StudentMarker lat={38.540895} lng={-121.753334} />
-                      <StudentMarker lat={38.560895} lng={-121.763334} />
-                      <StudentMarker lat={38.520895} lng={-121.733334} />
-                      <StudentMarker lat={38.500895} lng={-121.713334} />
+                      <Marker lat={38.6568118} lng={-121.8699631} type={'clinic'} data={'Clinic 1'} />
+                      <Marker lat={38.5368118} lng={-121.8689631} type={'clinic'} data={'Clinic 2'} />
+                      <Marker lat={38.5168118} lng={-121.7799631} type={'clinic'} data={'Clinic 3'} />
+                      <Marker lat={38.4968118} lng={-121.7609631} type={'clinic'} data={'Clinic 4'} />
+                      <Marker lat={38.4768118} lng={-121.7669631} type={'clinic'} data={'Clinic 5'} />
+                      <Marker lat={38.740895} lng={-121.753334} type={'student'} data={'Student 1'} />
+                      <Marker lat={38.660895} lng={-121.663334} type={'student'} data={'Student 2'} />
+                      <Marker lat={38.520895} lng={-121.733334} type={'student'} data={'Student 3'} />
+                      <Marker lat={38.500895} lng={-121.713334} type={'student'} data={'Student 4'} />
                   </GoogleMapReact>
                 </div>
               </div>

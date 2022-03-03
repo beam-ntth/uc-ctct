@@ -6,7 +6,7 @@ NProgress.configure({
   minimum: 0.4,
   easing: 'ease',
   speed: 800,
-  showSpinner: false,
+  showSpinner: true,
 });
 
 export default NProgress;

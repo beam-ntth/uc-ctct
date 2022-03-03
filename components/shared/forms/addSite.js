@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
+import { CircularProgress } from "@mui/material";
 
 export default function AddNewSite(props) {
     const [hover, setHover] = useState(false)
@@ -21,7 +22,8 @@ export default function AddNewSite(props) {
           value: previous_num_sites["total_sites"] + 1
         }];
         await region_container.item(props.regionId, props.regionId).patch(replaceOperation)
-        setTimeout(() => props.reload(), 500)
+        props.setOpen(false)
+        props.reload()
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -35,47 +37,61 @@ export default function AddNewSite(props) {
     //     })
     // })
 
+    const [submittingForm, setSubmittingForm] = useState(false)
+
     return (
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
-            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                <p className="editTitle">Add New Region</p>
-                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-            </div>
-            <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="Site Name" onChange={(e) => {
-                    let newSite = {...site}
-                    newSite.name = e.target.value
-                    setSite(newSite)
-                    return
-                }} /> </p>
-                <p><strong>Affiliation:</strong><input placeholder="All Site Affiliations" onChange={(e) => {
-                    let newSite = {...site}
-                    newSite.affiliation = e.target.value
-                    setSite(newSite)
-                    return
-                }} /> </p>
-                <p>
-                    <strong>Status:</strong>
-                    <select value={site.status} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.status = e.target.value
-                        setSite(newSite)
-                        return 
-                    }}>
-                        { StatusParser("sites", -1) }
-                    </select>
-                </p>
-            </div>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => {
-                addSite()
-                props.setOpen(false)
-                return
-            }}>Create Site</div>
-            </div>
+            {
+                submittingForm ?
+                <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
+                    <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+                    <CircularProgress color="primary" size={120} />
+                    </div>
+                    <p style={{textAlign: 'center'}}>Submitting the form. Please wait.</p>
+                </div>
+                :
+                (<React.Fragment>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+                        <p className="editTitle">Add New Region</p>
+                        <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+                    </div>
+                    <div style={{width: '90%'}}>
+                        <p><strong>Name:</strong><input placeholder="Site Name" onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.name = e.target.value
+                            setSite(newSite)
+                            return
+                        }} /> </p>
+                        <p><strong>Affiliation:</strong><input placeholder="All Site Affiliations" onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.affiliation = e.target.value
+                            setSite(newSite)
+                            return
+                        }} /> </p>
+                        <p>
+                            <strong>Status:</strong>
+                            <select value={site.status} onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.status = e.target.value
+                                setSite(newSite)
+                                return 
+                            }}>
+                                { StatusParser("sites", -1) }
+                            </select>
+                        </p>
+                    </div>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
+                        <div className="saveBtn" onClick={() => {
+                        addSite()
+                        setSubmittingForm(true)
+                        return
+                    }}>Create Site</div>
+                    </div>
+                </React.Fragment>)
+            }
         </div>
         <style jsx>
             {

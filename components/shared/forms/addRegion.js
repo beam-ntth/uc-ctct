@@ -1,3 +1,4 @@
+import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
@@ -10,8 +11,9 @@ export default function AddNewRegion(props) {
     async function createNewRegion() {
         const database = client.database("uc-ctct");
         const region_container = database.container("Regions");
-        region_container.items.create(region)
-        setTimeout(() => props.reload(), 500)
+        await region_container.items.create(region)
+        props.setOpen(false)
+        props.reload()
     }
 
     // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -25,31 +27,45 @@ export default function AddNewRegion(props) {
     //     })
     // })
 
+    const [submittingForm, setSubmittingForm] = useState(false)
+
     return (
         <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
-            <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                <p className="editTitle">Add New Region</p>
-                <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
-                onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
-            </div>
-            <div style={{width: '90%'}}>
-                <p><strong>Name:</strong><input placeholder="Region Name" onChange={(e) => {
-                    let newRegion = {...region}
-                    newRegion.name = e.target.value
-                    setRegion(newRegion)
-                    return
-                }} /> </p>
-            </div>
-            <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
-            <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                <div className="saveBtn" onClick={() => {
-                createNewRegion()
-                props.setOpen(false)
-                return
-            }}>Create Region</div>
-            </div>
+            {
+                submittingForm ?
+                <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
+                    <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+                    <CircularProgress color="primary" size={120} />
+                    </div>
+                    <p style={{textAlign: 'center'}}>Submitting the form. Please wait.</p>
+                </div>
+                :
+                (<React.Fragment>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
+                        <p className="editTitle">Add New Region</p>
+                        <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
+                        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+                    </div>
+                    <div style={{width: '90%'}}>
+                        <p><strong>Name:</strong><input placeholder="Region Name" onChange={(e) => {
+                            let newRegion = {...region}
+                            newRegion.name = e.target.value
+                            setRegion(newRegion)
+                            return
+                        }} /> </p>
+                    </div>
+                    <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
+                        <div className="saveBtn" onClick={() => {
+                        createNewRegion()
+                        setSubmittingForm(true)
+                        return
+                    }}>Create Region</div>
+                    </div>
+                </React.Fragment>)
+            }
         </div>
         <style jsx>
             {

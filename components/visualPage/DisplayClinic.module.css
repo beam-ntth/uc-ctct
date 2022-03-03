@@ -1,4 +1,4 @@
-.regionForm, .siteForm, .statusForm, .positionForm, .credsForm {
+.regionForm, .siteForm, .statusForm, .positionForm, .credsForm, .sLocationForm, .sPopForm, .popForm, .acuityForm, .expForm {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -17,9 +17,10 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: 0.3rem;
+    margin-top: 0.5rem;
     cursor: pointer;
     z-index: 20;
+    font-size: small;
 }
   
 .formTitle p {
@@ -32,7 +33,7 @@
     justify-content: flex-start;
     align-items: center;
     height: 10%;
-    width: 90%;
+    width: 95%;
     font-family: "Lato", sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
@@ -43,7 +44,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 85%;
+    width: 95%;
     height: 2rem;
     margin: 1rem 0;
 }
@@ -69,20 +70,35 @@
 }
 
 .titleCol1 {
-    width: 40%;
-    margin-left: 4rem;
+    width: 35%;
+    margin-left: 0.5rem;
+    font-size: large;
+    
 }
 .titleCol2 {
-    width: 20%;
-    margin-right: 7rem;
+    width: 15%;
+    margin-right: 2rem;
+    font-size: large;
 }
 .titleCol3 {
     width: 15%;
-    margin-right: 7rem;
+    margin-right: 2rem;
+    font-size: large;
 }
 .titleCol4 {
     width: 25%;
+    margin-right: 2rem;
+    font-size: large;
+}
+.titleCol5 {
+    width: 25%;
     margin-right: 3rem;
+    font-size: large;
+}
+.titleCol6 {
+    width: 25%;
+    margin-right: 3rem;
+    font-size: large;
 }
 
 .dataCol1 {
@@ -90,26 +106,45 @@
     margin-left: 2rem;
     inline-size: 200px;
     flex-wrap: wrap;
+    font-size: small;
 }
 .dataCol2 {
-    width: 15%;
+    width: 11%;
     /* margin-left: 4rem; */
     padding-left: 3rem;
     inline-size: 200px;
     flex-wrap: wrap;
+    font-size: small;
+    
 }
 .dataCol3 {
-    width: 15%;
-    /* margin-left: 4rem; */
+    width: 11%;
+    margin-left: -4rem; 
     padding-left: 4rem;
     inline-size: 200px;
     flex-wrap: wrap;
+    font-size: small;
 }
 .dataCol4 {
-    width: 25%;
+    width: 11%;
+    margin-left: 1rem;
+    inline-size: 200px;
+    flex-wrap: wrap;
+    font-size: small;
+}
+.dataCol5 {
+    width: 11%;
+    margin-left: 1rem;
+    inline-size: 200px;
+    flex-wrap: wrap;
+    font-size: small;
+}
+.dataCol6 {
+    width: 11%;
     margin-right: 2rem;
     inline-size: 200px;
     flex-wrap: wrap;
+    font-size: small;
 }
 
 .download {

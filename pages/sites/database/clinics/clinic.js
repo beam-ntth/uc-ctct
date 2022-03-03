@@ -1,7 +1,8 @@
 // Import React & Next modules
 import Head from "next/head";
 import Link from "next/link";
-import React, { useState } from "react";
+import dynamic from "next/dynamic";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 // Import Next Components
@@ -9,34 +10,28 @@ import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
 import styles from "../../../../styles/Clinic.module.css";
 import Accordion from "../../../../components/clinicPage/accordion";
-import ClinicInfoEdit from "../../../../components/clinicPage/generalInfoEdit";
-import AdminInfoAdd from "../../../../components/clinicPage/adminInfoAdd";
-import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
-import PlacementInfoEdit from "../../../../components/clinicPage/placementInfoEdit";
-import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import StatusParser from "../../../../components/shared/status";
+
+const ClinicInfoEdit = dynamic(() => import("../../../../components/clinicPage/generalInfoEdit"));
+const AdminInfoAdd = dynamic(() => import("../../../../components/clinicPage/adminInfoAdd"));
+const PreceptorInfoEdit = dynamic(() => import("../../../../components/clinicPage/preceptorInfoEdit"));
+const PlacementInfoEdit = dynamic(() => import("../../../../components/clinicPage/placementInfoEdit"));
+const NoteEdit = dynamic(() => import("../../../../components/clinicPage/noteEdit"));
+const AdminInfoEdit = dynamic(() => import("../../../../components/clinicPage/adminInfoEdit"));
 
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
-import AdminInfoEdit from "../../../../components/clinicPage/adminInfoEdit";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const database = client.database("uc-ctct");
-  const container = database.container("Preceptors");
   const data = await getClinic(clinicName);
-  let all_preceptor_data = []
-  for (let i = 0; i < data.preceptorInfo.length; i++) {
-    const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
-    all_preceptor_data.push(preceptor_data)
-  }
-  return { props: { data, all_preceptor_data } }
+  return { props: { data } }
 }
 
-export default function ClinicDetails({ data, all_preceptor_data }) {
+export default function ClinicDetails({ data }) {
   /**
    * Create a refresh data function to reload page when there 
    * is any changes to the database
@@ -61,14 +56,31 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
   const [noteOpen, setNoteOpen] = useState(false);
-  
+
   /**
    * Status of all the forms in this page
    * true = open form, false = close form
-   */ 
+   */
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
+
+  /**
+   * Lazy loading preceptor data to speed up clinic page
+   * Call useEffect() to initiate loading
+   */
+  const [preceptorData, setPreceptorData] = useState(null)
+  async function clientLoadPreceptor() {
+    const database = client.database("uc-ctct");
+    const container = database.container("Preceptors");
+    let all_preceptor_data = []
+    for (let i = 0; i < data.preceptorInfo.length; i++) {
+      const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
+      all_preceptor_data.push(preceptor_data)
+    }
+    setPreceptorData(all_preceptor_data)
+  }
+  useEffect(() => clientLoadPreceptor(), [data])
 
   /**
    * Remove admin data from clinic
@@ -211,11 +223,11 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Preceptors Information</p>
                   </div>
-                  <div className={styles.editButton} style={{width: '12rem'}} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
+                  <div className={styles.editButton} style={{ width: '12rem' }} onClick={() => setPreceptorOpen(true)}>+ Add New Preceptor</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
-                    all_preceptor_data.map((x, ind) => {
+                    preceptorData == null ? <p>Loading...</p> : (preceptorData.map((x, ind) => {
                       const status = StatusParser('preceptors', parseInt(x.status))
                       return (
                         <React.Fragment>
@@ -227,7 +239,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                                 <p className="preceptorCol3">{x.phoneNumber}</p>
                                 <p className="preceptorCol4">{x.email}</p>
                                 <p className="preceptorCol5">{status}</p>
-                                <div className={`tag${x['status']}`}></div>
+                                <div className={`clinicTag${x['status']}`}></div>
                               </div>
                             </Link>
                             <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
@@ -248,7 +260,7 @@ export default function ClinicDetails({ data, all_preceptor_data }) {
                           </div>
                         </React.Fragment>
                       )
-                    })
+                    }))
                   }
                 </div>
               </div>

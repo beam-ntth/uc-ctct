@@ -1,6 +1,7 @@
 // Import React & Next modules
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "../../../../styles/Database.module.css";
@@ -11,17 +12,19 @@ import Header from "../../../../components/shared/header/header";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
+import SearchString from "../../../../components/shared/search";
 
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
+import { removeClinic } from "../../../../api-lib/azure/azureOps";
 
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
-import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClinic } from "../../../../api-lib/azure/azureOps";
-import SearchString from "../../../../components/shared/search";
+
+// Only import these components when the user clicks
+const EditSiteNote = dynamic(() => import("../../../../components/shared/forms/editSiteNote"));
+const AddNewClinic = dynamic(() => import("../../../../components/shared/forms/addClinic"));
 
 export async function getServerSideProps(context) {
   // TODO: JT - FIX AND GET RID OF ANY CODE NOT USING AZURE OP FUNC.
@@ -30,11 +33,11 @@ export async function getServerSideProps(context) {
   const site_container = database.container("Sites");
   const clinic_container = database.container("Clinics");
   const { resources: data } = await clinic_container.items.query(`SELECT * from c WHERE c.site_id = '${location}'`).fetchAll();
-  const { resource: note_data } = await site_container.item(location, location).read();
-  return { props: { data, note_data } }
+  const { resource: site_data } = await site_container.item(location, location).read();
+  return { props: { data, site_data } }
 }
 
-export default function Clinics({ data, note_data }) {
+export default function Clinics({ data, site_data }) {
   /**
    * Global state of the current displayed data
    * - Initialized with all the site data
@@ -72,18 +75,16 @@ export default function Clinics({ data, note_data }) {
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
     const site_container = database.container("Sites");
-    console.log("Remove index is:", remove_index)
-    note_data.notes.splice(remove_index, 1)
-    console.log(note_data.notes)
+    site_data.notes.splice(remove_index, 1)
     const replaceOperation =
       [
         {
           op: "replace",
           path: "/notes",
-          value: note_data.notes
+          value: site_data.notes
         }
       ]
-    await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
+    await site_container.item(site_data.id, site_data.id).patch(replaceOperation)
     refreshData()
     return 
   }
@@ -93,7 +94,7 @@ export default function Clinics({ data, note_data }) {
    * @param {String} id - UUID of clinic to remove. 
    */
   async function removeElement(id) {
-    await removeClinic(id, note_data.id)
+    await removeClinic(id, site_data.id)
     refreshData()
     return
   }
@@ -116,9 +117,9 @@ export default function Clinics({ data, note_data }) {
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={note_data.id} /> : null}
+      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={site_data.id} /> : null}
       {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
-      {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null}
+      {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={site_data.id} regionId={site_data.region_id} siteName={site_data.name} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -131,7 +132,7 @@ export default function Clinics({ data, note_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${note_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${site_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
                 <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
@@ -141,8 +142,8 @@ export default function Clinics({ data, note_data }) {
                   </div>
                 </div>
                 {
-                  note_data.notes.map((x, ind) => {
-                    return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={note_data.id} remove={removeNoteEntry} />)
+                  site_data.notes.map((x, ind) => {
+                    return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
                   })
                 }
               </div>
@@ -153,8 +154,8 @@ export default function Clinics({ data, note_data }) {
               </div>
               <div className={styles.row}>
                 <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
-                <p className="row2Clinics">Last Updated</p>
-                <p className="row3Clinics">Status</p>
+                <p className="row2Clinics" style={{ marginRight: '2rem' }}>Last Updated</p>
+                <p className="row3Clinics" style={{ marginLeft: '2rem' }}>Status</p>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />
               </div >
