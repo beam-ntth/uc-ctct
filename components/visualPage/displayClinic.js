@@ -131,11 +131,11 @@ export default function DisplayClinic(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol2}>Region</p>
-        <p className={styles.titleCol3}>Setting Location</p>
-        <p className={styles.titleCol4}>Setting Population</p>
-        <p className={styles.titleCol5}>Population</p>
-        <p className={styles.titleCol6}>Patient Acuity</p>
+        <p className={styles.titleCol2}>Affiliation</p>
+        <p className={styles.titleCol5}>Age Group</p>
+        <p className={styles.titleCol3}>Setting</p>
+        <p className={styles.titleCol4}>Population</p>
+        <p className={styles.titleCol6}>Acuity Level</p>
       </div>
 
       {
@@ -149,9 +149,9 @@ export default function DisplayClinic(props) {
                 <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
                 {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
                 <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
+                <p className={styles.dataCol5}>{x.description.population}</p>
                 <p className={styles.dataCol3} >{x.description.settingLocation}</p>
                 <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
-                <p className={styles.dataCol5}>{x.description.population}</p>
                 <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
                 {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
               </div>

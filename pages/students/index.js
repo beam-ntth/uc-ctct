@@ -1,8 +1,9 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../styles/Database.module.css'
+import styles from '../../styles/Students.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
+import csv from 'csvtojson'
 import React, { useEffect, useState } from 'react';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io'
@@ -22,12 +23,15 @@ import EditRegion from '../../components/shared/forms/editRegion';
 //   return { props: { data } }
 // }
 
-export default function Student({ data }) {
+export default function Student() {
 //   const [openForm, setOpenForm] = useState(false)
 //   const [openEditForm, setOpenEditForm] = useState(false)
 //   const [hover, setHover] = useState(false)
 //   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
 //   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+  const [data, setData] = useState([])
+  const [csvFile, setCsvFile] = useState(null)
+
 
   const router = useRouter()
   const refreshData = () => {
@@ -38,6 +42,23 @@ export default function Student({ data }) {
 //     setTimeout(() => refreshData(), 500)
 //     return
 //   }
+
+  useEffect(() => {
+    if (csvFile != null) {
+      console.log(csvFile)
+      const reader = new FileReader();
+      reader.addEventListener('load', function (e) {   
+        let csvdata = e.target.result; 
+        csv().fromString(csvdata).then(
+          obj => {
+            console.log(obj)
+            setData(obj)
+          }
+        )
+      });
+      reader.readAsBinaryString(csvFile)
+    }
+  }, [csvFile])
 
   return (
     <React.Fragment>
@@ -55,20 +76,23 @@ export default function Student({ data }) {
               <div className={styles.row}>
                 <p style={{ width: '70%', marginLeft: '2rem' }}>Student Name</p>
                 <p style={{ width: '20%' }}>Clinic Assigned</p>
+                <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} />
                 {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
               </div >
-              {/* {
+              {
                 data.map((x, ind) => {
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Link href={`/sites/database/site?location=${x['id']}`}>
+                      <Link href={`/sites/database/site?location=${ind}`}>
                         <div className='displayRegionRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']} Region</p>
-                          <p style={{ width: '25%', textAlign: 'center' }}>{x['total_sites']}</p>
+                          <p style={{ marginLeft: '2rem', width: '10%' }}>{x['first_name']}</p>
+                          <p style={{ width: '15%' }}>{x['last_name']}</p>
+                          <p style={{ width: '25%' }}>{x.email}</p>
+                          <p style={{ width: '15%' }}>{x['primary_phone']}</p>
                         </div>
                       </Link>
-                      <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
+                      {/* <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
                         style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                         onMouseEnter={() => {
                           let newStatus = [...editHover]
@@ -98,11 +122,11 @@ export default function Student({ data }) {
                           setTrashHover(newStatus)
                           return
                         }
-                        } onClick={() => removeElement(x.id)} />
+                        } onClick={() => removeElement(x.id)} /> */}
                     </div >
                   )
                 })
-              } */}
+              }
             </div >
           </div >
         </main >
