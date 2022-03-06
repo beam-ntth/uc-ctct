@@ -1,6 +1,6 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../styles/Database.module.css'
+import styles from '../../styles/Student.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +9,6 @@ import { IoMdAdd } from 'react-icons/io'
 import { FiEdit } from 'react-icons/fi'
 
 // Import DB operation
-
 
 // Importing components
 import Navbar from '../../components/shared/navbar/navbar';
@@ -22,6 +21,11 @@ import EditRegion from '../../components/shared/forms/editRegion';
 //   return { props: { data } }
 // }
 
+
+/* 
+Have year as a filter and not a column - Make it one of the first filters 
+Able to crop names for Clinics 
+ */
 export default function Student({ data }) {
 //   const [openForm, setOpenForm] = useState(false)
 //   const [openEditForm, setOpenEditForm] = useState(false)
@@ -39,6 +43,7 @@ export default function Student({ data }) {
 //     return
 //   }
 
+// Student, Status, Population/(Age), Primary Site, Secondary Site,  Affiliation 
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -53,8 +58,12 @@ export default function Student({ data }) {
             <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.row}>
-                <p style={{ width: '70%', marginLeft: '2rem' }}>Student Name</p>
-                <p style={{ width: '20%' }}>Clinic Assigned</p>
+                <p style={{ marginLeft: '2rem' }}>Name</p>
+                <p style={{ width: '20%' }}>Status</p>
+                <p style={{ width: '20%' }}>Population Age</p>
+                <p style={{ width: '20%' }}>Primary Site</p>
+                <p style={{ width: '20%' }}>Secondary Site</p>
+                <p style={{ width: '20%' }}>Affiliation</p>
                 {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
               </div >
