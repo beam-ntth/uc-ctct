@@ -228,6 +228,7 @@ export default function ClinicDetails({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     preceptorData == null ? <p>Loading...</p> : (preceptorData.map((x, ind) => {
+                      console.log(preceptorData)
                       const status = StatusParser('preceptors', parseInt(x.status))
                       return (
                         <React.Fragment>
