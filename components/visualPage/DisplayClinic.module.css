@@ -101,6 +101,12 @@
     font-size: large;
 }
 
+.titleCol7 {
+  width: 25%;
+  margin-right: 3rem;
+  font-size: large;
+}
+
 .dataCol1 {
     width: 40%;
     margin-left: 2rem;
