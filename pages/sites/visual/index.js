@@ -9,10 +9,10 @@ import styles from '../../../styles/Visualization.module.css'
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 
-import DisplaySite from '../../../components/visualPage/displaySite';
+import DisplaySite from '../../../components/visualPage/displaySite/displaySite';
 
-const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic'));
-const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor'));
+const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic/displayClinic'));
+const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor/displayPreceptor'));
 
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions,

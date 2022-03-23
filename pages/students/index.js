@@ -88,7 +88,7 @@ export default function Student({}) {
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link href={`/sites/database/site?location=${ind}`}>
-                        <div className='displayRegionRow' key={`elem_${ind}`}>
+                        <div className='displayStudentRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '10%' }}>{x['first_name']}</p>
                           <p style={{ width: '15%' }}>{x['last_name']}</p>
                           <p style={{ width: '25%' }}>{x.email}</p>

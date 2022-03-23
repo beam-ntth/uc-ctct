@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import styles from './DisplayClinic.module.css'
-import Dropdown from './dropDown/dropdown';
-import SearchString from '../shared/search'
-import StatusParser from '../shared/status';
-import { getAllSites } from '../../api-lib/azure/azureOps';
+import Dropdown from '../dropDown/dropdown';
+import SearchString from '../../shared/search'
+import StatusParser from '../../shared/status';
+import { getAllSites } from '../../../api-lib/azure/azureOps';
 import { AiOutlineDownload } from 'react-icons/ai';
-import { createDownloadLink } from './csvParser';
+import { createDownloadLink } from '../csvParser';
 
 
 export default function DisplayClinic(props) {
@@ -129,13 +129,15 @@ export default function DisplayClinic(props) {
         </div>
       </div>
       <div className={styles.row}>
-        <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol2}>Status</p>
-        <p className={styles.titleCol3}>Affiliation</p>
-        <p className={styles.titleCol4}>Age Group</p>
-        <p className={styles.titleCol5}>Setting</p>
-        <p className={styles.titleCol6}>Population</p>
-        <p className={styles.titleCol7}>Acuity</p>
+        <div style={{display: 'flex', width: '97%'}}>
+          <p className={styles.titleCol1}>Clinic Name</p>
+          <p className={styles.titleCol2}>Status</p>
+          <p className={styles.titleCol3}>Affiliation</p>
+          <p className={styles.titleCol4}>Age Group</p>
+          <p className={styles.titleCol5}>Setting</p>
+          <p className={styles.titleCol6}>Population</p>
+          <p className={styles.titleCol7}>Acuity</p>
+        </div>
       </div>
 
       {
@@ -147,14 +149,13 @@ export default function DisplayClinic(props) {
             <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
-                  <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                  <p className={styles.dataCol2} style={{ marginRight: '2rem' }}>{statusText}</p>
-                  {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
-                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-                  <p className={styles.dataCol5}>{x.description.population}</p>
-                  <p className={styles.dataCol3} >{x.description.settingLocation}</p>
-                  <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
-                  <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
+                  <p className={styles.dataCol1}>{x.name}</p>
+                  <p className={styles.dataCol2}>{statusText}</p>
+                  <p className={styles.dataCol3}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
+                  <p className={styles.dataCol4}>{x.description.population}</p>
+                  <p className={styles.dataCol5} >{x.description.settingLocation}</p>
+                  <p className={styles.dataCol6}>{x.description.settingPopulation}</p>
+                  <p className={styles.dataCol7}>{x.description.patientAcuity}</p>
                 </div>
               </div>
             </Link>
