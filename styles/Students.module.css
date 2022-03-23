@@ -118,7 +118,7 @@
 }
 
 .titleCol1 {
-    width: 35%;
+    width: 45%;
     margin-left: 0.5rem;
     font-size: large;
     
@@ -129,22 +129,22 @@
     font-size: large;
 }
 .titleCol3 {
-    width: 15%;
+    width: 25%;
     margin-right: 2rem;
     font-size: large;
 }
 .titleCol4 {
-    width: 25%;
+    width: 20%;
     margin-right: 2rem;
     font-size: large;
 }
 .titleCol5 {
-    width: 25%;
+    width: 20%;
     margin-right: 3rem;
     font-size: large;
 }
 .titleCol6 {
-    width: 25%;
+    width: 15%;
     margin-right: 3rem;
     font-size: large;
 }
