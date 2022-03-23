@@ -15,7 +15,7 @@ a {
   height: 4px !important;
 }
 
-.displayRow, .displayVizRow {
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -29,74 +29,44 @@ a {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
+  z-index: 99;
+}
+
+.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover {
+  color: #079CDB;
+  transition: linear 0.3s;
 }
 
 .displayRow {
   width: 85%;
 }
 
-.displayVizRow {
-  width: 95%;
-}
-
-.displayRow:hover, .displayVizRow:hover {
-  color: #079CDB;
-  transition: linear 0.3s;
-}
-
 .displayRow:hover {
   width: 86%;
 }
 
+.displayVizRow {
+  width: 95%;
+}
 
 .displayVizRow:hover {
   width: 96%;
 }
 
 .displayRegionRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #fff;
-  height: 3.6rem;
   width: 80%;
-  margin: 0.4rem 0;
-  border-radius: 1rem;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  font-family: 'Lato', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
 }
 
 .displayRegionRow:hover {
-  color: #079CDB;
   width: 81%;
-  transition: linear 0.3s;
 }
 
 .displayStudentRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #fff;
-  height: 3.6rem;
   width: 90%;
-  margin: 0.4rem 0;
-  border-radius: 1rem;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  font-family: 'Lato', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
 }
 
 .displayStudentRow:hover {
-  color: #079CDB;
   width: 91%;
-  transition: linear 0.3s;
 }
 
 .row1Sites {
@@ -104,18 +74,13 @@ a {
   margin-left: 2rem;
 }
 
-.row2Sites {
-  width: 20%;
-}
-
-.row3Sites {
+.row2Sites, .row3Sites {
   width: 20%;
 }
 
 .row4Sites {
   width: 15%;
 }
-
 
 .row1Clinics {
   width: 50%;
@@ -132,7 +97,7 @@ a {
 .rowContentClinics {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 97%;
   height: 100%;
@@ -256,8 +221,6 @@ a {
 .preceptorTag9 {
   background-color: #d24641;
 }
-
-
 
 .editButton {
   height: 3rem;
