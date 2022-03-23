@@ -1,6 +1,6 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../styles/Database.module.css'
+import styles from '../../styles/Students.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -72,12 +72,15 @@ export default function Student({}) {
           <div className={styles.content}>
             <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
+            <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
               <div className={styles.row}>
-                <p className={styles.titleCol1}>Clinic Name</p>
-                <p className={styles.titleCol2}>Affiliation</p>
-                <p className={styles.titleCol5}>Age Group</p>
-                <p className={styles.titleCol3}>Setting</p>
-                <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} />
+                <p className={styles.titleCol1}>Name</p>
+                <p className={styles.titleCol2}>Status</p>
+                <p className={styles.titleCol3}>Population Age</p>
+                <p className={styles.titleCol4}>Primary Site</p>
+                <p className={styles.titleCol5}>Secondary Site</p>
+                <p className={styles.titleCol6}>Affiliation</p>
+                {/* <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} /> */}
                 {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
               </div >

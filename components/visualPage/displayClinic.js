@@ -12,14 +12,13 @@ import { createDownloadLink } from './csvParser';
 
 export default function DisplayClinic(props) {
   const [filteredClinicData, setFilteredClinicData] = useState(props.data);
+  const [showStatusDropdown, setShowStatusDropdown] = useState(false);
   const [showRegionDropdown, setShowRegionDropdown] = useState(false);
   // const [showSiteDropdown, setShowSiteDropdown] = useState(false);
   const [showSetLocationDropdown, setShowSetLocationDropdown] = useState(false);
   const [showSetPopDropdown, setShowSetPopDropdown] = useState(false);
   const [showPopDropdown, setShowPopDropdown] = useState(false);
   const [showAcuityDropdown, setShowAcuityDropdown] = useState(false);
-
-  // const [showStatusDropdown, setShowStatusDropdown] = useState(false);
 
   const regionChoices = props.region_choices;
   // const allSiteNames = props.sites.map(x => x.name);
@@ -89,6 +88,13 @@ export default function DisplayClinic(props) {
           </div>
           <Dropdown disableSearch displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
         </div>
+        <div className={styles.statusForm}>
+          <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
+            <p>Status</p>
+            <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+          </div>
+          <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
+        </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
             <p style={{ fontSize: '0.71rem', marginRight: 0 }}>Setting Location</p>
@@ -117,13 +123,6 @@ export default function DisplayClinic(props) {
           </div>
           <Dropdown displayOnly open={showAcuityDropdown} setOpen={setShowAcuityDropdown} choices={patientAcuityChoices} />
         </div>
-        {/* <div className={styles.statusForm}>
-          <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
-            <p>Status</p>
-            <IoIosArrowDown color='#079CDB' style={showStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
-          </div>
-          <Dropdown displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={statusChoices} />
-        </div> */}
         <div className={styles.download} onClick={download_csv_file}>
           <AiOutlineDownload size={25} style={{ marginRight: '0.2rem' }} />
           <p>Download CSV</p>
@@ -131,33 +130,36 @@ export default function DisplayClinic(props) {
       </div>
       <div className={styles.row}>
         <p className={styles.titleCol1}>Clinic Name</p>
-        <p className={styles.titleCol2}>Affiliation</p>
-        <p className={styles.titleCol5}>Age Group</p>
-        <p className={styles.titleCol3}>Setting</p>
-        <p className={styles.titleCol4}>Population</p>
-        <p className={styles.titleCol6}>Acuity Level</p>
+        <p className={styles.titleCol2}>Status</p>
+        <p className={styles.titleCol3}>Affiliation</p>
+        <p className={styles.titleCol4}>Age Group</p>
+        <p className={styles.titleCol5}>Setting</p>
+        <p className={styles.titleCol6}>Population</p>
+        <p className={styles.titleCol7}>Acuity</p>
       </div>
 
       {
         filteredClinicData.map((x, ind) => {
-        //const population = Parser("clinics", parseInt(x.population))
-        const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
-        return (
-          <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
-            <div key={`clinics_${ind}`} className='displayVizRow'>
-              <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
-                {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
-                <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-                <p className={styles.dataCol5}>{x.description.population}</p>
-                <p className={styles.dataCol3} >{x.description.settingLocation}</p>
-                <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
-                <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
-                {/* <p className={styles.dataCol4} style={{ marginRight: '2rem' }}>{statusText}</p> */}
+          //const population = Parser("clinics", parseInt(x.population))
+          const statusText = StatusParser("sites", parseInt(x.status));
+          const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
+          return (
+            <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
+              <div key={`clinics_${ind}`} className='displayVizRow'>
+                <div className="rowContentClinics">
+                  <p className={styles.dataCol1} style={{ marginLeft: '2rem' }}>{x.name}</p>
+                  <p className={styles.dataCol2} style={{ marginRight: '2rem' }}>{statusText}</p>
+                  {/* <p className={styles.dataCol2}>{x.affiliation}</p> */}
+                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
+                  <p className={styles.dataCol5}>{x.description.population}</p>
+                  <p className={styles.dataCol3} >{x.description.settingLocation}</p>
+                  <p className={styles.dataCol4}>{x.description.settingPopulation}</p>
+                  <p className={styles.dataCol6}>{x.description.patientAcuity}</p>
+                </div>
               </div>
-            </div>
-          </Link>
-        )})
+            </Link>
+          )
+        })
       }
     </React.Fragment >
   )
