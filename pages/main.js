@@ -52,6 +52,8 @@ export default function Main() {
   async function loadData() {
     const cData = await getAllClinics();
     setClinicData(cData)
+    const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1545%20Jade%20St&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
+    console.log(res)
   }
 
   useEffect(() => {
