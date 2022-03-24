@@ -24,11 +24,7 @@ import EditRegion from '../../components/shared/forms/editRegion';
 // }
 
 export default function Student({}) {
-//   const [openForm, setOpenForm] = useState(false)
-//   const [openEditForm, setOpenEditForm] = useState(false)
   const [hover, setHover] = useState(false)
-//   const [editHover, setEditHover] = useState(Array(data.length).fill(false))
-//   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
   const router = useRouter()
   const refreshData = () => {
@@ -36,6 +32,7 @@ export default function Student({}) {
   }
   const [data, setData] = useState([])
   const [csvFile, setCsvFile] = useState(null)
+  const [fileElem, setFileElem] = useState(null)
 
   useEffect(() => {
     if (csvFile != null) {
@@ -53,8 +50,11 @@ export default function Student({}) {
     }
   }, [csvFile])
 
-  const fileElem = document.getElementById('fileElem')
-
+  /**
+   * Initialize hidden CSV upload button
+   */
+  useEffect(() => setFileElem(document.getElementById('fileElem')), [])
+  
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -79,7 +79,7 @@ export default function Student({}) {
                 <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
                 <FiUpload color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 55 : 50} 
                 style={{ cursor: 'pointer', transition: 'linear 0.2s' }} 
-                onClick={() => fileElem.click()}
+                onClick={() => fileElem != null ? fileElem.click() : null}
                 onMouseEnter={() => setHover(true)} 
                 onMouseLeave={() => setHover(false)} />
               </div >
