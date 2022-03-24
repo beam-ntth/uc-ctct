@@ -9,10 +9,10 @@ import styles from '../../../styles/Visualization.module.css'
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 
-import DisplaySite from '../../../components/visualPage/displaySite';
+import DisplaySite from '../../../components/visualPage/displaySite/displaySite';
 
-const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic'));
-const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor'));
+const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic/displayClinic'));
+const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor/displayPreceptor'));
 
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions,
@@ -104,7 +104,7 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
               {searchSetting === 0 ? <DisplaySite region_data={regionData} data={site_data}
                 region_choices={regionChoices} affiliation_choices={affiliationChoices} /> : null}
               {searchSetting === 1 ? (clinicData == null ? <p>Loading...</p> : <DisplayClinic data={clinicData} region_data={regionData} region_choices={regionChoices} sites={site_data} />) : null}
-              {searchSetting === 2 ? (preceptorData == null ? <p>Loading...</p> : <DisplayPreceptor data={preceptorData} choices={regionChoices} />) : null}
+              {searchSetting === 2 ? (preceptorData == null ? <p>Loading...</p> : <DisplayPreceptor data={preceptorData} clinicData={clinicData} choices={regionChoices} />) : null}
             </div>
           </div>
         </main>

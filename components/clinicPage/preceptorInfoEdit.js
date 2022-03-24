@@ -16,6 +16,10 @@ export default function PreceptorInfoEdit(props) {
     "npi": "",
     "phoneNumber": null,
     "status": 0,
+    "description": {
+      "population": "Transitional Age Youth",
+      "experience": "Established"
+    },
     "notes": [],
     "clinics": [
       props.id
@@ -106,6 +110,32 @@ export default function PreceptorInfoEdit(props) {
                     return;
                   }} />
                 </p>
+                <p><strong>Preceptor Experience:</strong>
+                  <select
+                    disabled
+                    value={info.status}
+                    onChange={(e) => {
+                      let newInfo = { ...info }
+                      newInfo.status = e.target.value
+                      setInfo(newInfo);
+                      return;
+                    }} >
+                    <option value={0}>Coming Soon!</option>
+                  </select>
+                </p>
+                <p><strong>Preceptor Specialized Population:</strong>
+                  <select
+                    disabled
+                    value={info.status}
+                    onChange={(e) => {
+                      let newInfo = { ...info }
+                      newInfo.status = e.target.value
+                      setInfo(newInfo);
+                      return;
+                    }} >
+                    <option value={0}>Coming Soon!</option>
+                  </select>
+                </p>
                 <p><strong>Status:</strong>
                   <select
                     value={info.status}
@@ -115,7 +145,7 @@ export default function PreceptorInfoEdit(props) {
                       setInfo(newInfo);
                       return;
                     }} >
-                    {StatusParser('preceptors', -1)}
+                    { StatusParser('preceptors', -1) }
                   </select>
                 </p>
               </div>
@@ -146,7 +176,7 @@ export default function PreceptorInfoEdit(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 70vh;
+                    height: 80vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;

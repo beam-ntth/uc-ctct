@@ -15,8 +15,9 @@ import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import Marker from '../components/shared/marker/marker';
+import { getAllClinics } from '../api-lib/azure/azureOps';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -39,13 +40,23 @@ import Marker from '../components/shared/marker/marker';
 // }
 // 0 is site, 1 is clinic, 2 is preceptor
 
-
 export default function Main() {
+  const [clinicData, setClinicData] = useState(null)
+
   const center = {
-    lat: 38.5568118,
-    lng: -121.7699631
+    lat: 37.227590,
+    lng: -120.388835
   }
-  const zoom = 10
+  const zoom = 6
+
+  async function loadData() {
+    const cData = await getAllClinics();
+    setClinicData(cData)
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [])
 
   return (
     <div className={styles.container}>
@@ -58,7 +69,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
+          <Header header="Welcome!" imgSrc="/asset/images/user-image.png" />
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
@@ -66,15 +77,23 @@ export default function Main() {
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
-                      <Marker lat={38.6568118} lng={-121.8699631} type={'clinic'} data={'Clinic 1'} />
-                      <Marker lat={38.5368118} lng={-121.8689631} type={'clinic'} data={'Clinic 2'} />
-                      <Marker lat={38.5168118} lng={-121.7799631} type={'clinic'} data={'Clinic 3'} />
-                      <Marker lat={38.4968118} lng={-121.7609631} type={'clinic'} data={'Clinic 4'} />
-                      <Marker lat={38.4768118} lng={-121.7669631} type={'clinic'} data={'Clinic 5'} />
-                      <Marker lat={38.740895} lng={-121.753334} type={'student'} data={'Student 1'} />
-                      <Marker lat={38.660895} lng={-121.663334} type={'student'} data={'Student 2'} />
-                      <Marker lat={38.520895} lng={-121.733334} type={'student'} data={'Student 3'} />
-                      <Marker lat={38.500895} lng={-121.713334} type={'student'} data={'Student 4'} />
+                      {
+                        clinicData != null ?
+                        clinicData.map((x) => {
+                          const genInfo = x.generalInformation
+                          return <Marker lat={genInfo.lat} lng={genInfo.long} 
+                          type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
+                          addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
+                        })
+                        :
+                        null
+                      }
+                      {
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
+                      }
+                      {
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={33 + Math.random() * 3} lng={-116 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
+                      }
                   </GoogleMapReact>
                 </div>
               </div>

@@ -142,6 +142,9 @@ export default function Clinics({ data, site_data }) {
                   </div>
                 </div>
                 {
+                  site_data.notes.length == 0 ?
+                  <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently, you do not have any notes! </p>
+                  :
                   site_data.notes.map((x, ind) => {
                     return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
                   })
@@ -153,9 +156,15 @@ export default function Clinics({ data, site_data }) {
                 <input className={styles.searchInput} placeholder="Search Clinic Name..." onChange={(x) => searchClinicName(x.target.value)} />
               </div>
               <div className={styles.row}>
-                <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
-                <p className="row2Clinics" style={{ marginRight: '2rem' }}>Last Updated</p>
-                <p className="row3Clinics" style={{ marginLeft: '2rem' }}>Status</p>
+                <div style={{ width: '85%' }}>
+                  <div style={{ display: 'flex', width: '97%' }}>
+                  <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
+                  <p className="row2Clinics">Last Updated</p>
+                  <p className="row3Clinics">Status</p>
+                  </div>
+                  {/* Fake color tab for alignment */}
+                  <p style={{ width: '3%', margin: 0 }}></p>
+                </div>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />
               </div >
@@ -164,12 +173,12 @@ export default function Clinics({ data, site_data }) {
                   const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                         <div key={`clinic_${ind}`} className="displayRow">
                           <div className="rowContentClinics">
                             <p className="row1Clinics" style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                            <p className="row2Clinics" >{x['last_updated']}</p>
+                            <p className="row2Clinics">{x['last_updated']}</p>
                             <p className="row3Clinics">{statusText}</p>
                           </div>
                           <div className={`clinicTag${parseInt(x.status)}`}></div>
@@ -182,14 +191,14 @@ export default function Clinics({ data, site_data }) {
                           newStatus[ind] = true
                           setTrashHover(newStatus)
                           return
-                        }
-                        } onMouseLeave={() => {
+                        }} 
+                        onMouseLeave={() => {
                           let newStatus = [...trashHover]
                           newStatus[ind] = false
                           setTrashHover(newStatus)
                           return
-                        }
-                        } onClick={() => removeElement(x.id)} />
+                        }} 
+                        onClick={() => removeElement(x.id)} />
                     </div>
                   )
                 })

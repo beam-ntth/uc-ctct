@@ -36,18 +36,33 @@ export default function ClinicInfoEdit(props) {
     props.reload()
   }
 
-  // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-  useEffect(() => {
-    document.addEventListener("keydown", e => {
-      if (e.key === 'Enter') {
-        updateInfo()
-        props.setOpen(false)
-        return
-      }
-    })
-  })
-
   const [submittingForm, setSubmittingForm] = useState(false)
+
+  const [coorLoading, setCoorLoading] = useState(false)
+  const [errorText, setErrorText] = useState(false)
+  const [successText, setSuccessText] = useState(false)
+
+  async function searchCoordinates() {
+    const genInfo = generalInfo
+    const addr = `${genInfo.addressLine1}%20${genInfo.addressLine2 ? genInfo.addressLine2 + '%20' : ''}${genInfo.city}%20${genInfo.state}%20${genInfo.postal}`
+    const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
+    console.log(res)
+    // Set the flags whether to show error text or not
+    if (res.status == "ZERO_RESULTS") {
+      setErrorText(true)
+      setCoorLoading(false)
+      return
+    }
+    const location = res.results[0].geometry.location
+    let newInfo = { ...generalInfo }
+    newInfo.lat = location.lat
+    newInfo.long = location.lng
+    setGeneralInfo(newInfo)
+    // Hide loading icon back
+    setErrorText(false)
+    setSuccessText(true)
+    setCoorLoading(false)
+  }
 
   return (
     <React.Fragment>
@@ -79,6 +94,11 @@ export default function ClinicInfoEdit(props) {
                   newInfo.phoneNumber = e.target.value
                   setGeneralInfo(newInfo)
                 }} /></p>
+                <p><strong>Fax Number:</strong><input value={generalInfo.faxNumber} onChange={(e) => {
+                  let newInfo = { ...generalInfo }
+                  newInfo.faxNumber = e.target.value
+                  setGeneralInfo(newInfo)
+                }} /></p>
                 <p><strong>Address Line 1:</strong><input value={generalInfo.addressLine1} onChange={(e) => {
                   let newInfo = { ...generalInfo }
                   newInfo.addressLine1 = e.target.value
@@ -104,9 +124,21 @@ export default function ClinicInfoEdit(props) {
                   newInfo.postal = e.target.value
                   setGeneralInfo(newInfo)
                 }} /></p>
-                <p><strong>Fax Number:</strong><input value={generalInfo.faxNumber} onChange={(e) => {
+                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
+                  <div className="coorSearchBtn" onClick={() => {setCoorLoading(true); searchCoordinates(); return;}}>Search Coordinates</div>
+                  { coorLoading ? <CircularProgress color="primary" size={'1.5rem'} /> : null }
+                  { ( !errorText && !successText ) ? <p style={{ color: '#000', fontSize: '0.8rem', margin: 0 }}>Click after editing in the address, if you do not know the coordinates</p> : null}
+                  { errorText ? <p style={{ color: 'red', fontSize: '0.8rem', margin: 0 }}>Cannot find coordinates! Please check the address again.</p> : null}
+                  { successText ? <p style={{ color: 'green', fontSize: '0.8rem', margin: 0 }}>Coordinates Found!</p> : null}
+                </div>
+                <p><strong>Latitude:</strong><input value={generalInfo.lat} onChange={(e) => {
                   let newInfo = { ...generalInfo }
-                  newInfo.faxNumber = e.target.value
+                  newInfo.lat = e.target.value
+                  setGeneralInfo(newInfo)
+                }} /></p>
+                <p><strong>Longitude:</strong><input value={generalInfo.long} onChange={(e) => {
+                  let newInfo = { ...generalInfo }
+                  newInfo.long = e.target.value
                   setGeneralInfo(newInfo)
                 }} /></p>
                 <p>
@@ -268,6 +300,20 @@ export default function ClinicInfoEdit(props) {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
+                }
+
+                .coorSearchBtn {
+                  height: 2rem;
+                  width: 22%;
+                  font-size: 0.8rem;
+                  background-color: #444444;
+                  cursor: pointer;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  color: #fff;
+                  border-radius: 0.5rem;
+                  margin-right: 1rem;
                 }
                 `
         }
