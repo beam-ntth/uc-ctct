@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
+import GoogleMapReact from 'google-map-react';
+
 // Import Next Components
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
@@ -24,6 +26,7 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
+import Marker from "../../../../components/shared/marker/marker";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
@@ -102,6 +105,12 @@ export default function ClinicDetails({ data }) {
     refreshData()
     return
   }
+
+  const center = {
+    lat: parseFloat(data.generalInformation.lat),
+    lng: parseFloat(data.generalInformation.long)
+  }
+  const zoom = 14
 
   return (
     <React.Fragment>
@@ -228,6 +237,7 @@ export default function ClinicDetails({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     preceptorData == null ? <p>Loading...</p> : (preceptorData.map((x, ind) => {
+                      console.log(preceptorData)
                       const status = StatusParser('preceptors', parseInt(x.status))
                       return (
                         <React.Fragment>
@@ -292,6 +302,9 @@ export default function ClinicDetails({ data }) {
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
+                    data.notes.length == 0 ?
+                    <p style={{ marginBottom: '2rem' }}> Currently, you do not have any notes! </p>
+                    :
                     data.notes.map((x, ind) => {
                       return (<Accordion x={x} ind={ind} />)
                     })
@@ -306,8 +319,14 @@ export default function ClinicDetails({ data }) {
                     <p className={styles.generalTitleHeader}>Map & Direction</p>
                   </div>
                 </div>
-                <div className={styles.generalDetail} style={{ height: 'auto', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0' }}>
-                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3120.690806215745!2d-121.77333398432486!3d38.540894979627275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085285671d81bc3%3A0xa9b2b5f9232535d6!2sSol%20at%20West%20Village!5e0!3m2!1sen!2sus!4v1644113659546!5m2!1sen!2sus" width='80%' height='400px' style={{ border: 0 }} allowFullScreen="" loading="lazy"></iframe>
+                <div className={styles.generalDetail} style={{ height: '50vh', width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '1rem 0' }}>
+                  <div style={{height: '95%', width: '90%'}}>
+                    <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
+                        <Marker lat={data.generalInformation.lat} lng={data.generalInformation.long} type={'clinic'} name={data.name}
+                        addr={`${data.generalInformation.addressLine1}, ${data.generalInformation.addressLine2 ? `${data.generalInformation.addressLine2}, ` : ''}${data.generalInformation.city}, ${data.generalInformation.state}, ${data.generalInformation.postal}`}
+                        phoneNumber={data.generalInformation.phoneNumber} />
+                    </GoogleMapReact>
+                  </div>
                 </div>
               </div>
             </div>

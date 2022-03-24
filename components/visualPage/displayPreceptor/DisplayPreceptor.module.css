@@ -69,80 +69,50 @@
     padding-left: 0.5rem;
 }
 
+.titleCol1, .dataCol1 {
+    width: 30%;
+    margin-left: 2rem;
+}
+
 .titleCol1 {
-    width: 35%;
-    margin-left: 0.5rem;
-    font-size: large;
-    
-}
-.titleCol2 {
-    width: 15%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol3 {
-    width: 15%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol4 {
-    width: 25%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol5 {
-    width: 25%;
-    margin-right: 3rem;
-    font-size: large;
-}
-.titleCol6 {
-    width: 25%;
-    margin-right: 3rem;
     font-size: large;
 }
 
 .dataCol1 {
-    width: 40%;
-    margin-left: 2rem;
-    inline-size: 200px;
     flex-wrap: wrap;
     font-size: small;
 }
-.dataCol2 {
-    width: 11%;
-    /* margin-left: 4rem; */
-    padding-left: 3rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-    
+
+.titleCol2, .dataCol2, .titleCol3, .dataCol3 {
+    width: 15%;
 }
-.dataCol3 {
-    width: 11%;
-    margin-left: -4rem; 
-    padding-left: 4rem;
-    inline-size: 200px;
+
+.titleCol2, .titleCol3 {
+    font-size: large;
+}
+
+.dataCol2, .dataCol3 {
     flex-wrap: wrap;
     font-size: small;
 }
+
+.titleCol4 {
+    width: 15%;
+    font-size: large;
+}
+
+.titleCol5 {
+    width: 15%;
+    font-size: large;
+}
+
 .dataCol4 {
-    width: 11%;
-    margin-left: 1rem;
-    inline-size: 200px;
+    width: 15%;
     flex-wrap: wrap;
     font-size: small;
 }
 .dataCol5 {
-    width: 11%;
-    margin-left: 1rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol6 {
-    width: 11%;
-    margin-right: 2rem;
-    inline-size: 200px;
+    width: 15%;
     flex-wrap: wrap;
     font-size: small;
 }

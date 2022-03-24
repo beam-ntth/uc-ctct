@@ -110,10 +110,16 @@ export default function SiteDetails({ data, region_data }) {
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
               </div>
               <div className={styles.row}>
-                <p className='row1Sites' style={{ marginRight: '-7rem' }}>Site Name</p>
-                <p className='row2Sites'style={{ marginRight: '4rem' }} >Affiliation</p>
-                <p className='row3Sites'style={{ marginLeft: '-2rem' }}>Total Clinics</p>
-                <p className='row4Sites'style={{ marginLeft: '2rem' }}>Status</p>
+                <div style={{ width: '85%' }}>
+                  <div style={{ display: 'flex', width: '97%' }}>
+                  <p className='row1Sites'>Site Name</p>
+                  <p className='row2Sites'>Affiliation</p>
+                  <p className='row3Sites'>Total Clinics</p>
+                  <p className='row4Sites'>Status</p>
+                  </div>
+                  {/* Fake color tab for alignment */}
+                  <p style={{ width: '3%', margin: 0 }}></p>
+                </div>
                 <IoMdAdd color={addHover ? "#079CDB" : "#C4C4C4"} size={addHover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setAddHover(true)} onMouseLeave={() => setAddHover(false)} onClick={() => setOpenForm(true)} />
               </div>
@@ -121,13 +127,13 @@ export default function SiteDetails({ data, region_data }) {
                 filteredData.map((x, ind) => {
                   const statusText = StatusParser("sites", parseInt(x.status))
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/sites/database/clinics?location=${x.id}`}>
                         <div key={`site_${ind}`} className='displayRow'>
                           <div className='rowContentClinics'>
-                            <p className='row1Sites' style={{ marginLeft: '2rem' }}>{x['name']}</p>
-                            <p className='row2Sites'style={{ marginRight: '8rem' }}>{x['affiliation']}</p>
-                            <p className='row3Sites' style={{ paddingRight: '9rem' }}>{x['total_clinics']}</p>
+                            <p className='row1Sites'>{x['name']}</p>
+                            <p className='row2Sites'>{x['affiliation']}</p>
+                            <p className='row3Sites'>{x['total_clinics']}</p>
                             <p className="row4Sites">{statusText}</p>
                           </div>
                           <div className={`siteTag${x['status']}`}></div>

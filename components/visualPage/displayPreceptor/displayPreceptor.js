@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
-import styles from './DisplayClinic.module.css'
-import Dropdown from './dropDown/dropdown';
-import SearchString from '../shared/search'
-import StatusParser from '../shared/status';
+import styles from './DisplayPreceptor.module.css'
+import Dropdown from '../dropDown/dropdown';
+import SearchString from '../../shared/search'
+import StatusParser from '../../shared/status';
 import { AiOutlineDownload } from 'react-icons/ai';
 import { parse } from 'json2csv';
-import { createDownloadLink } from './csvParser';
+import { createDownloadLink } from '../csvParser';
 
 /* TODO: preceptor no search in the dropdowns */
 
@@ -95,11 +95,14 @@ export default function DisplayPreceptor(props) {
         </div>
       </div>
       <div className={styles.row}>
-        <p className={styles.titleCol1} style={{ paddingRight: '4rem' }}>Preceptor Name</p>
-        <p className={styles.titleCol2} style={{ marginRight: '9rem' }}>Position</p>
-        <p className={styles.titleCol3} style={{ marginRight: '9rem' }}>Population</p>
-        <p className={styles.titleCol3} style={{ marginRight: '9rem' }}>Experience</p>
-        <p className={styles.titleCol4}>Status</p>
+        <div style={{display: 'flex', width: '97%'}}>
+          <p className={styles.titleCol1}>Preceptor Name</p>
+          <p className={styles.titleCol2}>Position</p>
+          <p className={styles.titleCol3}>Population</p>
+          <p className={styles.titleCol4}>Experience</p>
+          <p className={styles.titleCol5}>Status</p>
+        </div>
+        <p style={{width: '3%'}}></p>
       </div>
       {
         filteredPrecepData.map((x, ind) => {
@@ -108,12 +111,11 @@ export default function DisplayPreceptor(props) {
           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
             <div key={`clinics_${ind}`} className='displayVizRow'>
               <div className="rowContentClinics">
-                <p className={styles.dataCol1} style={{ marginLeft: '3rem' }}>{x.firstname} {x.lastname}</p>
-                <p className={styles.dataCol2} style={{ marginRight: '7rem' }}>{x.position}</p>
-                {/* <p className={styles.dataCol3}>{x.credential}</p> */}
-                <p className={styles.dataCol3} style={{ marginRight: '7rem' }}>{x.description.population}</p>
-                <p className={styles.dataCol4} style={{ paddingRight: '3rem' }}>{x.description.experience}</p>
-                <p className={styles.dataCol5} style={{ marginRight: '1rem' }}>{statusText}</p>
+                <p className={styles.dataCol1}>{x.firstname} {x.lastname}</p>
+                <p className={styles.dataCol2}>{x.position}</p>
+                <p className={styles.dataCol3}>{x.description.population}</p>
+                <p className={styles.dataCol4}>{x.description.experience}</p>
+                <p className={styles.dataCol5}>{statusText}</p>
               </div>
               <div className={`preceptorTag${x['status']}`}></div>
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IoArrowBack } from "react-icons/io5";
 import styles from "./Header.module.css"
 
@@ -6,10 +6,20 @@ export default function Header(props) {
   const currentdate = new Date();
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
-  const datetime = `Today: ${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, 
+  
+  const [datetime, setDatetime] = useState(`Today: ${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, 
+  ${currentdate.getFullYear()} - ${currentdate.getHours() < 10 ? `0${currentdate.getHours()}`
+  : currentdate.getHours()}:${currentdate.getMinutes() < 10 ? `0${currentdate.getMinutes()}`
+  : currentdate.getMinutes()}:${currentdate.getSeconds() < 10 ? `0${currentdate.getSeconds()}` : currentdate.getSeconds()}`)
+  
+  useEffect(() => {
+    setTimeout(() => setDatetime(`Today: ${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, 
     ${currentdate.getFullYear()} - ${currentdate.getHours() < 10 ? `0${currentdate.getHours()}`
-      : currentdate.getHours()}:${currentdate.getMinutes() < 10 ? `0${currentdate.getMinutes()}`
-        : currentdate.getMinutes()}:${currentdate.getSeconds() < 10 ? `0${currentdate.getSeconds()}` : currentdate.getSeconds()}`
+    : currentdate.getHours()}:${currentdate.getMinutes() < 10 ? `0${currentdate.getMinutes()}`
+    : currentdate.getMinutes()}:${currentdate.getSeconds() < 10 ? `0${currentdate.getSeconds()}` : currentdate.getSeconds()}`), 1000)
+    return
+  })
+
   return (
     <React.Fragment>
       <div className={styles.mainHeader}>

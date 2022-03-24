@@ -15,7 +15,7 @@ a {
   height: 4px !important;
 }
 
-.displayRow, .displayVizRow {
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -29,69 +29,58 @@ a {
   font-weight: 600;
   font-size: 1rem;
   cursor: pointer;
+  z-index: 99;
+}
+
+.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover {
+  color: #079CDB;
+  transition: linear 0.3s;
 }
 
 .displayRow {
   width: 85%;
 }
 
-.displayVizRow {
-  width: 95%;
-}
-
-.displayRow:hover, .displayVizRow:hover {
-  color: #079CDB;
-  transition: linear 0.3s;
-}
-
 .displayRow:hover {
   width: 86%;
 }
 
+.displayVizRow {
+  width: 95%;
+}
 
 .displayVizRow:hover {
   width: 96%;
 }
 
 .displayRegionRow {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #fff;
-  height: 3.6rem;
   width: 80%;
-  margin: 0.4rem 0;
-  border-radius: 1rem;
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
-  font-family: 'Lato', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
 }
 
 .displayRegionRow:hover {
-  color: #079CDB;
   width: 81%;
-  transition: linear 0.3s;
+}
+
+.displayStudentRow {
+  width: 90%;
+}
+
+.displayStudentRow:hover {
+  width: 91%;
 }
 
 .row1Sites {
   width: 40%;
+  margin-left: 2rem;
 }
 
-.row2Sites {
-  width: 20%;
-}
-
-.row3Sites {
+.row2Sites, .row3Sites {
   width: 20%;
 }
 
 .row4Sites {
   width: 15%;
 }
-
 
 .row1Clinics {
   width: 50%;
@@ -108,7 +97,7 @@ a {
 .rowContentClinics {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   width: 97%;
   height: 100%;
@@ -120,126 +109,6 @@ a {
   font-weight: bold;
 }
 
-.tag0, .tag1, .tag2, .tag3, .tag4, .tag5, .tag6, .tag7, .tag8, .tag9, .tag10, .tag11, .tag12, .tag13 {
-  height: 100%;
-  width: 3%;
-  border-start-end-radius: 1rem;
-  border-end-end-radius: 1rem; 
-}
-
-.tag0 {
-  background-color: #FF8B8B;
-}
-
-.tag1 {
-  background-color: #FFB23E;
-}
-
-.tag2 {
-  background-color: #3EDCFF;
-}
-
-.tag3 {
-  background-color: #34E23B;
-}
-
-.tag4 {
-  background-color: #8B97FF;
-}
-
-.tag5 {
-  background-color: #CC8BFF;
-}
-
-.tag6 {
-  background-color: #FF8BE6;
-}
-
-.tag7 {
-  background-color: #FDFF8B;
-}
-
-.tag8 {
-  background-color: #814242;
-}
-
-.tag9 {
-  background-color: #816F42;
-}
-
-.tag10 {
-  background-color: #438142;
-}
-
-.tag11 {
-  background-color: #425381;
-}
-
-.tag12 {
-  background-color: #c4c4c4;
-}
-
-.tag13 {
-  background-color: rgb(73, 73, 73);
-}
-
-.tag {
-  background-color: #000;
-}
-
-.clinicTag0, .clinicTag1, .clinicTag2, .clinicTag3, .clinicTag4, .clinicTag5, .clinicTag6, .clinicTag7, .clinicTag8, .clinicTag9, .clinicTag10, .clinicTag11, .clinicTag12, .clinicTag13 {
-  height: 100%;
-  width: 3%;
-  border-start-end-radius: 1rem;
-  border-end-end-radius: 1rem; 
-}
-
-.clinicTag0 {
-  background-color: #B7DEE8;
-}
-
-.clinicTag1 {
-  background-color: #4BACC6;
-}
-
-.clinicTag2 {
-  background-color: #31869B;
-}
-
-.clinicTag3 {
-  background-color: #E4DFEC;
-}
-
-.clinicTag4 {
-  background-color: #CCC0DA;
-}
-
-.clinicTag5 {
-  background-color: #FFFFCC;
-}
-
-.clinicTag6 {
-  background-color: #FCD5B4;
-}
-
-.clinicTag7 {
-  background-color: #FABF8F;
-}
-
-.clinicTag8 {
-  background-color: #A9D08E;
-}
-
-.clinicTag9 {
-  background-color: #DA9694;
-}
-
-.clinicTag, .clinicTagundefined {
-  background-color: #000;
-}
-
-/*added*/
-
 .siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7, .siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
   height: 100%;
   width: 3%;
@@ -248,46 +117,65 @@ a {
 }
 
 .siteTag0 {
-  background-color: #B7DEE8;
+  background-color: #d24641;
 }
 
 .siteTag1 {
-  background-color: #4BACC6;
+  background-color: #d24641;
 }
 
 .siteTag2 {
-  background-color: #31869B;
+  background-color: #e7e453;
 }
 
 .siteTag3 {
-  background-color: #E4DFEC;
+  background-color: #d24641;
 }
 
 .siteTag4 {
-  background-color: #CCC0DA;
+  background-color: #d24641;
 }
 
 .siteTag5 {
-  background-color: #FFFFCC;
+  background-color: #e7e453;
+ 
 }
 
 .siteTag6 {
-  background-color: #FCD5B4;
+  background-color: #e7e453;
+  
 }
 
 .siteTag7 {
-  background-color: #FABF8F;
+  background-color: #89c85c;
 }
 
 .siteTag8 {
-  background-color: #A9D08E;
+  background-color: #e7e453;
 }
 
 .siteTag9 {
-  background-color: #DA9694;
+  background-color:  #d24641;
+
 }
 
-.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9, .preceptorTag10, .preceptorTag11, .preceptorTag12, .preeptorTag13 {
+.siteTag10 {
+  background-color: rgb(62, 57, 57);
+}
+
+.siteTag11 {
+  background-color: rgb(62, 57, 57);
+}
+
+.siteTag12 {
+  background-color: #d24641;
+}
+
+.siteTag13 {
+  background-color: rgb(62, 57, 57);
+}
+
+.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9{
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -295,45 +183,44 @@ a {
 }
 
 .preceptorTag0 {
-  background-color: #B7DEE8;
+  background-color:#d24641;
 }
 
 .preceptorTag1 {
-  background-color: #4BACC6;
+  background-color: #d24641;
 }
 
 .preceptorTag2 {
-  background-color: #31869B;
+  background-color: #e7e453;
 }
 
 .preceptorTag3 {
-  background-color: #E4DFEC;
+  background-color: #d24641;
 }
 
 .preceptorTag4 {
-  background-color: #CCC0DA;
+  background-color: #d24641;
 }
 
 .preceptorTag5 {
-  background-color: #FFFFCC;
+  background-color: rgb(62, 57, 57);
 }
 
 .preceptorTag6 {
-  background-color: #FCD5B4;
+  background-color: rgb(62, 57, 57);
 }
 
 .preceptorTag7 {
-  background-color: #FABF8F;
+  background-color: #89c85c;
 }
 
 .preceptorTag8 {
-  background-color: #A9D08E;
+  background-color: rgb(62, 57, 57);
 }
 
 .preceptorTag9 {
-  background-color: #DA9694;
+  background-color: #d24641;
 }
-
 
 .editButton {
   height: 3rem;
