@@ -89,9 +89,8 @@ export default function Student({}) {
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link href={`/sites/database/site?location=${ind}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '10%' }}>{x['first_name']}</p>
-                          <p style={{ width: '15%' }}>{x['last_name']}</p>
-                          <p style={{ width: '25%' }}>{x.email}</p>
+                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x['first_name']} {x['last_name']}</p>
+                          <p style={{ width: '20%' }}>{x.email.length > 20 ? `${x.email.substring(0, 20).toLowerCase()}...` : x.email.toLowerCase()}</p>
                           <p style={{ width: '15%' }}>{x['primary_phone']}</p>
                         </div>
                       </Link>

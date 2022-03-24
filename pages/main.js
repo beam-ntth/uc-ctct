@@ -52,8 +52,6 @@ export default function Main() {
   async function loadData() {
     const cData = await getAllClinics();
     setClinicData(cData)
-    const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1545%20Jade%20St&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
-    console.log(res)
   }
 
   useEffect(() => {
@@ -71,7 +69,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header="Welcome, Rosalind De Lisser!" imgSrc="/asset/images/user-image.png" />
+          <Header header="Welcome!" imgSrc="/asset/images/user-image.png" />
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
@@ -81,14 +79,21 @@ export default function Main() {
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
                       {
                         clinicData != null ?
-                        clinicData.map((x) => <Marker lat={40 - Math.random() * 5} lng={-119 - Math.random() * 2} type={'clinic'} data={x.name} />)
+                        clinicData.map((x) => {
+                          const genInfo = x.generalInformation
+                          return <Marker lat={genInfo.lat} lng={genInfo.long} 
+                          type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
+                          addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
+                        })
                         :
                         null
                       }
-                      <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} data={'Student 1'} />
-                      <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} data={'Student 2'} />
-                      <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} data={'Student 3'} />
-                      <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} data={'Student 4'} />
+                      {
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
+                      }
+                      {
+                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={33 + Math.random() * 3} lng={-116 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
+                      }
                   </GoogleMapReact>
                 </div>
               </div>

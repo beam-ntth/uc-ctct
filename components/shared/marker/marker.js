@@ -16,8 +16,9 @@ export default function Marker(props) {
                 { hover ? 
                 <div className='map-text'>
                     <h4 style={{ fontSize: '18px', margin: 0 }}>{props.type == 'clinic' ? 'Clinic Information' : 'Student Information'}</h4>
-                    <p style={{ fontSize: '13px', marginTop: '10px' }}><strong>Name:</strong> {props.data}</p>
-                    <p style={{ fontSize: '13px', marginTop: '10px' }}><strong>Address:</strong> {props.data}</p>
+                    <p style={{ fontSize: '13px', marginTop: '10px' }}><strong>Name:</strong> {props.name}</p>
+                    <p style={{ fontSize: '13px', marginTop: '10px' }}><strong>Address:</strong> {props.addr ? props.addr : 'Unknown'}</p>
+                    <p style={{ fontSize: '13px', marginTop: '10px' }}><strong>Phone Number:</strong> {props.phoneNumber ? props.phoneNumber : 'Unknown'}</p>
                 </div> 
                 : null }
             </div>
@@ -27,7 +28,7 @@ export default function Marker(props) {
                         .map-container {
                             display: flex;
                             flex-direction: row;
-                            height: 150px;
+                            height: 170px;
                             width: 350px;
                         }
 

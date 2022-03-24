@@ -110,13 +110,15 @@ export default function SiteDetails({ data, region_data }) {
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
               </div>
               <div className={styles.row}>
-                <div style={{ display: 'flex', width: '85%' }}>
+                <div style={{ width: '85%' }}>
+                  <div style={{ display: 'flex', width: '97%' }}>
                   <p className='row1Sites'>Site Name</p>
                   <p className='row2Sites'>Affiliation</p>
                   <p className='row3Sites'>Total Clinics</p>
                   <p className='row4Sites'>Status</p>
+                  </div>
                   {/* Fake color tab for alignment */}
-                  <p style={{ width: '3%' }}></p>
+                  <p style={{ width: '3%', margin: 0 }}></p>
                 </div>
                 <IoMdAdd color={addHover ? "#079CDB" : "#C4C4C4"} size={addHover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setAddHover(true)} onMouseLeave={() => setAddHover(false)} onClick={() => setOpenForm(true)} />

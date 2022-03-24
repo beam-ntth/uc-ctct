@@ -142,6 +142,9 @@ export default function Clinics({ data, site_data }) {
                   </div>
                 </div>
                 {
+                  site_data.notes.length == 0 ?
+                  <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently, you do not have any notes! </p>
+                  :
                   site_data.notes.map((x, ind) => {
                     return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
                   })
@@ -153,12 +156,14 @@ export default function Clinics({ data, site_data }) {
                 <input className={styles.searchInput} placeholder="Search Clinic Name..." onChange={(x) => searchClinicName(x.target.value)} />
               </div>
               <div className={styles.row}>
-                <div style={{ display: 'flex', width: '85%' }}>
+                <div style={{ width: '85%' }}>
+                  <div style={{ display: 'flex', width: '97%' }}>
                   <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
                   <p className="row2Clinics">Last Updated</p>
                   <p className="row3Clinics">Status</p>
+                  </div>
                   {/* Fake color tab for alignment */}
-                  <p style={{width: '3%'}}></p>
+                  <p style={{ width: '3%', margin: 0 }}></p>
                 </div>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenAddClinic(true)} />

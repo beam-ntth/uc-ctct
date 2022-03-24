@@ -11,7 +11,7 @@ export default function Dropdown(props) {
 
   return (
     <React.Fragment>
-      <div className={styles.dropDownMain} style={props.open ? { opacity: 1, transform: 'translateY(0px)' } : { opacity: 0, transform: 'translateY(-50px)' }}>
+      <div className={styles.dropDownMain} style={props.open ? { opacity: 1, transform: 'translateY(0px)', zIndex: 100 } : { opacity: 0, transform: 'translateY(-50px)', zIndex: 10 }}>
         {props.disableSearch ? null : <input className={styles.dropDownSearchBar} placeholder='Search...' onChange={(x) => searchName(x.target.value)} />}
         <div className={styles.dropDownSelect}>
           {
