@@ -1,0 +1,246 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+#nprogress .bar {
+  height: 4px !important;
+}
+
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: #fff;
+  height: 3.6rem;
+  margin: 0.4rem 0;
+  border-radius: 1rem;
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+  font-family: 'Lato', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 99;
+}
+
+.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover {
+  color: #079CDB;
+  transition: linear 0.3s;
+}
+
+.displayRow {
+  width: 85%;
+}
+
+.displayRow:hover {
+  width: 86%;
+}
+
+.displayVizRow {
+  width: 95%;
+}
+
+.displayVizRow:hover {
+  width: 96%;
+}
+
+.displayRegionRow {
+  width: 80%;
+}
+
+.displayRegionRow:hover {
+  width: 81%;
+}
+
+.displayStudentRow {
+  width: 90%;
+  font-weight: normal;
+}
+
+.displayStudentRow:hover {
+  width: 91%;
+}
+
+.row1Sites {
+  width: 40%;
+  margin-left: 2rem;
+}
+
+.row2Sites, .row3Sites {
+  width: 20%;
+}
+
+.row4Sites {
+  width: 15%;
+}
+
+.row1Clinics {
+  width: 50%;
+}
+
+.row2Clinics {
+  width: 25%;
+}
+
+.row3Clinics {
+  width: 20%;
+}
+
+.rowContentClinics {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  width: 97%;
+  height: 100%;
+}
+
+.titleClinics {
+  font-family: 'Lato', sans-serif;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7, .siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem; 
+}
+
+.siteTag0 {
+  background-color: #d24641;
+}
+
+.siteTag1 {
+  background-color: #d24641;
+}
+
+.siteTag2 {
+  background-color: #e7e453;
+}
+
+.siteTag3 {
+  background-color: #d24641;
+}
+
+.siteTag4 {
+  background-color: #d24641;
+}
+
+.siteTag5 {
+  background-color: #e7e453;
+ 
+}
+
+.siteTag6 {
+  background-color: #e7e453;
+  
+}
+
+.siteTag7 {
+  background-color: #89c85c;
+}
+
+.siteTag8 {
+  background-color: #e7e453;
+}
+
+.siteTag9 {
+  background-color:  #d24641;
+
+}
+
+.siteTag10 {
+  background-color: rgb(62, 57, 57);
+}
+
+.siteTag11 {
+  background-color: rgb(62, 57, 57);
+}
+
+.siteTag12 {
+  background-color: #d24641;
+}
+
+.siteTag13 {
+  background-color: rgb(62, 57, 57);
+}
+
+.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9{
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem; 
+}
+
+.preceptorTag0 {
+  background-color:#d24641;
+}
+
+.preceptorTag1 {
+  background-color: #d24641;
+}
+
+.preceptorTag2 {
+  background-color: #e7e453;
+}
+
+.preceptorTag3 {
+  background-color: #d24641;
+}
+
+.preceptorTag4 {
+  background-color: #d24641;
+}
+
+.preceptorTag5 {
+  background-color: rgb(62, 57, 57);
+}
+
+.preceptorTag6 {
+  background-color: rgb(62, 57, 57);
+}
+
+.preceptorTag7 {
+  background-color: #89c85c;
+}
+
+.preceptorTag8 {
+  background-color: rgb(62, 57, 57);
+}
+
+.preceptorTag9 {
+  background-color: #d24641;
+}
+
+.editButton {
+  height: 3rem;
+  width: 10rem;
+  background-color: #fff;
+  opacity: 0.8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 500;
+  color: #1AACFE;
+  border: solid 2px #1AACFE;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  z-index: 100;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* DO NOT IMPORT GOOGLE FONTS HERE! Chrome threw a lot of errors for no reason */

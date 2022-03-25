@@ -1,0 +1,57 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    height: 100vh;
+    width: 92%;
+    overflow-y: scroll;
+}
+
+.menu {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.menuOption {
+    height: 75%;
+    width: 38rem;
+    background-color: #F5F5F5;
+    border-radius: 2rem;
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.menuOption:hover {
+    height: 80%;
+    width: 40rem;
+    transition: linear 0.3s;
+}
+
+.menuOption h1 {
+    margin: 1rem;
+    color: #079CDB;
+}
+
+.menuOption p {
+    margin: 0;
+    color: #AAB2C8;
+}
