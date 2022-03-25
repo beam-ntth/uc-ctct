@@ -1,12 +1,15 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import styles from '../../styles/Students.module.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+
+// Import styles and icons modules
+import styles from '../../styles/Students.module.css'
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { IoMdAdd } from 'react-icons/io'
 import { FiEdit, FiUpload } from 'react-icons/fi'
+
 import csv from 'csvtojson'
 
 // Import DB operation
@@ -15,13 +18,6 @@ import csv from 'csvtojson'
 // Importing components
 import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
-import AddNewRegion from '../../components/shared/forms/addRegion';
-import EditRegion from '../../components/shared/forms/editRegion';
-
-// export async function getServerSideProps() {
-  
-//   return { props: { data } }
-// }
 
 export default function Student({}) {
   const [hover, setHover] = useState(false)
@@ -30,10 +26,18 @@ export default function Student({}) {
   const refreshData = () => {
     router.replace(router.asPath);
   }
+
+  /**
+   * Initiate states to parse and store uploaded data from a CSV file
+   */
   const [data, setData] = useState([])
   const [csvFile, setCsvFile] = useState(null)
   const [fileElem, setFileElem] = useState(null)
 
+  /**
+   * Parse the CSV file and update the "data" state, whenever there is
+   * a new CSV file uploaded to the site 
+   */
   useEffect(() => {
     if (csvFile != null) {
       const reader = new FileReader();

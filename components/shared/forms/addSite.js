@@ -26,17 +26,6 @@ export default function AddNewSite(props) {
         props.reload()
     }
 
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    // useEffect(() => {
-    //     document.addEventListener("keydown", e => {
-    //         if (e.key === 'Enter') {
-    //             createNewRegion()
-    //             props.setOpen(false)
-    //             return
-    //         }
-    //     })
-    // })
-
     const [submittingForm, setSubmittingForm] = useState(false)
 
     return (

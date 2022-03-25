@@ -106,6 +106,9 @@ export default function ClinicDetails({ data }) {
     return
   }
 
+  /**
+   * Initiate variables for Google Maps functionality
+   */
   const center = {
     lat: parseFloat(data.generalInformation.lat),
     lng: parseFloat(data.generalInformation.long)

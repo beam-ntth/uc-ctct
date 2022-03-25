@@ -10,7 +10,6 @@ import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 
 import DisplaySite from '../../../components/visualPage/displaySite/displaySite';
-
 const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic/displayClinic'));
 const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor/displayPreceptor'));
 
@@ -19,13 +18,6 @@ import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions,
    getAllRegions, getDistinctSiteAffiliations } from '../../../api-lib/azure/azureOps'
 
 export async function getServerSideProps() {
-  // const database = client.database("uc-ctct");
-  // const site_container = database.container("Sites");
-  // const clinic_container = database.container("Clinics");
-  // const preceptor_container = database.container("Preceptors");
-  // const { resources: site_data } = await site_container.items.query("SELECT * FROM c").fetchAll();
-  // const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
-  // const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
   const site_data = await getAllSites();
   const regionChoices = await getDistinctRegions();
   const affiliationChoices = await getDistinctSiteAffiliations();

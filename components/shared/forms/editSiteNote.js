@@ -9,12 +9,14 @@ export default function EditSiteNote(props) {
     const [hover, setHover] = useState(false)
     const [id, index, data] = props.open
     const [siteNote, setSiteNote] = useState("")
-    // Filled in the form with pre-existing data.
+    const [submittingForm, setSubmittingForm] = useState(false)
 
-    // Needed to correctly update a note after it has been updated. 
-    // Updates when state has been updated, i.e props.open. 
+    /**
+     * Filled in the form with pre-existing data.
+     * Needed to correctly update a note after it has been updated.
+     * Updates when state has been updated, i.e props.open.
+     */
     useEffect(() => {
-        console.log("Prop open", props.open);
         setSiteNote(data)
     }, [])
 
@@ -27,21 +29,9 @@ export default function EditSiteNote(props) {
       new_data[index] = siteNote
       // Patch operation to the DB. 
       await updateSiteNote(id, new_data);
+      props.setOpen(false)
       props.reload()
     }
-
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    // useEffect(() => {
-    //   document.addEventListener("keydown", e => {
-    //     if (e.key === 'Enter') {
-    //       editElement()
-    //       props.setOpen(false)
-    //       return
-    //     }
-    //   })
-    // })
-
-    const [submittingForm, setSubmittingForm] = useState(false)
 
     return (
     <React.Fragment>
@@ -80,8 +70,8 @@ export default function EditSiteNote(props) {
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={async () => {
-                        await editElement()
-                        props.setOpen(false)
+                        editElement()
+                        setSubmittingForm(true)
                         return
                         }}>Save</div>
                     </div>
