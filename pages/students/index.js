@@ -18,6 +18,7 @@ import csv from 'csvtojson'
 // Importing components
 import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
+import ValidateStudentDetails from '../../components/studentPage/validateDetails';
 
 export default function Student({}) {
   const [hover, setHover] = useState(false)
@@ -45,8 +46,46 @@ export default function Student({}) {
         let csvdata = e.target.result; 
         csv().fromString(csvdata).then(
           obj => {
-            console.log(obj)
-            setData(obj)
+            const cleaned_obj = obj.map((x) => {
+              
+              function cleanUpName (name) {
+                if (name.includes(" ")) {
+                  const fnArr = name.split(" ").map(x => `${x.charAt(0).toUpperCase()}${x.slice(1).toLowerCase()}`)
+                  return fnArr.join(" ")
+                }
+                if (name.includes("-")) {
+                  const fnArr = name.split("-").map(x => `${x.charAt(0).toUpperCase()}${x.slice(1).toLowerCase()}`)
+                  return fnArr.join("-")
+                }
+                return `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`
+              }
+              return {
+                englishNative: x["Is English your native language?"],
+                militaryService: x["Military_service"] == "" ? "No" : "Yes",
+                dob: x["dob"],
+                email: x["email"].toLowerCase(),
+                ethnic: x["ethnic_background"] == "" ? "Unspecified" : x["ethnic_background"],
+                firstName: cleanUpName(x["first_name"]),
+                gender: x["gender_identity"] == "" ? "Unspecified" : x["gender_identity"],
+                lastName: cleanUpName(x["last_name"]),
+                medically_underserved: x["medically_underserved_community"] == "Y" ? "Yes" : "No",
+                middleName: x["middle_name"] != ("-" || "") ? cleanUpName(x["middle_name"]) : "",
+                addressLine1: cleanUpName(x["pref_address1"]),
+                addressLine2: cleanUpName(x["pref_address2"]),
+                city: cleanUpName(x["pref_city"]),
+                country: x["pref_country"],
+                postal: x["pref_postal_cd"],
+                state: x["pref_state"].toUpperCase(),
+                primary_degree: x["primary_education_degree"] == "" ? "Unspecified" : x["primary_education_degree"],
+                primary_major: x["primary_education_major"] == "" ? "Unspecified" : x["primary_education_major"],
+                phoneNumber: x["primary_phone"].replace(/[^\d]/g, ""),
+                sex: x["sexual_orientation_descr"] == "" ? "Unspecified" : x["sexual_orientation_descr"],
+                usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
+              }
+            })
+            console.log(cleaned_obj)
+            setData(cleaned_obj)
+            setValidation(true)
           }
         )
       });
@@ -58,9 +97,15 @@ export default function Student({}) {
    * Initialize hidden CSV upload button
    */
   useEffect(() => setFileElem(document.getElementById('fileElem')), [])
+
+  /**
+   * 
+   */
+  const [validation, setValidation] = useState(false)
   
   return (
     <React.Fragment>
+      { validation ? <ValidateStudentDetails data={data} setOpen={ setValidation } reload={refreshData} /> : null }
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -93,9 +138,9 @@ export default function Student({}) {
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link href={`/sites/database/site?location=${ind}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x['first_name']} {x['last_name']}</p>
-                          <p style={{ width: '20%' }}>{x.email.length > 20 ? `${x.email.substring(0, 20).toLowerCase()}...` : x.email.toLowerCase()}</p>
-                          <p style={{ width: '15%' }}>{x['primary_phone']}</p>
+                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                          <p style={{ width: '22%' }}>{x.email}</p>
+                          <p style={{ width: '15%' }}>{x.phoneNumber}</p>
                         </div>
                       </Link>
                     </div >
