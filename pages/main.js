@@ -81,7 +81,7 @@ export default function Main() {
                         clinicData != null ?
                         clinicData.map((x) => {
                           const genInfo = x.generalInformation
-                          return <Marker lat={genInfo.lat} lng={genInfo.long} 
+                          return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}
                           type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
                           addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
                         })

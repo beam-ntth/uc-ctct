@@ -7,31 +7,23 @@ import { getClinic, getSite } from "../../api-lib/azure/azureOps";
 export default function ValidateStudentDetails(props) {
   const [hover, setHover] = useState(false)
 
-  async function updateInfo() {
-    // const database = client.database("uc-ctct");
-    // const container = database.container("Clinics");
-    // const clinic_data = await getClinic(props.id);
-    // let adminInfo = clinic_data.adminInfo;
-    // adminInfo.push(info);
-    // const replaceOperation = [
-    //   {
-    //     op: "replace",
-    //     path: "/adminInfo",
-    //     value: adminInfo,
-    //   },
-    // ];
-    // await container.item(props.id, props.id).patch(replaceOperation);
-    setTimeout(() => { 
-        props.setOpen(false);
-        props.reload(); 
-    }, 2000)
+  async function createProfile() {
+    const database = client.database("uc-ctct");
+    const container = database.container("Students");
+    for (let i = 0; i < props.data.length; i++) {
+      await container.items.create(props.data[i])
+    }
+    props.setOpen(false);
+    props.setCsv(null);
+    props.reload();
+    return; 
   }
 
   const [submittingForm, setSubmittingForm] = useState(false)
 
   return (
     <React.Fragment>
-      <div className="backDrop" onClick={() => props.setOpen(false)}></div>
+      <div className="backDrop" onClick={() => {props.setOpen(false); props.setCsv(null); return;}}></div>
       <div className="editScreen">
         {
           submittingForm ?
@@ -49,7 +41,7 @@ export default function ValidateStudentDetails(props) {
                     <p style={{marginBottom: '1rem'}}>Please review the uploaded information</p>
                 </div>
                 <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{ transition: '0.2s linear', cursor: 'pointer' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => { props.setOpen(false); props.setCsv(null); return; }} />
               </div>
               <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', fontWeight: 'bold' }}>
                 <p style={{ marginLeft: '2rem', width: '10%' }}>Name</p>
@@ -66,8 +58,7 @@ export default function ValidateStudentDetails(props) {
                 {
                     props.data.map((x, ind) => {
                     return (
-                        <div style={{ width: 'auto', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {/* <Link href={`/sites/database/site?location=${ind}`}> */}
+                        <div key={`record_${ind}`} style={{ width: 'auto', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <div className='displayStudentValidateRow' key={`elem_${ind}`}>
                                 <p style={{ marginLeft: '2rem', width: '10%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
                                 <p style={{ marginLeft: '1rem', width: '15%' }}>{x.email}</p>
@@ -79,7 +70,6 @@ export default function ValidateStudentDetails(props) {
                                 <p style={{ marginLeft: '1rem', width: '4%' }}>{x.militaryService}</p>
                                 <p style={{ marginLeft: '1rem', width: '4%' }}>{x.usCitizen}</p>
                             </div>
-                        {/* </Link> */}
                         </div >
                     )
                     })
@@ -89,8 +79,8 @@ export default function ValidateStudentDetails(props) {
               <div>
                 <div className="saveBtn"
                   onClick={ async () => {
-                    await updateInfo();
                     setSubmittingForm(true)
+                    await createProfile();
                     return;
                   }} >
                   Yes, looks good!
@@ -100,6 +90,7 @@ export default function ValidateStudentDetails(props) {
                 <div className="exitBtn"
                   onClick={() => {
                     props.setOpen(false)
+                    props.setCsv(null)
                     return;
                   }} >
                   No, still need to edit

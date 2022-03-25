@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useState } from 'react'
 
 export default function Marker(props) {
@@ -7,8 +8,10 @@ export default function Marker(props) {
             <div className='map-container'>
                 {
                     props.type == 'clinic' ? 
-                    <img height={hover ? '35px' : '30px'} width="auto" style={{zIndex: 50}} src="/asset/images/clinic-pin.png"
-                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                    <Link href={`/sites/database/clinics/clinic?name=${props.id}`}>
+                        <img height={hover ? '35px' : '30px'} width="auto" style={{zIndex: 50}} src="/asset/images/clinic-pin.png"
+                        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                    </Link>
                     :
                     <img height={hover ? '35px' : '30px'} width="auto" style={{zIndex: 50}} src="/asset/images/student-pin.png"
                     onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
