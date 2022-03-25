@@ -24,16 +24,6 @@ import { removeClinic, getPreceptor, getClinic } from "../../../../api-lib/azure
 
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 
-// export async function getServerSideProps(context) {
-// const location = context.query.location;
-// const database = client.database("uc-ctct");
-// const site_container = database.container("Sites");
-// const clinic_container = database.container("Clinics");
-// const { resources: data } = await clinic_container.items.query(`SELECT * from c WHERE c.site_id = '${location}'`).fetchAll();
-// const { resource: note_data } = await site_container.item(location, location).read();
-// return { props: { data, note_data } }
-// }
-
 export async function getServerSideProps(context) {
   const preceptor = await getPreceptor(context.query.preceptor_id);
   return { props: { preceptor } }

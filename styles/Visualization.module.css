@@ -60,13 +60,7 @@
   display: flex;
   flex-direction: row;
   padding-top: 2rem;
-  /* justify-content: flex-start;
-  align-items: flex-start; */
   margin-right: 40%;
-  /* margin: 2rem 2rem 0 2rem; */
-  /* margin-left: 2.5rem; */
-  /* height: 10%;
-  width: 40%; */
   font-family: "Lato", sans-serif;
   font-weight: bold;
   font-size: 1.5rem;
