@@ -7,6 +7,7 @@ const Regions = db.container("Regions");
 const Sites = db.container("Sites");
 const Clinics = db.container("Clinics");
 const Preceptors = db.container("Preceptors");
+const Students = db.container("Students");
 
 // console.log("Getting sites: ", sites);
 
@@ -28,6 +29,9 @@ const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
 
 /** GETTERS */
 
+/**
+ * Query all Region items in a container
+ */
 export const getAllRegions = async () => {
   try {
     const { resources: data } = await Regions.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
@@ -38,6 +42,9 @@ export const getAllRegions = async () => {
   }
 };
 
+/**
+ * Query all Site items in a container
+ */
 export const getAllSites = async () => {
   try {
     const { resources: data } = await Sites.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
@@ -48,7 +55,9 @@ export const getAllSites = async () => {
   }
 };
 
-
+/**
+ * Query all Clinic items in a container
+ */
 export const getAllClinics = async () => {
   try {
     const { resources: data } = await Clinics.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
@@ -59,12 +68,27 @@ export const getAllClinics = async () => {
   }
 };
 
+/**
+ * Query all Preceptor items in a container
+ */
 export const getAllPreceptors = async () => {
   try {
     const { resources: data } = await Preceptors.items.query(`${selectAllQuery} ORDER BY c.lastname ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error("Issue getting all preceptors.");
+  }
+}
+
+/**
+ * Query all Student items in a container
+ */
+export const getAllStudents = async () => {
+  try {
+    const { resources: data } = await Students.items.query(`${selectAllQuery} ORDER by c.lastName ASC`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting all students.");
   }
 }
 
@@ -143,6 +167,15 @@ export const getSitesFromRegion = async (id) => {
 export const getPreceptor = async (id) => {
   try {
     const { resource: data } = await Preceptors.item(id, id).read();
+    return data;
+  } catch (error) {
+    throw new Error("Issue getting preceptor with id", id);
+  }
+}
+
+export const getStudent = async (id) => {
+  try {
+    const { resource: data } = await Students.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error("Issue getting preceptor with id", id);

@@ -17,7 +17,7 @@ import BarChart from '../components/Charts/barcharts';
 import PieChart from '../components/Charts/piechart';
 import React, { useState, useEffect } from 'react'
 import Marker from '../components/shared/marker/marker';
-import { getAllClinics } from '../api-lib/azure/azureOps';
+import { getAllClinics, getAllStudents } from '../api-lib/azure/azureOps';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
@@ -42,16 +42,21 @@ import { getAllClinics } from '../api-lib/azure/azureOps';
 
 export default function Main() {
   const [clinicData, setClinicData] = useState(null)
+  const [studentData, setStudentData] = useState(null)
+  const [mapIsLoading, setMapIsLoading] = useState(true)
 
   const center = {
-    lat: 37.227590,
+    lat: 36.427590,
     lng: -120.388835
   }
-  const zoom = 6
+  const zoom = 7
 
   async function loadData() {
     const cData = await getAllClinics();
+    const sData = await getAllStudents();
     setClinicData(cData)
+    setStudentData(sData)
+    setMapIsLoading(false)
   }
 
   useEffect(() => {
@@ -74,6 +79,7 @@ export default function Main() {
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
               <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} /> <img src='/asset/images/student-pin.png' />  Student</h4>
+              {mapIsLoading ? <p style={{ margin: '1rem 0 0 2rem', padding: 0 }}>Loading student and clinic data. Please wait...</p> : null}
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
                   <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
@@ -81,7 +87,7 @@ export default function Main() {
                         clinicData != null ?
                         clinicData.map((x) => {
                           const genInfo = x.generalInformation
-                          return <Marker lat={genInfo.lat} lng={genInfo.long} 
+                          return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}
                           type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
                           addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
                         })
@@ -89,10 +95,13 @@ export default function Main() {
                         null
                       }
                       {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
-                      }
-                      {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={33 + Math.random() * 3} lng={-116 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
+                        studentData != null ?
+                        studentData.map(x => {
+                          const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
+                          return <Marker lat={x.lat} lng={x.long} type={'student'} id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
+                        })
+                        :
+                        null
                       }
                   </GoogleMapReact>
                 </div>

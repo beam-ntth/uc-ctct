@@ -11,6 +11,7 @@ import { IoMdAdd } from 'react-icons/io'
 import { FiEdit, FiUpload } from 'react-icons/fi'
 
 import csv from 'csvtojson'
+import { v4 as uuidv4 } from "uuid";
 
 // Import DB operation
 
@@ -20,7 +21,24 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 import ValidateStudentDetails from '../../components/studentPage/validateDetails';
 
-export default function Student({}) {
+import { getAllStudents } from '../../api-lib/azure/azureOps';
+import { client } from '../../api-lib/azure/azureConfig';
+
+export async function getServerSideProps(context) {
+  const students = await getAllStudents();
+
+  /**
+   * DEVELOPMENT PURPOSE: Only uncomment this part when you want
+   * to delete every instance of student profile
+   */
+  // const database = client.database("uc-ctct");
+  // const container = database.container("Students");
+  // students.map(x => container.item(x.id, x.id).delete())
+
+  return { props: { students } }
+}
+
+export default function Student({ students }) {
   const [hover, setHover] = useState(false)
 
   const router = useRouter()
@@ -60,6 +78,7 @@ export default function Student({}) {
                 return `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`
               }
               return {
+                id: uuidv4().toString(),
                 englishNative: x["Is English your native language?"],
                 militaryService: x["Military_service"] == "" ? "No" : "Yes",
                 dob: x["dob"],
@@ -83,7 +102,6 @@ export default function Student({}) {
                 usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
               }
             })
-            console.log(cleaned_obj)
             setData(cleaned_obj)
             setValidation(true)
           }
@@ -105,7 +123,7 @@ export default function Student({}) {
   
   return (
     <React.Fragment>
-      { validation ? <ValidateStudentDetails data={data} setOpen={ setValidation } reload={refreshData} /> : null }
+      { validation ? <ValidateStudentDetails data={data} setOpen={ setValidation } reload={refreshData} setCsv={setCsvFile} /> : null }
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -133,10 +151,10 @@ export default function Student({}) {
                 onMouseLeave={() => setHover(false)} />
               </div >
               {
-                data.map((x, ind) => {
+                students.map((x, ind) => {
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <Link href={`/sites/database/site?location=${ind}`}>
+                      <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
                           <p style={{ width: '22%' }}>{x.email}</p>
