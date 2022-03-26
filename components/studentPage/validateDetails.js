@@ -2,24 +2,55 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from "../../api-lib/azure/azureConfig";
-import { getClinic, getSite } from "../../api-lib/azure/azureOps";
 
 export default function ValidateStudentDetails(props) {
   const [hover, setHover] = useState(false)
 
+  const [submittingForm, setSubmittingForm] = useState(false)
+  const [loadCount, setLoadCount] = useState(0)
+  const [cleaningFlag, setCleaningFlag] = useState(true)
+  const [cleanCount, setCleanCount] = useState(0)
+
   async function createProfile() {
     const database = client.database("uc-ctct");
     const container = database.container("Students");
+    const newData = []
+    // Get the corrdinates for all the student's address
     for (let i = 0; i < props.data.length; i++) {
-      await container.items.create(props.data[i])
+      setCleanCount(cleanCount++)
+      const addr = `${props.data[i].addressLine1}, ${props.data[i].addressLine2 == "" ? "" : props.data[i].addressLine2 + ', '}${props.data[i].city}, ${props.data[i].state} ${props.data[i].postal}`.replaceAll(", ", "%20").replaceAll(" ", "%20")
+      const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
+      let newInfo = { ...props.data[i], lat: "38", "long": "-121" }
+      // If the API denied our request, we will retry it again
+      if (res.status == "REQUEST_DENIED") {
+        const retryRes = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
+        if (retryRes.status != "OK") {
+          continue
+        }
+      }
+      // If the address is invalid, then set it to a default value
+      if (res.status == "ZERO_RESULTS") {
+        newData.push(newInfo)
+        continue
+      }
+      const location = res.results[0].geometry.location
+      newInfo.lat = location.lat
+      newInfo.long = location.lng
+      newData.push(newInfo)
+    }
+    // Indicate to the user that we're done cleaning up data
+    setCleaningFlag(false)
+    
+    // Create new student item and add it to the container
+    for (let i = 0; i < newData.length; i++) {
+      setLoadCount(loadCount++)
+      await container.items.create(newData[i])
     }
     props.setOpen(false);
     props.setCsv(null);
     props.reload();
     return; 
   }
-
-  const [submittingForm, setSubmittingForm] = useState(false)
 
   return (
     <React.Fragment>
@@ -31,7 +62,8 @@ export default function ValidateStudentDetails(props) {
               <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
                 <CircularProgress color="primary" size={120} />
               </div>
-              <p style={{ textAlign: 'center' }}>Please wait. We're uploading new data to the database.</p>
+              <p style={{ textAlign: 'center' }}>{`Please wait. ${cleaningFlag ? `Finished cleaning up data for ${cleanCount}/${props.data.length} student${cleanCount > 1 ? 's' : ''}` 
+              : `We're uploading ${loadCount}/${props.data.length} student profile${loadCount > 1 ? 's' : ''} to the database.`}`}</p>
             </div>
             :
             (<React.Fragment>

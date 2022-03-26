@@ -9,12 +9,14 @@ export default function Marker(props) {
                 {
                     props.type == 'clinic' ? 
                     <Link href={`/sites/database/clinics/clinic?name=${props.id}`}>
-                        <img height={hover ? '35px' : '30px'} width="auto" style={{zIndex: 50}} src="/asset/images/clinic-pin.png"
+                        <img height={hover ? '35px' : '30px'} width="auto" style={{ zIndex: 50, transform: 'translateY(-30px)' }} src="/asset/images/clinic-pin.png"
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
                     </Link>
                     :
-                    <img height={hover ? '35px' : '30px'} width="auto" style={{zIndex: 50}} src="/asset/images/student-pin.png"
-                    onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                    <Link href={`/students/profile?id=${props.id}`}>
+                        <img height={hover ? '35px' : '30px'} width="auto" style={{ zIndex: 50, transform: 'translateY(-30px)' }} src="/asset/images/student-pin.png"
+                        onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
+                    </Link>
                 }
                 { hover ? 
                 <div className='map-text'>

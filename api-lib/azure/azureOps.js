@@ -85,7 +85,7 @@ export const getAllPreceptors = async () => {
  */
 export const getAllStudents = async () => {
   try {
-    const { resources: data } = await Students.items.query(`${selectAllQuery}`).fetchAll();
+    const { resources: data } = await Students.items.query(`${selectAllQuery} ORDER by c.lastName ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error("Issue getting all students.");

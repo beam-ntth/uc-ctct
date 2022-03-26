@@ -100,7 +100,6 @@ export default function AddNewClinic(props) {
     const genInfo = clinic.generalInformation
     const addr = `${genInfo.addressLine1}%20${genInfo.addressLine2 ? genInfo.addressLine2 + '%20' : ''}${genInfo.city}%20${genInfo.state}%20${genInfo.postal}`
     const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
-    console.log(res)
     // Set the flags whether to show error text or not
     if (res.status == "ZERO_RESULTS") {
       setErrorText(true)
