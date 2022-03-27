@@ -30,16 +30,14 @@
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-    /* margin: 4rem 2rem 1rem 2rem; */
-    /* margin: 2rem 2rem 0 2rem; */
-    /* margin-left: 2.5rem; */
-    height: 10%;
-    width: 90%;
+    height: 15%;
+    width: 100%;
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
+    margin: 1rem 0;
 }
 
 .searchBar {
@@ -68,129 +66,47 @@
 }
 
 .titleCol1 {
-  width: 35%;
-  margin-left: -3rem;
+  width: 30%;
+  margin-left: 2rem;
   font-size: large;
-  
 }
+
 .titleCol2 {
-  width: 15%;
-  margin-left: -4rem;
+  width: 10%;
   font-size: large;
 }
+
 .titleCol3 {
   width: 15%;
-  margin-right: 4rem;
   font-size: large;
 }
+
 .titleCol4 {
-  width: 25%;
-  margin-right: 4rem;
+  width: 15%;
   font-size: large;
 }
+
 .titleCol5 {
-  width: 25%;
-  margin-right: -1rem;
+  width: 15%;
   font-size: large;
 }
+
 .titleCol6 {
-  width: 25%;
-  margin-left: 4rem;
+  width: 10%;
   font-size: large;
 }
 
 .data {
     background-color: #F5F6FA;
-    margin: 2rem 5rem 0 7rem;
+    margin: 2rem 3rem 0 7rem;
     border-radius: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    
-    /* height: 550px; */
     max-height: 100vh;
     width: auto;
-    margin-bottom: 3rem;
+    padding-left: 5rem;
     padding-bottom: 4rem;
     overflow-y: scroll;
-    /* padding: 1rem; */
-}
-
-.titleCol1 {
-    width: 45%;
-    margin-left: 0.5rem;
-    font-size: large;
-    
-}
-.titleCol2 {
-    width: 15%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol3 {
-    width: 25%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol4 {
-    width: 20%;
-    margin-right: 2rem;
-    font-size: large;
-}
-.titleCol5 {
-    width: 20%;
-    margin-right: 3rem;
-    font-size: large;
-}
-.titleCol6 {
-    width: 15%;
-    margin-right: 3rem;
-    font-size: large;
-}
-
-.dataCol1 {
-    width: 40%;
-    margin-left: 2rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol2 {
-    width: 11%;
-    /* margin-left: 4rem; */
-    padding-left: 3rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-    
-}
-.dataCol3 {
-    width: 11%;
-    margin-left: -4rem; 
-    padding-left: 4rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol4 {
-    width: 11%;
-    margin-left: 1rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol5 {
-    width: 11%;
-    margin-left: 1rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol6 {
-    width: 11%;
-    margin-right: 2rem;
-    inline-size: 200px;
-    flex-wrap: wrap;
-    font-size: small;
 }

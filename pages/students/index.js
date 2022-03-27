@@ -137,14 +137,16 @@ export default function Student({ students }) {
             <div className={styles.data}>
             <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
               <div className={styles.row}>
-                <p className={styles.titleCol1}>Name</p>
-                <p className={styles.titleCol2}>Status</p>
-                <p className={styles.titleCol3}>Population Age</p>
-                <p className={styles.titleCol4}>Primary Site</p>
-                <p className={styles.titleCol5}>Secondary Site</p>
-                <p className={styles.titleCol6}>Affiliation</p>
+                <div style={{ display: 'flex', width: '90%' }}>
+                  <p className={styles.titleCol1}>Name</p>
+                  <p className={styles.titleCol2}>Status</p>
+                  <p className={styles.titleCol3}>Population Age</p>
+                  <p className={styles.titleCol4}>Primary Site</p>
+                  <p className={styles.titleCol5}>Secondary Site</p>
+                  <p className={styles.titleCol6}>Affiliation</p>
+                </div>
                 <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
-                <FiUpload color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 55 : 50} 
+                <FiUpload color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} 
                 style={{ cursor: 'pointer', transition: 'linear 0.2s' }} 
                 onClick={() => fileElem != null ? fileElem.click() : null}
                 onMouseEnter={() => setHover(true)} 
@@ -153,12 +155,15 @@ export default function Student({ students }) {
               {
                 students.map((x, ind) => {
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                          <p style={{ width: '22%' }}>{x.email}</p>
-                          <p style={{ width: '15%' }}>{x.phoneNumber}</p>
+                          <p style={{ marginLeft: '2rem', width: '30%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                          <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
+                          <p style={{ width: '15%' }}>{x.populationAge ? x.populationAge : "Undetermined"}</p>
+                          <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                          <p style={{ width: '15%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
+                          <p style={{ width: '10%' }}>{x.affiliation ? x.affiliation : "Unassigned"}</p>
                         </div>
                       </Link>
                     </div >
