@@ -13,22 +13,15 @@ import { IoMdAdd } from 'react-icons/io';
 
 export async function getServerSideProps(context) {
     const clinics = await getAllClinics();
-    return { props: { clinics } }
+    const students = await getAllStudents();
+    return { props: { clinics, students } }
 }
 
-export default function Matching({ clinics }) {
+export default function Matching({ clinics, students }) {
     const [hover, setHover] = useState(false)
-    const [data, setData] = useState(null)
+    const [addHover, setAddHover] = useState(Array(students.length).fill(false))
 
-    /**
-     * Load all student data lazily
-     */
-    async function initialLoadData() {
-        const allData = await getAllStudents();
-        setData(allData)
-        return
-    }
-    useEffect(() => initialLoadData(), [])
+    const [selectedClinic, setSelectedClinic] = useState(clinics[0].name)
 
     return (
         <div className={styles.container}>
@@ -43,11 +36,16 @@ export default function Matching({ clinics }) {
                     <Header header="Student - Clinic Matching Tool" imgSrc="/asset/images/user-image.png" />
                     <div className={styles.data}>
                         <div className={styles.clinicSelect}>
-                            <p style={{ marginRight: '2rem' }}>Clinic: Unselected</p>
+                            <p style={{ marginRight: '2rem', fontSize: '1.2rem' }}>
+                                <strong style={{ marginRight: '1rem' }}>Currently Assigning Clinic:</strong>
+                                { selectedClinic ? selectedClinic : 'Unselected' }
+                            </p>
+                        </div>
+                        <div className={styles.clinicSelect}>
                             <p style={{ marginRight: '1rem' }}>Please select your clinic: </p>
-                            <select>
+                            <select onChange={x => setSelectedClinic(x.target.value)}>
                                 {
-                                    clinics.map(x => <option>{x.name}</option>)
+                                    clinics.map(x => <option value={x.name}>{ x.name }</option>)
                                 }
                             </select>
                         </div>
@@ -56,13 +54,18 @@ export default function Matching({ clinics }) {
                                 <p className={styles.titleCol1}>Assigned Students</p>
                             </div>
                         </div>
+                        {
+                            clinics.filter(x => x.name == selectedClinic)[0].student ? 
+                            clinics.filter(x => x.name == selectedClinic)[0].student :
+                            <p>No Students Assigned To This Clinic</p>
+                        }
                         <div className={styles.row}>
                             <div style={{ display: 'flex', width: '80%' }}>
                             <p className={styles.titleCol1}>Unassigned Students</p>
                             </div>
                         </div>
                         {
-                            data ? data.map((x, ind) => {
+                            students ? students.map((x, ind) => {
                             return (
                                 <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Link href={`/students/profile?id=${x.id}`}>
@@ -74,9 +77,11 @@ export default function Matching({ clinics }) {
                                             <p style={{ width: '15%' }}>{x.surveyResponse ? x.surveyResponse : "No Response"}</p>
                                         </div>
                                     </Link>
-                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem' }}>
-                                        <p style={{ fontSize: '0.8rem' }}>Add to Clinic</p>
-                                        <IoMdAdd color={ hover ? "#079CDB" : "#C4C4C4"} size={ hover ? 22 : 20 } style={{ marginLeft: '1rem', transition: 'linear 0.2s', cursor: 'pointer' }} />
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
+                                    onMouseEnter={() => { let newStatus = [...addHover]; newStatus[ind] = true; setAddHover(newStatus); return; }} 
+                                    onMouseLeave={() => { let newStatus = [...addHover]; newStatus[ind] = false; setAddHover(newStatus); return; }} >
+                                        <p style={addHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : { fontSize: '0.8rem', transition: 'linear 0.2s' }}>Add to Clinic</p>
+                                        <IoMdAdd color={ addHover[ind] ? "#079CDB" : "#C4C4C4"} size={ addHover[ind] ? 22 : 20 } style={{ marginLeft: '1rem', transition: 'linear 0.2s' }} />
                                     </div>
                                 </div >
                             )

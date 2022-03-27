@@ -100,6 +100,12 @@ export default function Student({ students }) {
                 phoneNumber: x["primary_phone"].replace(/[^\d]/g, ""),
                 sex: x["sexual_orientation_descr"] == "" ? "Unspecified" : x["sexual_orientation_descr"],
                 usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
+                survey: {
+                  lastSent: "",
+                  sentCount: "0",
+                  responseDate: ""
+                },
+                year: `${new Date().getFullYear()}`
               }
             })
             setData(cleaned_obj)
@@ -135,6 +141,14 @@ export default function Student({ students }) {
           <div className={styles.content}>
             <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
+            <div style={{ width: '100%', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>
+              <p style={{ marginRight: '1rem' }}>Please select students year: </p>
+              <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
+                {
+                  <option value={'2022'}>2022</option>
+                }
+              </select>
+            </div>
             <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '90%' }}>
