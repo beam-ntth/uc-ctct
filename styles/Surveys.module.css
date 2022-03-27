@@ -1,0 +1,100 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    height: 75vh;
+    width: 92%;
+}
+
+.menu {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 15%;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin: 1rem 0;
+}
+
+.titleCol1 {
+    width: 25%;
+    margin-left: 2rem;
+    font-size: large;
+}
+
+.titleCol2 {
+    width: 30%;
+    font-size: large;
+}
+
+.titleCol3 {
+    width: 15%;
+    font-size: large;
+}
+
+.titleCol4 {
+    width: 15%;
+    font-size: large;
+}
+
+.titleCol5 {
+    width: 15%;
+    font-size: large;
+}
+
+.data {
+    background-color: #F5F6FA;
+    margin: 2rem 0 0 7rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: auto;
+    padding-left: 5rem;
+    padding-bottom: 4rem;
+    overflow-y: scroll;
+}
+
+.sendAllBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    height: 3rem;
+    width: 7rem;
+    border-radius: 0.5rem;
+    border: 1px solid #000;
+    cursor: pointer;
+    margin-left: 2rem;
+}
+
+.sendAllBtn p {
+    margin: 0 0.5rem 0 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+}

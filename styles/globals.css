@@ -15,7 +15,7 @@ a {
   height: 4px !important;
 }
 
-.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow {
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow, .displaySurveyRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -32,7 +32,7 @@ a {
   z-index: 99;
 }
 
-.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover {
+.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover, .displaySurveyRow:hover {
   color: #079CDB;
   transition: linear 0.3s;
 }
@@ -68,6 +68,15 @@ a {
 
 .displayStudentRow:hover {
   width: 91%;
+}
+
+.displaySurveyRow {
+  width: 80%;
+  font-weight: normal;
+}
+
+.displaySurveyRow:hover {
+  width: 81%;
 }
 
 .row1Sites {

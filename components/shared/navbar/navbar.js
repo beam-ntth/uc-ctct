@@ -37,13 +37,13 @@ export default function Navbar(props) {
             <p style={{ textAlign: 'center' }}>Student<br />Management</p>
           </div>
         </Link>
-        <Link href="/404">
+        <Link href="/surveys">
           <div className={styles.dashboard}>
             <RiSurveyFill size={icons[3] ? 40 : 30} color={icons[3] ? '#079CDB' : '#E0E0E0'} />
             <p>Surveys</p>
           </div>
         </Link>
-        <Link href="/404">
+        <Link href="/match">
           <div className={styles.dashboard}>
             <FaPeopleArrows size={icons[4] ? 40 : 30} color={icons[4] ? '#079CDB' : '#E0E0E0'} />
             <p>Matching</p>

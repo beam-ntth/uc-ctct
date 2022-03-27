@@ -13,9 +13,8 @@
 }
 
 .content {
-    height: 100vh;
+    height: 75vh;
     width: 92%;
-    overflow-y: scroll;
 }
 
 .menu {
@@ -37,7 +36,6 @@
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
-    margin: 1rem 0;
 }
 
 .searchBar {
@@ -97,16 +95,30 @@
 }
 
 .data {
-  background-color: #F5F6FA;
-  margin: 2rem 3rem 0 7rem;
-  border-radius: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  max-height: 100vh;
-  width: auto;
-  padding-left: 5rem;
-  padding-bottom: 4rem;
-  overflow-y: scroll;
+    background-color: #F5F6FA;
+    margin: 2rem 3rem 0 7rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: auto;
+    padding-left: 5rem;
+    padding-bottom: 4rem;
+    overflow-y: scroll;
+}
+
+.data select {
+    border-radius: 0.5rem;
+    border: solid 1px #c4c4c4;
+    padding: 0.5rem;
+    width: 30%;
+}
+
+.clinicSelect {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
