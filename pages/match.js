@@ -8,20 +8,21 @@ import Header from '../components/shared/header/header';
 
 import { FaChartPie, FaDatabase } from 'react-icons/fa';
 
-import { getAllClinics, getAllStudents } from '../api-lib/azure/azureOps';
+import { getAllClinics, getAllStudents, getAllPreceptors } from '../api-lib/azure/azureOps';
 import { IoMdAdd } from 'react-icons/io';
 
 export async function getServerSideProps(context) {
     const clinics = await getAllClinics();
     const students = await getAllStudents();
-    return { props: { clinics, students } }
+    const preceptors = await getAllPreceptors();
+    return { props: { clinics, students, preceptors } }
 }
 
-export default function Matching({ clinics, students }) {
+export default function Matching({ clinics, students, preceptors }) {
     const [hover, setHover] = useState(false)
     const [addHover, setAddHover] = useState(Array(students.length).fill(false))
 
-    const [selectedClinic, setSelectedClinic] = useState(clinics[0].name)
+    const [selectedClinic, setSelectedClinic] = useState(clinics[0])
 
     return (
         <div className={styles.container}>
@@ -38,14 +39,27 @@ export default function Matching({ clinics, students }) {
                         <div className={styles.clinicSelect}>
                             <p style={{ marginRight: '2rem', fontSize: '1.2rem' }}>
                                 <strong style={{ marginRight: '1rem' }}>Currently Assigning Clinic:</strong>
-                                { selectedClinic ? selectedClinic : 'Unselected' }
+                                { selectedClinic ? selectedClinic.name : 'Unselected' }
                             </p>
                         </div>
                         <div className={styles.clinicSelect}>
                             <p style={{ marginRight: '1rem' }}>Please select your clinic: </p>
-                            <select onChange={x => setSelectedClinic(x.target.value)}>
+                            <select onChange={x => setSelectedClinic(clinics.filter(clinic => clinic.name == x.target.value)[0])}>
                                 {
                                     clinics.map(x => <option value={x.name}>{ x.name }</option>)
+                                }
+                            </select>
+                            <span style={{ marginRight: '4rem' }}></span>
+                            <p style={{ marginRight: '1rem' }}>Please select your preceptor: </p>
+                            <select>
+                                {
+                                    selectedClinic ? 
+                                    (selectedClinic.preceptorInfo.length == 0 ? 
+                                        <option>No Preceptor</option>
+                                        : 
+                                        preceptors.filter(x => selectedClinic.preceptorInfo.includes(x.id)).map(x => <option value={x.firstname}>{ x.firstname } { x.lastname }</option>))
+                                    :
+                                    <option>Loading...</option>
                                 }
                             </select>
                         </div>
@@ -55,8 +69,8 @@ export default function Matching({ clinics, students }) {
                             </div>
                         </div>
                         {
-                            clinics.filter(x => x.name == selectedClinic)[0].student ? 
-                            clinics.filter(x => x.name == selectedClinic)[0].student :
+                            clinics.filter(x => x.name == selectedClinic.name)[0].student ? 
+                            clinics.filter(x => x.name == selectedClinic.name)[0].student :
                             <p>No Students Assigned To This Clinic</p>
                         }
                         <div className={styles.row}>

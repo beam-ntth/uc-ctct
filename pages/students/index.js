@@ -65,7 +65,10 @@ export default function Student({ students }) {
         csv().fromString(csvdata).then(
           obj => {
             const cleaned_obj = obj.map((x) => {
-              
+              /**
+               * Clean up the string so that everything follows the same pattern
+               * Pattern: {CAP}{lower} {CAP}{lower}-{CAP}{lower} | hello WORLD-examPLE -> Hello World-Example
+               */
               function cleanUpName (name) {
                 if (name.includes(" ")) {
                   const fnArr = name.split(" ").map(x => `${x.charAt(0).toUpperCase()}${x.slice(1).toLowerCase()}`)
@@ -77,6 +80,7 @@ export default function Student({ students }) {
                 }
                 return `${name.charAt(0).toUpperCase()}${name.slice(1).toLowerCase()}`
               }
+
               return {
                 id: uuidv4().toString(),
                 englishNative: x["Is English your native language?"],
@@ -105,6 +109,7 @@ export default function Student({ students }) {
                   sentCount: "0",
                   responseDate: ""
                 },
+                assignedPreceptor: false,
                 year: `${new Date().getFullYear()}`
               }
             })
@@ -123,7 +128,8 @@ export default function Student({ students }) {
   useEffect(() => setFileElem(document.getElementById('fileElem')), [])
 
   /**
-   * 
+   * Set a state for validation pop-up screen, asking user to check everything before
+   * uploading to the database
    */
   const [validation, setValidation] = useState(false)
   

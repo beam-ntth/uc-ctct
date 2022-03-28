@@ -78,7 +78,11 @@ export default function Main() {
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
-              <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} /> <img src='/asset/images/student-pin.png' />  Student</h4>
+              <h4 className={styles.legend}>
+                <img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} />
+                <img src='/asset/images/student-pin.png' />  Student (Assigned) <span style={{marginRight: '2rem'}} />
+                <img src="/asset/images/student-unassigned-pin.png" /> Student (Unassigned)
+                </h4>
               {mapIsLoading ? <p style={{ margin: '1rem 0 0 2rem', padding: 0 }}>Loading student and clinic data. Please wait...</p> : null}
               <div className={styles.mapFrame}>
                 <div className={styles.mapContainer}>
@@ -98,7 +102,8 @@ export default function Main() {
                         studentData != null ?
                         studentData.map(x => {
                           const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
-                          return <Marker lat={x.lat} lng={x.long} type={'student'} id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
+                          return <Marker lat={x.lat} lng={x.long} type={x.assignedPreceptor ? 'student-assigned' : 'student-unassigned'} 
+                          id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
                         })
                         :
                         null
