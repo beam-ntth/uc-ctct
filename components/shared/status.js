@@ -11,15 +11,16 @@ export default function StatusParser(type, id) {
           <option value={2}>Waiting For Response</option>
           <option value={3}>Scheduled Meeting</option>
           <option value={4}>TAA Request</option>
-          <option value={5}>TAA Site Signature Pending</option>
-          <option value={6}>TAA University Signature Pending</option>
-          <option value={7}>Site Active TAA</option>
-          <option value={8}>TAA Amendment Pending</option>
-          <option value={9}>TAA Expiring Soon</option>
-          <option value={10}>No Go</option>
-          <option value={11}>No Go For Now - Follow Up</option>
-          <option value={12}>Follow Up Needed</option>
-          <option value={13}>Site Inactive</option>
+          <option value={5}>TAA Negotiation</option>
+          <option value={6}>TAA Site Signature Pending</option>
+          <option value={7}>TAA University Signature Pending</option>
+          <option value={8}>Site Active TAA</option>
+          <option value={9}>TAA Amendment Pending</option>
+          <option value={10}>TAA Expiring Soon</option>
+          <option value={11}>No Go</option>
+          <option value={12}>No Go For Now - Follow Up</option>
+          <option value={13}>Follow Up Needed</option>
+          <option value={14}>Site Inactive</option>
         </React.Fragment>
         break
       case 0:
@@ -38,30 +39,33 @@ export default function StatusParser(type, id) {
         text = "TAA Request"
         break
       case 5:
-        text = "TAA Site Signature Pending"
+        text = "TAA Negotiation"
         break
       case 6:
-        text = "TAA University Signature Pending"
+        text = "TAA Site Signature Pending"
         break
       case 7:
-        text = "Site Active TAA"
+        text = "TAA University Signature Pending"
         break
       case 8:
-        text = "TAA Amendment Pending"
+        text = "Site Active TAA"
         break
       case 9:
-        text = "TAA Expiring Soon"
+        text = "TAA Amendment Pending"
         break
       case 10:
-        text = "No Go"
+        text = "TAA Expiring Soon"
         break
       case 11:
-        text = "No Go For Now - Follow Up"
+        text = "No Go"
         break
       case 12:
-        text = "Follow Up Needed"
+        text = "No Go For Now - Follow Up"
         break
       case 13:
+        text = "Follow Up Needed"
+        break
+      case 14:
         text = "Site Inactive"
         break
       default:
