@@ -78,7 +78,7 @@ export default function Database({ data }) {
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '80%' }}>
                   <p style={{ width: '70%', marginLeft: '2rem' }}>Region Name</p>
-                  <p style={{ width: '20%' }}>Total sites</p>
+                  <p style={{ width: '20%' }}>Total Active Sites</p>
                 </div>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
