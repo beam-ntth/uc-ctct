@@ -83,7 +83,7 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
-            <p style={{ fontSize: '0.7rem' }}>Region</p>
+            <p style={{ fontSize: '0.7rem' }}>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch displayOnly open={showRegionDropdown} setOpen={setShowRegionDropdown} choices={regionChoices} />
@@ -97,21 +97,21 @@ export default function DisplayClinic(props) {
         </div>
         <div className={styles.sLocationForm}>
           <div className={styles.formTitle} onClick={() => setShowSetLocationDropdown(!showSetLocationDropdown)}>
-            <p style={{ fontSize: '0.71rem', marginRight: 0 }}>Setting Location</p>
+            <p style={{ fontSize: '0.71rem', marginRight: 0 }}>Setting</p>
             <IoIosArrowDown color='#079CDB' style={showSetLocationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetLocationDropdown} setOpen={setShowSetLocationDropdown} choices={setLocationChoices} />
         </div>
         <div className={styles.sPopForm}>
           <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
-            <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Setting Population</p>
+            <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Population</p>
             <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />
         </div>
         <div className={styles.popForm}>
           <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-            <p style={{ fontSize: '0.71rem' }}>Population</p>
+            <p style={{ fontSize: '0.71rem' }}>Age Group</p>
             <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={populationChoices} />
@@ -128,14 +128,14 @@ export default function DisplayClinic(props) {
           <p>Download CSV</p>
         </div>
       </div>
-      <div className={styles.row}>
+      <div className={styles.row}> 
         <div style={{display: 'flex', width: '97%'}}>
           <p className={styles.titleCol1}>Clinic Name</p>
           <p className={styles.titleCol2}>Status</p>
           <p className={styles.titleCol3}>Affiliation</p>
-          <p className={styles.titleCol4}>Age Group</p>
-          <p className={styles.titleCol5}>Setting</p>
-          <p className={styles.titleCol6}>Population</p>
+          <p className={styles.titleCol4}>Setting</p>
+          <p className={styles.titleCol5}>Population</p>
+          <p className={styles.titleCol6}>Age Group</p>
           <p className={styles.titleCol7}>Acuity</p>
         </div>
       </div>
@@ -152,9 +152,9 @@ export default function DisplayClinic(props) {
                   <p className={styles.dataCol1}>{x.name}</p>
                   <p className={styles.dataCol2}>{statusText}</p>
                   <p className={styles.dataCol3}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-                  <p className={styles.dataCol4}>{x.description.population}</p>
-                  <p className={styles.dataCol5} >{x.description.settingLocation}</p>
-                  <p className={styles.dataCol6}>{x.description.settingPopulation}</p>
+                  <p className={styles.dataCol4} >{x.description.settingLocation}</p>
+                  <p className={styles.dataCol5}>{x.description.settingPopulation}</p>
+                  <p className={styles.dataCol6}>{x.description.population}</p>
                   <p className={styles.dataCol7}>{x.description.patientAcuity}</p>
                 </div>
               </div>
