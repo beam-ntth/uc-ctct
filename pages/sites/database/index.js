@@ -109,7 +109,7 @@ export default function Database({ data }) {
                         }
                         }
                         onClick={() => setOpenEditForm([x.id, x.name])} />
-                      <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
+                      {/* <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
                         style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                         onMouseEnter={() => {
                           let newStatus = [...trashHover]
@@ -123,7 +123,7 @@ export default function Database({ data }) {
                           setTrashHover(newStatus)
                           return
                         }
-                        } onClick={() => removeElement(x.id)} />
+                        } onClick={() => removeElement(x.id)} /> */}
                     </div >
                   )
                 })
