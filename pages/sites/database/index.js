@@ -77,7 +77,7 @@ export default function Database({ data }) {
             <div className={styles.data}>
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '80%' }}>
-                  <p style={{ width: '70%', marginLeft: '2rem' }}>Region Name</p>
+                  <p style={{ width: '70%', marginLeft: '2rem' }}>Affiliation</p>
                   <p style={{ width: '20%' }}>Total Active Sites</p>
                 </div>
                 <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
@@ -89,7 +89,7 @@ export default function Database({ data }) {
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/sites/database/site?location=${x['id']}`}>
                         <div className='displayRegionRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']} Region</p>
+                          <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']}</p>
                           <p style={{ width: '20%', textAlign: 'left', paddingLeft: '1.5rem' }}>{x['total_sites']}</p>
                         </div>
                       </Link>

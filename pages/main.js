@@ -75,6 +75,24 @@ export default function Main() {
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
           <Header header="Welcome!" imgSrc="/asset/images/user-image.png" />
+          <div className={styles.mainCharts}>
+            <div className={styles.chart}>
+              <div className={styles.chartTitle}>
+                <p>Chart 1: Detail</p>
+              </div>
+              <div style={{ height: '90%', width: 'auto' }}>
+                <BarChart />
+              </div>
+            </div>
+            <div className={styles.chart}>
+              <div className={styles.chartTitle}>
+                <p>Chart 2: Detail</p>
+              </div>
+              <div style={{ height: '90%', width: 'auto' }}>
+                <PieChart />
+              </div>
+            </div>
+          </div>
           <div className={styles.activities}>
             <div className={styles.activityBox}>
               <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
@@ -110,24 +128,6 @@ export default function Main() {
                       }
                   </GoogleMapReact>
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.mainCharts}>
-            <div className={styles.chart}>
-              <div className={styles.chartTitle}>
-                <p>Chart 1: Detail</p>
-              </div>
-              <div style={{ height: '90%', width: 'auto' }}>
-                <BarChart />
-              </div>
-            </div>
-            <div className={styles.chart}>
-              <div className={styles.chartTitle}>
-                <p>Chart 2: Detail</p>
-              </div>
-              <div style={{ height: '90%', width: 'auto' }}>
-                <PieChart />
               </div>
             </div>
           </div>

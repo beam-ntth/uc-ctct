@@ -113,7 +113,6 @@ export default function SiteDetails({ data, region_data }) {
                 <div style={{ width: '85%' }}>
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className='row1Sites'>Site Name</p>
-                  {/* <p className='row2Sites'>Affiliation</p> */}
                   <p className='row2Sites'>Total Clinics</p>
                   <p className='row3Sites'>Total Active Preceptors</p>
                   <p className='row4Sites'>Status</p>
@@ -133,8 +132,8 @@ export default function SiteDetails({ data, region_data }) {
                         <div key={`site_${ind}`} className='displayRow'>
                           <div className='rowContentClinics'>
                             <p className='row1Sites'>{x['name']}</p>
-                            {/* <p className='row2Sites'>{x['affiliation']}</p> */}
                             <p className='row2Sites'>{x['total_clinics']}</p>
+                            <p className='row3Sites'>0</p>
                             <p className="row4Sites">{statusText}</p>
                           </div>
                           <div className={`siteTag${x['status']}`}></div>

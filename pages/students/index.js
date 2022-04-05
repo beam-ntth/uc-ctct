@@ -1,25 +1,26 @@
 // Importing Next and React modules
 import Head from 'next/head'
-import Link from 'next/link'
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 // Import styles and icons modules
 import styles from '../../styles/Students.module.css'
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { IoMdAdd } from 'react-icons/io'
 import { FiEdit, FiUpload } from 'react-icons/fi'
-
 import csv from 'csvtojson'
 import { v4 as uuidv4 } from "uuid";
 
 // Import DB operation
 
-
 // Importing components
 import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 import ValidateStudentDetails from '../../components/studentPage/validateDetails';
+const DisplayALL = dynamic(() => import('../../components/studentPage/displayAll'));
+const DisplayUCD = dynamic(() => import('../../components/studentPage/displayDavis'))
+const DisplayUCLA = dynamic(() => import('../../components/studentPage/displayLA'));
+const DisplayUCI = dynamic(() => import('../../components/studentPage/displayIrvine'))
+const DisplayUCSF = dynamic(() => import('../../components/studentPage/displaySF'))
 
 import { getAllStudents } from '../../api-lib/azure/azureOps';
 import { client } from '../../api-lib/azure/azureConfig';
@@ -40,6 +41,7 @@ export async function getServerSideProps(context) {
 
 export default function Student({ students }) {
   const [hover, setHover] = useState(false)
+  const [page, setPage] = useState('Default')
 
   const router = useRouter()
   const refreshData = () => {
@@ -145,52 +147,49 @@ export default function Student({ students }) {
         <main className={styles.main}>
           <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.data}>
-            <div style={{ width: '100%', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>
-              <p style={{ marginRight: '1rem' }}>Please select students year: </p>
-              <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
-                {
-                  <option value={'2022'}>2022</option>
-                }
-              </select>
-            </div>
+            <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" />
+
+            {/* Hidden file upload button */}
             <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
-              <div className={styles.row}>
-                <div style={{ display: 'flex', width: '90%' }}>
-                  <p className={styles.titleCol1}>Name</p>
-                  <p className={styles.titleCol2}>Status</p>
-                  <p className={styles.titleCol3}>Population Age</p>
-                  <p className={styles.titleCol4}>Primary Site</p>
-                  <p className={styles.titleCol5}>Secondary Site</p>
-                  <p className={styles.titleCol6}>Affiliation</p>
+            <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
+
+            {/* Switching between pages */}
+            { page === 'Default' ? <div className={styles.selectUniversities}>
+              <div className={styles.fileUpload} style={ hover ? { height: '11%', width: '91%', transition: 'linear 0.2s' } : {} }
+                onClick={() => fileElem != null ? fileElem.click() : null} onMouseEnter={() => setHover(true)} 
+                onMouseLeave={() => setHover(false)} >
+                <p style={ hover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 
+                : { marginRight: '1rem', transition: 'linear 0.2s' } }>
+                  Upload the CSV file here
+                </p>
+                <FiUpload color={ hover ? "#079CDB" : "#C4C4C4" } size={ hover ? 35 : 30 } 
+                style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
+              </div>
+              <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
+                <p>Show all universities</p>
+              </div>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn} onClick={() => setPage('UCD')}>
+                  <p>UC Davis</p>
                 </div>
-                <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
-                <FiUpload color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} 
-                style={{ cursor: 'pointer', transition: 'linear 0.2s' }} 
-                onClick={() => fileElem != null ? fileElem.click() : null}
-                onMouseEnter={() => setHover(true)} 
-                onMouseLeave={() => setHover(false)} />
-              </div >
-              {
-                students.map((x, ind) => {
-                  return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                      <Link href={`/students/profile?id=${x.id}`}>
-                        <div className='displayStudentRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '30%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                          <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
-                          <p style={{ width: '15%' }}>{x.populationAge ? x.populationAge : "Undetermined"}</p>
-                          <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                          <p style={{ width: '15%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                          <p style={{ width: '10%' }}>{x.affiliation ? x.affiliation : "Unassigned"}</p>
-                        </div>
-                      </Link>
-                    </div >
-                  )
-                })
-              }
-            </div >
+                <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
+                  <p>UCSF</p>
+                </div>
+              </div>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn} onClick={() => setPage('UCLA')}>
+                  <p>UCLA</p>
+                </div>
+                <div className={styles.universityBtn} onClick={() => setPage('UCI')}>
+                  <p>UC Irvine</p>
+                </div>
+              </div>
+            </div> : null }
+            { page === 'UCD' ? <DisplayUCD students={students} setPage={setPage} /> : null }
+            { page === 'UCLA' ? <DisplayUCLA students={students} setPage={setPage} /> : null }
+            { page === 'UCI' ? <DisplayUCI students={students} setPage={setPage} /> : null }
+            { page === 'UCSF' ? <DisplayUCSF students={students} setPage={setPage} /> : null }
+            { page === 'ALL' ? <DisplayALL students={students} setPage={setPage} /> : null }
           </div >
         </main >
       </div >
