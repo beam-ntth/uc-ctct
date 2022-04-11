@@ -22,10 +22,10 @@ export default function DisplayUCD (props) {
                 <div className={styles.row}>
                   <div style={{ display: 'flex', width: '93%' }}>
                     <p className={styles.titleCol1}>Name</p>
-                    <p className={styles.titleCol4}>Primary Site</p>
-                    <p className={styles.titleCol2}>Status</p>
-                    <p className={styles.titleCol5}>Secondary Site</p>
-                    <p className={styles.titleCol4}>  Status</p>
+                    <p className={styles.titleCol2}>Primary Site</p>
+                    <p className={styles.titleCol3}>Status</p>
+                    <p className={styles.titleCol4}>Secondary Site</p>
+                    <p className={styles.titleCol5}>  Status</p>
                   </div>
                 </div >
                 {
@@ -34,11 +34,11 @@ export default function DisplayUCD (props) {
                       <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                         <Link href={`/students/profile?id=${x.id}`}>
                           <div className='displayStudentRow' key={`elem_${ind}`}>
-                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                            <p style={{marginLeft: '3em', width: '10%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                            <p style={{marginLeft: '4rem', width: '11%'  }}>{x.status ? x.status : "Unassigned"}</p>
+                            <p style={{ marginLeft: '2rem', width: '27%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                            <p style={{marginLeft: '3rem', width: '16%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                            <p style={{marginLeft: '2rem', width: '10%'  }}>{x.status ? x.status : "Unassigned"}</p>
                             <p style={{marginLeft: '5rem', width: '11%'  }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                            <p style={{marginLeft: '2rem', width: '3%'  }}>{x.status ? x.status : "Unassigned"}</p>
+                            <p style={{marginLeft: '3.5rem', width: '3%'  }}>{x.status ? x.status : "Unassigned"}</p>
                           </div>
                         </Link>
                       </div >
