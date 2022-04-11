@@ -22,7 +22,7 @@ export default function DisplaySite(props) {
    * States of all the dropdown buttoons
    * true = display dropdown, false = hide dropdown
    */
-  const [showRegionDropdown, setShowRegionDropdown] = useState(false)
+  // const [showRegionDropdown, setShowRegionDropdown] = useState(false)
   const [showSiteDropdown, setShowSiteDropdown] = useState(false)
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
 
@@ -94,14 +94,14 @@ export default function DisplaySite(props) {
         <div className={styles.searchBar}>
           <input className={styles.searchInput} placeholder="Enter Site Name ..." onChange={(x) => searchSiteData(x.target.value)} />
         </div>
-        <div className={styles.regionForm}>
+        {/* <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
             <p>Region</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch open={showRegionDropdown} setOpen={setShowRegionDropdown}
             choices={regionChoices} ddFilter={regionFilter} setddFilter={setRegionFilter} />
-        </div>
+        </div> */}
         <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
             <p>Affiliation</p>
@@ -126,9 +126,8 @@ export default function DisplaySite(props) {
       <div className={styles.row}>
         <div style={{display: 'flex', width: '97%'}}>
           <p className={styles.titleCol1}>Site Name</p>
-          <p className={styles.titleCol2}>Region</p>
-          <p className={styles.titleCol3}>Affiliation</p>
-          <p className={styles.titleCol4}>Status</p>
+          <p className={styles.titleCol2}>Affiliation</p>
+          <p className={styles.titleCol3}>Status</p>
         </div>
         <p style={{width: '3%'}}></p>
       </div>
@@ -141,7 +140,6 @@ export default function DisplaySite(props) {
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
                   <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
                   <p className={styles.dataCol3}>{x.affiliation}</p>
                   <p className={styles.dataCol4}>{statusText}</p>
                 </div>
