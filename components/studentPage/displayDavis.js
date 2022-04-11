@@ -12,7 +12,7 @@ export default function DisplayUCD (props) {
                   <IoArrowBack size={30} style={{ width: '10%', marginRight: '0.5rem' }} /> 
                   <p style={{ margin: 0 }}>Back to selection</p>
                 </div>
-                <p style={{ marginRight: '1rem' }}>Please select students year: </p>
+                <p style={{ marginRight: '1rem' }}>Cohort: </p>
                 <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
                   {
                     <option value={'2022'}>2022</option>
@@ -22,11 +22,10 @@ export default function DisplayUCD (props) {
                 <div className={styles.row}>
                   <div style={{ display: 'flex', width: '90%' }}>
                     <p className={styles.titleCol1}>Name</p>
-                    <p className={styles.titleCol2}>Status</p>
-                    <p className={styles.titleCol3}>Population Age</p>
                     <p className={styles.titleCol4}>Primary Site</p>
+                    <p className={styles.titleCol2}>Status</p>
                     <p className={styles.titleCol5}>Secondary Site</p>
-                    <p className={styles.titleCol6}>Affiliation</p>
+                    <p className={styles.titleCol4}>  Status</p>
                   </div>
                 </div >
                 {
@@ -36,11 +35,10 @@ export default function DisplayUCD (props) {
                         <Link href={`/students/profile?id=${x.id}`}>
                           <div className='displayStudentRow' key={`elem_${ind}`}>
                             <p style={{ marginLeft: '2rem', width: '30%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
-                            <p style={{ width: '15%' }}>{x.populationAge ? x.populationAge : "Undetermined"}</p>
                             <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                             <p style={{ width: '15%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                            <p style={{ width: '10%' }}>{x.affiliation ? x.affiliation : "Unassigned"}</p>
+                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                           </div>
                         </Link>
                       </div >

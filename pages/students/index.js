@@ -147,7 +147,7 @@ export default function Student({ students }) {
         <main className={styles.main}>
           <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header="Student Management Overview" imgSrc="/asset/images/user-image.png" />
+            <Header header="Student Management Full Overview" imgSrc="/asset/images/user-image.png" />
 
             {/* Hidden file upload button */}
             <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
