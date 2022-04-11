@@ -18,15 +18,14 @@ export default function DisplayUCSF (props) {
                     <option value={'2022'}>2022</option>
                   }
                 </select>
-              </div>
+                </div>
                 <div className={styles.row}>
-                  <div style={{ display: 'flex', width: '90%' }}>
+                  <div style={{ display: 'flex', width: '93%' }}>
                     <p className={styles.titleCol1}>Name</p>
-                    <p className={styles.titleCol2}>Status</p>
-                    <p className={styles.titleCol3}>Population Age</p>
                     <p className={styles.titleCol4}>Primary Site</p>
+                    <p className={styles.titleCol2}>Status</p>
                     <p className={styles.titleCol5}>Secondary Site</p>
-                    <p className={styles.titleCol6}>Affiliation</p>
+                    <p className={styles.titleCol4}>  Status</p>
                   </div>
                 </div >
                 {
@@ -35,12 +34,11 @@ export default function DisplayUCSF (props) {
                       <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                         <Link href={`/students/profile?id=${x.id}`}>
                           <div className='displayStudentRow' key={`elem_${ind}`}>
-                            <p style={{ marginLeft: '2rem', width: '30%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
-                            <p style={{ width: '15%' }}>{x.populationAge ? x.populationAge : "Undetermined"}</p>
-                            <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                            <p style={{ width: '15%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                            <p style={{ width: '10%' }}>{x.affiliation ? x.affiliation : "Unassigned"}</p>
+                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                            <p style={{marginLeft: '3em', width: '10%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                            <p style={{marginLeft: '4rem', width: '11%'  }}>{x.status ? x.status : "Unassigned"}</p>
+                            <p style={{marginLeft: '5rem', width: '11%'  }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
+                            <p style={{marginLeft: '2rem', width: '3%'  }}>{x.status ? x.status : "Unassigned"}</p>
                           </div>
                         </Link>
                       </div >

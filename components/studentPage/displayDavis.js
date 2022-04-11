@@ -20,7 +20,7 @@ export default function DisplayUCD (props) {
                 </select>
               </div>
                 <div className={styles.row}>
-                  <div style={{ display: 'flex', width: '90%' }}>
+                  <div style={{ display: 'flex', width: '93%' }}>
                     <p className={styles.titleCol1}>Name</p>
                     <p className={styles.titleCol4}>Primary Site</p>
                     <p className={styles.titleCol2}>Status</p>
@@ -34,11 +34,11 @@ export default function DisplayUCD (props) {
                       <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                         <Link href={`/students/profile?id=${x.id}`}>
                           <div className='displayStudentRow' key={`elem_${ind}`}>
-                            <p style={{ marginLeft: '2rem', width: '30%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                            <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
-                            <p style={{ width: '15%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                            <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
+                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                            <p style={{marginLeft: '3em', width: '10%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                            <p style={{marginLeft: '4rem', width: '11%'  }}>{x.status ? x.status : "Unassigned"}</p>
+                            <p style={{marginLeft: '5rem', width: '11%'  }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
+                            <p style={{marginLeft: '2rem', width: '3%'  }}>{x.status ? x.status : "Unassigned"}</p>
                           </div>
                         </Link>
                       </div >
