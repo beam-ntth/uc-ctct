@@ -101,7 +101,7 @@ export default function StudentProfile({ student }) {
                     <p><strong>Gender Preference:</strong> {student.gender}</p>
                   </div>
                   <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Phone Number:</strong> {student.phoneNumber}</p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Phone Number:</strong> ({student.phoneNumber.substring(0, 3)}) {student.phoneNumber.substring(3, 6)}-{student.phoneNumber.substring(6, 10)}</p>
                     <p><strong>Email:</strong> {student.email}</p>
                   </div>
                   <div className={styles.infoRow}>

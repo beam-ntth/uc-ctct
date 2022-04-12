@@ -17,16 +17,14 @@ export default function DisplayUCSF (props) {
     return (
         <React.Fragment>
             <div className={styles.data}>
-              <div style={{ width: '100%', paddingLeft: '2rem', display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
+              <div className={ styles.topRow }>
                 <div className={ styles.goBack } onClick={() => props.setPage('Default')} >
                   <IoArrowBack size={30} style={{ width: '10%', marginRight: '0.5rem' }} /> 
                   <p style={{ margin: 0 }}>Back to selection</p>
                 </div>
-                <p style={{ marginRight: '1rem' }}>Please select students year: </p>
+                <p style={{ marginRight: '1rem' }}>Cohort: </p>
                 <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
-                  {
                     <option value={'2022'}>2022</option>
-                  }
                 </select>
               </div>
 

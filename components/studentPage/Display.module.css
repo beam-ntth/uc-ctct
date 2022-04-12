@@ -70,17 +70,26 @@
   padding-left: 0.5rem;
 }
 
+.topRow {
+  width: 100%;
+  padding-left: 2rem;
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+}
+
 .goBack {
   justify-content: center;
   align-items: center;
   height: auto;
-  width: 15%;
+  width: 14%;
   background-color: #fff;
-  padding: 0.5rem 0;
+  padding: 0.3rem 0;
   display: flex;
   border-radius: 1rem;
   cursor: pointer;
   margin-right: 1rem;
+  font-size: 0.9rem;
 }
 
 .titleCol1 {

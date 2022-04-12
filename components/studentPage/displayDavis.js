@@ -17,7 +17,7 @@ export default function DisplayUCD (props) {
     return (
         <React.Fragment>
             <div className={styles.data}>
-              <div style={{ width: '100%', paddingLeft: '2rem', display: 'flex', alignItems: 'center', marginTop: '1rem' }}>
+              <div className={ styles.topRow }>
                 <div className={ styles.goBack } onClick={() => props.setPage('Default')} >
                   <IoArrowBack size={30} style={{ width: '10%', marginRight: '0.5rem' }} /> 
                   <p style={{ margin: 0 }}>Back to selection</p>

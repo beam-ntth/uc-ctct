@@ -37,8 +37,7 @@ export const getAllRegions = async () => {
     const { resources: data } = await Regions.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
-    console.log("Error is", error.code);
-    throw new Error("Issue fetching Regions");
+    throw new Error(`Issue fetching Regions: ${error}`);
   }
 };
 
@@ -50,8 +49,7 @@ export const getAllSites = async () => {
     const { resources: data } = await Sites.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
-    console.log("Error is: ", error.code);
-    throw new Error("Issue with fetching sites");
+    throw new Error(`Issue with fetching sites: ${error}`);
   }
 };
 
@@ -63,8 +61,7 @@ export const getAllClinics = async () => {
     const { resources: data } = await Clinics.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
-    console.log("Error is", error.code);
-    throw new Error("Issue fetching Clinics");
+    throw new Error(`Issue fetching Clinics: ${error}`);
   }
 };
 
@@ -76,7 +73,7 @@ export const getAllPreceptors = async () => {
     const { resources: data } = await Preceptors.items.query(`${selectAllQuery} ORDER BY c.lastname ASC`).fetchAll();
     return data;
   } catch (error) {
-    throw new Error("Issue getting all preceptors.");
+    throw new Error(`Issue getting all preceptors: ${error}`);
   }
 }
 
@@ -88,7 +85,7 @@ export const getAllStudents = async () => {
     const { resources: data } = await Students.items.query(`${selectAllQuery} ORDER by c.lastName ASC`).fetchAll();
     return data;
   } catch (error) {
-    throw new Error("Issue getting all students.");
+    throw new Error(`Issue getting all students: ${error}`);
   }
 }
 
@@ -101,8 +98,7 @@ export const getRegion = async (id) => {
     const { resource: data } = await Regions.item(id, id).read();
     return data;
   } catch (error) {
-    console.log("Error is", error);
-    throw new Error("Issue fetching region with id", id);
+    throw new Error(`Issue fetching region with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -116,7 +112,7 @@ export const getClinic = async (id) => {
     return data;
   } catch (error) {
     console.log("Error is", error.code);
-    throw new Error("Issue fetching clinic with id", id);
+    throw new Error(`Issue fetching clinic with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -128,7 +124,7 @@ export const getClinicsFromSite = async (id) => {
     }).fetchAll();
     return data;
   } catch (error) {
-    throw new Error(`Issue fetching clinics connected to site ${id}`);
+    throw new Error(`Issue fetching clinics connected to site ${id}. Error is: ${error}`);
   }
 }
 
@@ -142,8 +138,7 @@ export const getSite = async (id) => {
     console.log("Fetching site", data);
     return data;
   } catch (error) {
-    console.log("Error is: ", error.code);
-    throw new Error("Issue with fetching the site: ", id);
+    throw new Error(`Issue with fetching the site: ${id}. Error is: ${error}`);
   }
 };
 
@@ -159,8 +154,7 @@ export const getSitesFromRegion = async (id) => {
     }).fetchAll();
     return data;
   } catch (error) {
-    console.log();
-    throw new Error(`Issue getting sites with region_id ${id}.`);
+    throw new Error(`Issue getting sites with region_id ${id}. Error is: ${error}`);
   }
 }
 
@@ -169,7 +163,7 @@ export const getPreceptor = async (id) => {
     const { resource: data } = await Preceptors.item(id, id).read();
     return data;
   } catch (error) {
-    throw new Error("Issue getting preceptor with id", id);
+    throw new Error(`Issue getting preceptor with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -178,7 +172,7 @@ export const getStudent = async (id) => {
     const { resource: data } = await Students.item(id, id).read();
     return data;
   } catch (error) {
-    throw new Error("Issue getting preceptor with id", id);
+    throw new Error(`Issue getting preceptor with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -194,8 +188,8 @@ export const getDistinctRegions = async () => {
     console.log("Getting all distinct regions", res);
     // const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
     return data;
-  } catch (Error) {
-    throw new Error("Issue getting all distinct regions.");
+  } catch (error) {
+    throw new Error(`Issue getting all distinct regions. Error is: ${error}`);
   }
 }
 
@@ -203,8 +197,8 @@ export const getDistinctClinicStatuses = async () => {
   try {
     const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
     return data;
-  } catch (Error) {
-    throw new Error("Issue getting all distinct clinic statuses.");
+  } catch (error) {
+    throw new Error(`Issue getting all distinct clinic statuses. Error is: ${error}`);
   }
 }
 
@@ -213,8 +207,8 @@ export const getDistinctSiteAffiliations = async () => {
     const { resources: data } = await Sites.items.query(distinctAffiliationQuery).fetchAll();
     console.log("Getting distinct affiliations: ", data);
     return data;
-  } catch (Error) {
-    throw new Error("Issue getting all distinct site affiliations.");
+  } catch (error) {
+    throw new Error(`Issue getting all distinct site affiliations. Error is: ${error}`);
   }
 }
 
@@ -236,13 +230,17 @@ export const addClinic = async (clinic_data, site_id) => {
  * @returns preceptor - Preceptor that was recently added to Preceptors container.
  */
 const createNewPreceptor = async (preceptor) => {
-  const id = uuidv4().toString();
-  const actualPreceptor = {
-    id: id,
-    ...preceptor
+  try {
+    const id = uuidv4().toString();
+    const actualPreceptor = {
+      id: id,
+      ...preceptor
+    }
+    await Preceptors.items.create(actualPreceptor);
+    return actualPreceptor;
+  } catch (error) {
+    throw new Error(`Issue while creating new preceptor profile. Error is: ${error}`);
   }
-  await Preceptors.items.create(actualPreceptor);
-  return actualPreceptor;
 }
 
 /**
@@ -251,26 +249,29 @@ const createNewPreceptor = async (preceptor) => {
  * @param 
  */
 export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
-  // Create new preceptor doc with passed in preceptor.
-  const preceptor = await createNewPreceptor(preceptor_info);
+  try {
+    // Create new preceptor doc with passed in preceptor.
+    const preceptor = await createNewPreceptor(preceptor_info);
 
-  // Get clinic data to access array of preceptors.
-  const clinic = await getClinic(id);
-  let preceptors = clinic.preceptorInfo;
+    // Get clinic data to access array of preceptors.
+    const clinic = await getClinic(id);
+    let preceptors = clinic.preceptorInfo;
 
-  // Add new id of the recently created preceptor to array. 
-  preceptors.push(preceptor.id);
-  const replaceOperation = [
-    {
-      op: "replace",
-      path: "/preceptorInfo",
-      value: preceptors
-    },
-  ];
+    // Add new id of the recently created preceptor to array. 
+    preceptors.push(preceptor.id);
+    const replaceOperation = [
+      {
+        op: "replace",
+        path: "/preceptorInfo",
+        value: preceptors
+      },
+    ];
 
-  // Replace and update with newly added preceptor id.
-  await Clinics.item(id, id).patch(replaceOperation);
-  return
+    // Replace and update with newly added preceptor id.
+    await Clinics.item(id, id).patch(replaceOperation);
+  } catch (error) {
+    throw new Error(`Issue while adding preceptor to clinic with id (${id}). Error is: ${error}`);
+  }
 }
 
 /**
@@ -279,15 +280,19 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
  * @param {JSON} note_data New JSON data of the note to patch to the DB.
  */
 export async function updateSiteNote(id, note_data) {
-  const replaceOperation =
-        [
-            {
-                op: "replace",
-                path: "/notes",
-                value: note_data
-            }
-        ];
-        await Sites.item(id, id).patch(replaceOperation);
+  try {
+    const replaceOperation =
+    [
+        {
+            op: "replace",
+            path: "/notes",
+            value: note_data
+        }
+    ];
+    await Sites.item(id, id).patch(replaceOperation);
+  } catch (error) {
+    throw new Error(`Issue while updating note to site with id (${id}). Error is: ${error}`);
+  }
 }
 
 /** DELETION OPERATIONS */
@@ -309,7 +314,6 @@ export const removeClinic = async (id, siteId) => {
         value: previous_num_clinics["total_clinics"] - 1
       }]
     await Sites.item(siteId, siteId).patch(replaceOperation)
-
   } catch (error) {
     console.log("Error is", error.code);
     throw new Error("Issue deleting clinic with id", id);
@@ -350,7 +354,7 @@ export const removeSite = async (id, regionId) => {
     await Regions.item(regionId, regionId).patch(replaceOperation)
 
   } catch (error) {
-    throw new Error("Issue deleting site with id", id);
+    throw new Error(`Issue deleting site with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -380,7 +384,7 @@ export const removeRegion = async (id) => {
     await Regions.item(id, id).delete();
 
   } catch (error) {
-    throw new Error("Issue deleting region with id", id);
+    throw new Error(`Issue deleting region with id (${id}). Error is: ${error}`);
   }
 }
 
@@ -405,7 +409,7 @@ export const removeAdmin = async (id, index) => {
     return
 
   } catch (error) {
-    throw new Error(`Issue deleting clinic admin with id ${id} at position ${index}`);
+    throw new Error(`Issue deleting clinic admin with id ${id} at position ${index}. Error is: ${error}`);
   }
 }
 
@@ -417,7 +421,7 @@ export const removeAdmin = async (id, index) => {
  * @throws {Error} Error if any operation is unable to be completed.
  */
 export const removePreceptor = async (id, index) => {
-  // try {
+  try {
     // EDIT Clinic Information
     const { resource: clinic_obj } = await Clinics.item(id, id).read()
     const preceptor_id = clinic_obj.preceptorInfo[index]
@@ -448,7 +452,7 @@ export const removePreceptor = async (id, index) => {
       await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
     }
     return
-  // } catch (error) {
-  //   throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic`);
-  // }
+  } catch (error) {
+    throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic. Error is:  ${error}`);
+  }
 }
