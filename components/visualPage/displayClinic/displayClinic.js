@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { IoIosArrowDown } from 'react-icons/io';
 import styles from './DisplayClinic.module.css'
+import { IoIosArrowDown } from 'react-icons/io';
 import Dropdown from '../dropDown/dropdown';
 import SearchString from '../../shared/search'
 import StatusParser from '../../shared/status';
@@ -142,20 +142,39 @@ export default function DisplayClinic(props) {
 
       {
         filteredClinicData.map((x, ind) => {
-          //const population = Parser("clinics", parseInt(x.population))
           const statusText = StatusParser("sites", parseInt(x.status));
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
+          let displayAffi = "N/A"
+          if (regionName != null) {
+            switch (regionName[0].name) {
+              case "University of California, Davis":
+                displayAffi = "UCD";
+                break;
+              case "University of California, San Francisco":
+                displayAffi = "UCSF";
+                break;
+              case "University of California, Los Angeles":
+                displayAffi = "UCLA";
+                break;
+              case "University of California, Irvine":
+                displayAffi = "UCI";
+                break;
+              default:
+                displayAffi = "N/A";
+                break;
+            }
+          }
           return (
             <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
-                  <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{statusText}</p>
-                  <p className={styles.dataCol3}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-                  <p className={styles.dataCol4} >{x.description.settingLocation}</p>
-                  <p className={styles.dataCol5}>{x.description.settingPopulation}</p>
-                  <p className={styles.dataCol6}>{x.description.population}</p>
-                  <p className={styles.dataCol7}>{x.description.patientAcuity}</p>
+                  <p className={styles.dataCol1}>{ x.name }</p>
+                  <p className={styles.dataCol2}>{ statusText }</p>
+                  <p className={styles.dataCol3}>{ displayAffi }</p>
+                  <p className={styles.dataCol4}>{ x.description.settingLocation }</p>
+                  <p className={styles.dataCol5}>{ x.description.settingPopulation }</p>
+                  <p className={styles.dataCol6}>{ x.description.population }</p>
+                  <p className={styles.dataCol7}>{ x.description.patientAcuity }</p>
                 </div>
               </div>
             </Link>

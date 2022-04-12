@@ -112,7 +112,12 @@ export default function Student({ students }) {
                   responseDate: ""
                 },
                 assignedPreceptor: false,
-                year: `${new Date().getFullYear()}`
+                year: `${ new Date().getFullYear() }`,
+                metadata: {
+                  date_format: 'mm/dd/yyyy',
+                  date_added: `${ new Date().getMonth() }/${ new Date().getDate() }/${ new Date().getFullYear() }`,
+                  date_last_updated: `${ new Date().getMonth() }/${ new Date().getDate() }/${ new Date().getFullYear() }`
+                }
               }
             })
             setData(cleaned_obj)
@@ -134,6 +139,26 @@ export default function Student({ students }) {
    * uploading to the database
    */
   const [validation, setValidation] = useState(false)
+
+  /**
+   * Activate loading on the client-side, [] means only load once
+   */
+   useEffect(() => {
+    const stickyValue = window.localStorage.getItem('studentPageSetting');
+    stickyValue !== null ? setPage(JSON.parse(stickyValue)) : setPage("Default")
+  }, [])
+
+  /**
+   * Save user's last state in local storage, so when they click 'go back' button
+   * in the browser, they don't have tp re-choose the page again
+   */
+  useEffect(() => {
+    window.localStorage.setItem('studentPageSetting', JSON.stringify(page))
+  }, [page])
+
+  /**
+   * Configure Header Text
+   */
   
   return (
     <React.Fragment>
@@ -147,7 +172,7 @@ export default function Student({ students }) {
         <main className={styles.main}>
           <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header="Student Management Full Overview" imgSrc="/asset/images/user-image.png" />
+            <Header header={`Student Management ${ page == 'Default' ? 'Full Overview' : '- ' + page }`} imgSrc="/asset/images/user-image.png" />
 
             {/* Hidden file upload button */}
             <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
@@ -170,21 +195,26 @@ export default function Student({ students }) {
               </div>
               <div className={styles.selectIndiUni}>
                 <div className={styles.universityBtn} onClick={() => setPage('UCD')}>
+                  <img src='/asset/images/school_seals/UCD_Seal.png' />
                   <p>UC Davis</p>
                 </div>
                 <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
+                  <img src='/asset/images/school_seals/UCSF_Seal.png' />
                   <p>UCSF</p>
                 </div>
               </div>
               <div className={styles.selectIndiUni}>
                 <div className={styles.universityBtn} onClick={() => setPage('UCLA')}>
+                  <img src='/asset/images/school_seals/UCLA_Seal.png' />
                   <p>UCLA</p>
                 </div>
                 <div className={styles.universityBtn} onClick={() => setPage('UCI')}>
+                  <img src='/asset/images/school_seals/UCI_Seal.png' />
                   <p>UC Irvine</p>
                 </div>
               </div>
             </div> : null }
+
             { page === 'UCD' ? <DisplayUCD students={students} setPage={setPage} /> : null }
             { page === 'UCLA' ? <DisplayUCLA students={students} setPage={setPage} /> : null }
             { page === 'UCI' ? <DisplayUCI students={students} setPage={setPage} /> : null }

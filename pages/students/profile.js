@@ -84,9 +84,9 @@ export default function StudentProfile({ student }) {
                 <h4>General Profile Information</h4>
               </div>
               <div className={styles.bioTitle}>
-                <div className={styles.profileImg}>
+                {/* <div className={styles.profileImg}>
                   <img src="/asset/images/user-image.png" />
-                </div>
+                </div> */}
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {student.firstName} {student.middleName} {student.lastName}</p>
