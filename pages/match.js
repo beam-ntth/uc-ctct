@@ -65,7 +65,7 @@ export default function Matching({ clinics, students, preceptors }) {
                         </div>
                         <div className={styles.row}>
                             <div style={{ display: 'flex', width: '80%' }}>
-                                <p className={styles.titleCol1}>Assigned Students</p>
+                                <p className={styles.headerCol}>Assigned Students</p>
                             </div>
                         </div>
                         {
@@ -75,20 +75,29 @@ export default function Matching({ clinics, students, preceptors }) {
                         }
                         <div className={styles.row}>
                             <div style={{ display: 'flex', width: '80%' }}>
-                            <p className={styles.titleCol1}>Unassigned Students</p>
+                            <p className={styles.headerCol}>Unassigned Students</p>
                             </div>
                         </div>
+                        <div className={styles.row}>
+                            <div style={{ display: 'flex', width: '85%' }}>
+                                <p className={styles.titleCol1}>Name</p>
+                                <p className={styles.titleCol2}>Primary Clinic</p>
+                                <p className={styles.titleCol3}>Primary Status</p>
+                                <p className={styles.titleCol4}>Secondary Clinic</p>
+                                <p className={styles.titleCol5}>Secondary Status</p>
+                            </div>
+                        </div >
                         {
                             students ? students.map((x, ind) => {
                             return (
                                 <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                                     <Link href={`/students/profile?id=${x.id}`}>
                                         <div className='displaySurveyRow' key={`elem_${ind}`}>
-                                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.lastName}</p>
-                                            <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>
-                                            <p style={{ width: '15%' }}>{x.surveyCount ? x.surveyCount : "Not sent"}</p>
-                                            <p style={{ width: '15%' }}>{x.surveyLastSent ? x.surveyLastSent : "N/A"}</p>
-                                            <p style={{ width: '15%' }}>{x.surveyResponse ? x.surveyResponse : "No Response"}</p>
+                                            <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                                            <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                                            <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
+                                            <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
+                                            <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
                                         </div>
                                     </Link>
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}

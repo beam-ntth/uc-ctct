@@ -40,7 +40,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Student({ students }) {
-  const [hover, setHover] = useState(false)
+  const [addStudentHover, setAddStudentHover] = useState(false)
+  const [editStudentHover, setEditStudentHover] = useState(false)
   const [page, setPage] = useState('Default')
 
   const router = useRouter()
@@ -157,8 +158,12 @@ export default function Student({ students }) {
   }, [page])
 
   /**
-   * Configure Header Text
+   * Parse the CSV file and update each student's record accordingly
+   * - Display an alert message to remind the user before uploading their CSV file
    */
+  const editStudent = () => {
+    alert(`BEFORE UPLOADING THE FILE!\nPlease make sure the first two columns are:\n1. Student Name\n2. Student Home Email\nThe system will not match student records correctly if the two fields are not correct.`)
+  }
   
   return (
     <React.Fragment>
@@ -175,20 +180,34 @@ export default function Student({ students }) {
             <Header header={`Student Management ${ page == 'Default' ? 'Full Overview' : '- ' + page }`} imgSrc="/asset/images/user-image.png" />
 
             {/* Hidden file upload button */}
-            <input type={'file'} onChange={(e) => setCsvFile(e.target.files[0])} style={{display: 'none'}} />
             <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
 
             {/* Switching between pages */}
-            { page === 'Default' ? <div className={styles.selectUniversities}>
-              <div className={styles.fileUpload} style={ hover ? { height: '11%', width: '91%', transition: 'linear 0.2s' } : {} }
-                onClick={() => fileElem != null ? fileElem.click() : null} onMouseEnter={() => setHover(true)} 
-                onMouseLeave={() => setHover(false)} >
-                <p style={ hover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 
-                : { marginRight: '1rem', transition: 'linear 0.2s' } }>
-                  Upload the CSV file here
-                </p>
-                <FiUpload color={ hover ? "#079CDB" : "#C4C4C4" } size={ hover ? 35 : 30 } 
-                style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
+            { page === 'Default' ? 
+            <div className={styles.selectUniversities}>
+              <div className={styles.uploadBtns}>
+                <div className={styles.fileUpload} style={ addStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
+                  onClick={() => fileElem != null ? fileElem.click() : null} 
+                  onMouseEnter={() => setAddStudentHover(true)} 
+                  onMouseLeave={() => setAddStudentHover(false)} >
+                  <p style={ addStudentHover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 
+                  : { marginRight: '1rem', transition: 'linear 0.2s' } }>
+                    Add student profile with CSV
+                  </p>
+                  <FiUpload color={ addStudentHover ? "#079CDB" : "#C4C4C4" } size={ addStudentHover ? 35 : 30 } 
+                  style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
+                </div>
+                <div className={styles.fileUpload} style={ editStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
+                  onClick={() => editStudent()} 
+                  onMouseEnter={() => setEditStudentHover(true)} 
+                  onMouseLeave={() => setEditStudentHover(false)} >
+                  <p style={ editStudentHover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 
+                  : { marginRight: '1rem', transition: 'linear 0.2s' } }>
+                    Edit student profile with CSV
+                  </p>
+                  <FiUpload color={ editStudentHover ? "#079CDB" : "#C4C4C4" } size={ editStudentHover ? 35 : 30 } 
+                  style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
+                </div>
               </div>
               <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
                 <p>Show all universities</p>

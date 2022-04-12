@@ -31,7 +31,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    height: 15%;
+    height: 10%;
     width: 100%;
     font-family: 'Lato', sans-serif;
     font-weight: bold;
@@ -63,14 +63,20 @@
     border: 1px solid #079CDB;
 }
 
+.headerCol {
+  width: 50%;
+  margin-left: 2rem;
+  font-size: large;
+}
+
 .titleCol1 {
-  width: 30%;
+  width: 20%;
   margin-left: 2rem;
   font-size: large;
 }
 
 .titleCol2 {
-  width: 10%;
+  width: 15%;
   font-size: large;
 }
 
@@ -80,17 +86,12 @@
 }
 
 .titleCol4 {
-  width: 15%;
+  width: 18%;
   font-size: large;
 }
 
 .titleCol5 {
-  width: 15%;
-  font-size: large;
-}
-
-.titleCol6 {
-  width: 10%;
+  width: 18%;
   font-size: large;
 }
 

@@ -69,10 +69,12 @@ export default function DisplayUCD (props) {
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '90%' }}>
                   <p className={styles.titleCol1}>Name</p>
-                  <p className={styles.titleCol2}>Primary Site</p>
-                  <p className={styles.titleCol3}>Primary Status</p>
-                  <p className={styles.titleCol4}>Secondary Site</p>
-                  <p className={styles.titleCol5}>Secondary Status</p>
+                  <p className={styles.titleCol2}>Language</p>
+                  <p className={styles.titleCol3}>County</p>
+                  <p className={styles.titleCol4}>Population</p>
+                  <p className={styles.titleCol5}>Address</p>
+                  <p className={styles.titleCol6}>Population Preference</p>
+                  <p className={styles.titleCol7}>Last Accessed</p>
                 </div>
               </div >
               {
@@ -82,10 +84,12 @@ export default function DisplayUCD (props) {
                       <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                          <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                          <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
-                          <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                          <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
+                          <p style={{ width: '10%' }}>{x.primaryClinic ? x.primaryClinic : "TBD"}</p>
+                          <p style={{ width: '10%' }}>{x.status ? x.status : "TBD"}</p>
+                          <p style={{ width: '10%' }}>{x.status ? x.status : "TBD"}</p>
+                          <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.state}, ${x.postal}` : "TBD"}</p>
+                          <p style={{ width: '18%' }}>{x.status ? x.status : "TBD"}</p>
+                          <p style={{ width: '15%' }}>{x.metadata ? x.metadata.date_last_updated : "TBD"}</p>
                         </div>
                       </Link>
                     </div >

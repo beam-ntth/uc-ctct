@@ -99,22 +99,32 @@
 }
 
 .titleCol2 {
-  width: 15%;
+  width: 10%;
   font-size: large;
 }
 
 .titleCol3 {
-  width: 15%;
+  width: 10%;
   font-size: large;
 }
 
 .titleCol4 {
-  width: 18%;
+  width: 10%;
   font-size: large;
 }
 
 .titleCol5 {
+  width: 15%;
+  font-size: large;
+}
+
+.titleCol6 {
   width: 18%;
+  font-size: large;
+}
+
+.titleCol7 {
+  width: 15%;
   font-size: large;
 }
   
