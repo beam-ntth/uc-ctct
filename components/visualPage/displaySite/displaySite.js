@@ -140,16 +140,16 @@ export default function DisplaySite(props) {
           let displayAffi = "N/A"
           if (regionName != null) {
             switch (regionName[0].name) {
-              case "University of California, Davis":
+              case "UC Davis":
                 displayAffi = "UCD";
                 break;
-              case "University of California, San Francisco":
+              case "UC San Francisco":
                 displayAffi = "UCSF";
                 break;
-              case "University of California, Los Angeles":
+              case "UC Los Angeles":
                 displayAffi = "UCLA";
                 break;
-              case "University of California, Irvine":
+              case "UC Irvine":
                 displayAffi = "UCI";
                 break;
               default:
