@@ -97,7 +97,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Meeting Type</p>
                   <IoIosArrowDown color='#079CDB' style={showMeetingDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
-                <Dropdown displayOnly open={showMeetingDropdown} setOpen={setMeetingDropdown} choices={meetingChoices} />
+                <Dropdown displayOnly open={showMeetingDropdown} setOpen={setMeetingDropdown} disableSearch choices={meetingChoices} />
               </div>
             </div>
             <div className={styles.row}>
