@@ -214,21 +214,21 @@ export default function Student({ students }) {
               </div>
               <div className={styles.selectIndiUni}>
                 <div className={styles.universityBtn} onClick={() => setPage('UCD')}>
-                  <img src='/asset/images/school_seals/UCD_Seal.png' />
+                  <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
                   <p>UC Davis</p>
                 </div>
                 <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
-                  <img src='/asset/images/school_seals/UCSF_Seal.png' />
+                  <img src='/asset/images/school_logos/UCSF_logo.png' />
                   <p>UCSF</p>
                 </div>
               </div>
               <div className={styles.selectIndiUni}>
                 <div className={styles.universityBtn} onClick={() => setPage('UCLA')}>
-                  <img src='/asset/images/school_seals/UCLA_Seal.png' />
+                  <img src='/asset/images/school_logos/UCLA_logo.png' />
                   <p>UCLA</p>
                 </div>
                 <div className={styles.universityBtn} onClick={() => setPage('UCI')}>
-                  <img src='/asset/images/school_seals/UCI_Seal.png' />
+                  <img src='/asset/images/school_logos/UCI_logo.png' />
                   <p>UC Irvine</p>
                 </div>
               </div>
