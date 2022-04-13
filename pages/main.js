@@ -74,7 +74,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header="Welcome!" imgSrc="/asset/images/user-image.png" />
+          <Header header="UC PMHNP Consortium Clinical Site Management" imgSrc="/asset/images/user-image.png" />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
