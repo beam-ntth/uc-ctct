@@ -24,6 +24,7 @@ const DisplayUCSF = dynamic(() => import('../../components/studentPage/displaySF
 
 import { getAllStudents } from '../../api-lib/azure/azureOps';
 import { client } from '../../api-lib/azure/azureConfig';
+import ValidateEditStudentDetails from '../../components/studentPage/validateEditDetails';
 
 export async function getServerSideProps(context) {
   const students = await getAllStudents();
@@ -55,6 +56,9 @@ export default function Student({ students }) {
   const [data, setData] = useState([])
   const [csvFile, setCsvFile] = useState(null)
   const [fileElem, setFileElem] = useState(null)
+  const [updateInfoData, setUpdateInfoData] = useState(null)
+  const [updateInfoCsvFile, setUpdateInfoCsvFile] = useState(null)
+  const [updateInfoFileElem, setUpdateInfoFileElem] = useState(null)
 
   /**
    * Parse the CSV file and update the "data" state, whenever there is
@@ -131,15 +135,48 @@ export default function Student({ students }) {
   }, [csvFile])
 
   /**
+   * Parse the CSV file and update the "updateInfoData" state, whenever there is
+   * a new CSV file uploaded to the site 
+   */
+   useEffect(() => {
+    if (updateInfoCsvFile != null) {
+      const reader = new FileReader();
+      reader.addEventListener('load', function (e) {   
+        let csvdata = e.target.result; 
+        csv().fromString(csvdata).then(
+          obj => {
+            const cleaned_obj = obj.map((x) => {
+              return {
+                firstName: x["first_name"],
+                middleName: x["middle_name"],
+                lastName: x["last_name"],
+                email: x["home_email"],
+                affiliatedEmail: x["affiliated_email"],
+              }
+            })
+            setUpdateInfoData(cleaned_obj)
+            setUpdateValidation(true)
+          }
+        )
+      });
+      reader.readAsBinaryString(updateInfoCsvFile)
+    }
+  }, [updateInfoCsvFile])
+
+  /**
    * Initialize hidden CSV upload button
    */
-  useEffect(() => setFileElem(document.getElementById('fileElem')), [])
+  useEffect(() => {
+    setFileElem(document.getElementById('fileElem'));
+    setUpdateInfoFileElem(document.getElementById('updateFileElem'));
+  }, [])
 
   /**
    * Set a state for validation pop-up screen, asking user to check everything before
    * uploading to the database
    */
   const [validation, setValidation] = useState(false)
+  const [updatevalidation, setUpdateValidation] = useState(false)
 
   /**
    * Activate loading on the client-side, [] means only load once
@@ -156,18 +193,11 @@ export default function Student({ students }) {
   useEffect(() => {
     window.localStorage.setItem('studentPageSetting', JSON.stringify(page))
   }, [page])
-
-  /**
-   * Parse the CSV file and update each student's record accordingly
-   * - Display an alert message to remind the user before uploading their CSV file
-   */
-  const editStudent = () => {
-    alert(`BEFORE UPLOADING THE FILE!\nPlease make sure the first two columns are:\n1. Student Name\n2. Student Home Email\nThe system will not match student records correctly if the two fields are not correct.`)
-  }
   
   return (
     <React.Fragment>
-      { validation ? <ValidateStudentDetails data={data} setOpen={ setValidation } reload={refreshData} setCsv={setCsvFile} /> : null }
+      { validation ? <ValidateStudentDetails data={data} setOpen={ setValidation } reload={ refreshData } setCsv={ setCsvFile } /> : null }
+      { updatevalidation ? <ValidateEditStudentDetails data={updateInfoData} setOpen={ setUpdateValidation } reload={ refreshData } setCsv={ setUpdateInfoCsvFile } /> : null }
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -181,6 +211,7 @@ export default function Student({ students }) {
 
             {/* Hidden file upload button */}
             <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />
+            <input type={'file'} id={'updateFileElem'} style={{display: 'none'}} onChange={(e) => setUpdateInfoCsvFile(e.target.files[0])} />
 
             {/* Switching between pages */}
             { page === 'Default' ? 
@@ -198,7 +229,11 @@ export default function Student({ students }) {
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
                 </div>
                 <div className={styles.fileUpload} style={ editStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
-                  onClick={() => editStudent()} 
+                  onClick={() => {
+                      alert(`BEFORE UPLOADING THE FILE!\nPlease make sure the first two columns are:\n1. Student Name\n2. Student Home Email\nThe system will not match student records correctly if the two fields are not correct.`)
+                      updateInfoFileElem != null ? updateInfoFileElem.click() : null
+                    }
+                  } 
                   onMouseEnter={() => setEditStudentHover(true)} 
                   onMouseLeave={() => setEditStudentHover(false)} >
                   <p style={ editStudentHover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 

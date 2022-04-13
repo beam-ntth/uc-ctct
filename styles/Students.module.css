@@ -152,11 +152,11 @@
 
 .universityBtn img {
   transition: linear 0.2s;
-  height: 25%;
+  height: 20%;
   width: auto;
 }
 
 .universityBtn:hover img {
-  height: 30%;
+  height: 23%;
   width: auto;
 }
