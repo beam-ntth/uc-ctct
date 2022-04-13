@@ -37,34 +37,41 @@ export default function DisplayALL (props) {
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowPrimeSiteDropdown(!showPrimeSiteDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Primary Site</p>
+                    <p style={{ fontSize: '0.7rem' }}>Language</p>
+                    <IoIosArrowDown color='#079CDB' style={showPrimeSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  </div>
+                  <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
+                </div>
+                <div className={styles.regionForm}>
+                  <div className={styles.formTitle} onClick={() => setShowPrimeSiteDropdown(!showPrimeSiteDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>County</p>
                     <IoIosArrowDown color='#079CDB' style={showPrimeSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
                   <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowPrimeStatusDropdown(!showPrimeStatusDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Primary Status</p>
+                    <p style={{ fontSize: '0.7rem' }}>Address</p>
                     <IoIosArrowDown color='#079CDB' style={showPrimeStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
                   <Dropdown disableSearch displayOnly open={showPrimeStatusDropdown} setOpen={setShowPrimeStatusDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowSecSiteDropdown(!showSecSiteDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Secondary Site</p>
+                    <p style={{ fontSize: '0.7rem' }}>Population preference</p>
                     <IoIosArrowDown color='#079CDB' style={showSecSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
                   <Dropdown disableSearch displayOnly open={showSecSiteDropdown} setOpen={setShowSecSiteDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowSecStatusDropdown(!showSecStatusDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Secondary Status</p>
+                    <p style={{ fontSize: '0.7rem' }}>Last accessed</p>
                     <IoIosArrowDown color='#079CDB' style={showSecStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
+            
                   <Dropdown disableSearch displayOnly open={showSecStatusDropdown} setOpen={setShowSecStatusDropdown} choices={["N/A"]} />
                 </div>
               </div>
-
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '90%' }}>
                   <p className={styles.titleCol1}>Name</p>
