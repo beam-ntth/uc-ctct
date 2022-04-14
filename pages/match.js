@@ -32,7 +32,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
   const [showSetPopDropdown, setShowSetPopDropdown] = useState(false);
 
   const regionChoices = region_choices;
-  const meetingChoices = ['Online', 'In Person'];
+  const meetingChoices = ['Online', 'In Person', 'Hybrid'];
   const settingPopChoices = [... new Set(clinics.map(x => x.description.population))];
 
   const [regionFilter, setRegionFilter] = useState(Array(regionChoices.length).fill(""))
@@ -87,14 +87,14 @@ export default function Matching({ clinics, students, preceptors, region_choices
               </div>
               <div className={styles.sPopForm}>
                 <div className={styles.formTitle} onClick={() => setShowSetPopDropdown(!showSetPopDropdown)}>
-                  <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Population</p>
+                  <p>Population</p>
                   <IoIosArrowDown color='#079CDB' style={showSetPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
                 <Dropdown displayOnly open={showSetPopDropdown} setOpen={setShowSetPopDropdown} choices={settingPopChoices} />
               </div>
               <div className={styles.onlineForm}>
                 <div className={styles.formTitle} onClick={() => setMeetingDropdown(!showMeetingDropdown)}>
-                  <p style={{ fontSize: '0.7rem', marginRight: 0 }}>Meeting Type</p>
+                  <p>Meeting Type</p>
                   <IoIosArrowDown color='#079CDB' style={showMeetingDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
                 <Dropdown displayOnly open={showMeetingDropdown} setOpen={setMeetingDropdown} disableSearch choices={meetingChoices} />
