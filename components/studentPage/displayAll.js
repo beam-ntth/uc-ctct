@@ -50,22 +50,36 @@ export default function DisplayALL (props) {
                   <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowPrimeStatusDropdown(!showPrimeStatusDropdown)}>
+                  <div className={styles.formTitle} onClick={() => setShowPrimeSiteDropdown(!showPrimeSiteDropdown)}>
                     <p style={{ fontSize: '0.7rem' }}>Address</p>
+                    <IoIosArrowDown color='#079CDB' style={showPrimeSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  </div>
+                  <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
+                </div>
+                <div className={styles.regionForm}>
+                  <div className={styles.formTitle} onClick={() => setShowPrimeSiteDropdown(!showPrimeSiteDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>Population pref.</p>
+                    <IoIosArrowDown color='#079CDB' style={showPrimeSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  </div>
+                  <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
+                </div>
+                <div className={styles.regionForm}>
+                  <div className={styles.formTitle} onClick={() => setShowPrimeStatusDropdown(!showPrimeStatusDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>Last accessed</p>
                     <IoIosArrowDown color='#079CDB' style={showPrimeStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
                   <Dropdown disableSearch displayOnly open={showPrimeStatusDropdown} setOpen={setShowPrimeStatusDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowSecSiteDropdown(!showSecSiteDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Population preference</p>
+                    <p style={{ fontSize: '0.7rem' }}>Affiliation</p>
                     <IoIosArrowDown color='#079CDB' style={showSecSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
                   <Dropdown disableSearch displayOnly open={showSecSiteDropdown} setOpen={setShowSecSiteDropdown} choices={["N/A"]} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowSecStatusDropdown(!showSecStatusDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Last accessed</p>
+                    <p style={{ fontSize: '0.7rem' }}>Status</p>
                     <IoIosArrowDown color='#079CDB' style={showSecStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
             
@@ -81,6 +95,8 @@ export default function DisplayALL (props) {
                   <p className={styles.titleCol5}>Address</p>
                   <p className={styles.titleCol6}>Population Preference</p>
                   <p className={styles.titleCol7}>Last Accessed</p>
+                  <p className={styles.titleCol7}>Affiliation</p>
+                  <p className={styles.titleCol7}>Status</p>
                 </div>
               </div >
               {
@@ -96,6 +112,8 @@ export default function DisplayALL (props) {
                           <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.state}, ${x.postal}` : "TBD"}</p>
                           <p style={{ width: '18%' }}>{x.status ? x.status : "TBD"}</p>
                           <p style={{ width: '15%' }}>{x.metadata ? x.metadata.date_last_updated : "TBD"}</p>
+                          <p style={{ width: '15%' }}>{x.affiliation ? x.metadata.date_last_updated : "TBD"}</p>
+                          <p style={{ width: '10%' }}>{x.status ? x.status : "TBD"}</p>
                         </div>
                       </Link>
                     </div >
