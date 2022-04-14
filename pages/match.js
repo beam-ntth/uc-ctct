@@ -76,6 +76,21 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 }
               </select>
             </div>
+            <div className={styles.row}>
+              <div style={{ display: 'flex', width: '80%' }}>
+                <p className={styles.headerCol}>Assigned Students</p>
+              </div>
+            </div>
+            {
+              clinics.filter(x => x.name == selectedClinic.name)[0].student ?
+                clinics.filter(x => x.name == selectedClinic.name)[0].student :
+                <p>No Students Assigned To This Clinic</p>
+            }
+            <div className={styles.row}>
+              <div style={{ display: 'flex', width: '80%' }}>
+                <p className={styles.headerCol}>Unassigned Students</p>
+              </div>
+            </div>
             <div className={styles.filterRow}>
               <div className={styles.regionForm}>
                 <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
@@ -98,21 +113,6 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   <IoIosArrowDown color='#079CDB' style={showMeetingDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
                 <Dropdown displayOnly open={showMeetingDropdown} setOpen={setMeetingDropdown} disableSearch choices={meetingChoices} />
-              </div>
-            </div>
-            <div className={styles.row}>
-              <div style={{ display: 'flex', width: '80%' }}>
-                <p className={styles.headerCol}>Assigned Students</p>
-              </div>
-            </div>
-            {
-              clinics.filter(x => x.name == selectedClinic.name)[0].student ?
-                clinics.filter(x => x.name == selectedClinic.name)[0].student :
-                <p>No Students Assigned To This Clinic</p>
-            }
-            <div className={styles.row}>
-              <div style={{ display: 'flex', width: '80%' }}>
-                <p className={styles.headerCol}>Unassigned Students</p>
               </div>
             </div>
             <div className={styles.row}>

@@ -118,6 +118,7 @@ export default function Student({ students }) {
                 },
                 assignedPreceptor: false,
                 year: `${ new Date().getFullYear() }`,
+                notes: [],
                 metadata: {
                   date_format: 'mm/dd/yyyy',
                   date_added: `${ new Date().getMonth() }/${ new Date().getDate() }/${ new Date().getFullYear() }`,
