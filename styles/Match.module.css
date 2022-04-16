@@ -13,8 +13,48 @@
 }
 
 .content {
-    height: 75vh;
+    height: 100%;
     width: 92%;
+}
+
+.data {
+  background-color: #F5F6FA;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 75%;
+  width: auto;
+  margin-top: 2rem;
+}
+
+.data select {
+  border-radius: 0.5rem;
+  border: solid 1px #c4c4c4;
+  padding: 0.5rem;
+  width: 20%;
+}
+
+.studentSection, .clinicSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  border: 1px #000 solid;
+}
+
+.studentSection {
+  width: 100%;
+}
+
+.clinicSection {
+  width: 0%;
+}
+
+.matchContent {
+  height: 100%;
+  width: 100%;
 }
 
 .menu {
@@ -33,7 +73,7 @@
   align-items: center;
   width: 95%;
   height: 2rem;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
 }
 
 .regionForm, .sPopForm, .onlineForm {
@@ -105,55 +145,27 @@
 .headerCol {
   width: 50%;
   margin-left: 2rem;
-  font-size: large;
 }
 
 .titleCol1 {
   width: 20%;
   margin-left: 2rem;
-  font-size: large;
 }
 
 .titleCol2 {
   width: 15%;
-  font-size: large;
 }
 
 .titleCol3 {
   width: 15%;
-  font-size: large;
 }
 
 .titleCol4 {
   width: 18%;
-  font-size: large;
 }
 
 .titleCol5 {
   width: 18%;
-  font-size: large;
-}
-
-.data {
-    background-color: #F5F6FA;
-    margin: 2rem 3rem 0 7rem;
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    height: 100%;
-    width: auto;
-    padding-left: 5rem;
-    padding-bottom: 4rem;
-    overflow-y: scroll;
-}
-
-.data select {
-    border-radius: 0.5rem;
-    border: solid 1px #c4c4c4;
-    padding: 0.5rem;
-    width: 20%;
 }
 
 .clinicSelect {

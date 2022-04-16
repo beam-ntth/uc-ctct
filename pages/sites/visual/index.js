@@ -15,6 +15,7 @@ const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/di
 
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions, getAllRegions } from '../../../api-lib/azure/azureOps'
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps() {
   const site_data = await getAllSites();
@@ -68,6 +69,8 @@ export default function Visualization({ site_data, regionChoices }) {
     window.localStorage.setItem('vizPageSetting', JSON.stringify(searchSetting))
   }, [searchSetting])
 
+  const router = useRouter();
+
   return (
     <React.Fragment>
       <div className={styles.container}>
@@ -79,7 +82,7 @@ export default function Visualization({ site_data, regionChoices }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
+            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
                 <p className={styles.toggleTitle}

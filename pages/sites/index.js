@@ -80,20 +80,20 @@ export default function Database({ data }) {
                   <p style={{ width: '70%', marginLeft: '2rem' }}>Affiliation</p>
                   <p style={{ width: '20%' }}>Total Active Sites</p>
                 </div>
-                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
+                {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
+                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
               </div >
               {
                 data.map((x, ind) => {
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link href={`/sites/database/?location=${x['id']}`}>
                         <div className='displayRegionRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']}</p>
                           <p style={{ width: '20%', textAlign: 'left', paddingLeft: '1.5rem' }}>{x['total_sites']}</p>
                         </div>
                       </Link>
-                      <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
+                      {/* <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
                         style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                         onMouseEnter={() => {
                           let newStatus = [...editHover]
@@ -108,7 +108,7 @@ export default function Database({ data }) {
                           return
                         }
                         }
-                        onClick={() => setOpenEditForm([x.id, x.name])} />
+                        onClick={() => setOpenEditForm([x.id, x.name])} /> */}
                       {/* <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
                         style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                         onMouseEnter={() => {
