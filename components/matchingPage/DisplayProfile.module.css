@@ -1,0 +1,72 @@
+.data, .noteData {
+    background-color: #F5F6FA;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
+}
+
+.noteData {
+    margin-top: 0rem;
+}
+
+.profileImg {
+    height: auto;
+    width: 15%;
+    background-color: #fff;
+}
+
+.profileImg img {
+    height: 100%;
+    width: 100%;
+}
+
+.profileInfo {
+    height: auto;
+    width: 85%;
+    padding-left: 2rem;
+}
+
+.infoRow {
+    display: flex;
+}
+
+.bioTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 95%;
+}
+
+.bioTitle h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    width: 80%;
+    margin: 1rem 0;
+}
+
+.goBackBar {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.goBackBtn {
+    height: 3rem;
+    width: 30%;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem 0 0 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
