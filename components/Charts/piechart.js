@@ -1,46 +1,31 @@
 import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
+import { Bar } from 'react-chartjs-2';
 
 const state = {
-  labels: ['Active', 'Pending', 'Cold Called',
-           'Onboarding', 'Inactive'],
+  labels: ['UCD', 'UCLA', 'UCSF',
+           'UCI'],
   datasets: [
     {
-      label: 'Rainfall',
-      backgroundColor: [
-        '#4682B4',
-        '#6B8E23',
-        '#FF7F50',
-        '#BDB76B',
-        '#483D8B'
-      ],
-      hoverBackgroundColor: [
-      '#501800',
-      '#4B5000',
-      '#175000',
-      '#003350',
-      '#35014F'
-      ],
+      label: ' Matching Goal Percentage',
+      backgroundColor:[ 'RGB(61, 174, 43)', 'RGB(241, 138, 0)', 'RGB(0, 142, 170)', 'RGB(118, 8, 130)'],
+      borderColor: 'rgba(0,0,0,1)',
+      borderWidth: 0,
       data: [65, 59, 80, 81, 56]
     }
   ]
 }
 
-export default function PieChart() {
+export default function BarChart() {
     return (
       <React.Fragment>
-        <Doughnut
-          data={state} options={{
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                display: true,
-                position: 'left',
-              }
-            }
-            
-          }}
+        <Bar data={state} options={{
+          responsive: true,
+          maintainAspectRatio: false,
+          legend:{
+            display:true,
+            position:'right'
+          }
+        }}
         />
       </React.Fragment>
     );

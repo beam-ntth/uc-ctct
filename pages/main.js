@@ -53,7 +53,7 @@ export default function Main() {
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Chart 1: Detail</p>
+                <p>Number of active students</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
                 <BarChart />
@@ -61,7 +61,7 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Chart 2: Detail</p>
+                <p>Matching Goal</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
                 <PieChart />
@@ -79,7 +79,7 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Chart 2: Detail</p>
+                <p>Matching Goal</p> 
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
                 <PieChart />
