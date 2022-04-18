@@ -107,15 +107,21 @@
 }
 
 .row {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    height: 10%;
-    width: 100%;
-    font-family: 'Lato', sans-serif;
-    font-weight: bold;
-    font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.titleAndRow {
+  height: 60%;
+  width: 96%;
+  margin-left: 2rem;
 }
 
 .searchBar {
@@ -176,6 +182,10 @@
     align-items: center;
 }
 
+.clinicSelect select {
+  cursor: pointer;
+}
+
 .availableClinicSection {
   height: 80%;
   width: 100%;
@@ -183,4 +193,5 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  overflow-y: scroll;
 }
