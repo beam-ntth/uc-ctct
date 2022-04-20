@@ -47,11 +47,11 @@ export default function AddNewClinic(props) {
     "preceptorInfo": [],
     "clinicPlacementDetail": [
       {
-        "title": "Clerance Timeline",
+        "title": "Clearance Timeline",
         "note": ""
       },
       {
-        "title": "Clerance Requirement",
+        "title": "Clearance Requirement",
         "note": ""
       },
       {

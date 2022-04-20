@@ -1,0 +1,115 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    height: 100vh;
+    width: 92%;
+    overflow-y: scroll;
+}
+
+.mainCharts {
+    height: 50%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    margin-top: 1rem;
+}
+
+.chart {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 95%;
+    width: 40%;
+    background-color: #F5F5F5;
+    border-radius: 2rem;
+    margin: 0 1rem 1rem 1rem;
+    padding: 1rem 2rem 2rem 2rem;
+}
+
+.chartTitle {
+    height: auto;
+    width: 90%;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.data {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  /* justify-content: space-between; */
+  align-items: center;
+  height: 10%;
+  width: 95%;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  font-size: 3rem;
+}
+
+/* .numCol1{
+  height: auto;
+  font-size: 1.2rem;
+  font-weight: bold;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 15%;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.numCol2{
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.numCol3{
+  font-size: 1.2rem;
+  font-weight: bold;
+} */
+
+.label {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: flex-start; */
+  justify-content: space-between;
+  /* align-items: center; */
+  height: 10%;
+  width: 95%;
+  font-family: "Lato", sans-serif;
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.siteCol1{
+  font-size: 1.2rem;
+}
+
+.siteCol2{
+  font-size: 1.2rem;
+}
+
+.siteCol3{
+  font-size: 1.2rem;
+}

@@ -33,25 +33,28 @@ export default function AddNewRegion(props) {
                 :
                 (<React.Fragment>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Add New Region</p>
+                        <p className="editTitle">Add New Affiliation</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
                     <div style={{width: '90%'}}>
-                        <p><strong>Name:</strong><input placeholder="Region Name" onChange={(e) => {
+                        <p><strong>Name:</strong><input placeholder="Affiliation Name" onChange={(e) => {
                             let newRegion = {...region}
                             newRegion.name = e.target.value
                             setRegion(newRegion)
                             return
                         }} /> </p>
                     </div>
-                    <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span>
+
+                    {/* No longer using the term region - Updated 4/5/22 */}
+                    {/* <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span> */}
+                    
                     <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
                         <div className="saveBtn" onClick={() => {
                         createNewRegion()
                         setSubmittingForm(true)
                         return
-                    }}>Create Region</div>
+                    }}>Add Affiliation</div>
                     </div>
                 </React.Fragment>)
             }
@@ -74,7 +77,7 @@ export default function AddNewRegion(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 30vh;
+                    height: 35vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;

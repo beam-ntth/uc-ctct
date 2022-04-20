@@ -21,6 +21,7 @@ import { removeClinic } from "../../../../api-lib/azure/azureOps";
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
+import EditSite from "../../../../components/shared/forms/editSite";
 
 // Only import these components when the user clicks
 const EditSiteNote = dynamic(() => import("../../../../components/shared/forms/editSiteNote"));
@@ -51,6 +52,7 @@ export default function Clinics({ data, site_data }) {
   const [openNote, setOpenNote] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
   const [openAddClinic, setOpenAddClinic] = useState(false)
+  const [generalOpen, setGeneralOpen] = useState(false);
 
   /**
    * Status of all the buttons, whether the user hovers over it
@@ -115,11 +117,17 @@ export default function Clinics({ data, site_data }) {
     setFilteredData(data)
   }, [data])
 
+  /**
+   * Convert the encoded status to text
+   */
+  const statusText = StatusParser("sites", parseInt(site_data.status))
+
   return (
     <React.Fragment>
       {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={site_data.id} /> : null}
       {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
       {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={site_data.id} regionId={site_data.region_id} siteName={site_data.name} /> : null}
+      {generalOpen ? <EditSite data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -133,11 +141,32 @@ export default function Clinics({ data, site_data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header={`${site_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <div className={styles.generalBox}>
+              <div className={styles.generalContent}>
+                <div className={styles.generalTitle}>
+                  <div>
+                    <p className={styles.generalTitleHeader}>Site Profile</p>
+                    <p className={styles.generalTitleSubHeader}>Last Updated: 26 January 2021</p>
+                  </div>
+                  <div className={"editButton"} onClick={() => setGeneralOpen(site_data.id)}>Edit Information</div>
+                </div>
+                <Accordion x={{ title: "General Information", note: null }} ind={`profile0`} disabledEdit disabledTrash>
+                  <div className={styles.generalDetail}>
+                    <p style={{ marginRight: '2rem' }}><strong>Phone Number:</strong> {site_data.generalInformation.phoneNumber}</p>
+                    <p><strong>Fax Number:</strong> {site_data.generalInformation.faxNumber}</p>
+                  </div>
+                  <div className={styles.generalDetail}>
+                    <p style={{ marginRight: '2rem' }}><strong>Address:</strong> {`${site_data.generalInformation.addressLine1}, ${site_data.generalInformation.addressLine2 ? `${site_data.generalInformation.addressLine2}, ` : ''}${site_data.generalInformation.city}, ${site_data.generalInformation.state}, ${site_data.generalInformation.postal}`}</p>
+                    <p><strong>Current Status:</strong> {statusText}</p>
+                  </div>
+                </Accordion>
+              </div>
+            </div>
             <div className={styles.data}>
-              <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
-                <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
-                  <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Site Notes</p>
-                  <div style={{ width: '20%', display: 'flex', justifyContent: 'center' }}>
+              <div style={{ width: '90%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: '100%', display: 'flex', marginBottom: '0.5rem' }}>
+                  <p className="titleClinics" style={{ width: '80%', margin: 0, display: 'flex', alignItems: 'center' }}>Site Notes</p>
+                  <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}>
                     <div className='editButton' onClick={() => setOpenNote(true)}>+ Add Note</div>
                   </div>
                 </div>
@@ -173,7 +202,7 @@ export default function Clinics({ data, site_data }) {
                   const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }}>
                       <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                         <div key={`clinic_${ind}`} className="displayRow">
                           <div className="rowContentClinics">

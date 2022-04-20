@@ -37,7 +37,7 @@
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
-    margin: 1rem 0;
+    margin-bottom: 1rem;
 }
 
 .searchBar {
@@ -65,48 +65,147 @@
     border: 1px solid #079CDB;
 }
 
-.titleCol1 {
-  width: 30%;
-  margin-left: 2rem;
-  font-size: large;
+.selectUniversities {
+  height: 75%;
+  width: 90%;
+  margin-top: 2rem;
+  margin-left: 7rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.titleCol2 {
-  width: 10%;
-  font-size: large;
+.uploadBtns {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 10%;
+  width: 90%;
 }
 
-.titleCol3 {
-  width: 15%;
-  font-size: large;
+.fileUpload, .allUniversities {
+  background-color: #f5f5f5;
+
+  margin-bottom: 2rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
 }
 
-.titleCol4 {
-  width: 15%;
-  font-size: large;
+.fileUpload {
+  width: 48%;
+  height: 95%;
 }
 
-.titleCol5 {
-  width: 15%;
-  font-size: large;
+.allUniversities {
+  width: 90%;
+  height: 10%;
 }
 
-.titleCol6 {
-  width: 10%;
-  font-size: large;
+.allUniversities:hover {
+  width: 91%;
+  height: 11%;
+  font-size: 1.1rem;
+  transition: linear 0.2s;
 }
 
-.data {
-    background-color: #F5F6FA;
-    margin: 2rem 3rem 0 7rem;
-    border-radius: 2rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    max-height: 100vh;
-    width: auto;
-    padding-left: 5rem;
-    padding-bottom: 4rem;
-    overflow-y: scroll;
+.selectIndiUni {
+  width: 173%;
+  height: 30%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: -2rem;
+  margin-bottom: 2rem;
+}
+
+.universityBtn {
+  width: 25%;
+  height: 95%;
+  background-color: #71c982;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+
+.universityBtn2 {
+  width: 25%;
+  height: 95%;
+  background-color: #eb934f;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+
+.universityBtn3 {
+  width: 25%;
+  height: 95%;
+  background-color: #5f99bd;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+
+.universityBtn4 {
+  width: 25%;
+  height: 95%;
+  background-color: #9a74ce;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+
+.universityBtn:hover, .universityBtn2:hover, .universityBtn3:hover, .universityBtn4:hover {
+  font-size: 1.1rem;
+  height: 100%;
+  width: 26%;
+}
+
+.universityBtn p {
+  margin: 1rem 0 0 0;
+}
+
+.universityBtn img {
+  transition: linear 0.2s;
+  height: 20%;
+  width: auto;
+}
+
+.universityBtn:hover img {
+  height: 23%;
+  width: auto;
 }

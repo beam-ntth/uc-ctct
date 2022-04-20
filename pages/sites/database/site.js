@@ -104,7 +104,7 @@ export default function SiteDetails({ data, region_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${region_data.name} Region - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${region_data.name} - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
@@ -113,8 +113,8 @@ export default function SiteDetails({ data, region_data }) {
                 <div style={{ width: '85%' }}>
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className='row1Sites'>Site Name</p>
-                  <p className='row2Sites'>Affiliation</p>
-                  <p className='row3Sites'>Total Clinics</p>
+                  <p className='row2Sites'>Total Clinics</p>
+                  <p className='row3Sites'>Active Preceptors</p>
                   <p className='row4Sites'>Status</p>
                   </div>
                   {/* Fake color tab for alignment */}
@@ -127,13 +127,13 @@ export default function SiteDetails({ data, region_data }) {
                 filteredData.map((x, ind) => {
                   const statusText = StatusParser("sites", parseInt(x.status))
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }}>
                       <Link href={`/sites/database/clinics?location=${x.id}`}>
                         <div key={`site_${ind}`} className='displayRow'>
                           <div className='rowContentClinics'>
                             <p className='row1Sites'>{x['name']}</p>
-                            <p className='row2Sites'>{x['affiliation']}</p>
-                            <p className='row3Sites'>{x['total_clinics']}</p>
+                            <p className='row2Sites'>{x['total_clinics']}</p>
+                            <p className='row3Sites'>0</p>
                             <p className="row4Sites">{statusText}</p>
                           </div>
                           <div className={`siteTag${x['status']}`}></div>

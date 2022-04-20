@@ -6,7 +6,7 @@ import StatusParser from "../status";
 
 export default function EditSite(props) {
     const [hover, setHover] = useState(false)
-    const [site, setSite] = useState({ name: 'Loading...', affiliation: 'Loading...' })
+    const [site, setSite] = useState({ name: 'Loading...', generalInformation: { phoneNumber: 'Loading...' } })
 
     async function getCurrentData() {
         const database = client.database("uc-ctct");
@@ -21,19 +21,14 @@ export default function EditSite(props) {
         const replaceOperation =
         [
             {
-            op: "replace",
-            path: "/name",
-            value: site.name
+                op: "replace",
+                path: "/name",
+                value: site.name
             },
             {
-            op: "replace",
-            path: "/affiliation",
-            value: site.affiliation
-            },
-            {
-            op: "replace",
-            path: "/status",
-            value: site.status
+                op: "replace",
+                path: "/status",
+                value: site.status
             },
         ];
         await site_container.item(props.open, props.open).patch(replaceOperation);
@@ -62,8 +57,8 @@ export default function EditSite(props) {
                 </div>
                 :
                 (<React.Fragment>
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Edit Region Name</p>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <p className="editTitle">Edit Site Information</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
@@ -71,14 +66,6 @@ export default function EditSite(props) {
                         <p><strong>Name:</strong><input value={site.name} onChange={(e) => {
                         let newSite = {...site}
                         newSite.name = e.target.value
-                        setSite(newSite)
-                        return
-                        }} /> </p>
-                    </div>
-                    <div style={{ width: '90%' }}>
-                        <p><strong>Affiliation:</strong><input value={site.affiliation} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.affiliation = e.target.value
                         setSite(newSite)
                         return
                         }} /> </p>
@@ -95,6 +82,63 @@ export default function EditSite(props) {
                                 { StatusParser("sites", -1) }
                             </select> 
                         </p>
+                    </div>
+                    <p className="editSubTitle">General Information</p>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.phoneNumber = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.faxNumber = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.addressLine1 = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.addressLine2 = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>City:</strong><input value={site.generalInformation.city} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.city = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>State:</strong><input value={site.generalInformation.state} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.state = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Postal:</strong><input value={site.generalInformation.postal} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.postal = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={() => {
@@ -121,14 +165,21 @@ export default function EditSite(props) {
                     font-size: 1.3rem;
                     font-weight: bold;
                 }
+
+                .editSubTitle {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    margin: 0.5rem 0 0 0;
+                    color: #626262;
+                }
                 
                 .editScreen {
                     position: absolute;
-                    height: 45vh;
+                    height: 75vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
-                    top: 20vh;
+                    top: 10vh;
                     left: 25vw;
                     z-index: 901;
                     display: flex;

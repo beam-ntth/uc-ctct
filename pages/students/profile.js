@@ -63,7 +63,7 @@ export default function StudentProfile({ student }) {
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Preceptors" id={student.id} /> : null}
+      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Students" id={student.id} /> : null}
       {/* {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
             {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null} */}
       <div className={styles.container}>
@@ -82,11 +82,14 @@ export default function StudentProfile({ student }) {
             <div className={styles.data}>
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>
+                <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className={"editButton"} onClick={() => {}}>Edit Profile</div>
+                </div>
               </div>
               <div className={styles.bioTitle}>
-                <div className={styles.profileImg}>
+                {/* <div className={styles.profileImg}>
                   <img src="/asset/images/user-image.png" />
-                </div>
+                </div> */}
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {student.firstName} {student.middleName} {student.lastName}</p>
@@ -101,7 +104,7 @@ export default function StudentProfile({ student }) {
                     <p><strong>Gender Preference:</strong> {student.gender}</p>
                   </div>
                   <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Phone Number:</strong> {student.phoneNumber}</p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Phone Number:</strong> ({student.phoneNumber.substring(0, 3)}) {student.phoneNumber.substring(3, 6)}-{student.phoneNumber.substring(6, 10)}</p>
                     <p><strong>Email:</strong> {student.email}</p>
                   </div>
                   <div className={styles.infoRow}>
@@ -121,27 +124,30 @@ export default function StudentProfile({ student }) {
             </div>
             <div className={styles.data} style={{ marginTop: '1rem' }}>
                 <div className={styles.bioTitle}>
-                <h4>Course Schedule</h4>
+                  <h4>{student.firstName} {student.lastName}'s Clinical Placement</h4>
+                  <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className={"editButton"} onClick={() => {}}>Edit Placement</div>
+                  </div>
                 </div>
                 <p>Nothing has been assigned to this student so far!</p>
             </div>
-            {/* <div className={styles.noteData}>
-              <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>
-                <div style={{ width: '100%', display: 'flex', marginBottom: '2rem' }}>
-                  <p className="titleClinics" style={{ width: '80%', paddingLeft: '2rem', margin: 0, display: 'flex', alignItems: 'center' }}>Preceptor Notes</p>
-                  <div style={{ width: '20%', display: 'flex', justifyContent: 'center' }}>
+            <div className={styles.noteData}>
+              <div style={{ width: '100%', display: 'flex', flexDirection: 'column', paddingTop: '2rem', justifyContent: 'center', alignItems: 'center' }}>
+                <div style={{ width: '95%', display: 'flex', marginBottom: '2rem' }}>
+                  <p className="titleClinics" style={{ width: '80%', margin: 0, display: 'flex', alignItems: 'center' }}>{student.firstName} {student.lastName}'s Notes</p>
+                  <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}>
                     <div className={"editButton"} onClick={() => setOpenNote(true)}>+ Add Notes</div>
                   </div>
                 </div>
                 <div>
                   {
-                    preceptor.notes.length !== 0 ? preceptor.notes.map((x, ind) => {
+                    student.notes.length !== 0 ? student.notes.map((x, ind) => {
                       return (<Accordion x={x} ind={ind} />)
                     }) : <p style={{ width: '100%', textAlign: 'center' }}>Currently, you do not have any notes!</p>
                   }
                 </div>
               </div>
-            </div> */}
+            </div>
           </div >
         </main >
       </div >

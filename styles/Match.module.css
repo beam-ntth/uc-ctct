@@ -1,0 +1,197 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    height: 100%;
+    width: 92%;
+}
+
+.data {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 75%;
+  width: auto;
+  margin-top: 2rem;
+}
+
+.data select {
+  border-radius: 0.5rem;
+  border: solid 1px #c4c4c4;
+  padding: 0.5rem;
+  width: 20%;
+}
+
+.studentSection, .clinicSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  background-color: #F5F6FA;
+}
+
+.studentSection {
+  width: 95%;
+  border-radius: 1rem;
+}
+
+.clinicSection {
+  width: 0%;
+  border-radius: 1rem;
+}
+
+.matchContent {
+  height: 100%;
+  width: 100%;
+}
+
+.menu {
+    height: 80%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 95%;
+  height: 2rem;
+  margin: 0.5rem 0;
+}
+
+.regionForm, .sPopForm, .onlineForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: 15%;
+  background-color: #fff;
+  border-radius: 0.6rem;
+  border: 1px solid #C4C4C4;
+  margin-right: 0.5rem;
+}
+
+.formTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;
+  cursor: pointer;
+  z-index: 20;
+  font-size: small;
+}
+
+.formTitle p {
+  margin: 0 0.5rem 0 0;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  height: 10%;
+  width: 100%;
+  font-family: 'Lato', sans-serif;
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.titleAndRow {
+  height: 60%;
+  width: 96%;
+  margin-left: 2rem;
+}
+
+.searchBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 2.5rem;
+    width: 90%;
+    margin-top: 2rem;
+}
+
+.searchInput {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    height: 100%;
+    width: 90%;
+    border: 1px solid #C4C4C4;
+    border-radius: 0.5rem;
+    padding-left: 0.5rem;
+}
+
+.searchInput:active {
+    border: 1px solid #079CDB;
+}
+
+.headerCol {
+  width: 50%;
+  margin-left: 2rem;
+}
+
+.titleCol1 {
+  width: 20%;
+  margin-left: 2rem;
+}
+
+.titleCol2 {
+  width: 15%;
+}
+
+.titleCol3 {
+  width: 15%;
+}
+
+.titleCol4 {
+  width: 18%;
+}
+
+.titleCol5 {
+  width: 18%;
+}
+
+.clinicSelect {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.clinicSelect select {
+  cursor: pointer;
+}
+
+.availableClinicSection {
+  height: 80%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: scroll;
+}

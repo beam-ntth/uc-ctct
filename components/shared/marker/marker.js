@@ -14,7 +14,8 @@ export default function Marker(props) {
                     </Link>
                     :
                     <Link href={`/students/profile?id=${props.id}`}>
-                        <img height={hover ? '35px' : '30px'} width="auto" style={{ zIndex: 50, transform: 'translateY(-30px)' }} src="/asset/images/student-pin.png"
+                        <img height={hover ? '35px' : '30px'} width="auto" style={{ zIndex: 50, transform: 'translateY(-30px)' }} 
+                        src={props.type == 'student-assigned' ? "/asset/images/student-pin.png" : "/asset/images/student-unassigned-pin.png"}
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} />
                     </Link>
                 }
