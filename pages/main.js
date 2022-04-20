@@ -13,7 +13,7 @@ import Chart from 'chart.js/auto'
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
-import PieChart from '../components/Charts/piechart';
+import LineChart from '../components/Charts/linechart';
 import React from 'react'
 
 /* Suppress just for development */
@@ -53,7 +53,7 @@ export default function Main() {
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Number of active students</p>
+                <p>Number of active students per Affiliation</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
                 <BarChart />
@@ -61,28 +61,10 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Matching Goal</p>
+                <p>Matching Goal Percentage per Affiliation</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
-                <PieChart />
-              </div>
-            </div>
-          </div>
-          <div className={styles.mainCharts}>
-            <div className={styles.chart}>
-              <div className={styles.chartTitle}>
-                <p>Chart 1: Detail</p>
-              </div>
-              <div style={{ height: '90%', width: 'auto' }}>
-                <BarChart />
-              </div>
-            </div>
-            <div className={styles.chart}>
-              <div className={styles.chartTitle}>
-                <p>Matching Goal</p> 
-              </div>
-              <div style={{ height: '90%', width: 'auto' }}>
-                <PieChart />
+                <LineChart />
               </div>
             </div>
           </div>
