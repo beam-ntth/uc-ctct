@@ -456,3 +456,150 @@ export const removePreceptor = async (id, index) => {
     throw new Error(`Issue deleting clinic preceptor with clinic id: [${id}] or preceptor's clinic. Error is:  ${error}`);
   }
 }
+
+export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id, choice) {
+  try {
+    const date = new Date();
+    const today_date = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}/${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${date.getFullYear()}`
+    
+    const { resource: student_obj } = await Students.item(student_id, student_id).read()
+    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
+
+    // Update student information
+    let new_student_assignment = { ...student_obj.assignment }
+    new_student_assignment.isAssigned = true
+
+    if ( choice == "Primary" ) {
+      new_student_assignment.primary_choice.clinic_id = clinic_id
+      new_student_assignment.primary_choice.preceptor_id = preceptor_id
+      new_student_assignment.primary_choice.date_assigned = today_date
+    } else if ( choice == "Secondary" ) {
+      new_student_assignment.secondary_choice.clinic_id = clinic_id
+      new_student_assignment.secondary_choice.preceptor_id = preceptor_id
+      new_student_assignment.secondary_choice.date_assigned = today_date
+    } else {
+      new_student_assignment.tertiary_choice.clinic_id = clinic_id
+      new_student_assignment.tertiary_choice.preceptor_id = preceptor_id
+      new_student_assignment.tertiary_choice.date_assigned = today_date
+    }
+
+    const replaceStudentOperation =
+    [
+      {
+        op: "replace",
+        path: "/assignment",
+        value: new_student_assignment
+      }
+    ]
+
+    const studentRes = await Students.item(student_id, student_id).patch(replaceStudentOperation)
+
+    // Update Preceptor Information
+    let new_preceptor_assignment = [...preceptor_obj.students]
+    new_preceptor_assignment.push(student_id)
+
+    const replacePreceptorOperation =
+    [
+      {
+        op: "replace",
+        path: "/students",
+        value: new_preceptor_assignment
+      }
+    ]
+
+    const preceptorRes = await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
+
+    // Update Clinic Information
+    let new_clinic_assignment = [...clinic_obj.students]
+    new_clinic_assignment.push(student_id)
+
+    const replaceClinicOperation =
+    [
+      {
+        op: "replace",
+        path: "/students",
+        value: new_clinic_assignment
+      }
+    ]
+
+    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+
+    return [studentRes, preceptorRes, clinicRes]
+
+  } catch (error) {
+    throw new Error(`Error happens when trying to assign a student to the preceptor. Error is: ${error}`)
+  }
+}
+
+export async function removeStudentFromPreceptor(student_id, clinic_id, preceptor_id, choice) {
+  try {
+    const { resource: student_obj } = await Students.item(student_id, student_id).read()
+    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
+
+    // Update student information
+    let new_student_assignment = { ...student_obj.assignment }
+    new_student_assignment.isAssigned = true
+
+    if ( choice == "Primary" ) {
+      new_student_assignment.primary_choice.clinic_id = ""
+      new_student_assignment.primary_choice.preceptor_id = ""
+      new_student_assignment.primary_choice.date_assigned = ""
+    } else if ( choice == "Secondary" ) {
+      new_student_assignment.secondary_choice.clinic_id = ""
+      new_student_assignment.secondary_choice.preceptor_id = ""
+      new_student_assignment.secondary_choice.date_assigned = ""
+    } else {
+      new_student_assignment.tertiary_choice.clinic_id = ""
+      new_student_assignment.tertiary_choice.preceptor_id = ""
+      new_student_assignment.tertiary_choice.date_assigned = ""
+    }
+
+    const replaceStudentOperation =
+    [
+      {
+        op: "replace",
+        path: "/assignment",
+        value: new_student_assignment
+      }
+    ]
+
+    const studentRes = await Students.item(student_id, student_id).patch(replaceStudentOperation)
+
+    // Update Preceptor Information
+    let new_preceptor_assignment = [...preceptor_obj.students]
+    new_preceptor_assignment.splice(new_preceptor_assignment.indexOf(student_id), 1)
+
+    const replacePreceptorOperation =
+    [
+      {
+        op: "replace",
+        path: "/students",
+        value: new_preceptor_assignment
+      }
+    ]
+
+    const preceptorRes = await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
+
+    // Update Clinic Information
+    let new_clinic_assignment = [...clinic_obj.students]
+    new_clinic_assignment.splice(new_clinic_assignment.indexOf(student_id), 1)
+
+    const replaceClinicOperation =
+    [
+      {
+        op: "replace",
+        path: "/students",
+        value: new_clinic_assignment
+      }
+    ]
+
+    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+
+    return [studentRes, preceptorRes, clinicRes]
+
+  } catch (error) {
+    throw new Error(`Error happens when trying to assign a student to the preceptor. Error is: ${error}`)
+  }
+}

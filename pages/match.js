@@ -3,18 +3,17 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Match.module.css'
 
-import { IoIosArrowDown } from 'react-icons/io';
 import Dropdown from '../components/visualPage/dropDown/dropdown';
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import SearchString from '../components/shared/search'
+import CircularProgress from '@mui/material/CircularProgress'
 
-import { FaChartPie, FaDatabase } from 'react-icons/fa';
-
-import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions } from '../api-lib/azure/azureOps';
+import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions, addStudentToPreceptor } from '../api-lib/azure/azureOps';
 import { IoMdAdd } from 'react-icons/io';
 import CountyList from '../components/shared/countyList';
 import StudentPreview from '../components/matchingPage/displayProfile';
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps(context) {
   const clinics = await getAllClinics();
@@ -25,6 +24,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Matching({ clinics, students, preceptors, region_choices }) {
+  const router = useRouter()
+
   const [hover, setHover] = useState(false)
   const [addHover, setAddHover] = useState(Array(students.length).fill(false))
   const [matching, setMatching] = useState(false)
@@ -40,6 +41,41 @@ export default function Matching({ clinics, students, preceptors, region_choices
   const settingPopChoices = [... new Set(clinics.map(x => x.description.population))];
 
   const [regionFilter, setRegionFilter] = useState(Array(regionChoices.length).fill(""))
+
+  /**
+   * All the states when assigning a student to a preceptor and clinic
+   */
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [choiceRank, setChoiceRank] = useState('Primary')
+
+  const assignStudent = async (clinic_id, preceptor_id) => {
+    setIsUpdating(true)
+    await addStudentToPreceptor(selectedStudent.id, clinic_id, preceptor_id, choiceRank)
+    router.reload()
+    setIsUpdating(false)
+    return
+  }
+
+  /**
+   * Activate loading on the client-side, [] means only load once
+   */
+    useEffect(() => {
+    const stickyValue = window.localStorage.getItem('matchingPageSetting');
+    if (stickyValue !== 'null') {
+      setMatching(true)
+      setSelectedStudent(students.filter(x => x.id == JSON.parse(stickyValue))[0])
+    } else {
+      setMatching(false)
+    }
+  }, [])
+  
+  /**
+   * Save user's last state in local storage, so when they click 'go back' button
+   * in the browser, they don't have tp re-choose the page again
+   */
+  useEffect(() => {
+    window.localStorage.setItem('matchingPageSetting', selectedStudent ? JSON.stringify(selectedStudent.id) : JSON.stringify(null))
+  }, [selectedStudent])
 
   return (
     <React.Fragment>
@@ -59,9 +95,17 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 matching 
                 ? 
                 (
-                  selectedStudent 
+                  selectedStudent
                   ?
-                  <StudentPreview data={selectedStudent} setMatching={setMatching} />
+                  isUpdating ? 
+                    <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "center"}}>
+                      <div style={{textAlign: 'center', marginBottom: '1rem'}}>
+                        <CircularProgress color="primary" size={120} />
+                      </div>
+                      <p style={{textAlign: 'center'}}>Updating Student Data. Please wait.</p>
+                    </div> 
+                    : 
+                    <StudentPreview data={selectedStudent} setMatching={setMatching} setStudent={setSelectedStudent} clinic_data={clinics} preceptor_data={preceptors} setUpdating={setIsUpdating} reload={router.reload} />
                   :
                   <div>Loading...</div>
                 ) 
@@ -85,7 +129,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   {
                     students ? students.map((x, ind) => {
                       return (
-                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                           <Link href={`/students/profile?id=${x.id}`}>
                             <div className='displaySurveyRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
@@ -104,7 +148,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                             }} 
                               style={addHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : 
                               { fontSize: '0.8rem', transition: 'linear 0.2s' }}>
-                                Add to Clinic
+                                Manage
                             </p>
                             <IoMdAdd color={addHover[ind] ? "#079CDB" : "#C4C4C4"} 
                               size={addHover[ind] ? 22 : 20} 
@@ -131,16 +175,15 @@ export default function Matching({ clinics, students, preceptors, region_choices
                     <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>County: </p>
                     <select>
                       {
-                        CountyList().map(x => <option value={x}>{x}</option>)
+                        CountyList().map(x => <option value={x} key={x} >{x}</option>)
                       }
                       
                     </select>
                     <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>Choice: </p>
-                    <select>
+                    <select onChange={x => setChoiceRank(x.target.value)}>
                       {
-                        ['Primary', 'Secondary', 'Tertiary'].map(x => <option value={x}>{x}</option>)
+                        ['Primary', 'Secondary', 'Tertiary'].map(x => <option value={x} key={x} >{x}</option>)
                       }
-                      
                     </select>
                   </div>
                   <div className={styles.row}>
@@ -150,27 +193,36 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   </div>
                   <div className={ styles.availableClinicSection }>
                     {
-                      clinics.map(x => 
-                      <div className='clinicBar'>
+                      clinics.map(clinic => 
+                      <div className='clinicBar' key={ clinic.id }>
                         <div className='clinicTitle'>
-                          <p>{ x.name }</p>
+                          <p>{ clinic.name }</p>
                         </div>
                         <div className='line'></div>
                         <div className='clinicDetails'>
-                          <p><strong>Setting: </strong>{ x.description.settingLocation }</p>
-                          <p><strong>Population: </strong>{ x.description.settingPopulation }</p>
-                          <p><strong>Age Group: </strong>{ x.description.population }</p>
-                          <p><strong>Acuity: </strong>{ x.description.patientAcuity }</p>
+                          <p><strong>Setting: </strong>{ clinic.description.settingLocation }</p>
+                          <p><strong>Population: </strong>{ clinic.description.settingPopulation }</p>
+                          <p><strong>Age Group: </strong>{ clinic.description.population }</p>
+                          <p><strong>Acuity: </strong>{ clinic.description.patientAcuity }</p>
                         </div>
                         <div className='line'></div>
                         <div className='clinicDetails' style={{ marginBottom: '1rem' }}>
                           <p><strong>Preceptor(s) Available </strong></p>
-                          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '1.6rem' }}>
-                            <p>{ 'Cristiano Ronaldo' }</p>
-                            <div className='assignBtn'>
-                              Assign!
+                          {
+                            clinic.preceptorInfo.length == 0 ?
+                            <div>
+                              <p>No preceptors available at this clinic</p>
                             </div>
-                          </div>
+                            : 
+                              preceptors.filter(p => clinic.preceptorInfo.includes(p.id)).map(precep => 
+                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
+                                    <p>{ precep.firstname } { precep.lastname } | <strong>Students Assigned: </strong> {precep.students.length}</p>
+                                    <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                      Assign!
+                                    </div>
+                                </div>
+                              )
+                          }
                         </div>
                       </div>)
                     }
