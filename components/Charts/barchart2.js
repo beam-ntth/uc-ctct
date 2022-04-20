@@ -15,6 +15,7 @@ const state = {
   ]
 }
 
+
 export default function BarChart() {
     return (
       <React.Fragment>
