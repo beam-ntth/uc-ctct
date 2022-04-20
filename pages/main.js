@@ -61,6 +61,23 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
+                <p>Number of active sites</p>
+              </div>
+              {/* <div style={{ height: '90%', width: 'auto' }}> */}
+                <div className={styles.data}>
+                  <p className={styles.numCol1}>45</p>
+                  <p className={styles.numCol2}>70</p>
+                  <p className={styles.numCol3}>63</p>
+                </div>
+                <div className={styles.label}>
+                  <p className={styles.siteCol1}>Total Green</p>
+                  <p className={styles.siteCol2}>Total Yellow</p>
+                  <p className={styles.siteCol3}>Total Red</p>
+                {/* </div> */}
+              </div>
+            </div>
+            <div className={styles.chart}>
+              <div className={styles.chartTitle}>
                 <p>Matching Goal Percentage per Affiliation</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
