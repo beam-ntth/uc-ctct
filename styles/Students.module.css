@@ -116,18 +116,64 @@
 }
 
 .selectIndiUni {
-  width: 100%;
+  width: 173%;
   height: 30%;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: -2rem;
   margin-bottom: 2rem;
 }
 
 .universityBtn {
   width: 25%;
   height: 95%;
-  background-color: #f5f5f5;
+  background-color: #71c982;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+.universityBtn2 {
+  width: 25%;
+  height: 95%;
+  background-color: #eb934f;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+.universityBtn3 {
+  width: 25%;
+  height: 95%;
+  background-color: #5f99bd;
+  margin-right: 2rem;
+  cursor: pointer;
+  color: #079CDB;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  transition: linear 0.2s;
+  border-radius: 1rem;
+}
+.universityBtn4 {
+  width: 25%;
+  height: 95%;
+  background-color: #9a74ce;
   margin-right: 2rem;
   cursor: pointer;
   color: #079CDB;

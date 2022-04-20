@@ -249,23 +249,19 @@ export default function Student({ students }) {
                 <p>Show all universities</p>
               </div>
               <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn} onClick={() => setPage('UCD')}>
+                <div className={styles.universityBtn3} onClick={() => setPage('UCD')}>
                   <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
-                  <p>UC Davis</p>
                 </div>
                 <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
                   <img src='/asset/images/school_logos/UCSF_logo.png' />
-                  <p>UCSF</p>
                 </div>
               </div>
               <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn} onClick={() => setPage('UCLA')}>
-                  <img src='/asset/images/school_logos/UCLA_logo.png' />
-                  <p>UCLA</p>
+                <div className={styles.universityBtn2} onClick={() => setPage('UCLA')}>
+                  <img src='/asset/images/school_logos/UCLA_logo.png'  height='15%'/>
                 </div>
-                <div className={styles.universityBtn} onClick={() => setPage('UCI')}>
-                  <img src='/asset/images/school_logos/UCI_logo.png' />
-                  <p>UC Irvine</p>
+                <div className={styles.universityBtn4} onClick={() => setPage('UCI')}>
+                  <img src='/asset/images/school_logos/UCI_logo.png' height='15%'/>
                 </div>
               </div>
             </div> : null }
