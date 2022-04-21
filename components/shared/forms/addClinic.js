@@ -5,6 +5,7 @@ import { client } from '../../../api-lib/azure/azureConfig';
 import DescriptionGenerator from "../../clinicPage/description";
 import CircularProgress from '@mui/material/CircularProgress'
 import StatusParser from "../status";
+import { addNewClinic } from "../../../api-lib/azure/azureExecute";
 
 export default function AddNewClinic(props) {
   const currentdate = new Date();
@@ -21,6 +22,7 @@ export default function AddNewClinic(props) {
     last_updated: datetime,
     total_clinics: 0,
     status: 0,
+    type: "clinic",
     "generalInformation": {
       "site": props.siteName,
       "phoneNumber": "",
@@ -45,6 +47,7 @@ export default function AddNewClinic(props) {
     },
     "adminInfo": [],
     "preceptorInfo": [],
+    "students": [],
     "clinicPlacementDetail": [
       {
         "title": "Clearance Timeline",
@@ -68,10 +71,7 @@ export default function AddNewClinic(props) {
       }
     ],
     "notes": [],
-    "map": {
-      "displayUrl": ""
     }
-  }
   )
 
   async function addClinic() {
@@ -79,8 +79,9 @@ export default function AddNewClinic(props) {
     const database = client.database("uc-ctct");
     const site_container = database.container("Sites");
     const { resource: previous_num_clinics } = await site_container.item(props.siteId, props.siteId).read()
-    const clinic_container = database.container("Clinics");
-    await clinic_container.items.create(clinic)
+    // const clinic_container = database.container("Clinics");
+    // await clinic_container.items.create(clinic)
+    addNewClinic(clinic)
     const replaceOperation =
       [{
         op: "replace",

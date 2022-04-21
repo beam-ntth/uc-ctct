@@ -48,35 +48,28 @@ export const CONTAINER = DB.container("sprocTest");
  * Adds a clinic to a site. 
  * Commonly used in areas like addClinic.js component. 
  * @param {JSON} clinicData JSON data of a clinic.
- * @param {String} siteID UUIDV4 string of site's ID.
  */
 export const addClinicSproc = {
   id: "addClinic",
-  body: function addClinic(clinicData, siteID) {
+  body: function addClinic(clinicData) {
     let context = getContext();
     let collection = context.getCollection();
     let collectionLink = collection.getSelfLink();
     let response = context.getResponse();
-    clinicData.type = "clinic";
 
     tryCreate(clinicData, callback);
 
-    function tryCreate(item, callback) {
+    function tryCreate(callback) {
       var options = {
         disableAutomaticIdGeneration: true
       };
       var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
       if (!isAccepted) response.setBody("DID NOT WORK");
     }
+
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
     }
-    // Get a 
   }
-}
-
-module.exports = {
-  addClinicSproc,
-  CONTAINER
 }
