@@ -82,13 +82,13 @@ export default function AddNewClinic(props) {
     // const clinic_container = database.container("Clinics");
     // await clinic_container.items.create(clinic)
     addNewClinic(clinic)
-    const replaceOperation =
-      [{
-        op: "replace",
-        path: "/total_clinics",
-        value: previous_num_clinics["total_clinics"] + 1
-      }];
-    await site_container.item(props.siteId, props.siteId).patch(replaceOperation)
+    // const replaceOperation =
+    //   [{
+    //     op: "replace",
+    //     path: "/total_clinics",
+    //     value: previous_num_clinics["total_clinics"] + 1
+    //   }];
+    // await site_container.item(props.siteId, props.siteId).patch(replaceOperation)
     props.setOpen(false)
     setTimeout(() => props.reload(), 500)
   }
