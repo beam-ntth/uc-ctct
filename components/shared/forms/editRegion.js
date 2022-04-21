@@ -3,6 +3,10 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 
+/**
+ * @deprecated Since 04/21/2022, the board has decided that 
+ * there can only be 4 non-mutable affiliations
+ */
 export default function EditRegion(props) {
   const [regionId, regionName] = props.open
   const [hover, setHover] = useState(false)

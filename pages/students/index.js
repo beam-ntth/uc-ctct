@@ -111,10 +111,29 @@ export default function Student({ students }) {
                 phoneNumber: x["primary_phone"].replace(/[^\d]/g, ""),
                 sex: x["sexual_orientation_descr"] == "" ? "Unspecified" : x["sexual_orientation_descr"],
                 usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
+                location_affiliation: "",
                 survey: {
                   lastSent: "",
                   sentCount: "0",
                   responseDate: ""
+                },
+                assignment: {
+                  isAssigned: false,
+                  primary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  },
+                  secondary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  },
+                  tertiary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  }
                 },
                 assignedPreceptor: false,
                 year: `${ new Date().getFullYear() }`,

@@ -20,6 +20,7 @@ export default function PreceptorInfoEdit(props) {
       "population": "Transitional Age Youth",
       "experience": "Established"
     },
+    "students": [],
     "notes": [],
     "clinics": [
       props.id
