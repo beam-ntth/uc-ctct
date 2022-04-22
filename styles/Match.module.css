@@ -106,7 +106,7 @@
   margin: 0 0.5rem 0 0;
 }
 
-.row {
+.row, .titleRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -118,10 +118,35 @@
   font-size: 1.3rem;
 }
 
+.titleRow {
+  height: 20%;
+  flex-direction: column;
+}
+
 .titleAndRow {
   height: 60%;
   width: 96%;
   margin-left: 2rem;
+}
+
+.filterOptions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.filterOptions p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-right: 1rem;
+}
+
+.filterOptions select {
+  margin-right: 1rem;
 }
 
 .searchBar {

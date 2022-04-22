@@ -44,6 +44,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: linear 0.3s;
 }
 
 .menuOptionTop {
@@ -55,21 +56,19 @@
 .menuOptionBottom {
     height: 40%;
     min-width: 33rem;
-    width: 70%;
+    width: 85%;
 }
 
 .menuOptionTop:hover {
     height: 57%;
     min-width: 35rem;
     width: 87%;
-    transition: linear 0.3s;
 }
 
 .menuOptionBottom:hover {
     height: 42%;
     min-width: 33rem;
-    width: 72%;
-    transition: linear 0.3s;
+    width: 87%;
 }
 
 .menuOptionTop h1, .menuOptionBottom h1 {

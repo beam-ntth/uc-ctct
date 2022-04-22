@@ -111,8 +111,18 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 ) 
                 : 
                 <React.Fragment>
-                  <div className={styles.row}>
-                    <div style={{ display: 'flex', width: '80%' }}>
+                  <div className={styles.titleRow}>
+                    <div className={ styles.filterOptions }>
+                      <p>Cohort: </p>
+                      <select>
+                        {['2022', '2021'].map(x => <option key={x}>{x}</option>)}
+                      </select>
+                      <p>Campus: </p>
+                      <select>
+                        {['UC Davis', 'UC San Francisco', 'UC Irvine', 'UC Los Angeles'].map(x => <option key={x}>{x}</option>)}
+                      </select>
+                    </div>
+                    <div style={{ display: 'flex', width: '100%' }}>
                       <p className={styles.headerCol}>Unassigned Students</p>
                     </div>
                   </div>
@@ -177,9 +187,14 @@ export default function Matching({ clinics, students, preceptors, region_choices
                       {
                         CountyList().map(x => <option value={x} key={x} >{x}</option>)
                       }
-                      
                     </select>
-                    <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>Choice: </p>
+                    <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Age: </p>
+                    <select>
+                      {
+                        ['Child/Adolescent'].map(x => <option value={x} key={x} >{x}</option>)
+                      }
+                    </select>
+                    <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Choice: </p>
                     <select onChange={x => setChoiceRank(x.target.value)}>
                       {
                         ['Primary', 'Secondary', 'Tertiary'].map(x => <option value={x} key={x} >{x}</option>)

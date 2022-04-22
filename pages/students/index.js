@@ -236,6 +236,25 @@ export default function Student({ students }) {
             {/* Switching between pages */}
             { page === 'Default' ? 
             <div className={styles.selectUniversities}>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn3} onClick={() => setPage('UCD')}>
+                  <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
+                </div>
+                <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
+                  <img src='/asset/images/school_logos/UCSF_logo.png' />
+                </div>
+              </div>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn2} onClick={() => setPage('UCLA')}>
+                  <img src='/asset/images/school_logos/UCLA_logo.png'  height='15%'/>
+                </div>
+                <div className={styles.universityBtn4} onClick={() => setPage('UCI')}>
+                  <img src='/asset/images/school_logos/UCI_logo.png' height='15%'/>
+                </div>
+              </div>
+              <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
+                <p>Show all universities</p>
+              </div>
               <div className={styles.uploadBtns}>
                 <div className={styles.fileUpload} style={ addStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
                   onClick={() => fileElem != null ? fileElem.click() : null} 
@@ -262,25 +281,6 @@ export default function Student({ students }) {
                   </p>
                   <FiUpload color={ editStudentHover ? "#079CDB" : "#C4C4C4" } size={ editStudentHover ? 35 : 30 } 
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
-                </div>
-              </div>
-              <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
-                <p>Show all universities</p>
-              </div>
-              <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn3} onClick={() => setPage('UCD')}>
-                  <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
-                </div>
-                <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
-                  <img src='/asset/images/school_logos/UCSF_logo.png' />
-                </div>
-              </div>
-              <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn2} onClick={() => setPage('UCLA')}>
-                  <img src='/asset/images/school_logos/UCLA_logo.png'  height='15%'/>
-                </div>
-                <div className={styles.universityBtn4} onClick={() => setPage('UCI')}>
-                  <img src='/asset/images/school_logos/UCI_logo.png' height='15%'/>
                 </div>
               </div>
             </div> : null }

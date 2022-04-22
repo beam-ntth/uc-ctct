@@ -76,7 +76,9 @@ export default function Main() {
                 {/* </div> */}
               </div>
             </div>
-            <div className={styles.chart}>
+          </div>
+          <div className={styles.mainCharts}>
+          <div className={styles.chart}>
               <div className={styles.chartTitle}>
                 <p>Matching Goal Percentage per Affiliation</p>
               </div>
