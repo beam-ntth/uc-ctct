@@ -24,27 +24,52 @@ export async function getServerSideProps(context) {
 export default function Matching({ clinics, students, preceptors, region_choices }) {
   const router = useRouter()
 
+  /**
+   * All the states for the main page filters
+   * @var cohortFilter : Cohort year is defaulted as the current year
+   * @var campusFilter : Campus value is defaulted to UC Davis
+   */
+  const [cohortFilter, setCohortFilter] = useState((new Date()).getFullYear())
+  const [campusFilter, setCampusFilter] = useState('UC Davis')
+
+  /**
+   * All the states for manage buttons
+   */
   const [manageUnassignedHover, setManageUnassignedHover] = useState(Array(students.filter(x => !x.assignment.isAssigned).length).fill(false))
   const [manageAssignedHover, setManageAssignedHover] = useState(Array(students.filter(x => x.assignment.isAssigned).length).fill(false))
+  
+  /**
+   * All the states for when the page is loading, loaded, or in the dual-monitor mode
+   */
   const [matching, setMatching] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState(null)
 
-  const regionChoices = region_choices;
-  const meetingChoices = ['Online', 'In Person', 'Hybrid'];
-  const settingPopChoices = [... new Set(clinics.map(x => x.description.population))];
-
   /**
    * All the states when assigning a student to a preceptor and clinic
+   * @param clinic_id : Takes in a clinic ID
+   * @param preceptor_id : Takes in a preceptor ID
    */
   const [isUpdating, setIsUpdating] = useState(false)
   const [choiceRank, setChoiceRank] = useState('Primary')
-
   const assignStudent = async (clinic_id, preceptor_id) => {
     setIsUpdating(true)
     await addStudentToPreceptor(selectedStudent.id, clinic_id, preceptor_id, choiceRank)
     router.reload()
     setIsUpdating(false)
     return
+  }
+
+  /**
+   * @function getAvailablePreceptorPerClinic : Helper function to display preceptors
+   * @param clinic : Accepts a clinic object
+   */
+  const getAvailablePreceptorPerClinic = (clinic) => {
+    return preceptors.filter(p => {
+      // Filter the preceptor based on their ID and availability (from <= current_year <= to)
+      const fromYear = p.availability.from.substring(p.availability.from.length-4, p.availability.from.length)
+      const toYear = p.availability.from.substring(p.availability.to.length-4, p.availability.to.length)
+      return clinic.preceptorInfo.includes(p.id) && fromYear >= cohortFilter && toYear <= cohortFilter
+    })
   }
 
   /**
@@ -105,11 +130,11 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   <div className={styles.titleRow}>
                     <div className={ styles.filterOptions }>
                       <p>Cohort: </p>
-                      <select>
+                      <select onChange={ x => setCohortFilter(x.target.value) }>
                         {['2022', '2021'].map(x => <option key={x}>{x}</option>)}
                       </select>
                       <p>Campus: </p>
-                      <select>
+                      <select onChange={ x => setCampusFilter(x.target.value) }>
                         {['UC Davis', 'UC San Francisco', 'UC Irvine', 'UC Los Angeles'].map(x => <option key={x}>{x}</option>)}
                       </select>
                     </div>
@@ -128,7 +153,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                       </div>
                     </div >
                     {
-                      students ? students.filter(x => !(x.assignment.isAssigned)).map((x, ind) => {
+                      students ? students.filter(x => !x.assignment.isAssigned && x.year == cohortFilter && x.location_affiliation == campusFilter).map((x, ind) => {
                         return (
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
@@ -167,7 +192,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   </div>
                   <div className={ styles.titleAndRow }>
                     {
-                      students ? students.filter(x => x.assignment.isAssigned).map((x, ind) => {
+                      students ? students.filter(x => x.assignment.isAssigned && x.year == cohortFilter && x.location_affiliation == campusFilter).map((x, ind) => {
                         return (
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
@@ -195,8 +220,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           </div >
                         )
                       })
-                        :
-                        <p>Loading... Please wait</p>
+                      :
+                      <p>Loading... Please wait</p>
                     }
                   </div>
                 </React.Fragment>
@@ -249,17 +274,22 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           {
                             clinic.preceptorInfo.length == 0 ?
                             <div>
-                              <p>No preceptors available at this clinic</p>
+                              <p>No preceptor at this clinic</p>
                             </div>
                             : 
-                              preceptors.filter(p => clinic.preceptorInfo.includes(p.id)).map(precep => 
-                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
-                                    <p>{ precep.firstname } { precep.lastname } | <strong>Students Assigned: </strong> {precep.students.length}</p>
-                                    <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
-                                      Assign!
-                                    </div>
-                                </div>
-                              )
+                            getAvailablePreceptorPerClinic(clinic).length == 0 ?
+                            <div>
+                              <p>No preceptor available for this cohort</p>
+                            </div>
+                            :
+                            getAvailablePreceptorPerClinic(clinic).map(precep => 
+                              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
+                                  <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
+                                  <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                    Assign!
+                                  </div>
+                              </div>
+                            )
                           }
                         </div>
                       </div>)

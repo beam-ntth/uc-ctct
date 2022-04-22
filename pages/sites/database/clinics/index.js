@@ -175,7 +175,7 @@ export default function Clinics({ data, site_data }) {
                   <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently, you do not have any notes! </p>
                   :
                   site_data.notes.map((x, ind) => {
-                    return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
+                    return (<Accordion x={x} ind={ind} key={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
                   })
                 }
               </div>
@@ -202,7 +202,7 @@ export default function Clinics({ data, site_data }) {
                   const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }} key={x.id} >
                       <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                         <div key={`clinic_${ind}`} className="displayRow">
                           <div className="rowContentClinics">

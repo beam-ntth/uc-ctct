@@ -30,8 +30,9 @@
 .row {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
+    padding-left: 4rem;
     height: 10%;
     width: 100%;
     font-family: 'Lato', sans-serif;

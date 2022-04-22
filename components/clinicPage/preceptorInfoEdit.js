@@ -8,21 +8,25 @@ export default function PreceptorInfoEdit(props) {
   const [hover, setHover] = useState(false);
 
   const [info, setInfo] = useState({
-    "firstname": null,
-    "lastname": null,
-    "position": null,
-    "credential": null,
-    "email": null,
-    "npi": "",
-    "phoneNumber": null,
-    "status": 0,
-    "description": {
-      "population": "Transitional Age Youth",
-      "experience": "Established"
+    firstname: null,
+    lastname: null,
+    position: null,
+    credential: null,
+    email: null,
+    npi: "",
+    phoneNumber: null,
+    status: 0,
+    description: {
+      population: "Transitional Age Youth",
+      experience: "Established"
     },
-    "students": [],
-    "notes": [],
-    "clinics": [
+    students: [],
+    notes: [],
+    availability: {
+      from: "",
+      to: ""
+  },
+    clinics: [
       props.id
     ]
   });
@@ -107,6 +111,26 @@ export default function PreceptorInfoEdit(props) {
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.email = e.target.value
+                    setInfo(newInfo);
+                    return;
+                  }} />
+                </p>
+                <p><strong>Availability </strong>
+                from:
+                <input type={'date'}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    let newInfo = { ...info }
+                    newInfo.availability.from = `${val.substring(5, 7)}/${val.substring(8, 10)}/${val.substring(0, 4)}`
+                    setInfo(newInfo);
+                    return;
+                  }} />
+                to:
+                <input type={'date'}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    let newInfo = { ...info }
+                    newInfo.availability.to = `${val.substring(5, 7)}/${val.substring(8, 10)}/${val.substring(0, 4)}`
                     setInfo(newInfo);
                     return;
                   }} />

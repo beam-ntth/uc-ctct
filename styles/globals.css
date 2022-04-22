@@ -123,7 +123,8 @@ a {
   font-weight: bold;
 }
 
-.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7, .siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
+.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7,
+.siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -189,7 +190,8 @@ a {
   background-color: rgb(62, 57, 57);
 }
 
-.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9{
+.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5,
+.preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
