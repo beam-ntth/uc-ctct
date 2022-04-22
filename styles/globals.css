@@ -15,7 +15,7 @@ a {
   height: 4px !important;
 }
 
-.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow, .displaySurveyRow {
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow, .displaySurveyRow, .displayMatchRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -70,13 +70,17 @@ a {
   width: 91%;
 }
 
-.displaySurveyRow {
+.displaySurveyRow, .displayMatchRow {
   width: 85%;
   font-weight: normal;
 }
 
 .displaySurveyRow:hover {
   width: 86%;
+}
+
+.displayMatchRow {
+  cursor: default;
 }
 
 .row1Sites {

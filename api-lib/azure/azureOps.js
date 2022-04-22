@@ -3,25 +3,22 @@ import { client } from "./azureConfig";
 import { v4 as uuidv4 } from "uuid";
 
 const db = client.database("uc-ctct");
-const Regions = db.container("Regions");
-const Sites = db.container("Sites");
+const Master = db.container("Master");
 const Clinics = db.container("Clinics");
 const Preceptors = db.container("Preceptors");
 const Students = db.container("Students");
-
-// console.log("Getting sites: ", sites);
 
 // SQL Query Literals
 // TODO: Get better naming scheme to differentiate literals from the functions.
 const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
-  "SELECT * FROM c WHERE c.region_id = @region_id ORDER BY c.name ASC";
+  `SELECT * FROM c WHERE c.type = "site" AND c.region_id = @region_id ORDER BY c.name ASC`;
 const getClinicsConnectedToSite =
   "SELECT * FROM c where c.site_id = @site_id ORDER BY c.name ASC";
-const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
+const regionTypeQuery = `SELECT DISTINCT VALUE c.name FROM c WHERE c.type = "affiliation" ORDER by c.name ASC`;
 const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
-const distinctAffiliationQuery = "SELECT DISTINCT VALUE c.affiliation from c ORDER by c.affiliation ASC";
+const distinctAffiliationQuery = `SELECT DISTINCT VALUE c.affiliation WHERE c.type = "site" from c ORDER by c.affiliation ASC`;
 const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
 
 // TODO: CREATE BETTER METHOD OF ERROR HANDLING. 
@@ -34,7 +31,7 @@ const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
  */
 export const getAllRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "affiliation" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching Regions: ${error}`);
@@ -46,7 +43,7 @@ export const getAllRegions = async () => {
  */
 export const getAllSites = async () => {
   try {
-    const { resources: data } = await Sites.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "site" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue with fetching sites: ${error}`);
@@ -95,7 +92,7 @@ export const getAllStudents = async () => {
  */
 export const getRegion = async (id) => {
   try {
-    const { resource: data } = await Regions.item(id, id).read();
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching region with id (${id}). Error is: ${error}`);
@@ -111,7 +108,6 @@ export const getClinic = async (id) => {
     const { resource: data } = await Clinics.item(id, id).read();
     return data;
   } catch (error) {
-    console.log("Error is", error.code);
     throw new Error(`Issue fetching clinic with id (${id}). Error is: ${error}`);
   }
 }
@@ -134,8 +130,7 @@ export const getClinicsFromSite = async (id) => {
  */
 export const getSite = async (id) => {
   try {
-    const { resource: data } = await Sites.item(id, id).read();
-    console.log("Fetching site", data);
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error(`Issue with fetching the site: ${id}. Error is: ${error}`);
@@ -148,7 +143,7 @@ export const getSite = async (id) => {
  */
 export const getSitesFromRegion = async (id) => {
   try {
-    const { resources: data } = await Sites.items.query({
+    const { resources: data } = await Master.items.query({
       query: getSitesConnectedToRegion,
       parameters: [{ name: "@region_id", value: id }]
     }).fetchAll();
@@ -183,10 +178,8 @@ export const getStudent = async (id) => {
  */
 export const getDistinctRegions = async () => {
   try {
-    const res = await Regions.items.query(regionTypeQuery).fetchAll();
+    const res = await Master.items.query(regionTypeQuery).fetchAll();
     const data = res.resources;
-    console.log("Getting all distinct regions", res);
-    // const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct regions. Error is: ${error}`);
@@ -204,8 +197,7 @@ export const getDistinctClinicStatuses = async () => {
 
 export const getDistinctSiteAffiliations = async () => {
   try {
-    const { resources: data } = await Sites.items.query(distinctAffiliationQuery).fetchAll();
-    console.log("Getting distinct affiliations: ", data);
+    const { resources: data } = await Master.items.query(distinctAffiliationQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct site affiliations. Error is: ${error}`);
@@ -289,7 +281,7 @@ export async function updateSiteNote(id, note_data) {
             value: note_data
         }
     ];
-    await Sites.item(id, id).patch(replaceOperation);
+    await Master.item(id, id).patch(replaceOperation);
   } catch (error) {
     throw new Error(`Issue while updating note to site with id (${id}). Error is: ${error}`);
   }
@@ -306,16 +298,15 @@ export const removeClinic = async (id, siteId) => {
     await Clinics.item(id, id).delete();
 
     // Update total number of clinics
-    const { resource: previous_num_clinics } = await Sites.item(siteId, siteId).read()
+    const { resource: previous_num_clinics } = await Master.item(siteId, siteId).read()
     const replaceOperation =
       [{
         op: "replace",
         path: "/total_clinics",
         value: previous_num_clinics["total_clinics"] - 1
       }]
-    await Sites.item(siteId, siteId).patch(replaceOperation)
+    await Master.item(siteId, siteId).patch(replaceOperation)
   } catch (error) {
-    console.log("Error is", error.code);
     throw new Error("Issue deleting clinic with id", id);
   }
 }
@@ -329,29 +320,24 @@ export const removeSite = async (id, regionId) => {
   try {
     // Query all related clinics
     const clinics = await getClinicsFromSite(id);
-    // const { resources: clinics } = await Clinics.items.query({
-    //   query: getClinicsConnectedToSite,
-    //   parameters: [{ name: "@site_id", value: id }]
-    // }).fetchAll();
 
     // Iterate through all clinics and delete
     for (const clinic of clinics) {
-      console.log("Removing clinc with id", clinic.id)
       removeClinic(clinic.id);
     }
 
     // Remove site itself. 
-    await Sites.item(id, id).delete();
+    await Master.item(id, id).delete();
 
     // Update number of sites left in region
-    const { resource: previous_num_sites } = await Regions.item(regionId, regionId).read()
+    const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
     const replaceOperation =
       [{
         op: "replace",
         path: "/total_sites",
         value: previous_num_sites["total_sites"] - 1
       }]
-    await Regions.item(regionId, regionId).patch(replaceOperation)
+    await Master.item(regionId, regionId).patch(replaceOperation)
 
   } catch (error) {
     throw new Error(`Issue deleting site with id (${id}). Error is: ${error}`);
@@ -364,7 +350,6 @@ export const removeSite = async (id, regionId) => {
  * @throws {Error} Error if any operation is unable to be completed.
  */
 export const removeRegion = async (id) => {
-  console.log("Passing");
   try {
     // Fetch all sites related to the current region. 
     const sites = await getSitesFromRegion(id);
@@ -381,7 +366,7 @@ export const removeRegion = async (id) => {
     }
 
     // Delete the specified region.
-    await Regions.item(id, id).delete();
+    await Master.item(id, id).delete();
 
   } catch (error) {
     throw new Error(`Issue deleting region with id (${id}). Error is: ${error}`);
@@ -468,9 +453,9 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    new_student_assignment.isAssigned = true
-
+    
     if ( choice == "Primary" ) {
+      new_student_assignment.isAssigned = true
       new_student_assignment.primary_choice.clinic_id = clinic_id
       new_student_assignment.primary_choice.preceptor_id = preceptor_id
       new_student_assignment.primary_choice.date_assigned = today_date
@@ -540,9 +525,9 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    new_student_assignment.isAssigned = true
-
+    
     if ( choice == "Primary" ) {
+      new_student_assignment.isAssigned = false
       new_student_assignment.primary_choice.clinic_id = ""
       new_student_assignment.primary_choice.preceptor_id = ""
       new_student_assignment.primary_choice.date_assigned = ""

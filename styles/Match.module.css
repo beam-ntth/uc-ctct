@@ -127,6 +127,7 @@
   height: 60%;
   width: 96%;
   margin-left: 2rem;
+  overflow-y: scroll;
 }
 
 .filterOptions {
