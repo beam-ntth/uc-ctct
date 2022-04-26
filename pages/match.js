@@ -185,8 +185,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                         <p>Loading... Please wait</p>
                     }
                   </div>
-                  <div className={styles.row}>
-                    <div style={{ display: 'flex', width: '80%' }}>
+                  <div className={styles.titleRow}>
+                    <div style={{ display: 'flex', width: '100%' }}>
                       <p className={styles.headerCol}>Assigned Students</p>
                     </div>
                   </div>
@@ -194,7 +194,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                     {
                       students ? students.filter(x => x.assignment.isAssigned && x.year == cohortFilter && x.location_affiliation == campusFilter).map((x, ind) => {
                         return (
-                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
+                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={ x.id }>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
                               <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>

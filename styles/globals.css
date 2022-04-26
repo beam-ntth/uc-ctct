@@ -32,7 +32,7 @@ a {
   z-index: 99;
 }
 
-.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover, .displaySurveyRow:hover {
+.displayRow:hover, .displayVizRow:hover, .displayRegionRow:hover, .displayStudentRow:hover {
   color: #079CDB;
   transition: linear 0.3s;
 }
@@ -73,13 +73,6 @@ a {
 .displaySurveyRow, .displayMatchRow {
   width: 85%;
   font-weight: normal;
-}
-
-.displaySurveyRow:hover {
-  width: 86%;
-}
-
-.displayMatchRow {
   cursor: default;
 }
 
@@ -153,12 +146,10 @@ a {
 
 .siteTag5 {
   background-color: #e7e453;
- 
 }
 
 .siteTag6 {
   background-color: #e7e453;
-  
 }
 
 .siteTag7 {
@@ -170,7 +161,7 @@ a {
 }
 
 .siteTag9 {
-  background-color:  #d24641;
+  background-color: #d24641;
 
 }
 

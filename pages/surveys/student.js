@@ -7,7 +7,6 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 
 import { getAllStudents } from '../../api-lib/azure/azureOps';
-import { IoSend } from 'react-icons/io5';
 import { useRouter } from 'next/router';
 
 export async function getServerSideProps( context ) {
@@ -16,8 +15,26 @@ export async function getServerSideProps( context ) {
 }
 
 export default function StudentSurveys({ students }) {
-    const [hover, setHover] = useState(false)
-    const [sendHover, setSendHover] = useState(Array(students.length).fill(false))
+    const currentYear = (new Date()).getFullYear()
+    const [cohortFilter, setCohortFilter] = useState(currentYear)
+    const [campusFilter, setCampusFilter] = useState('ALL')
+
+    const getFormattedDate = () => {
+        const curDate = new Date()
+        return `${curDate.getMonth()+1 < 10 ? '0' : ''}${curDate.getMonth()+1}/${curDate.getDate() < 10 ? '0' : ''}${curDate.getDate()}/${curDate.getFullYear()}`
+    }
+
+    /**
+     * Filter all the students based on their cohort and campus
+     */
+    const getFilteredStudents = () => {
+        if ( campusFilter === "ALL" ) {
+            return students.filter(x => x.year == cohortFilter)
+        }
+        else {
+            return students.filter(x => x.location_affiliation == campusFilter && x.year == cohortFilter)
+        }
+    }
 
     const router = useRouter()
 
@@ -36,54 +53,43 @@ export default function StudentSurveys({ students }) {
                         <div className={styles.data}>
                             <div style={{ width: '100%', marginTop: '1rem', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>
                                 <p style={{ marginRight: '1rem' }}>Please select student's year: </p>
-                                <select style={{ marginRight: '2rem', borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
-                                    <option value={'2022'}>2022</option>
-                                    <option value={'2021'}>2021</option>
+                                <select className={ styles.cohortFilter }
+                                    value={ cohortFilter } 
+                                    onChange={ x => setCohortFilter(x.target.value) }>
+                                    {[currentYear+1, currentYear, currentYear-1].map(x => <option value={x} key={x} >{x}</option>)}
                                 </select>
                                 <p style={{ marginRight: '1rem' }}>Please select student's campus: </p>
-                                <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
+                                <select className={ styles.campusFilter }
+                                    value={ campusFilter }
+                                    onChange={x => setCampusFilter(x.target.value)}>
                                     <option value={'ALL'}>All</option>
-                                    <option value={'UCD'}>UCD</option>
-                                    <option value={'UCSF'}>UCSF</option>
-                                    <option value={'UCLA'}>UCLA</option>
-                                    <option value={'UCI'}>UCI</option>
+                                    <option value={'UC Davis'}>UC Davis</option>
+                                    <option value={'UC San Francisco'}>UC San Francisco</option>
+                                    <option value={'UC Los Angeles'}>UC Los Angeles</option>
+                                    <option value={'UC Irvine'}>UC Irvine</option>
                                 </select>
                             </div>
-                            <div className={styles.row}>
-                                <div style={{ display: 'flex', width: '80%' }}>
+                            <p className={ styles.displayLastUpdated } ><strong>Response Last updated:</strong> {getFormattedDate()}</p>
+                            <div className={ styles.row }>
+                                <div className={ styles.rowTitle }>
                                 <p className={styles.titleCol1}>Name</p>
                                 <p className={styles.titleCol2}>Email</p>
-                                {/* <p className={styles.titleCol3}>Survey Sent</p>
-                                <p className={styles.titleCol4}>Last sent</p> */}
                                 <p className={styles.titleCol5}>Responded</p>
                                 </div>
-                                {/* <div className={styles.sendAllBtn} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
-                                style={ hover ? { height: '3.1rem', width: '7.4rem', transition: 'linear 0.2s' } : null }>
-                                    <p style={hover ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : null}>Send All</p>
-                                    <IoSend color={hover ? "#079CDB" : "#C4C4C4"} size={ hover ? 22 : 20 } style={{ transition: 'linear 0.2s' }} />
-                                </div> */}
                             </div >
                             {
-                                students ? students.map((x, ind) => {
+                                students ? 
+                                getFilteredStudents().length == 0 ?
+                                <div>No student from this campus</div> 
+                                : 
+                                getFilteredStudents().map((x, ind) => {
                                 return (
                                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                        <Link href={`/students/profile?id=${x.id}`}>
-                                            <div className='displaySurveyRow' key={`elem_${ind}`}>
-                                                <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.lastName}</p>
-                                                <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>
-                                                {/* <p style={{ width: '15%' }}>{(x.survey != null && parseInt(x.survey.sentCount) > 0) ? `Sent ${x.survey.sentCount} time${x.survey.sentCount > 1 ? 's' : ''}` : "Not sent"}</p>
-                                                <p style={{ width: '15%' }}>{(x.survey != null && x.survey.lastSent) != "" ? x.survey.lastSent : "N/A"}</p> */}
-                                                <p style={{ width: '15%' }}>{(x.survey != null && x.survey.responseDate) != "" ? x.survey.responseDate : "No Response"}</p>
-                                            </div>
-                                        </Link>
-                                        {/* <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
-                                        onMouseEnter={() => { let newStatus = [...sendHover]; newStatus[ind] = true; setSendHover(newStatus); return; }} 
-                                        onMouseLeave={() => { let newStatus = [...sendHover]; newStatus[ind] = false; setSendHover(newStatus); return; }} >
-                                            <p style={ sendHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } 
-                                            : { fontSize: '0.8rem', transition: 'linear 0.2s' }}>Send Survey</p>
-                                            <IoSend color={ sendHover[ind] ? "#079CDB" : "#C4C4C4"} size={ sendHover[ind] ? 22 : 20 } 
-                                            style={{ marginLeft: '1rem', transition: 'linear 0.2s' }}/>
-                                        </div> */}
+                                        <div className='displaySurveyRow' key={`elem_${ind}`}>
+                                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.lastName}</p>
+                                            <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>
+                                            <p style={{ width: '15%' }}>{(x.survey != null && x.survey.responseDate) != "" ? x.survey.responseDate : "No Response"}</p>
+                                        </div>
                                     </div >
                                     )
                                 })
