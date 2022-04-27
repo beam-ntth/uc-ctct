@@ -129,8 +129,8 @@ export const addPreceptorSproc = {
 
 //   }
  
-export const updateSiteNote = {
-  id: "siteNote",
+export const updateSiteNoteSproc = {
+  id: "updatesiteNote",
   body: function updateSite(siteData){
     {
       let context = getContext();

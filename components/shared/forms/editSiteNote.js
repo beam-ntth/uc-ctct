@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 import { getSite, updateSiteNote } from "../../../api-lib/azure/azureOps";
-import { addNewSiteNote} from "../../../api-lib/azure/azureExecute";
+import { editSiteNote} from "../../../api-lib/azure/azureExecute";
 import StatusParser from "../status";
 
 export default function EditSiteNote(props) {
@@ -33,6 +33,18 @@ export default function EditSiteNote(props) {
       props.setOpen(false)
       props.reload()
     }
+    
+    async function updateSiteNote() {
+  
+        const database = client.database("uc-ctct");
+        const site_container = database.container("Sites");
+        const { resource: previous_site_notes } = await site_container.item(props.siteId, props.siteId).read()
+  
+        await editSiteNote(site);
+        props.setOpen(false)
+        setTimeout(() => props.reload(), 500)
+      }
+ 
 
     return (
     <React.Fragment>
