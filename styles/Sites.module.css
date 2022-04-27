@@ -33,7 +33,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0.5rem 0;
+    margin: 3rem 0;
 }
 
 .menuOptionTop, .menuOptionBottom {
@@ -46,6 +46,8 @@
     align-items: center;
     cursor: pointer;
     transition: linear 0.3s;
+    padding: 3rem;
+    margin: 0.5rem;
 }
 
 .menuOptionTop {
@@ -109,6 +111,7 @@
     width: 85%;
     border-radius: 2rem;
     background-color: #F5F5F5;
+    /* margin-top: 4rem; */
 }
 
 .legend {
