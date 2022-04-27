@@ -141,7 +141,7 @@ export default function Clinics({ data, site_data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header={`${site_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.generalBox}>
+            <div className={styles.generalBox} id={ styles.topBox } >
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>
                   <div>

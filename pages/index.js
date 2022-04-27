@@ -1,9 +1,6 @@
 import Head from 'next/head'
 import { useState } from 'react';
 import styles from '../styles/Home.module.css'
-import { getClinic } from '../api-lib/azure/azureOps.js'
-import { CONTAINER, addPreceptorSproc } from '../api-lib/azure/azureSprocs';
-
 
 // export async function getServerSideProps(context) {
 //   // Get clinic data to access array of preceptors.

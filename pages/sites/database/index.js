@@ -72,10 +72,10 @@ export default function SiteMgmt({ data, region_data, location }) {
                         <Link href={`/sites/visual?location=${location}`}>
                             <div className={styles.menuOptionBottom}>
                                 <div className={styles.rowCenter}>
-                                    <FaChartPie size={30} color='#079CDB' style={{ marginTop: '2rem'}} />
-                                    <h1 style={{ marginTop: '3rem'}}>Clinical Site Overview</h1>
+                                    <FaChartPie size={30} color='#079CDB'/>
+                                    <h1>Clinical Site Overview</h1>
                                 </div>
-                                <p style={{ marginBottom: '3.5rem'}}>Quick overview of all the clinics and chart analysis</p>
+                                <p style={{ marginBottom: '1rem'}}>Quick overview of all the clinics and chart analysis</p>
                             </div>
                         </Link>
                     </div>
