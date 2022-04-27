@@ -74,11 +74,11 @@ export default function Database({ data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header="Management Overview" imgSrc="/asset/images/user-image.png" />
-            <div className={styles.data}>
+            <div className={styles.data_overview}>
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '90%' }}>
-                  <p style={{ width: '70%', marginLeft: '2rem' }}>Affiliation</p>
-                  <p style={{ width: '20%' }}>Total Active Sites</p>
+                  <p style={{ width: '50%', marginLeft: '7rem' }}>Affiliation</p>
+                  <p style={{ width: '40%' }}>Total Active Sites</p>
                 </div>
                 {/* <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} /> */}
@@ -86,7 +86,7 @@ export default function Database({ data }) {
               {
                 data.map((x, ind) => {
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ width: '70%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                       <Link href={`/sites/database/?location=${x['id']}`}>
                         <div className='displayRegionRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']}</p>

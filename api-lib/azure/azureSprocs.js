@@ -48,28 +48,118 @@ export const CONTAINER = DB.container("sprocTest");
  * Adds a clinic to a site. 
  * Commonly used in areas like addClinic.js component. 
  * @param {JSON} clinicData JSON data of a clinic.
+ * @param {String} siteID UUIDV4 string of site's ID.
  */
 export const addClinicSproc = {
   id: "addClinic",
-  body: function addClinic(clinicData) {
+  body: function addClinic(clinicData, siteID) {
     let context = getContext();
     let collection = context.getCollection();
     let collectionLink = collection.getSelfLink();
     let response = context.getResponse();
+    clinicData.type = "clinic";
 
     tryCreate(clinicData, callback);
 
-    function tryCreate(callback) {
+    function tryCreate(item, callback) {
       var options = {
         disableAutomaticIdGeneration: true
       };
       var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
       if (!isAccepted) response.setBody("DID NOT WORK");
     }
+    function callback(err, item, options) {
+      if (err) { throw new Error("ERROR") };
+      getContext().getResponse().setBody("WORKED");
+    }
+    // Get a 
+  }
+}
 
+
+//NEW FORMAT ADD FUNCTION
+export const addPreceptorSproc = {
+  id: "addPreceptor",
+  body: function addPreceptor(receptorData, clinicID) {
+
+    let context = getContext();
+    let collection = context.getCollection();
+    let collectionLink = collection.getSelfLink();
+    let response = context.getResponse();
+    preceptorData.type = "preceptor";
+
+    function tryCreate(preceptorData, callback) {
+      var options = {
+        disableAutomaticIdGeneration: true
+      };
+      var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
+      if (!isAccepted) response.setBody("DID NOT WORK");
+    }
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
     }
   }
+}
+
+
+var helloWorldStoredProc = {
+  id: "helloWorld",
+  serverScript: function () {
+    var context = getContext();
+    var response = context.getResponse();
+
+    response.setBody("Hello, World");
+  }
+}
+
+
+//OLD FUNCTION
+
+// const createNewPreceptor = async (preceptor) => {
+//   const id = uuidv4().toString();
+//   const actualPreceptor = {
+//     id: id,
+//     ...preceptor
+//   }
+//   await Preceptors.items.create(actualPreceptor);
+//   return actualPreceptor;
+// }
+
+
+// export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
+//   // Create new preceptor doc with passed in preceptor.
+//   const preceptor = await createNewPreceptor(preceptor_info);
+
+//   // Get clinic data to access array of preceptors.
+//   const clinic = await getClinic(id);
+//   let preceptors = clinic.preceptorInfo;
+
+//   // Add new id of the recently created preceptor to array. 
+//   preceptors.push(preceptor.id);
+//   const replaceOperation = [
+//     {
+//       op: "replace",
+//       path: "/preceptorInfo",
+//       value: preceptors
+//     },
+//   ];
+
+//   // Replace and update with newly added preceptor id.
+//   await Clinics.item(id, id).patch(replaceOperation);
+//   return
+// }
+
+
+
+
+
+
+
+
+
+
+module.exports = {
+  addClinicSproc,
+  CONTAINER
 }
