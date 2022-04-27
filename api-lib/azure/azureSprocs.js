@@ -103,63 +103,56 @@ export const addPreceptorSproc = {
 }
 
 
-var helloWorldStoredProc = {
-  id: "helloWorld",
-  serverScript: function () {
-    var context = getContext();
-    var response = context.getResponse();
+//NEW FORMAT ADD FUNCTION
+// export const addPreceptorFromClinicsPage = {
+//   id: "addPreceptor",
+//   body: function addPreceptor(preceptorData, clinicID){
+//     let context = getContext();
+//     let collection = context.getCollection();
+//     let collectionLink = collection.getSelfLink();
+//     let response = context.getResponse();
+//     preceptorData.type = "preceptor";
 
-    response.setBody("Hello, World");
-  }
-}
+//     tryCreate(preceptorData, callback){
+//       var options = {
+//       disableAutomaticIdGeneration : true
+//       };
+//       var isAccepted = collection.createDocument (collectionLink, clinicData, options, callback);
+//       if (!isAccepted) response.setBody("DID NOT WORK");
+//     }function callback(err, item, options) {
+//       if (err) { throw new Error("ERROR") };
+//       getContext().getResponse().setBody("WORKED");
+//     }
 
 
-//OLD FUNCTION
+//     }
 
-// const createNewPreceptor = async (preceptor) => {
-//   const id = uuidv4().toString();
-//   const actualPreceptor = {
-//     id: id,
-//     ...preceptor
 //   }
-//   await Preceptors.items.create(actualPreceptor);
-//   return actualPreceptor;
-// }
+ 
+export const updateSiteNote = {
+  id: "siteNote",
+  body: function updateSite(siteData){
+    {
+      let context = getContext();
+      let collection = context.getCollection();
+      let collectionLink = collection.getSelfLink();
+      let response = context.getResponse();
+      //siteData.type = "note";
 
+      function tryCreate(callback) {
+        var options = {
+          disableAutomaticIdGeneration: true
+        };
+        var isAccepted = collection.createDocument(collectionLink, siteData, options, callback);
+        if (!isAccepted) response.setBody("DID NOT WORK");
+      }
+      function callback(err, item, options) {
+        if (err) { throw new Error("ERROR") };
+        getContext().getResponse().setBody("WORKED");
+      }
+  }
 
-// export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
-//   // Create new preceptor doc with passed in preceptor.
-//   const preceptor = await createNewPreceptor(preceptor_info);
-
-//   // Get clinic data to access array of preceptors.
-//   const clinic = await getClinic(id);
-//   let preceptors = clinic.preceptorInfo;
-
-//   // Add new id of the recently created preceptor to array. 
-//   preceptors.push(preceptor.id);
-//   const replaceOperation = [
-//     {
-//       op: "replace",
-//       path: "/preceptorInfo",
-//       value: preceptors
-//     },
-//   ];
-
-//   // Replace and update with newly added preceptor id.
-//   await Clinics.item(id, id).patch(replaceOperation);
-//   return
-// }
-
-
-
-
-
-
-
-
-
-
-module.exports = {
-  addClinicSproc,
-  CONTAINER
 }
+}
+
+

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 import { getSite, updateSiteNote } from "../../../api-lib/azure/azureOps";
+import { addNewSiteNote} from "../../../api-lib/azure/azureExecute";
 import StatusParser from "../status";
 
 export default function EditSiteNote(props) {
