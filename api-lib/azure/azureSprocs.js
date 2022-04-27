@@ -73,3 +73,58 @@ export const addClinicSproc = {
     }
   }
 }
+
+
+//NEW FORMAT ADD FUNCTION
+// export const addPreceptorFromClinicsPage = {
+//   id: "addPreceptor",
+//   body: function addPreceptor(preceptorData, clinicID){
+//     let context = getContext();
+//     let collection = context.getCollection();
+//     let collectionLink = collection.getSelfLink();
+//     let response = context.getResponse();
+//     preceptorData.type = "preceptor";
+
+//     tryCreate(preceptorData, callback){
+//       var options = {
+//       disableAutomaticIdGeneration : true
+//       };
+//       var isAccepted = collection.createDocument (collectionLink, clinicData, options, callback);
+//       if (!isAccepted) response.setBody("DID NOT WORK");
+//     }function callback(err, item, options) {
+//       if (err) { throw new Error("ERROR") };
+//       getContext().getResponse().setBody("WORKED");
+//     }
+
+
+//     }
+
+//   }
+ 
+export const updateSiteNote = {
+  id: "siteNote",
+  body: function updateSite(siteData){
+    {
+      let context = getContext();
+      let collection = context.getCollection();
+      let collectionLink = collection.getSelfLink();
+      let response = context.getResponse();
+      //siteData.type = "note";
+
+      function tryCreate(callback) {
+        var options = {
+          disableAutomaticIdGeneration: true
+        };
+        var isAccepted = collection.createDocument(collectionLink, siteData, options, callback);
+        if (!isAccepted) response.setBody("DID NOT WORK");
+      }
+      function callback(err, item, options) {
+        if (err) { throw new Error("ERROR") };
+        getContext().getResponse().setBody("WORKED");
+      }
+  }
+
+}
+}
+
+
