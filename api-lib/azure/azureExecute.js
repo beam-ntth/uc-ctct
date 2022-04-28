@@ -13,9 +13,9 @@ export const incrementClinicCount = async (site_id) => {
     return
 }
 
-export const createNewPreceptor = async(clinic_id, preceptor) => {
+export const createNewPreceptor = async(clinic, preceptor) => {
     const container = CONTAINER;
-    await container.scripts.storedProcedure(createNewPreceptorSproc.id).execute(preceptor.id, [clinic_id, preceptor]);
+    await container.scripts.storedProcedure(createNewPreceptorSproc.id).execute(preceptor.id, [clinic, preceptor]);
 }
 
 export const editSiteNote = async (site_data, note_data) => { 

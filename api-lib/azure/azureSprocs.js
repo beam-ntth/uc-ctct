@@ -182,11 +182,10 @@ export const updateSiteNoteSproc = {
  */
 export const createNewPreceptorSproc = {
   id: "addPreceptor",
-  body: function addPreceptor(clinic_id, preceptor) {
+  body: function addPreceptor(clinic, preceptor) {
     async function main() {
       await createPreceptorProfile(preceptor);
-      const { feed, _ } = await getClinicObject(clinic_id)
-      await updateClinicPreceptorList(feed)
+      await updateClinicPreceptorList(clinic)
     }
     main().catch((err) => getContext().abort(err));
 
@@ -206,20 +205,6 @@ export const createNewPreceptorSproc = {
           if (!isAccepted) reject(new Error(429, "createDocument was not accepted."));
         }
       )
-    }
-
-    function getClinicObject(id) {
-      const sqlQuery = `SELECT * FROM Master m where m.id = "${id}"`
-      return new Promise((resolve, reject) => {
-        let isAccepted = __.queryDocuments(__.getSelfLink(), sqlQuery, options, (err, feed, opts)=>{
-            if (err) reject(err);
-            else resolve({
-                feed,
-                options: opts
-            });
-        });
-        if (!isAccepted) reject(new Error(429, "queryDocuments was not accepted."));
-      });
     }
 
     function updateClinicPreceptorList(clinic) {
