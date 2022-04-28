@@ -37,6 +37,13 @@ export const CONTAINER = DB.container("sprocTest");
  * }  
  */
 
+/**
+ * Formatting of writing our sprocs: 
+ * All sprocs should return a completed property in their body. 
+ * This is because a sproc may return without actually completing. This data will be used
+ * to alert clients if a function did not complete for any reason.
+ */
+
 // /**
 //  * Adding one clinic's data to a specific site.
 //  * @param {JSON} clinicData JSON data of a clinic.
@@ -72,4 +79,30 @@ export const addClinicSproc = {
       getContext().getResponse().setBody("WORKED");
     }
   }
+}
+
+/**
+ * General patch operation to update a clinic. 
+ * @param {JSON} newClinicData New data clinic to update DB with.
+ * @returns 
+ */
+export const updateClinicSproc = {
+  id: "updateClinic", 
+  body: function updateClinic(newClinicData) {
+    var context = getContext();
+    var container = context.getCollection();
+    var response = context.getResponse();
+
+    // Document to be updated with clinic
+    let clinicDoc;
+    // Query for the clinic to replace
+    let filterQuery = {
+      query: 'SELECT * FROM c WHERE c.id = @siteID', 
+      parameter: [{name: '@siteID', value: newClinicData.id}]
+    }
+
+    var accept = container.queryDocument(container.getSelfLink(), filterQuery, {}, tryQuery(err, clinicDoc))
+  }
+
+  // updateClinicSproc.updateClinic.catch
 }
