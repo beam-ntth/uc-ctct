@@ -8,6 +8,7 @@ export default function PreceptorInfoEdit(props) {
   const [hover, setHover] = useState(false);
 
   const [info, setInfo] = useState({
+    type: 'preceptor',
     firstname: null,
     lastname: null,
     position: null,

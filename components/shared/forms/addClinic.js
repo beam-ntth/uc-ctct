@@ -75,22 +75,9 @@ export default function AddNewClinic(props) {
   )
 
   async function addClinic() {
-    // TODO: CLEAN AND REPLACE WITH OWN OP.
-    const database = client.database("uc-ctct");
-    const site_container = database.container("Sites");
-    const { resource: previous_num_clinics } = await site_container.item(props.siteId, props.siteId).read()
-    // const clinic_container = database.container("Clinics");
-    // await clinic_container.items.create(clinic)
     await addNewClinic(clinic);
-    // const replaceOperation =
-    //   [{
-    //     op: "replace",
-    //     path: "/total_clinics",
-    //     value: previous_num_clinics["total_clinics"] + 1
-    //   }];
-    // await site_container.item(props.siteId, props.siteId).patch(replaceOperation)
     props.setOpen(false)
-    setTimeout(() => props.reload(), 500)
+    props.reload()
   }
 
   const [coorLoading, setCoorLoading] = useState(false)

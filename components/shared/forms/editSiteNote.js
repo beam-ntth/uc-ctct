@@ -1,9 +1,8 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { client } from '../../../api-lib/azure/azureConfig';
 import { getSite, updateSiteNote } from "../../../api-lib/azure/azureOps";
-import { editSiteNote} from "../../../api-lib/azure/azureExecute";
+import { editSiteNote } from "../../../api-lib/azure/azureExecute";
 import StatusParser from "../status";
 
 export default function EditSiteNote(props) {
@@ -20,32 +19,19 @@ export default function EditSiteNote(props) {
     useEffect(() => {
         setSiteNote(data)
     }, [])
-
-    async function editElement() {
-      // Get the site object where note is stored. 
-      const site = await getSite(id);
-      // Access the notes.
-      const new_data = site.notes;
-      // Get correct note from array of notes. 
-      new_data[index] = siteNote
-      // Patch operation to the DB. 
-      await updateSiteNote(id, new_data);
-      props.setOpen(false)
-      props.reload()
-    }
     
-    async function updateSiteNote() {
-  
-        const database = client.database("uc-ctct");
-        const site_container = database.container("Sites");
-        const { resource: previous_site_notes } = await site_container.item(props.siteId, props.siteId).read()
-  
-        await editSiteNote(site);
+    async function editElement() {
+        // Get the site object where note is stored. 
+        const site = await getSite(id);
+        // Access the notes.
+        const new_data = site.notes;
+        // Get correct note from array of notes. 
+        new_data[index] = siteNote
+        await editSiteNote(site, new_data);
         props.setOpen(false)
-        setTimeout(() => props.reload(), 500)
-      }
+        props.reload()
+    }
  
-
     return (
     <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>

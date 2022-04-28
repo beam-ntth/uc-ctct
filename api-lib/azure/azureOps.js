@@ -210,7 +210,9 @@ export const getDistinctSiteAffiliations = async () => {
 
 /** */
 
-// TODO: CREATE BETTER FUNCTION FOR ADDING NEW CLINIC. 
+/**
+ * @deprecated
+ */
 export const addClinic = async (clinic_data, site_id) => {
   // Get the clinic info with all ids attached. 
 }
@@ -270,6 +272,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
  * Updates a site's note with newly inputted data. 
  * @param {String} id UUID of site where note is attached.
  * @param {JSON} note_data New JSON data of the note to patch to the DB.
+ * @deprecated - Function has been converted to Sprocs
  */
 export async function updateSiteNote(id, note_data) {
   try {

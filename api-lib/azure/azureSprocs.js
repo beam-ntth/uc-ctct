@@ -52,12 +52,14 @@ export const CONTAINER = DB.container("sprocTest");
  */
 export const addClinicSproc = {
   id: "addClinic",
-  body: function addClinic(clinicData, siteID) {
+  body: function addClinic(items) {
+    const [clinicData, siteId] = items
+
+    // Add Clinic
     let context = getContext();
     let collection = context.getCollection();
     let collectionLink = collection.getSelfLink();
     let response = context.getResponse();
-    clinicData.type = "clinic";
 
     tryCreate(clinicData, callback);
 
@@ -68,91 +70,117 @@ export const addClinicSproc = {
       var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
       if (!isAccepted) response.setBody("DID NOT WORK");
     }
+
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
     }
-    // Get a 
+
+    // Edit Site's Total Number of Clinic Count
+    // 1. Get the old document
+    var siteDocument = null;
+    var isAccepted = collection.queryDocuments(
+        collection.getSelfLink(),
+        {
+          'query': 'SELECT * FROM Master m where m.id = "@siteId"',
+          'parameters' : [{'name':'@siteId', 'value': siteId}]
+        },
+        function (err, item, _) {
+            if (err) {
+                throw err;
+            }
+            siteDocument = item[0];
+            // Calling a Callback Function
+            updateData(siteDocument)
+        }
+    );
+    
+    // Callback Function
+    function updateData(site_doc) {
+        // 2. Update the field
+        site_doc.total_clinics = site_doc.total_clinics + 1;
+        // 3. Replace old document with new document
+        var accept = collection.replaceDocument(site_doc._self, site_doc,
+            function (err, _) {
+                if (err) throw "Unable to update clinic, abort";
+            }
+        )
+        if (!accept) throw "Unable to update clinic, abort";
+    }
+    if (!isAccepted) throw new Error('The query was not accepted by the server.');
   }
 }
 
-
 //NEW FORMAT ADD FUNCTION
-export const addPreceptorSproc = {
+export const createNewPreceptorSproc = {
   id: "addPreceptor",
-  body: function addPreceptor(receptorData, clinicID) {
+  body: function addPreceptor(preceptor) {
 
     let context = getContext();
     let collection = context.getCollection();
     let collectionLink = collection.getSelfLink();
     let response = context.getResponse();
-    preceptorData.type = "preceptor";
 
-    function tryCreate(preceptorData, callback) {
+    // Generate random id
+    const id = uuidv4().toString();
+    const actualPreceptor = {
+      id: id,
+      ...preceptor
+    }
+
+    function tryCreate(callback) {
       var options = {
         disableAutomaticIdGeneration: true
       };
-      var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
+      var isAccepted = collection.createDocument(collectionLink, actualPreceptor, options, callback);
       if (!isAccepted) response.setBody("DID NOT WORK");
     }
+
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
     }
   }
 }
-
-
-//NEW FORMAT ADD FUNCTION
-// export const addPreceptorFromClinicsPage = {
-//   id: "addPreceptor",
-//   body: function addPreceptor(preceptorData, clinicID){
-//     let context = getContext();
-//     let collection = context.getCollection();
-//     let collectionLink = collection.getSelfLink();
-//     let response = context.getResponse();
-//     preceptorData.type = "preceptor";
-
-//     tryCreate(preceptorData, callback){
-//       var options = {
-//       disableAutomaticIdGeneration : true
-//       };
-//       var isAccepted = collection.createDocument (collectionLink, clinicData, options, callback);
-//       if (!isAccepted) response.setBody("DID NOT WORK");
-//     }function callback(err, item, options) {
-//       if (err) { throw new Error("ERROR") };
-//       getContext().getResponse().setBody("WORKED");
-//     }
-
-
-//     }
-
-//   }
  
+
 export const updateSiteNoteSproc = {
   id: "updatesiteNote",
-  body: function updateSite(siteData){
-    {
-      let context = getContext();
-      let collection = context.getCollection();
-      let collectionLink = collection.getSelfLink();
-      let response = context.getResponse();
-      //siteData.type = "note";
-
-      function tryCreate(callback) {
-        var options = {
-          disableAutomaticIdGeneration: true
-        };
-        var isAccepted = collection.createDocument(collectionLink, siteData, options, callback);
-        if (!isAccepted) response.setBody("DID NOT WORK");
-      }
-      function callback(err, item, options) {
-        if (err) { throw new Error("ERROR") };
-        getContext().getResponse().setBody("WORKED");
-      }
+  body: function updateSite(siteData, noteData){
+    var collection = getContext().getCollection();
+    
+    // 1. Get the old document
+    var siteDocument = null;
+    var isAccepted = collection.queryDocuments(
+        collection.getSelfLink(),
+        {
+          'query': 'SELECT * FROM Master m where m.id = "@siteId"',
+          'parameters' : [{'name':'@siteId', 'value': siteData.id}]
+        },
+        function (err, item, _) {
+            if (err) {
+                throw err;
+            }
+            siteDocument = item[0];
+            // Calling a Callback Function
+            updateData(siteDocument)
+        }
+    );
+    
+    // Callback Function
+    function updateData(site_doc) {
+        // 2. Update the field
+        site_doc.notes = noteData;
+        // 3. Replace old document with new document
+        var accept = collection.replaceDocument(site_doc._self, site_doc,
+            function (err, _) {
+                if (err) throw "Unable to update clinic, abort";
+            }
+        )
+        if (!accept) throw "Unable to update clinic, abort";
+    }
+    if (!isAccepted) throw new Error('The query was not accepted by the server.');
   }
-
-}
 }
 
 
