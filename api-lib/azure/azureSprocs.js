@@ -55,25 +55,53 @@ export const CONTAINER = DB.container("sprocTest");
  * Adds a clinic to a site. 
  * Commonly used in areas like addClinic.js component. 
  * @param {JSON} clinicData JSON data of a clinic.
+ * @param {String} siteID UUIDV4 string of site's ID.
  */
 export const addClinicSproc = {
   id: "addClinic",
-  body: function addClinic(clinicData) {
+  body: function addClinic(clinicData, siteID) {
     let context = getContext();
     let collection = context.getCollection();
     let collectionLink = collection.getSelfLink();
     let response = context.getResponse();
+    clinicData.type = "clinic";
 
     tryCreate(clinicData, callback);
 
-    function tryCreate(callback) {
+    function tryCreate(item, callback) {
       var options = {
         disableAutomaticIdGeneration: true
       };
       var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
       if (!isAccepted) response.setBody("DID NOT WORK");
     }
+    function callback(err, item, options) {
+      if (err) { throw new Error("ERROR") };
+      getContext().getResponse().setBody("WORKED");
+    }
+    // Get a 
+  }
+}
 
+
+//NEW FORMAT ADD FUNCTION
+export const addPreceptorSproc = {
+  id: "addPreceptor",
+  body: function addPreceptor(receptorData, clinicID) {
+
+    let context = getContext();
+    let collection = context.getCollection();
+    let collectionLink = collection.getSelfLink();
+    let response = context.getResponse();
+    preceptorData.type = "preceptor";
+
+    function tryCreate(preceptorData, callback) {
+      var options = {
+        disableAutomaticIdGeneration: true
+      };
+      var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
+      if (!isAccepted) response.setBody("DID NOT WORK");
+    }
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
@@ -81,28 +109,57 @@ export const addClinicSproc = {
   }
 }
 
-/**
- * General patch operation to update a clinic. 
- * @param {JSON} newClinicData New data clinic to update DB with.
- * @returns 
- */
-export const updateClinicSproc = {
-  id: "updateClinic", 
-  body: function updateClinic(newClinicData) {
-    var context = getContext();
-    var container = context.getCollection();
-    var response = context.getResponse();
 
-    // Document to be updated with clinic
-    let clinicDoc;
-    // Query for the clinic to replace
-    let filterQuery = {
-      query: 'SELECT * FROM c WHERE c.id = @siteID', 
-      parameter: [{name: '@siteID', value: newClinicData.id}]
-    }
+//NEW FORMAT ADD FUNCTION
+// export const addPreceptorFromClinicsPage = {
+//   id: "addPreceptor",
+//   body: function addPreceptor(preceptorData, clinicID){
+//     let context = getContext();
+//     let collection = context.getCollection();
+//     let collectionLink = collection.getSelfLink();
+//     let response = context.getResponse();
+//     preceptorData.type = "preceptor";
 
-    var accept = container.queryDocument(container.getSelfLink(), filterQuery, {}, tryQuery(err, clinicDoc))
+//     tryCreate(preceptorData, callback){
+//       var options = {
+//       disableAutomaticIdGeneration : true
+//       };
+//       var isAccepted = collection.createDocument (collectionLink, clinicData, options, callback);
+//       if (!isAccepted) response.setBody("DID NOT WORK");
+//     }function callback(err, item, options) {
+//       if (err) { throw new Error("ERROR") };
+//       getContext().getResponse().setBody("WORKED");
+//     }
+
+
+//     }
+
+//   }
+ 
+export const updateSiteNoteSproc = {
+  id: "updatesiteNote",
+  body: function updateSite(siteData){
+    {
+      let context = getContext();
+      let collection = context.getCollection();
+      let collectionLink = collection.getSelfLink();
+      let response = context.getResponse();
+      //siteData.type = "note";
+
+      function tryCreate(callback) {
+        var options = {
+          disableAutomaticIdGeneration: true
+        };
+        var isAccepted = collection.createDocument(collectionLink, siteData, options, callback);
+        if (!isAccepted) response.setBody("DID NOT WORK");
+      }
+      function callback(err, item, options) {
+        if (err) { throw new Error("ERROR") };
+        getContext().getResponse().setBody("WORKED");
+      }
   }
 
-  // updateClinicSproc.updateClinic.catch
 }
+}
+
+

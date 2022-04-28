@@ -105,11 +105,11 @@ export default function SiteDetails({ data, region_data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header={`${region_data.name} - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.data}>
+            <div className={styles.data} id={ styles.topBox }>
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
               </div>
-              <div className={styles.row}>
+              <div className={styles.siteRow}>
                 <div style={{ width: '85%' }}>
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className='row1Sites'>Site Name</p>

@@ -12,7 +12,8 @@ export default function AddNewSite(props) {
             id: uuidv4().toString(), 
             region_id: props.regionId, 
             name: '', 
-            total_clinics: 0, 
+            total_clinics: 0,
+            total_preceptors: 0, 
             status: 0, 
             generalInformation: {
                 phoneNumber: '',
@@ -23,6 +24,7 @@ export default function AddNewSite(props) {
                 state: '',
                 postal: ''
             }, 
+            admins: [],
             notes: []
         }
     )

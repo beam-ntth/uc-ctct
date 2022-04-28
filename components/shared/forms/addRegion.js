@@ -4,6 +4,10 @@ import { IoClose } from "react-icons/io5";
 import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 
+/**
+ * @deprecated Since 04/21/2022, the board has decided that 
+ * there can only be 4 non-mutable affiliations
+ */
 export default function AddNewRegion(props) {
     const [hover, setHover] = useState(false)
     const [region, setRegion] = useState({ id: uuidv4().toString(), name: '', total_sites: 0})

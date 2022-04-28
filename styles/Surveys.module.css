@@ -31,7 +31,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80%;
+    height: 100%;
     width: auto;
 }
 
@@ -77,12 +77,16 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    height: 15%;
+    height: 10%;
     width: 100%;
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
-    margin-bottom: 1rem;
+}
+
+.rowTitle {
+    display: flex;
+    width: 85%;
 }
 
 .titleCol1 {
@@ -111,6 +115,13 @@
     font-size: large;
 }
 
+.displayLastUpdated {
+    width: 100%;
+    text-align: left;
+    padding-left: 2rem;
+    margin: 0.5rem 0;
+}
+
 .data {
     background-color: #F5F6FA;
     margin: 2rem 0 0 7rem;
@@ -126,6 +137,20 @@
     overflow-y: scroll;
 }
 
+.campusFilter, .cohortFilter {
+    border-radius: 0.5rem;
+    border: solid 1px #c4c4c4;
+    padding: 0 0.5rem;
+    height: 2rem;
+}
+
+.cohortFilter {
+    margin-right: 2rem;
+}
+
+/**
+* @deprecated - These stylings are no longer used
+*/
 .sendAllBtn {
     display: flex;
     justify-content: center;

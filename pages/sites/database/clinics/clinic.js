@@ -187,8 +187,8 @@ export default function ClinicDetails({ data }) {
                   {
                     data.adminInfo.map((x, ind) => {
                       return (
-                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          <div key={`admin_${ind}`} className="displayDetailRow">
+                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }} key={x.id} >
+                          <div className="displayDetailRow">
                             <p className="adminCol1">{`${x.name} - ${x.position}`}</p>
                             <p className="adminCol2">{x.phone}</p>
                             <p className="adminCol3">{x.email}</p>
@@ -243,35 +243,33 @@ export default function ClinicDetails({ data }) {
                       console.log(preceptorData)
                       const status = StatusParser('preceptors', parseInt(x.status))
                       return (
-                        <React.Fragment>
-                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
-                              <div key={`preceptor_${ind}`} className="displayPrecepRow">
-                                <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
-                                <p className="preceptorCol2">{x.credential}</p>
-                                <p className="preceptorCol3">{x.phoneNumber}</p>
-                                <p className="preceptorCol4">{x.email}</p>
-                                <p className="preceptorCol5">{status}</p>
-                                <div className={`clinicTag${x['status']}`}></div>
-                              </div>
-                            </Link>
-                            <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
-                              style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                              onMouseEnter={() => {
-                                let newStatus = [...precepTrashHover]
-                                newStatus[ind] = true
-                                setPrecepTrashHover(newStatus)
-                                return
-                              }
-                              } onMouseLeave={() => {
-                                let newStatus = [...precepTrashHover]
-                                newStatus[ind] = false
-                                setPrecepTrashHover(newStatus)
-                                return
-                              }
-                              } onClick={() => removePreceptorElement(ind)} />
-                          </div>
-                        </React.Fragment>
+                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }} key={x.id} >
+                          <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
+                            <div key={`preceptor_${ind}`} className="displayPrecepRow">
+                              <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
+                              <p className="preceptorCol2">{x.credential}</p>
+                              <p className="preceptorCol3">{x.phoneNumber}</p>
+                              <p className="preceptorCol4">{x.email}</p>
+                              <p className="preceptorCol5">{status}</p>
+                              <div className={`clinicTag${x['status']}`}></div>
+                            </div>
+                          </Link>
+                          <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
+                            style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...precepTrashHover]
+                              newStatus[ind] = true
+                              setPrecepTrashHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...precepTrashHover]
+                              newStatus[ind] = false
+                              setPrecepTrashHover(newStatus)
+                              return
+                            }
+                            } onClick={() => removePreceptorElement(ind)} />
+                        </div>
                       )
                     }))
                   }
@@ -289,7 +287,7 @@ export default function ClinicDetails({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     data.clinicPlacementDetail.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} disabledEdit disabledTrash />)
+                      return (<Accordion x={x} ind={ind} key={`placement_${ind}`} disabledEdit disabledTrash />)
                     })
                   }
                 </div>
@@ -309,7 +307,7 @@ export default function ClinicDetails({ data }) {
                     <p style={{ marginBottom: '2rem' }}> Currently, you do not have any notes! </p>
                     :
                     data.notes.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} />)
+                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} />)
                     })
                   }
                 </div>

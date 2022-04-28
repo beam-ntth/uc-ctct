@@ -27,10 +27,6 @@ export default function StudentMgmt() {
                                     <h1>Manage Student Surveys</h1>
                                 </div>
                             </Link>
-                            <div className={styles.uploadOption}>
-                                <FiUpload color={ "#079CDB" } size={ 35 } style={{ marginRight: '1rem' }} />
-                                <p>Upload Student Survey Responses</p>
-                            </div>
                         </div>
                         <div className={styles.mainOption}>
                             <Link href="/surveys/preceptor">
@@ -39,10 +35,6 @@ export default function StudentMgmt() {
                                     <h1>Manage Preceptor Surveys</h1>
                                 </div>
                             </Link>
-                            <div className={styles.uploadOption}>
-                                <FiUpload color={ "#079CDB" } size={ 35 } style={{ marginRight: '1rem' }} />
-                                <p>Upload Preceptor Survey Responses</p>
-                            </div>
                         </div>
                     </div>
                 </div>

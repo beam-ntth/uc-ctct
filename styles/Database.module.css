@@ -27,7 +27,7 @@
     align-items: center;
 }
 
-.row {
+.row, .siteRow {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -37,6 +37,11 @@
     font-family: 'Lato', sans-serif;
     font-weight: bold;
     font-size: 1.5rem;
+}
+
+.siteRow {
+    padding-left: 4rem;
+    justify-content: flex-start;
 }
 
 .searchBar {
@@ -89,6 +94,10 @@
     padding: 1rem 0;
 }
 
+#topBox {
+    margin-top: 3rem;
+}
+
 .generalContent {
     height: auto;
     width: 90%;
@@ -125,4 +134,14 @@
 .generalTitleSubHeader {
     color: #AAB2C8;
     font-weight: 400;
+}
+
+@media only screen and (max-width: 1025px) {
+    .data, .generalBox {
+        margin: 1rem 1rem 0 1rem;
+    }
+
+    .row, .siteRow {
+        font-size: 1.2rem;
+    }
 }
