@@ -62,52 +62,56 @@ export const CONTAINER = DB.container("sprocTest");
 // (err, resource, options)
 
 /**
- * 
- */
-
-/**
  * Adds a clinic to a site. 
  * Commonly used in areas like addClinic.js component. 
  * @param {JSON} clinicData JSON data of a clinic.
- * @param {String} siteID UUIDV4 string of site's ID.
  */
 export const addClinicSproc = {
   id: "addClinic",
-  body: function addClinic(items) {
-    const [clinicData, siteId] = items
-
+  body: function addClinic(clinicData) {
     // Add Clinic
-    let context = getContext();
-    let collection = context.getCollection();
-    let collectionLink = collection.getSelfLink();
-    let response = context.getResponse();
+    const clinicContext = getContext();
+    const clinicCollection = clinicContext.getCollection();
+    const clinicCL = clinicCollection.getSelfLink();
+    const cinicRes = clinicContext.getResponse();
 
-    tryCreate(clinicData, callback);
+    tryCreate(callback);
 
-    function tryCreate(item, callback) {
+    function tryCreate(callback) {
       var options = {
         disableAutomaticIdGeneration: true
       };
-      var isAccepted = collection.createDocument(collectionLink, clinicData, options, callback);
-      if (!isAccepted) response.setBody("DID NOT WORK");
+      var isAccepted = clinicCollection.createDocument(clinicCL, clinicData, options, callback);
+      if (!isAccepted) cinicRes.setBody("DID NOT WORK");
     }
 
-    function callback(err, item, options) {
+    function callback(err) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
     }
+  }
+}
 
+/**
+ * Adds a clinic to a site. 
+ * Gets called after the clinic has been created. This function
+ * increments the total number of site's clinic
+ * @param {String} siteID UUIDV4 string of site's ID.
+ */
+export const incrementClinicCountSproc = {
+  id: "incrementClinicCount",
+  body: function incrementClinicCount(site_id) {
+    const siteContext = getContext();
+    const siteCollection = siteContext.getCollection();
+    const siteCL = siteCollection.getSelfLink();
     // Edit Site's Total Number of Clinic Count
     // 1. Get the old document
     var siteDocument = null;
-    var isAccepted = collection.queryDocuments(
-        collection.getSelfLink(),
-        {
-          'query': 'SELECT * FROM Master m where m.id = "@siteId"',
-          'parameters' : [{'name':'@siteId', 'value': siteId}]
-        },
+    var isAccepted = siteCollection.queryDocuments(
+        siteCL,
+        `SELECT * FROM sprocTest s WHERE s.id = "${site_id}"`,
         function (err, item, _) {
-            if (err) {
+            if (err || item.length == 0) {
                 throw err;
             }
             siteDocument = item[0];
@@ -115,13 +119,12 @@ export const addClinicSproc = {
             updateData(siteDocument)
         }
     );
-    
     // Callback Function
     function updateData(site_doc) {
         // 2. Update the field
         site_doc.total_clinics = site_doc.total_clinics + 1;
         // 3. Replace old document with new document
-        var accept = collection.replaceDocument(site_doc._self, site_doc,
+        var accept = siteCollection.replaceDocument(site_doc._self, site_doc,
             function (err, _) {
                 if (err) throw "Unable to update clinic, abort";
             }
@@ -132,97 +135,20 @@ export const addClinicSproc = {
   }
 }
 
-//NEW FORMAT ADD FUNCTION
-export const createNewPreceptorSproc = {
-  id: "addPreceptor",
-  body: function addPreceptor(preceptor) {
-
-    let context = getContext();
-    let collection = context.getCollection();
-    let collectionLink = collection.getSelfLink();
-    let response = context.getResponse();
-
-    // Generate random id
-    const id = uuidv4().toString();
-    const actualPreceptor = {
-      id: id,
-      ...preceptor
-    }
-
-    function tryCreate(callback) {
-      var options = {
-        disableAutomaticIdGeneration: true
-      };
-      var isAccepted = collection.createDocument(collectionLink, actualPreceptor, options, callback);
-      if (!isAccepted) response.setBody("DID NOT WORK");
-    }
-
-    function callback(err, item, options) {
-      if (err) { throw new Error("ERROR") };
-      getContext().getResponse().setBody("WORKED");
-    }
-  }
-}
-
-export const updateClinicSproc =  {
-  id: "addClinicSproc",
-  body: function UpdateClinic() {
-
-
-    async function main() {
-
-    }
-
-    function queryDocuments(query, options) {
-      return new Promise((resolve, reject) => {
-        // let isAccepted = 
-      })
-
-    }
-  }
-}
-
-
-//NEW FORMAT ADD FUNCTION
-// export const addPreceptorFromClinicsPage = {
-//   id: "addPreceptor",
-//   body: function addPreceptor(preceptorData, clinicID){
-//     let context = getContext();
-//     let collection = context.getCollection();
-//     let collectionLink = collection.getSelfLink();
-//     let response = context.getResponse();
-//     preceptorData.type = "preceptor";
-
-//     tryCreate(preceptorData, callback){
-//       var options = {
-//       disableAutomaticIdGeneration : true
-//       };
-//       var isAccepted = collection.createDocument (collectionLink, clinicData, options, callback);
-//       if (!isAccepted) response.setBody("DID NOT WORK");
-//     }function callback(err, item, options) {
-//       if (err) { throw new Error("ERROR") };
-//       getContext().getResponse().setBody("WORKED");
-//     }
-
-
-//     }
-
-//   }
- 
-
+/**
+ * Update Site's Note
+ * @param {Object} siteData Site Object Data
+ * @param {Object} noteData New Note Object Data
+ */
 export const updateSiteNoteSproc = {
-  id: "updatesiteNote",
-  body: function updateSite(siteData, noteData){
+  id: "updateSiteNote",
+  body: function updateSiteNote(siteData, noteData) {
     var collection = getContext().getCollection();
-    
     // 1. Get the old document
     var siteDocument = null;
     var isAccepted = collection.queryDocuments(
         collection.getSelfLink(),
-        {
-          'query': 'SELECT * FROM Master m where m.id = "@siteId"',
-          'parameters' : [{'name':'@siteId', 'value': siteData.id}]
-        },
+        `SELECT * FROM Master m where m.id = "${siteData.id}"`,
         function (err, item, _) {
             if (err) {
                 throw err;
@@ -249,4 +175,83 @@ export const updateSiteNoteSproc = {
   }
 }
 
+/**
+ * Add New Preceptor Data to Clinic
+ * Usage: This function gets called in clinicPage/preceptorInfoEdit.js
+ * @param {Object} preceptor New Preceptor Object Data
+ */
+export const createNewPreceptorSproc = {
+  id: "addPreceptor",
+  body: function addPreceptor(clinic_id, preceptor) {
+    async function main() {
+      await createPreceptorProfile(preceptor);
+      const { feed, _ } = await getClinicObject(clinic_id)
+      await updateClinicPreceptorList(feed)
+    }
+    main().catch((err) => getContext().abort(err));
 
+    function createPreceptorProfile(precep) {
+      var options = {
+        disableAutomaticIdGeneration: true
+      };
+      return new Promise((resolve, reject) => {
+          let isAccepted = __.createDocument(__.getSelfLink(), precep, options, 
+            (err, feed, opts) => {
+                if (err) reject(err);
+                else resolve({
+                    feed,
+                    options: opts
+                });
+            });
+          if (!isAccepted) reject(new Error(429, "createDocument was not accepted."));
+        }
+      )
+    }
+
+    function getClinicObject(id) {
+      const sqlQuery = `SELECT * FROM Master m where m.id = "${id}"`
+      return new Promise((resolve, reject) => {
+        let isAccepted = __.queryDocuments(__.getSelfLink(), sqlQuery, options, (err, feed, opts)=>{
+            if (err) reject(err);
+            else resolve({
+                feed,
+                options: opts
+            });
+        });
+        if (!isAccepted) reject(new Error(429, "queryDocuments was not accepted."));
+      });
+    }
+
+    function updateClinicPreceptorList(clinic) {
+      clinic.preceptorInfo = clinic.preceptorInfo.push(preceptor.id)
+      return new Promise((resolve, reject) => {
+        let isAccepted = __.replaceDocument(clinic._self, clinic, (err, result, opts)=>{
+            if (err) reject(err);
+            else resolve({
+                result,
+                options: opts
+            });
+        });
+        if (!isAccepted) reject(new Error(429, "replaceDocument was not accepted."));
+      });
+    }
+  }
+}
+
+export const updateClinicSproc =  {
+  id: "addClinicSproc",
+  body: function UpdateClinic() {
+
+
+    async function main() {
+
+    }
+
+    function queryDocuments(query, options) {
+      return new Promise((resolve, reject) => {
+        // let isAccepted = 
+      })
+
+    }
+  }
+}

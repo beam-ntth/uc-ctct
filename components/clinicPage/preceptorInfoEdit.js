@@ -1,13 +1,16 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
+import { createNewPreceptor } from "../../api-lib/azure/azureExecute";
 import { addPreceptorFromClinicsPage } from "../../api-lib/azure/azureOps";
+import { v4 as uuidv4 } from "uuid";
 import StatusParser from "../shared/status";
 
 export default function PreceptorInfoEdit(props) {
   const [hover, setHover] = useState(false);
 
   const [info, setInfo] = useState({
+    id: uuidv4.toString(),
     type: 'preceptor',
     firstname: null,
     lastname: null,
@@ -33,7 +36,8 @@ export default function PreceptorInfoEdit(props) {
   });
 
   async function updateInfo() {
-    await addPreceptorFromClinicsPage(props.id, info);
+    await createNewPreceptor(props.id, info)
+    // await addPreceptorFromClinicsPage(props.id, info);
     props.setOpen(false);
     props.reload()
   }

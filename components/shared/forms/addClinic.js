@@ -5,7 +5,7 @@ import { client } from '../../../api-lib/azure/azureConfig';
 import DescriptionGenerator from "../../clinicPage/description";
 import CircularProgress from '@mui/material/CircularProgress'
 import StatusParser from "../status";
-import { addNewClinic } from "../../../api-lib/azure/azureExecute";
+import { addNewClinic, incrementClinicCount } from "../../../api-lib/azure/azureExecute";
 
 export default function AddNewClinic(props) {
   const currentdate = new Date();
@@ -19,6 +19,7 @@ export default function AddNewClinic(props) {
     id: uuidv4().toString(),
     site_id: props.siteId,
     region_id: props.regionId,
+    name: "",
     last_updated: datetime,
     total_clinics: 0,
     status: 0,
@@ -76,6 +77,7 @@ export default function AddNewClinic(props) {
 
   async function addClinic() {
     await addNewClinic(clinic);
+    await incrementClinicCount(props.siteId)
     props.setOpen(false)
     props.reload()
   }
