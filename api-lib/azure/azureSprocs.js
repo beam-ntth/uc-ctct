@@ -16,6 +16,7 @@ import { v4 as uuidv4 } from "uuid";
 // JS Serverside Programming documentation https://azure.github.io/azure-cosmosdb-js-server
 // https://docs.microsoft.com/en-us/azure/cosmos-db/sql/javascript-query-api
 // Documentation for JS SDK https://docs.microsoft.com/en-us/javascript/api/@azure/cosmos/storedprocedures?view=azure-node-latest
+// Using async await in sprocs https://thomaslevesque.com/2019/07/15/using-typescript-to-write-cosmos-db-stored-procedures-with-async-await/
 
 const DB = client.database("uc-ctct");
 export const CONTAINER = DB.container("sprocTest");
@@ -50,6 +51,19 @@ export const CONTAINER = DB.container("sprocTest");
 //  * @param {String} siteID UUIDV4 string of a site's ID. 
 //  */
 // export function addClinic(clinicData,  siteID)
+
+
+// Structure of Microsoft's serverside programming functions
+// Functions include queryDocuments, createDocument, etc.
+// (by order of args)
+// (selfLink, query, options, callback)
+
+// Structure of a callback (by order of args)
+// (err, resource, options)
+
+/**
+ * 
+ */
 
 /**
  * Adds a clinic to a site. 
@@ -105,6 +119,24 @@ export const addPreceptorSproc = {
     function callback(err, item, options) {
       if (err) { throw new Error("ERROR") };
       getContext().getResponse().setBody("WORKED");
+    }
+  }
+}
+
+export const updateClinicSproc =  {
+  id: "addClinicSproc",
+  body: function UpdateClinic() {
+
+
+    async function main() {
+
+    }
+
+    function queryDocuments(query, options) {
+      return new Promise((resolve, reject) => {
+        let isAccepted = 
+      })
+
     }
   }
 }
