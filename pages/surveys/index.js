@@ -7,9 +7,10 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 import { MdScience, MdOutlineEmojiPeople } from 'react-icons/md'
 import { FiRefreshCcw } from 'react-icons/fi'
-import { getSurveyStatus } from '../../api-lib/azure/azureOps';
-import { STUDENT_SURVEY, PRECEPTOR_SURVEY, startExportResponses, getSurveyExportProgress, downloadSurveyResponse, getAllSurveys } from '../../api-lib/qualtrics/qualtricsOps';
+import { getSurveyStatus, updateSurveyStatus } from '../../api-lib/azure/azureOps';
+import { STUDENT_SURVEY, PRECEPTOR_SURVEY, startExportResponses, getSurveyExportProgress, downloadSurveyResponse } from '../../api-lib/qualtrics/qualtricsOps';
 import Loading from '../../components/shared/loading';
+import { useRouter } from 'next/router';
 
 export default function StudentMgmt() {
     const [ lastUpdated, setLastUpdated ] = useState(null)
@@ -130,6 +131,7 @@ export default function StudentMgmt() {
             }
             setDisplayText("Finished downloading survey responses. Yay!")
             downloaded_data.forEach(x => console.log(x))
+            await updateSurveyStatus()
             setIsRefreshing(false)
         } catch (error) {
             setIsRefreshing(false)
@@ -137,7 +139,7 @@ export default function StudentMgmt() {
         }
     }
 
-    useEffect(() => loadData(), [])
+    useEffect(() => loadData(), [ isRefreshing ])
 
     return (
         <div className={styles.container}>

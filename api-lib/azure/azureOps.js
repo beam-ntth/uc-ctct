@@ -601,3 +601,26 @@ export async function getSurveyStatus() {
     throw new Error(`Error happens when querying Survey Metadata. Error is: ${error}`)
   }
 }
+
+export async function updateSurveyStatus() {
+  const date = new Date()
+  const day = `${date.getDate() < 10 ? '0' : ''}${date.getDate()}`
+  const month = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}`
+  const hours = `${date.getHours() < 10 ? '0' : ''}${date.getHours()+1}`
+  const mins = `${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()+1}`
+  const secs = `${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()+1}`
+  const newDate = `${month}/${day}/${date.getFullYear()} - ${hours}:${mins}:${secs}`
+  try {
+    const replaceClinicOperation =
+    [
+      {
+        op: "replace",
+        path: "/metadata/last_updated",
+        value: newDate
+      }
+    ]
+    await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
+  } catch (error) {
+    throw new Error(`Error happens when updating Survey Metadata. Error is: ${error}`)
+  }
+}
