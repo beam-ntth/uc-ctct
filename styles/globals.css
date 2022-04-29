@@ -229,6 +229,45 @@ a {
   background-color: #d24641;
 }
 
+.clinicTag0, .clinicTag1, .clinicTag2, .clinicTag3, .clinicTag4, .clinicTag5, 
+.clinicTag6, .clinicTag7, .clinicTag8, .clinicTag9 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem;
+}
+
+.clinicTag0 {
+  background-color: #e7e453
+}
+.clinicTag1 {
+  background-color: #e7e453
+}
+.clinicTag2 {
+  background-color: #e7e453
+}
+.clinicTag3 {
+  background-color: #d24641
+}
+.clinicTag4 {
+  background-color: #d24641
+}
+.clinicTag5 {
+  background-color: #e7e453
+}
+.clinicTag6 {
+  background-color: #e7e453
+}
+.clinicTag7 {
+  background-color: #89c85c
+}
+.clinicTag8 {
+  background-color: #d24641
+}
+.clinicTag9 {
+  background-color: #e7e453
+}
+
 .editButton {
   height: 3rem;
   width: 10rem;

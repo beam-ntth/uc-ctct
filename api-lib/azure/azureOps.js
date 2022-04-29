@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const db = client.database("uc-ctct");
 const Master = db.container("Master");
-const Clinics = db.container("Clinics");
 const Preceptors = db.container("Preceptors");
 const Students = db.container("Students");
 
@@ -14,12 +13,14 @@ const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
   `SELECT * FROM c WHERE c.type = "site" AND c.region_id = @region_id ORDER BY c.name ASC`;
 const getClinicsConnectedToSite =
-  "SELECT * FROM c where c.site_id = @site_id ORDER BY c.name ASC";
+  `SELECT * FROM c where c.type = "clinic" AND c.site_id = @site_id ORDER BY c.name ASC`;
 const regionTypeQuery = `SELECT DISTINCT VALUE c.name FROM c WHERE c.type = "affiliation" ORDER by c.name ASC`;
-const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
+const distinctClinicStatusQuery = `SELECT DISTINCT VALUE c.status FROM c WHERE c.type = "clinic" ORDER by c.status ASC`;
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
-const distinctAffiliationQuery = `SELECT DISTINCT VALUE c.affiliation WHERE c.type = "site" from c ORDER by c.affiliation ASC`;
+const distinctAffiliationQuery = `SELECT DISTINCT VALUE c.affiliation FROM c WHERE c.type = "site" ORDER by c.affiliation ASC`;
 const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
+
+const SURVEY_ID = `93910270-ea7a-4a5d-9646-6e57f004b647`
 
 // TODO: CREATE BETTER METHOD OF ERROR HANDLING. 
 // PERHAPS RETURN THE RESPONSE CODE AS WELL AS DATA, THEN CHECK THE CODE TO SEE IF NEEDING TO RENDER ERROR PAGE.
@@ -55,7 +56,7 @@ export const getAllSites = async () => {
  */
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Clinics.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "clinic" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching Clinics: ${error}`);
@@ -105,7 +106,7 @@ export const getRegion = async (id) => {
  */
 export const getClinic = async (id) => {
   try {
-    const { resource: data } = await Clinics.item(id, id).read();
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching clinic with id (${id}). Error is: ${error}`);
@@ -114,7 +115,7 @@ export const getClinic = async (id) => {
 
 export const getClinicsFromSite = async (id) => {
   try {
-    const { resources: data } = await Clinics.items.query({
+    const { resources: data } = await Master.items.query({
       query: getClinicsConnectedToSite,
       parameters: [{ name: "@site_id", value: id }]
     }).fetchAll();
@@ -188,7 +189,7 @@ export const getDistinctRegions = async () => {
 
 export const getDistinctClinicStatuses = async () => {
   try {
-    const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
+    const { resources: data } = await Master.items.query(distinctClinicStatusQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct clinic statuses. Error is: ${error}`);
@@ -262,7 +263,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
     ];
 
     // Replace and update with newly added preceptor id.
-    await Clinics.item(id, id).patch(replaceOperation);
+    await Master.item(id, id).patch(replaceOperation);
   } catch (error) {
     throw new Error(`Issue while adding preceptor to clinic with id (${id}). Error is: ${error}`);
   }
@@ -298,7 +299,7 @@ export async function updateSiteNote(id, note_data) {
  */
 export const removeClinic = async (id, siteId) => {
   try {
-    await Clinics.item(id, id).delete();
+    await Master.item(id, id).delete();
 
     // Update total number of clinics
     const { resource: previous_num_clinics } = await Master.item(siteId, siteId).read()
@@ -384,7 +385,7 @@ export const removeRegion = async (id) => {
  */
 export const removeAdmin = async (id, index) => {
   try {
-    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    const { resource: clinic_obj } = await Master.item(id, id).read()
     let clinic_admins = [...clinic_obj.adminInfo]
     clinic_admins.splice(index, 1)
     const replaceOperation =
@@ -393,7 +394,7 @@ export const removeAdmin = async (id, index) => {
         path: "/adminInfo",
         value: clinic_admins
       }]
-    await Clinics.item(id, id).patch(replaceOperation)
+    await Master.item(id, id).patch(replaceOperation)
     return
 
   } catch (error) {
@@ -411,7 +412,7 @@ export const removeAdmin = async (id, index) => {
 export const removePreceptor = async (id, index) => {
   try {
     // EDIT Clinic Information
-    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    const { resource: clinic_obj } = await Master.item(id, id).read()
     const preceptor_id = clinic_obj.preceptorInfo[index]
     let clinic_preceptors = [...clinic_obj.preceptorInfo]
     clinic_preceptors.splice(index, 1)
@@ -421,7 +422,7 @@ export const removePreceptor = async (id, index) => {
         path: "/preceptorInfo",
         value: clinic_preceptors
       }]
-    await Clinics.item(id, id).patch(replaceClinicOperation)
+    await Master.item(id, id).patch(replaceClinicOperation)
 
     // EDIT Preceptor Information
     const { resource: precep_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
@@ -451,7 +452,7 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
     const today_date = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}/${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${date.getFullYear()}`
     
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
-    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: clinic_obj } = await Master.item(clinic_id, clinic_id).read()
     const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
 
     // Update student information
@@ -511,7 +512,7 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
       }
     ]
 
-    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+    const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
 
     return [studentRes, preceptorRes, clinicRes]
 
@@ -523,7 +524,7 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
 export async function removeStudentFromPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
-    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: clinic_obj } = await Master.item(clinic_id, clinic_id).read()
     const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
 
     // Update student information
@@ -583,11 +584,20 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
       }
     ]
 
-    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+    const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
 
     return [studentRes, preceptorRes, clinicRes]
 
   } catch (error) {
     throw new Error(`Error happens when trying to assign a student to the preceptor. Error is: ${error}`)
+  }
+}
+
+export async function getSurveyStatus() {
+  try {
+    const { resource: data } = await Master.item(SURVEY_ID, SURVEY_ID).read();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens when querying Survey Metadata. Error is: ${error}`)
   }
 }

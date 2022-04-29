@@ -184,7 +184,7 @@ export default function Clinics({ data, site_data }) {
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Clinic Name..." onChange={(x) => searchClinicName(x.target.value)} />
               </div>
-              <div className={styles.row}>
+              <div className={styles.siteRow}>
                 <div style={{ width: '85%' }}>
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>

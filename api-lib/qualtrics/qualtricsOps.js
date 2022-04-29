@@ -1,5 +1,8 @@
 const URL = "https://iad1.qualtrics.com/API/v3"
 
+export const STUDENT_SURVEY = "SV_9vFAo599TwEHR7U"
+export const PRECEPTOR_SURVEY = "SV_0d20t3ZmuQH2WLY"
+
 /**
  * GET SURVEY INFORMATION
  */
@@ -13,7 +16,7 @@ export async function getAllSurveys() {
                 "X-API-TOKEN": `${process.env.NEXT_PUBLIC_QUALTRICS_API}`
             }
         })
-        return res;
+        return res.json();
     } catch (error) {
         throw new Error(`Issue while getting all surveys. Error is: ${error}`);
     }
@@ -28,7 +31,7 @@ export async function getSurvey(survey_id) {
                 "X-API-TOKEN": `${process.env.NEXT_PUBLIC_QUALTRICS_API}`
             }
         })
-        return res;
+        return res.json();
     } catch (error) {
         throw new Error(`Issue while getting a survey. Error is: ${error}`);
     }
@@ -37,18 +40,24 @@ export async function getSurvey(survey_id) {
 /**
  * DOWNLOAD SURVEY RESPONSES
  */
-
 export async function startExportResponses(survey_id) {
     try {
-        const res = await fetch(`${URL}/survey/${survey_id}/export-responses`, {
+        const res = await fetch(`${URL}/surveys/${survey_id}/export-responses/`, {
             "method": "POST",
             "headers": {
                 "Content-Type": "application/json",
                 "X-API-TOKEN": `${process.env.NEXT_PUBLIC_QUALTRICS_API}`
             },
-            "body": "{\"format\":\"csv\"}"
+            "body": JSON.stringify({
+                format: "json",
+                compress: false
+            })
         })
-        return res;
+        if (res.status != 200) {
+            console.log(res)
+            throw new Error(`Start Exporting Responses failed with an error code of ${res.status}: ${res.statusText}`)
+        }
+        return res.json();
     } catch (error) {
         throw new Error(`Issue while initiating survey responses download. Error is: ${error}`);
     }
@@ -56,7 +65,7 @@ export async function startExportResponses(survey_id) {
 
 export async function getSurveyExportProgress(survey_id, progress_id) {
     try {
-        const res = await fetch(`${URL}/survey/${survey_id}/export-responses/${progress_id}`, {
+        const res = await fetch(`${URL}/surveys/${survey_id}/export-responses/${progress_id}`, {
             "method": "GET",
             "headers": {
                 "Content-Type": "application/json",
@@ -71,7 +80,7 @@ export async function getSurveyExportProgress(survey_id, progress_id) {
 
 export async function downloadSurveyResponse(survey_id, file_id) {
     try {
-        const res = await fetch(`${URL}/survey/${survey_id}/export-responses/${file_id}/file`, {
+        const res = await fetch(`${URL}/surveys/${survey_id}/export-responses/${file_id}/file`, {
             "method": "GET",
             "headers": {
                 "Content-Type": "application/json",

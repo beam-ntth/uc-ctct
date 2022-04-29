@@ -62,7 +62,7 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Number of active sites</p>
+                <p>Number of Site based on Categories</p>
               </div>
               <NumberChart />
             </div>
