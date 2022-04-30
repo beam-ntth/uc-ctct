@@ -103,6 +103,7 @@ export default function Student({ students }) {
                 addressLine1: cleanUpName(x["pref_address1"]),
                 addressLine2: cleanUpName(x["pref_address2"]),
                 city: cleanUpName(x["pref_city"]),
+                county: "",
                 country: x["pref_country"],
                 postal: x["pref_postal_cd"],
                 state: x["pref_state"].toUpperCase(),
@@ -111,11 +112,14 @@ export default function Student({ students }) {
                 phoneNumber: x["primary_phone"].replace(/[^\d]/g, ""),
                 sex: x["sexual_orientation_descr"] == "" ? "Unspecified" : x["sexual_orientation_descr"],
                 usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
+                status: "Active",
                 location_affiliation: "",
                 survey: {
-                  lastSent: "",
-                  sentCount: "0",
-                  responseDate: ""
+                  hasResponded: false,
+                  responseDate: "",
+                  data: {
+
+                  }
                 },
                 assignment: {
                   isAssigned: false,

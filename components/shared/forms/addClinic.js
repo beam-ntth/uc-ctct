@@ -6,6 +6,7 @@ import DescriptionGenerator from "../../clinicPage/description";
 import CircularProgress from '@mui/material/CircularProgress'
 import StatusParser from "../status";
 import { addNewClinic, incrementClinicCount } from "../../../api-lib/azure/azureExecute";
+import { mapCityToCounty } from "../cityToCounty";
 
 export default function AddNewClinic(props) {
   const currentdate = new Date();
@@ -31,6 +32,7 @@ export default function AddNewClinic(props) {
       "addressLine1": "",
       "addressLine2": null,
       "city": "",
+      "county": "",
       "state": "",
       "postal": "",
       "lat": "38",
@@ -75,7 +77,9 @@ export default function AddNewClinic(props) {
   }
   )
 
+
   async function addClinic() {
+    clinic.generalInformation.county = mapCityToCounty(clinic.generalInformation.city)
     await addNewClinic(clinic);
     await incrementClinicCount(props.siteId)
     props.setOpen(false)

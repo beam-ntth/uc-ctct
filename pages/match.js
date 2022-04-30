@@ -31,6 +31,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
    */
   const [cohortFilter, setCohortFilter] = useState((new Date()).getFullYear())
   const [campusFilter, setCampusFilter] = useState('UC Davis')
+  const [countyFilter, setCountyFilter] = useState('Alameda')
 
   /**
    * All the states for manage buttons
@@ -70,6 +71,10 @@ export default function Matching({ clinics, students, preceptors, region_choices
       const toYear = p.availability.from.substring(p.availability.to.length-4, p.availability.to.length)
       return clinic.preceptorInfo.includes(p.id) && fromYear >= cohortFilter && toYear <= cohortFilter
     })
+  }
+
+  const filterClinicByCounty = (clinics) => {
+    return clinics.filter(x => x.generalInformation.county == countyFilter)
   }
 
   /**
@@ -231,7 +236,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 <div className={ styles.matchContent } style={ matching ? null : { display: 'none' } }>
                   <div className={styles.clinicSelect}>
                     <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>County: </p>
-                    <select>
+                    <select value={countyFilter} onChange={x => setCountyFilter(x.target.value)}>
                       {
                         CountyList().map(x => <option value={x} key={x} >{x}</option>)
                       }
@@ -256,7 +261,10 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   </div>
                   <div className={ styles.availableClinicSection }>
                     {
-                      clinics.map(clinic => 
+                      filterClinicByCounty(clinics).length == 0 ?
+                      <div>Currently, no clinics within this county</div>
+                      :
+                      filterClinicByCounty(clinics).map(clinic => 
                       <div className='clinicBar' key={ clinic.id }>
                         <div className='clinicTitle'>
                           <p>{ clinic.name }</p>

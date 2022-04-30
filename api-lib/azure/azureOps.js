@@ -446,6 +446,7 @@ export const removePreceptor = async (id, index) => {
   }
 }
 
+
 export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const date = new Date();
@@ -521,6 +522,14 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
   }
 }
 
+/**
+ * This function removes the assignment of a student from the preceptor and clinic
+ * @param {*} student_id : UUID of the assigned student
+ * @param {*} clinic_id : UUID of the assigned clinic
+ * @param {*} preceptor_id : UUID of the assigned preceptor
+ * @param {*} choice : The priority to remove = first_choice, second_choice, ...
+ * @returns A list of the response status after updated student, preceptor, and clinic records
+ */
 export async function removeStudentFromPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
@@ -593,6 +602,10 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
   }
 }
 
+/**
+ * This function queries the survey's metadata such as last_updated, ...
+ * @returns All the metadata correlated to the survey
+ */
 export async function getSurveyStatus() {
   try {
     const { resource: data } = await Master.item(SURVEY_ID, SURVEY_ID).read();
@@ -602,13 +615,17 @@ export async function getSurveyStatus() {
   }
 }
 
+/**
+ * This function updates the survey's last_updated metadata to
+ * the current date & time
+ */
 export async function updateSurveyStatus() {
   const date = new Date()
   const day = `${date.getDate() < 10 ? '0' : ''}${date.getDate()}`
   const month = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}`
-  const hours = `${date.getHours() < 10 ? '0' : ''}${date.getHours()+1}`
-  const mins = `${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()+1}`
-  const secs = `${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()+1}`
+  const hours = `${date.getHours() < 10 ? '0' : ''}${date.getHours()}`
+  const mins = `${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
+  const secs = `${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()}`
   const newDate = `${month}/${day}/${date.getFullYear()} - ${hours}:${mins}:${secs}`
   try {
     const replaceClinicOperation =
@@ -622,5 +639,19 @@ export async function updateSurveyStatus() {
     await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
   } catch (error) {
     throw new Error(`Error happens when updating Survey Metadata. Error is: ${error}`)
+  }
+}
+
+/**
+ * This function checks whether the student's record has already existed within our system
+ * @param email : student's home email that we want to check against
+ * @returns true if the record exist and false if it's brand new
+ */
+export async function checkIfStudentExisted(email) {
+  try {
+    const { resources: data } = await Students.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data.length > 0;
+  } catch (error) {
+    throw new Error(`Error happens while fetching student data. Error is: ${error}`)
   }
 }

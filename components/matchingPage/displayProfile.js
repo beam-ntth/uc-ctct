@@ -47,20 +47,20 @@ export default function StudentPreview(props) {
                 <div className={styles.profileInfo}>
                     <div className={styles.infoRow}>
                         <p style={{ marginRight: '1.5rem' }}><strong>Name:</strong> {student.firstName} {student.middleName} {student.lastName}</p>
-                        <p><strong>County:</strong> {''}</p>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Campus:</strong> {student.location_affiliation}</p>
+                        <p><strong>County:</strong> {student.county}</p>
                     </div>
                     <div className={styles.infoRow}>
                         <p style={{ marginRight: '1.5rem' }}><strong>Address:</strong> { `${student.addressLine1}, ${student.addressLine2 == "" ? "" : student.addressLine2 + ', '}${student.city}, ${student.state} ${student.postal}` }</p>
                         <p><strong>Phone Number:</strong> ({student.phoneNumber.substring(0, 3)}) {student.phoneNumber.substring(3, 6)}-{student.phoneNumber.substring(6, 10)}</p>
                     </div>
                     <div className={styles.infoRow}>
-                        <p style={{ marginRight: '1.5rem' }}><strong>UC Email:</strong> {student.email}</p>
+                        <p style={{ marginRight: '1.5rem' }}><strong>UC Email:</strong> {student.affiliated_email ? student.affiliated_email : "Not yet assigned"}</p>
                         <p style={{ marginRight: '1.5rem' }}><strong>US Citizen:</strong> {student.usCitizen}</p>
                         <p><strong>Other Language(s) Spoken:</strong> {student.englishNative}</p>
                     </div>
                     <div className={styles.infoRow}>
                         
-                        <p><strong>Other Language(s) Spoken:</strong> {student.englishNative}</p>
                     </div>
                 </div>
             </div>

@@ -7,10 +7,11 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 import { MdScience, MdOutlineEmojiPeople } from 'react-icons/md'
 import { FiRefreshCcw } from 'react-icons/fi'
-import { getSurveyStatus, updateSurveyStatus } from '../../api-lib/azure/azureOps';
+import { getAllPreceptors, getAllStudents, getSurveyStatus, updateSurveyStatus } from '../../api-lib/azure/azureOps';
 import { STUDENT_SURVEY, PRECEPTOR_SURVEY, startExportResponses, getSurveyExportProgress, downloadSurveyResponse } from '../../api-lib/qualtrics/qualtricsOps';
 import Loading from '../../components/shared/loading';
 import { useRouter } from 'next/router';
+import PopUp from '../../components/surveyPage/popUp';
 
 export default function StudentMgmt() {
     const [ lastUpdated, setLastUpdated ] = useState(null)
@@ -141,6 +142,27 @@ export default function StudentMgmt() {
 
     useEffect(() => loadData(), [ isRefreshing ])
 
+    /**
+     * States for sending emails to all the students
+     */
+    const [ sendAllEmail, setSendAllEmail ] = useState(false)
+    const [ allEmailAddress, setAllEmailAddress ] = useState([])
+    const [ surveyUrl, setSurveyUrl ] = useState("")
+
+    const getAllUnrespondedEmails = async (choice) => {
+        if (choice == "student") {
+            const student_data = await getAllStudents()
+            const all_emails = student_data.map(x => x.email)
+            setAllEmailAddress(all_emails)
+            setSurveyUrl("https://ucdavis.co1.qualtrics.com/jfe/form/SV_9vFAo599TwEHR7U")
+        } else {
+            const preceptor_data = await getAllPreceptors()
+            const all_emails = preceptor_data.map(x => x.email)
+            setAllEmailAddress(all_emails)
+            setSurveyUrl("https://ucdavis.co1.qualtrics.com/jfe/form/SV_0d20t3ZmuQH2WLY")
+        }
+    }
+
     return (
         <div className={styles.container}>
             <Head>
@@ -150,6 +172,7 @@ export default function StudentMgmt() {
             </Head>
             <main className={styles.main}>
                 { isRefreshing ? <Loading text={displayText} /> : null }
+                { sendAllEmail ? <PopUp open={setSendAllEmail} emailList={allEmailAddress} url={surveyUrl} /> : null }
                 <Navbar icons={[false, false, false, true, false]} /> 
                 <div className={styles.content}>
                     <Header header="Site Management Tools" imgSrc="/asset/images/user-image.png" />
@@ -166,6 +189,9 @@ export default function StudentMgmt() {
                                         <h1>Manage Student Surveys</h1>
                                     </div>
                                 </Link>
+                                <div className={styles.uploadOption} onClick={() => {getAllUnrespondedEmails('student'); setSendAllEmail(true);}}>
+                                    <h4>Send email to all students</h4>
+                                </div>
                             </div>
                             <div className={styles.mainOption}>
                                 <Link href="/surveys/preceptor">
@@ -174,6 +200,9 @@ export default function StudentMgmt() {
                                         <h1>Manage Preceptor Surveys</h1>
                                     </div>
                                 </Link>
+                                <div className={styles.uploadOption} onClick={() => {getAllUnrespondedEmails('preceptor'); setSendAllEmail(true);}}>
+                                    <h4>Send email to all preceptors</h4>
+                                </div>
                             </div>
                         </div>
                     </div>
