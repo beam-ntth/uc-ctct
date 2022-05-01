@@ -1,3 +1,5 @@
+import { amber } from "@mui/material/colors";
+
 function capitalizeText(text) {
     return `${text.substring(0, 1).toUpperCase()}${text.substring(1, text.length).toLowerCase()}`
 }
@@ -6,9 +8,16 @@ function cleanName(text) {
     return text.split(" ").map(x => capitalizeText(x)).join(" ")
 }
 
+function getOnlyNumber(text) {
+    return text.split(/ /)[0].replace(/[^\d]/g, '')
+}
+
 export function parseStudentData(student) {
     const data = student.values
     let returnResult = {}
+
+    // Add email field, for matching
+    returnResult.homeEmail = data.QID73_TEXT ? data.QID73_TEXT : ""
 
     // Add other languages field
     const languageQuestions = ["QID64_1", "QID64_2", "QID64_3"]
@@ -176,5 +185,82 @@ export function parseStudentData(student) {
     }
 
     returnResult.otherFacts = data.QID34_TEXT ? data.QID34_TEXT : "No"
+    return returnResult
+}
+
+export function parsePrecpetorData(preceptor) {
+    const data = preceptor.values
+    const labeledData = preceptor.labels
+    let returnResult = {}
+
+    returnResult.homeEmail = data.QID60_TEXT ? data.QID60_TEXT : ""
+
+    returnResult.clinicPlanned = data.QID53_TEXT
+
+    const professionRoleMap = {
+        "1": "Psychiatric Mental Health Nurse Practitioner (PMHNP)",
+        "4": "Psychiatric Mental Health Clinical Nurse Specialist",
+        "2": "Psychiatrist",
+        "3": "Licensed Clinical Social Worker",
+        "7": "Marriage and Family Therapist",
+        "6": "Pharmacist",
+        "5": "Psychologist"
+    }
+    returnResult.profession = parseInt(data.QID54) == 8 ? data.QID54_8_TEXT : professionRoleMap[parseInt(data.QID54)]
+
+    // If the text has @ means it's an email, else get the phone number
+    if (data.QID12_TEXT) {
+        returnResult.preferredContact = data.QID12_TEXT.includes("@") ? data.QID12_TEXT : getOnlyNumber(data.QID12_TEXT)
+    } else {
+        returnResult.preferredContact = ""
+    }
+    
+    returnResult.practiceSetting = labeledData.QID45
+
+    returnResult.patientPopulation = labeledData.QID47
+    data.QID47_14_TEXT ? returnResult.patientPopulation.push(data.QID47_14_TEXT) : null
+
+    returnResult.ageGroup = labeledData.QID46
+
+    returnResult.visitType = labeledData.QID48
+    returnResult.visitPercentInPerson = data.QID48_4_TEXT ? data.QID48_4_TEXT : ""
+    returnResult.visitPercentOnline = data.QID48_5_TEXT ? data.QID48_5_TEXT : ""
+
+    returnResult.patientAcuity = labeledData.QID49
+    data.QID49_5_TEXT ? returnResult.patientAcuity.push(data.QID49_5_TEXT) : null
+    
+    returnResult.patientVolume = labeledData.QID50
+    data.QID50_4_TEXT ? returnResult.patientVolume.push(data.QID50_4_TEXT) : null
+    
+    returnResult.experienceWithPmhnp = labeledData.QID52
+    returnResult.modelOfPrecepting = labeledData.QID55
+    returnResult.orderEntry = labeledData.QID57
+
+    returnResult.documentPractice = labeledData.QID56
+    data.QID56_4_TEXT ? returnResult.documentPractice.push(data.QID56_4_TEXT) : null
+
+    returnResult.studentSchedule = labeledData.QID58
+    data.QID58_5_TEXT ? returnResult.studentSchedule.push(data.QID58_5_TEXT) : null
+    
+    returnResult.interestInSupportOtherPrecep = labeledData.QID34
+    if (labeledData.QID35) {
+        data.QID35_3_TEXT ? returnResult.typeOfSupport = [data.QID35_3_TEXT] : returnResult.typeOfSupport = labeledData.QID35
+    } else {
+        returnResult.typeOfSupport = ""
+    }
+    
+    returnResult.availability = labeledData.QID27
+    
+    data.QID39_4_TEXT ? returnResult.daysForStudentToAttend = data.QID39_4_TEXT.trim() : returnResult.daysForStudentToAttend = labeledData.QID39
+    
+    returnResult.preferredDaysToWork = labeledData.QID28
+    
+    returnResult.helpfulStudentOtherLangs = labeledData.QID17
+    data.QID20_4_TEXT ? returnResult.whatOtherLangs = [data.QID20_4_TEXT] : returnResult.whatOtherLangs = labeledData.QID20
+
+    data.QID36_5_TEXT ? returnResult.preferredCommMethod = data.QID36_5_TEXT : returnResult.preferredCommMethod = labeledData.QID36
+
+    returnResult.otherConcerns = data.QID23_TEXT ? data.QID23_TEXT : "No"
+
     return returnResult
 }

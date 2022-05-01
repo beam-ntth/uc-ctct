@@ -221,18 +221,12 @@ export const addClinic = async (clinic_data, site_id) => {
 /**
  * Expects JSON of preceptor_info with name, position, phone, and email.
  * @param  preceptor Information about the preceptor, created before the function call.
- * @param preceptor.name {String} - Name attached.
  * @returns preceptor - Preceptor that was recently added to Preceptors container.
  */
 const createNewPreceptor = async (preceptor) => {
   try {
-    const id = uuidv4().toString();
-    const actualPreceptor = {
-      id: id,
-      ...preceptor
-    }
-    await Preceptors.items.create(actualPreceptor);
-    return actualPreceptor;
+    await Preceptors.items.create(preceptor);
+    return preceptor;
   } catch (error) {
     throw new Error(`Issue while creating new preceptor profile. Error is: ${error}`);
   }
@@ -701,5 +695,23 @@ export async function editPreceptorNote(id, new_data) {
     await Preceptors.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function getStudentFromEmail(email) {
+  try {
+    const { resources: data } = await Students.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens while finding a student matched to the email. Error is: ${error}`)
+  }
+}
+
+export async function getPreceptorFromEmail(email) {
+  try {
+    const { resources: data } = await Preceptors.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens while finding a student matched to the email. Error is: ${error}`)
   }
 }

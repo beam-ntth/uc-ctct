@@ -10,26 +10,19 @@ export default function PreceptorInfoEdit(props) {
   const [hover, setHover] = useState(false);
 
   const [info, setInfo] = useState({
-    id: uuidv4.toString(),
+    id: uuidv4().toString(),
     type: 'preceptor',
     firstname: null,
     lastname: null,
-    position: null,
-    credential: null,
     email: null,
     npi: "",
     phoneNumber: null,
     status: 0,
-    description: {
-      population: "Transitional Age Youth",
-      experience: "Established"
-    },
+    location_affiliation: props.region,
     survey: {
       hasResponded: false,
       responseDate: "",
-      data: {
-
-      }
+      data: {}
     },
     students: [],
     notes: [],
@@ -46,8 +39,8 @@ export default function PreceptorInfoEdit(props) {
     const data = await getClinic(props.id)
     let newData = [...data.preceptorInfo].push(info)
     data.preceptorInfo = newData
-    await createNewPreceptor(data, info)
-    // await addPreceptorFromClinicsPage(props.id, info);
+    // await createNewPreceptor(data, info)
+    await addPreceptorFromClinicsPage(props.id, info);
     props.setOpen(false);
     props.reload()
   }
@@ -90,22 +83,6 @@ export default function PreceptorInfoEdit(props) {
                     return;
                   }} />
                 </p>
-                <p><strong>Position:</strong><input placeholder="Position"
-                  onChange={(e) => {
-                    let newInfo = { ...info }
-                    newInfo.position = e.target.value
-                    setInfo(newInfo);
-                    return;
-                  }} />
-                </p>
-                <p><strong>Credential:</strong><input placeholder="Credential"
-                  onChange={(e) => {
-                    let newInfo = { ...info }
-                    newInfo.credential = e.target.value
-                    setInfo(newInfo);
-                    return;
-                  }} />
-                </p>
                 <p><strong>National Provider Identifier (NPI):</strong><input placeholder="NPI: (0000000000)"
                   onChange={(e) => {
                     let newInfo = { ...info }
@@ -130,7 +107,7 @@ export default function PreceptorInfoEdit(props) {
                     return;
                   }} />
                 </p>
-                <p><strong>Availability </strong>
+                <p><strong>Availability </strong><br />
                 from:
                 <input type={'date'}
                   onChange={(e) => {
@@ -140,6 +117,7 @@ export default function PreceptorInfoEdit(props) {
                     setInfo(newInfo);
                     return;
                   }} />
+                <br />
                 to:
                 <input type={'date'}
                   onChange={(e) => {
@@ -149,32 +127,6 @@ export default function PreceptorInfoEdit(props) {
                     setInfo(newInfo);
                     return;
                   }} />
-                </p>
-                <p><strong>Preceptor Experience:</strong>
-                  <select
-                    disabled
-                    value={info.status}
-                    onChange={(e) => {
-                      let newInfo = { ...info }
-                      newInfo.status = e.target.value
-                      setInfo(newInfo);
-                      return;
-                    }} >
-                    <option value={0}>Coming Soon!</option>
-                  </select>
-                </p>
-                <p><strong>Preceptor Specialized Population:</strong>
-                  <select
-                    disabled
-                    value={info.status}
-                    onChange={(e) => {
-                      let newInfo = { ...info }
-                      newInfo.status = e.target.value
-                      setInfo(newInfo);
-                      return;
-                    }} >
-                    <option value={0}>Coming Soon!</option>
-                  </select>
                 </p>
                 <p><strong>Status:</strong>
                   <select
@@ -217,11 +169,11 @@ export default function PreceptorInfoEdit(props) {
                 .editScreen {
                     position: absolute;
                     height: 80vh;
-                    width: 50vw;
+                    width: 80vw;
                     background-color: #fff;
                     opacity: 100%;
                     top: 10vh;
-                    left: 25vw;
+                    left: 10vw;
                     z-index: 901;
                     display: flex;
                     flex-direction: column;

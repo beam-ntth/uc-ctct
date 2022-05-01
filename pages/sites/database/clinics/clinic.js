@@ -25,7 +25,7 @@ const AdminInfoEdit = dynamic(() => import("../../../../components/clinicPage/ad
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
+import { getClinic, getRegion, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import Marker from "../../../../components/shared/marker/marker";
 
 export async function getServerSideProps(context) {
@@ -69,9 +69,10 @@ export default function ClinicDetails({ data }) {
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
 
   /**
-   * Lazy loading preceptor data to speed up clinic page
+   * Lazy loading data to speed up clinic page
    * Call useEffect() to initiate loading
    */
+  const [clinicRegion, setClinicRegion] = useState("")
   const [preceptorData, setPreceptorData] = useState(null)
   async function clientLoadPreceptor() {
     const database = client.database("uc-ctct");
@@ -81,7 +82,9 @@ export default function ClinicDetails({ data }) {
       const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
       all_preceptor_data.push(preceptor_data)
     }
+    const region_data = await getRegion(data.region_id)
     setPreceptorData(all_preceptor_data)
+    setClinicRegion(region_data.name)
   }
   useEffect(() => clientLoadPreceptor(), [data])
 
@@ -120,7 +123,7 @@ export default function ClinicDetails({ data }) {
       {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} id={data.id} /> : null}
       {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={refreshData} id={data.id} /> : null}
       {adminEditOpen ? <AdminInfoEdit open={adminEditOpen} setOpen={setAdminEditOpen} reload={refreshData} id={data.id} /> : null}
-      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
+      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} region={clinicRegion} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
       {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} type="Clinics" id={data.id} /> : null}
       <div className={styles.container}>

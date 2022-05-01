@@ -290,13 +290,75 @@ export default function Matching({ clinics, students, preceptors, region_choices
                               <p>No preceptor available for this cohort</p>
                             </div>
                             :
-                            getAvailablePreceptorPerClinic(clinic).map(precep => 
-                              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
-                                  <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
-                                  <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
-                                    Assign!
-                                  </div>
-                              </div>
+                            getAvailablePreceptorPerClinic(clinic).map((precep, ind) => 
+                              {
+                                const surveyData = precep.survey.data
+                                return (
+                                  <React.Fragment>
+                                    <div className='clinicBox' key={ precep.id }>
+                                      <div className='preceptorInfo'>
+                                        <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
+                                        <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                          Assign!
+                                        </div>
+                                      </div>
+
+                                      {
+                                      surveyData.homeEmail ?
+                                      <React.Fragment>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Profession:</strong> {surveyData.profession}</p>
+                                          <p><strong>Age Group:</strong> {surveyData.ageGroup.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Practice Setting:</strong> {surveyData.practiceSetting.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Patient Population:</strong> {surveyData.patientPopulation.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit Type:</strong> {surveyData.visitType}</p>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit % In-Person:</strong> {surveyData.visitPercentInPerson ? surveyData.visitPercentInPerson : "Not Indicated"}</p>
+                                          <p><strong>Visit % Online:</strong> {surveyData.visitPercentOnline ? surveyData.visitPercentOnline : "Not Indicated"}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Patient Volume:</strong> {surveyData.patientVolume}</p>
+                                          <p><strong>Patient Acuity:</strong> {surveyData.patientAcuity}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Experience with PMHNP:</strong> {surveyData.experienceWithPmhnp}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Model of Precepting:</strong> {surveyData.modelOfPrecepting}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Order Entry:</strong> {surveyData.orderEntry}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Documents Practice:</strong> {surveyData.documentPractice.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Student Scheduling Preference:</strong> {surveyData.studentSchedule}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Number of days for student to visit:</strong> {surveyData.daysForStudentToAttend}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Preferred Days to Precep:</strong> {surveyData.preferredDaysToWork.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Helpful When Students Speak Other Languages:</strong> {surveyData.helpfulStudentOtherLangs}</p>
+                                          <p><strong>Desired Languages:</strong> {surveyData.helpfulStudentOtherLangs == "Yes" ? surveyData.whatOtherLangs : "N/A"}</p>
+                                        </div>
+                                      </React.Fragment>
+                                      :
+                                      <p>Preceptor Still Doesn't Respond to the Survey</p>
+                                      }
+                                    </div>
+                                    {ind == getAvailablePreceptorPerClinic(clinic).length - 1 ? null : <div className='precepLine'></div>}
+                                  </React.Fragment>
+                                )
+                              }
                             )
                           }
                         </div>
@@ -334,7 +396,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
               margin: 1rem 0 0.5rem 1rem;
             }
 
-            .line {
+            .line, .precepLine {
               height: 2px;
               width: 80%;
               background-color: #C4C4C4;
@@ -343,7 +405,12 @@ export default function Matching({ clinics, students, preceptors, region_choices
               opacity: 50%;
             }
 
+            .precepLine {
+              margin: 0.5rem 0;
+            }
+
             .clinicDetails {
+              text-align: left;
               margin-left: 1rem;
             }
 
@@ -351,6 +418,22 @@ export default function Matching({ clinics, students, preceptors, region_choices
               margin: 0.3rem 0;
               font-size: 0.8rem;
               font-weight: normal;
+            }
+
+            .clinicBox {
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              align-items: flex-start;
+              height: auto;
+              margin-top: 0.5rem;
+            }
+
+            .preceptorInfo {
+              height: auto;
+              display: flex;
+              justify-content: flex-start;
+              align-items: flex-start;
             }
 
             .assignBar {
