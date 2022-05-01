@@ -5,6 +5,7 @@ import { IoClose } from "react-icons/io5";
 
 // Import DB modules
 import { client } from '../../api-lib/azure/azureConfig';
+import { getClinic, getSite } from "../../api-lib/azure/azureOps";
 
 const currentdate = new Date();
 
@@ -18,10 +19,19 @@ export default function NoteEdit(props) {
   // TODO: JT - CREATE A FUNCTION FOR PATCHING TO NOTES WITH THIS CAPABILITY.
   async function updateInfo() {
     const database = client.database("uc-ctct");
-    const container = database.container(props.type);
-    const { resource: data } = await container.item(props.id, props.id).read();
+    let data;
+    if (props.type == "Sites") {
+      data = getSite(props.id)
+    } else if (props.type == "Clinics") {
+      data = getClinic(props.id) 
+    } else {
+      const container = database.container(props.type);
+      const { resource: item } = await container.item(props.id, props.id).read();
+      data = item
+    }
+    
     let noteInfo = data.notes
-    console.log(note)
+    console.log(noteInfo)
     noteInfo.unshift(note)
     const replaceOperation =
       [{
@@ -33,17 +43,6 @@ export default function NoteEdit(props) {
     props.setOpen(false)
     props.reload()
   }
-
-  // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-  // useEffect(() => {
-  //   document.addEventListener("keydown", e => {
-  //     if (e.key === 'Enter') {
-  //       updateInfo()
-  //       props.setOpen(false)
-  //       return
-  //     }
-  //   })
-  // })
 
   const [submittingForm, setSubmittingForm] = useState(false)
 

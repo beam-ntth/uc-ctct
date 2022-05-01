@@ -23,7 +23,7 @@ export default function AdminInfoEdit(props) {
 
   async function updateInfo() {
     const database = client.database("uc-ctct");
-    const container = database.container("Clinics");
+    const container = database.container("Master");
     const clinic_data = await getClinic(props.id);
     let adminInfo = clinic_data.adminInfo;
     adminInfo[index] = info

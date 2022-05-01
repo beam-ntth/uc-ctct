@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from "react";
 
 // Import DB modules
-import { CosmosClient } from '@azure/cosmos';
 import { client } from '../../api-lib/azure/azureConfig';
 import { IoClose } from "react-icons/io5";
 import { CircularProgress } from "@mui/material";
@@ -13,7 +12,7 @@ export default function PlacementInfoEdit(props) {
 
   async function updateInfo() {
     const database = client.database("uc-ctct");
-    const container = database.container("Clinics");
+    const container = database.container("Master");
     const { resource: clinic_data } = await container.item(props.id, props.id).read();
     let adminInfo = clinic_data.adminInfo
     adminInfo = info

@@ -307,7 +307,7 @@ export default function ClinicDetails({ data }) {
                     <p style={{ marginBottom: '2rem' }}> Currently, you do not have any notes! </p>
                     :
                     data.notes.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} />)
+                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} setOpen={setNoteOpen} />)
                     })
                   }
                 </div>
