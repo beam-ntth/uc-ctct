@@ -23,6 +23,7 @@ import AddNewClinic from "../../components/shared/forms/addClinic";
 import { removeClinic, getPreceptor, getClinic, getStudent } from "../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../components/clinicPage/preceptorInfoEdit";
+import EditStudentProfile from "../../components/shared/forms/editStudentProfile";
 
 export async function getServerSideProps(context) {
     const student = await getStudent(context.query.id);
@@ -31,19 +32,22 @@ export async function getServerSideProps(context) {
 
 export default function StudentProfile({ student }) {
   const surveyData = student.survey.data
-  const [openNote, setOpenNote] = useState(false)
 
+  /**
+   * States to keep track of all the pop-ups
+   */
+  const [openNewNote, setOpenNewNote] = useState(false)
+  const [openEditInfo, setOpenEditInfo] = useState(false)
+
+  /**
+   * Router object is used to reload the page
+   */
   const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
 
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
-    const site_container = database.container("Sites");
-    console.log("Remove index is:", remove_index)
+    const container = database.container("Students");
     note_data.notes.splice(remove_index, 1)
-    console.log(note_data.notes)
     const replaceOperation =
       [
         {
@@ -52,21 +56,20 @@ export default function StudentProfile({ student }) {
           value: note_data.notes
         }
       ]
-    await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
-    setTimeout(() => refreshData(), 400)
+    await container.item(note_data.id, note_data.id).patch(replaceOperation)
+    router.reload()
   }
 
   async function removeElement(id) {
-    removeClinic(id, note_data.id)
-    setTimeout(() => refreshData(), 400)
+    await removeClinic(id, note_data.id)
+    router.reload()
     return
   }
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Students" id={student.id} /> : null}
-      {/* {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
-            {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null} */}
+      { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Students" id={student.id} /> : null }
+      { openEditInfo ? <EditStudentProfile open={openEditInfo} setOpen={setOpenEditInfo} data={student} reload={router.reload} id={student.id} /> : null }
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -84,7 +87,7 @@ export default function StudentProfile({ student }) {
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>
                 <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => {}}>Edit Profile</div>
+                    <div className={"editButton"} onClick={() => setOpenEditInfo(true)}>Edit Profile</div>
                 </div>
               </div>
               <div className={styles.bioTitle}>
@@ -206,9 +209,6 @@ export default function StudentProfile({ student }) {
             <div className={styles.data} style={{ marginTop: '1rem' }}>
                 <div className={styles.bioTitle}>
                   <h4>{student.firstName} {student.lastName}'s Clinical Placement</h4>
-                  <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => {}}>Edit Placement</div>
-                  </div>
                 </div>
                 <p>Nothing has been assigned to this student so far!</p>
             </div>
@@ -217,10 +217,10 @@ export default function StudentProfile({ student }) {
                 <div style={{ width: '95%', display: 'flex', marginBottom: '2rem' }}>
                   <p className="titleClinics" style={{ width: '80%', margin: 0, display: 'flex', alignItems: 'center' }}>{student.firstName} {student.lastName}'s Notes</p>
                   <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => setOpenNote(true)}>+ Add Notes</div>
+                    <div className={"editButton"} onClick={() => setOpenNewNote(true)}>+ Add Notes</div>
                   </div>
                 </div>
-                <div>
+                <div style={{ width: '90%' }}>
                   {
                     student.notes.length !== 0 ? student.notes.map((x, ind) => {
                       return (<Accordion x={x} ind={ind} />)

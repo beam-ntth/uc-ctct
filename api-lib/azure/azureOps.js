@@ -655,3 +655,51 @@ export async function checkIfStudentExisted(email) {
     throw new Error(`Error happens while fetching student data. Error is: ${error}`)
   }
 }
+
+export async function editPreceptorInfo(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function editStudentInfo(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Students.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating student data. Error is: ${error}`)
+  }
+}
+
+export async function editPreceptorNote(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}

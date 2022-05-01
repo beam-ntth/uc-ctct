@@ -19,13 +19,16 @@ export default function NoteEdit(props) {
   // TODO: JT - CREATE A FUNCTION FOR PATCHING TO NOTES WITH THIS CAPABILITY.
   async function updateInfo() {
     const database = client.database("uc-ctct");
+    let container;
     let data;
     if (props.type == "Sites") {
+      container = database.container("Master");
       data = getSite(props.id)
     } else if (props.type == "Clinics") {
+      container = database.container("Master");
       data = getClinic(props.id) 
     } else {
-      const container = database.container(props.type);
+      container = database.container(props.type);
       const { resource: item } = await container.item(props.id, props.id).read();
       data = item
     }
@@ -109,7 +112,7 @@ export default function NoteEdit(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 65vh;
+                    height: 75vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;

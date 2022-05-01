@@ -71,12 +71,12 @@ export default function Clinics({ data, site_data }) {
   }
 
   /**
-   * Remove clinic element and update total number of clinics in the site
-   * @param {String} remove_index - UUID of clinic to remove. 
+   * Remove a note from the site
+   * @param {String} remove_index - Index of the note that we want to remove. 
    */
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
-    const site_container = database.container("Sites");
+    const site_container = database.container("Master");
     site_data.notes.splice(remove_index, 1)
     const replaceOperation =
       [

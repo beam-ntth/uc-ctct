@@ -1,13 +1,12 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { getSite } from "../../../api-lib/azure/azureOps";
-import { editSiteNote } from "../../../api-lib/azure/azureExecute";
+import { editPreceptorNote, getPreceptor } from "../../../api-lib/azure/azureOps";
 
-export default function EditSiteNote(props) {
+export default function EditPreceptorNote(props) {
     const [hover, setHover] = useState(false)
     const [id, index, data] = props.open
-    const [siteNote, setSiteNote] = useState("")
+    const [preceptorNote, setPreceptorNote] = useState("")
     const [submittingForm, setSubmittingForm] = useState(false)
 
     /**
@@ -16,17 +15,17 @@ export default function EditSiteNote(props) {
      * Updates when state has been updated, i.e props.open.
      */
     useEffect(() => {
-        setSiteNote(data)
+        setPreceptorNote(data)
     }, [])
     
     async function editElement() {
         // Get the site object where note is stored. 
-        const site = await getSite(id);
+        const preceptor = await getPreceptor(id);
         // Access the notes.
-        const new_data = site.notes;
+        const new_data = preceptor.notes;
         // Get correct note from array of notes. 
-        new_data[index] = siteNote
-        await editSiteNote(site, new_data);
+        new_data[index] = preceptorNote
+        await editPreceptorNote(preceptor.id, new_data);
         props.setOpen(false)
         props.reload()
     }
@@ -51,18 +50,18 @@ export default function EditSiteNote(props) {
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
                     <div style={{ width: '90%' }}>
-                        <p><strong>Title:</strong><input value={siteNote.title} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.title = e.target.value
-                        setSiteNote(newSite)
+                        <p><strong>Title:</strong><input value={preceptorNote.title} onChange={(e) => {
+                        let newNoteData = {...preceptorNote}
+                        newNoteData.title = e.target.value
+                        setPreceptorNote(newNoteData)
                         return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%'}}>
-                        <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={siteNote.note} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.note = e.target.value
-                        setSiteNote(newSite)
+                        <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={preceptorNote.note} onChange={(e) => {
+                        let newNoteData = {...preceptorNote}
+                        newNoteData.note = e.target.value
+                        setPreceptorNote(newNoteData)
                         return
                         }} /> </p>
                     </div>
