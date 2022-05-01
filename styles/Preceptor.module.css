@@ -64,6 +64,10 @@
     padding-left: 2rem;
 }
 
+.profileInfo p {
+    margin: 0.5rem 0;
+}
+
 .infoRow {
     display: flex;
 }

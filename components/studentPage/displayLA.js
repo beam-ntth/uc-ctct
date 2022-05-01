@@ -78,16 +78,17 @@ export default function DisplayUCLA (props) {
               </div >
               {
                 props.students.map((x, ind) => {
+                  const surveyData = x.survey.data
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                          <p style={{ width: '10%' }}>{x.primaryClinic ? x.primaryClinic : "TBD"}</p>
-                          <p style={{ width: '10%' }}>{x.status ? x.status : "TBD"}</p>
-                          <p style={{ width: '10%' }}>{x.status ? x.status : "TBD"}</p>
+                          <p style={{ width: '10%' }}>{surveyData.otherLanguages[0]}</p>
+                          <p style={{ width: '10%' }}>{x.county}</p>
+                          <p style={{ width: '10%' }}>{surveyData.practiceSetting[0]}</p>
                           <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.state}, ${x.postal}` : "TBD"}</p>
-                          <p style={{ width: '18%' }}>{x.status ? x.status : "TBD"}</p>
+                          <p style={{ width: '18%' }}>{surveyData.patientPopulation[0]}</p>
                           <p style={{ width: '15%' }}>{x.metadata ? x.metadata.date_last_updated : "TBD"}</p>
                         </div>
                       </Link>

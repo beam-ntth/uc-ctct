@@ -117,9 +117,7 @@ export default function Student({ students }) {
                 survey: {
                   hasResponded: false,
                   responseDate: "",
-                  data: {
-
-                  }
+                  data: {}
                 },
                 assignment: {
                   isAssigned: false,
@@ -289,10 +287,10 @@ export default function Student({ students }) {
               </div>
             </div> : null }
 
-            { page === 'UCD' ? <DisplayUCD students={students} setPage={setPage} /> : null }
-            { page === 'UCLA' ? <DisplayUCLA students={students} setPage={setPage} /> : null }
-            { page === 'UCI' ? <DisplayUCI students={students} setPage={setPage} /> : null }
-            { page === 'UCSF' ? <DisplayUCSF students={students} setPage={setPage} /> : null }
+            { page === 'UCD' ? <DisplayUCD students={students.filter(x => x.location_affiliation == "UC Davis")} setPage={setPage} /> : null }
+            { page === 'UCLA' ? <DisplayUCLA students={students.filter(x => x.location_affiliation == "UC Los Angeles")} setPage={setPage} /> : null }
+            { page === 'UCI' ? <DisplayUCI students={students.filter(x => x.location_affiliation == "UC Irvine")} setPage={setPage} /> : null }
+            { page === 'UCSF' ? <DisplayUCSF students={students.filter(x => x.location_affiliation == "UC San Francisco")} setPage={setPage} /> : null }
             { page === 'ALL' ? <DisplayALL students={students} setPage={setPage} /> : null }
           </div >
         </main >

@@ -24,6 +24,13 @@ export default function PreceptorInfoEdit(props) {
       population: "Transitional Age Youth",
       experience: "Established"
     },
+    survey: {
+      hasResponded: false,
+      responseDate: "",
+      data: {
+
+      }
+    },
     students: [],
     notes: [],
     availability: {

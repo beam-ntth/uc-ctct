@@ -12,6 +12,7 @@ import { STUDENT_SURVEY, PRECEPTOR_SURVEY, startExportResponses, getSurveyExport
 import Loading from '../../components/shared/loading';
 import { useRouter } from 'next/router';
 import PopUp from '../../components/surveyPage/popUp';
+import { parseStudentData } from '../../components/surveyPage/parseQualtricsData';
 
 export default function StudentMgmt() {
     const [ lastUpdated, setLastUpdated ] = useState(null)
@@ -131,7 +132,7 @@ export default function StudentMgmt() {
                 }
             }
             setDisplayText("Finished downloading survey responses. Yay!")
-            downloaded_data.forEach(x => console.log(x))
+            downloaded_data.forEach(x => console.log(JSON.stringify(parseStudentData(x))))
             await updateSurveyStatus()
             setIsRefreshing(false)
         } catch (error) {
@@ -152,12 +153,12 @@ export default function StudentMgmt() {
     const getAllUnrespondedEmails = async (choice) => {
         if (choice == "student") {
             const student_data = await getAllStudents()
-            const all_emails = student_data.map(x => x.email)
+            const all_emails = student_data.filter(x => !x.survey.hasResponded).map(x => x.email)
             setAllEmailAddress(all_emails)
             setSurveyUrl("https://ucdavis.co1.qualtrics.com/jfe/form/SV_9vFAo599TwEHR7U")
         } else {
             const preceptor_data = await getAllPreceptors()
-            const all_emails = preceptor_data.map(x => x.email)
+            const all_emails = preceptor_data.filter(x => !x.survey.hasResponded).map(x => x.email)
             setAllEmailAddress(all_emails)
             setSurveyUrl("https://ucdavis.co1.qualtrics.com/jfe/form/SV_0d20t3ZmuQH2WLY")
         }
@@ -172,7 +173,7 @@ export default function StudentMgmt() {
             </Head>
             <main className={styles.main}>
                 { isRefreshing ? <Loading text={displayText} /> : null }
-                { sendAllEmail ? <PopUp open={setSendAllEmail} emailList={allEmailAddress} url={surveyUrl} /> : null }
+                { sendAllEmail ? <PopUp open={setSendAllEmail} emailList={allEmailAddress} setEmailList={setAllEmailAddress} url={surveyUrl} setUrl={setSurveyUrl} /> : null }
                 <Navbar icons={[false, false, false, true, false]} /> 
                 <div className={styles.content}>
                     <Header header="Site Management Tools" imgSrc="/asset/images/user-image.png" />

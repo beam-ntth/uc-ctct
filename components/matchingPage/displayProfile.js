@@ -1,9 +1,11 @@
 import styles from './DisplayProfile.module.css'
 import { IoArrowBack } from "react-icons/io5";
 import { removeStudentFromPreceptor } from '../../api-lib/azure/azureOps';
+import React from 'react';
 
 export default function StudentPreview(props) {
     const student = props.data
+    const surveyData = student.survey.data
     const clinic_id_1 = student.assignment.primary_choice.clinic_id
     const precep_id_1 = student.assignment.primary_choice.preceptor_id
     const date_assigned_1 = student.assignment.primary_choice.date_assigned
@@ -57,10 +59,96 @@ export default function StudentPreview(props) {
                     <div className={styles.infoRow}>
                         <p style={{ marginRight: '1.5rem' }}><strong>UC Email:</strong> {student.affiliated_email ? student.affiliated_email : "Not yet assigned"}</p>
                         <p style={{ marginRight: '1.5rem' }}><strong>US Citizen:</strong> {student.usCitizen}</p>
-                        <p><strong>Other Language(s) Spoken:</strong> {student.englishNative}</p>
+                    </div>
+                </div>
+            </div>
+            <div className={styles.bioTitle}>
+                <h4>Survey Data</h4>
+            </div>
+            <div className={styles.bioTitle}>
+                <div className={styles.profileInfo}>
+                    <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Other Language(s) Spoken:</strong> {surveyData.otherLanguages.join(", ")}</p>
                     </div>
                     <div className={styles.infoRow}>
-                        
+                        <p style={{ marginRight: '1.5rem' }}><strong>Preferred Location (Primary):</strong> {`${surveyData.preferredLocation.firstCity}, ${surveyData.preferredLocation.firstCounty}`}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Preferred Location (Secondary):</strong> {`${surveyData.preferredLocation.secondCity}, ${surveyData.preferredLocation.secondCounty}`}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Top-3 Practice Setting:</strong> {surveyData.practiceSetting.slice(0, 3).join(", ")}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Top-3 Patient Population:</strong> {surveyData.patientPopulation.slice(0, 3).join(", ")}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Top-3 Age Group:</strong> {surveyData.ageGroup.slice(0, 3).join(", ")}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Current Certification:</strong> {surveyData.currentCert}</p>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Primary Clinic Certification:</strong> {surveyData.primaryCert}</p>
+                        {surveyData.secondaryCert ? <p><strong>Secondary Clinic Certification:</strong> {surveyData.secondaryCert}</p> : null}
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>APRN Years of Experience:</strong> {surveyData.aprnWorkDuration}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Average Patient Volume:</strong> {surveyData.avgPatientVol}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>PMHNP Time Commitment:</strong> {surveyData.planToWork}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Availability:</strong> {surveyData.daysAvailable}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Plans After Graduation:</strong> {surveyData.planAfterGraduate}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Current Working at Mental Health Facility:</strong> {surveyData.isWorkingAtMentalHealth}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong style={{ textDecoration: 'underline' }}>Experience Working With</strong></p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Depression:</strong> {surveyData.mentalExperienceLevel.depression}</p>
+                        <p><strong>Anxiety:</strong> {surveyData.mentalExperienceLevel.anxiety}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Bipolar Disorder:</strong> {surveyData.mentalExperienceLevel.bipolarDisorder}</p>
+                        <p><strong>Eating Disorder:</strong> {surveyData.mentalExperienceLevel.eatingDisorders}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>ADHD:</strong> {surveyData.mentalExperienceLevel.adhd}</p>
+                        <p><strong>Schizophrenia:</strong> {surveyData.mentalExperienceLevel.schizophrenia}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Personality Disorder:</strong> {surveyData.mentalExperienceLevel.personalityDisorders}</p>
+                    </div>
+                    <div className={styles.infoRow}>
+                        <p><strong>Other Work Experience:</strong> {surveyData.otherExperience}</p>
+                    </div>
+                    { surveyData.hasPreferredClinic == "Yes" ?
+                    <React.Fragment>
+                        <div className={styles.infoRow}>
+                            <p style={{ textDecoration: 'underline' }}><strong>Preferred Clinic</strong></p>
+                        </div>
+                        <div className={styles.infoRow}>
+                            <p style={{ marginRight: '1.5rem' }}><strong>Clinic Name:</strong> {surveyData.preferredClinic.clinicName}</p>
+                        </div>
+                        <div className={styles.infoRow}>
+                            <p style={{ marginRight: '1.5rem' }}><strong>Address:</strong> {surveyData.preferredClinic.address}</p>
+                        </div>
+                        <div className={styles.infoRow}>
+                            <p style={{ marginRight: '1.5rem' }}><strong>Point of Contact:</strong> {surveyData.preferredClinic.poc}</p>
+                            <p style={{ marginRight: '1.5rem' }}><strong>Phone Number:</strong> {surveyData.preferredClinic.phone}</p>
+                            <p><strong>Email:</strong> {surveyData.preferredClinic.email}</p>
+                        </div>
+                    </React.Fragment>
+                    : null }
+                    <div className={styles.infoRow}>
+                        <p><strong>Other Interesting Facts:</strong> {surveyData.otherFacts}</p>
                     </div>
                 </div>
             </div>

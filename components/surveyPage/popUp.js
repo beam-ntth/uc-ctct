@@ -4,12 +4,12 @@ import React from "react";
 export default function PopUp(props) {
     return (
         <React.Fragment>
-        <div className="backDrop" onClick={() => props.open(false)}></div>
+        <div className="backDrop" onClick={() => {props.open(false); props.setEmailList([]); props.setUrl("")}}></div>
         <div className="editScreen">
             <div style={{height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignContent: 'center', justifyContent: "flex-start"}}>
                 <h4>Here is the list of all unresponded emails</h4>
                 <p className="instruction">Please copy the emails below and paste them on to the "Recipients" section of your mailing system</p>
-                <p>{props.emailList.join(", ")}</p>
+                <p>{props.emailList.length == 0 ? "Everybody responded to the email!" : props.emailList.join(", ")}</p>
                 <h4>Here is the anonymous survey link to attach to your email</h4>
                 <p className="url">{props.url}</p>
             </div>
