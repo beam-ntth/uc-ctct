@@ -3,6 +3,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    padding: 0.5rem;
 }
 
 .container {
@@ -26,13 +27,13 @@
 }
 
 .menu {
-    height: 25%;
+    height: 35%;
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin: 0.5rem 0;
+    margin: 3rem 0 1rem 0;
 }
 
 .menuOptionTop, .menuOptionBottom {
@@ -44,32 +45,20 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    transition: linear 0.3s;
+    margin: 0.5rem;
 }
 
-.menuOptionTop {
+.menuOptionTop, .menuOptionBottom {
     height: 55%;
     min-width: 33rem;
     width: 85%;
 }
 
-.menuOptionBottom {
-    height: 40%;
-    min-width: 33rem;
-    width: 70%;
-}
-
-.menuOptionTop:hover {
+.menuOptionTop:hover, .menuOptionBottom:hover {
     height: 57%;
     min-width: 35rem;
     width: 87%;
-    transition: linear 0.3s;
-}
-
-.menuOptionBottom:hover {
-    height: 42%;
-    min-width: 33rem;
-    width: 72%;
-    transition: linear 0.3s;
 }
 
 .menuOptionTop h1, .menuOptionBottom h1 {
@@ -79,7 +68,6 @@
 
 .menuOptionBottom h1 {
     margin: 0.5rem;
-    font-size: 1.2rem;
 }
 
 .menuOptionTop p, .menuOptionBottom p {
@@ -110,6 +98,7 @@
     width: 85%;
     border-radius: 2rem;
     background-color: #F5F5F5;
+    /* margin-top: 4rem; */
 }
 
 .legend {

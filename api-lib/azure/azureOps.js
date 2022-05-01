@@ -3,26 +3,24 @@ import { client } from "./azureConfig";
 import { v4 as uuidv4 } from "uuid";
 
 const db = client.database("uc-ctct");
-const Regions = db.container("Regions");
-const Sites = db.container("Sites");
-const Clinics = db.container("Clinics");
+const Master = db.container("Master");
 const Preceptors = db.container("Preceptors");
 const Students = db.container("Students");
-
-// console.log("Getting sites: ", sites);
 
 // SQL Query Literals
 // TODO: Get better naming scheme to differentiate literals from the functions.
 const selectAllQuery = "SELECT * FROM c";
 const getSitesConnectedToRegion =
-  "SELECT * FROM c WHERE c.region_id = @region_id ORDER BY c.name ASC";
+  `SELECT * FROM c WHERE c.type = "site" AND c.region_id = @region_id ORDER BY c.name ASC`;
 const getClinicsConnectedToSite =
-  "SELECT * FROM c where c.site_id = @site_id ORDER BY c.name ASC";
-const regionTypeQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
-const distinctClinicStatusQuery = "SELECT DISTINCT VALUE c.status FROM c ORDER by c.status ASC ";
+  `SELECT * FROM c where c.type = "clinic" AND c.site_id = @site_id ORDER BY c.name ASC`;
+const regionTypeQuery = `SELECT DISTINCT VALUE c.name FROM c WHERE c.type = "affiliation" ORDER by c.name ASC`;
+const distinctClinicStatusQuery = `SELECT DISTINCT VALUE c.status FROM c WHERE c.type = "clinic" ORDER by c.status ASC`;
 const distinctSiteNameQuery = "SELECT DISTINCT VALUE c.name FROM c ORDER by c.name ASC";
-const distinctAffiliationQuery = "SELECT DISTINCT VALUE c.affiliation from c ORDER by c.affiliation ASC";
+const distinctAffiliationQuery = `SELECT DISTINCT VALUE c.affiliation FROM c WHERE c.type = "site" ORDER by c.affiliation ASC`;
 const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
+
+const SURVEY_ID = `93910270-ea7a-4a5d-9646-6e57f004b647`
 
 // TODO: CREATE BETTER METHOD OF ERROR HANDLING. 
 // PERHAPS RETURN THE RESPONSE CODE AS WELL AS DATA, THEN CHECK THE CODE TO SEE IF NEEDING TO RENDER ERROR PAGE.
@@ -34,7 +32,7 @@ const queryPreceptor = "SELECT * from c WHERE c.preceptor_id = @preceptor_id";
  */
 export const getAllRegions = async () => {
   try {
-    const { resources: data } = await Regions.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "affiliation" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching Regions: ${error}`);
@@ -46,7 +44,7 @@ export const getAllRegions = async () => {
  */
 export const getAllSites = async () => {
   try {
-    const { resources: data } = await Sites.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "site" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue with fetching sites: ${error}`);
@@ -58,7 +56,7 @@ export const getAllSites = async () => {
  */
 export const getAllClinics = async () => {
   try {
-    const { resources: data } = await Clinics.items.query(`${selectAllQuery} ORDER BY c.name ASC`).fetchAll();
+    const { resources: data } = await Master.items.query(`${selectAllQuery} WHERE c.type = "clinic" ORDER BY c.name ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching Clinics: ${error}`);
@@ -95,7 +93,7 @@ export const getAllStudents = async () => {
  */
 export const getRegion = async (id) => {
   try {
-    const { resource: data } = await Regions.item(id, id).read();
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error(`Issue fetching region with id (${id}). Error is: ${error}`);
@@ -108,17 +106,16 @@ export const getRegion = async (id) => {
  */
 export const getClinic = async (id) => {
   try {
-    const { resource: data } = await Clinics.item(id, id).read();
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
-    console.log("Error is", error.code);
     throw new Error(`Issue fetching clinic with id (${id}). Error is: ${error}`);
   }
 }
 
 export const getClinicsFromSite = async (id) => {
   try {
-    const { resources: data } = await Clinics.items.query({
+    const { resources: data } = await Master.items.query({
       query: getClinicsConnectedToSite,
       parameters: [{ name: "@site_id", value: id }]
     }).fetchAll();
@@ -134,8 +131,7 @@ export const getClinicsFromSite = async (id) => {
  */
 export const getSite = async (id) => {
   try {
-    const { resource: data } = await Sites.item(id, id).read();
-    console.log("Fetching site", data);
+    const { resource: data } = await Master.item(id, id).read();
     return data;
   } catch (error) {
     throw new Error(`Issue with fetching the site: ${id}. Error is: ${error}`);
@@ -148,7 +144,7 @@ export const getSite = async (id) => {
  */
 export const getSitesFromRegion = async (id) => {
   try {
-    const { resources: data } = await Sites.items.query({
+    const { resources: data } = await Master.items.query({
       query: getSitesConnectedToRegion,
       parameters: [{ name: "@region_id", value: id }]
     }).fetchAll();
@@ -183,10 +179,8 @@ export const getStudent = async (id) => {
  */
 export const getDistinctRegions = async () => {
   try {
-    const res = await Regions.items.query(regionTypeQuery).fetchAll();
+    const res = await Master.items.query(regionTypeQuery).fetchAll();
     const data = res.resources;
-    console.log("Getting all distinct regions", res);
-    // const { resources: data } = await Regions.items.query(regionTypeQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct regions. Error is: ${error}`);
@@ -195,7 +189,7 @@ export const getDistinctRegions = async () => {
 
 export const getDistinctClinicStatuses = async () => {
   try {
-    const { resources: data } = await Clinics.items.query(distinctClinicStatusQuery).fetchAll();
+    const { resources: data } = await Master.items.query(distinctClinicStatusQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct clinic statuses. Error is: ${error}`);
@@ -204,8 +198,7 @@ export const getDistinctClinicStatuses = async () => {
 
 export const getDistinctSiteAffiliations = async () => {
   try {
-    const { resources: data } = await Sites.items.query(distinctAffiliationQuery).fetchAll();
-    console.log("Getting distinct affiliations: ", data);
+    const { resources: data } = await Master.items.query(distinctAffiliationQuery).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all distinct site affiliations. Error is: ${error}`);
@@ -218,7 +211,9 @@ export const getDistinctSiteAffiliations = async () => {
 
 /** */
 
-// TODO: CREATE BETTER FUNCTION FOR ADDING NEW CLINIC. 
+/**
+ * @deprecated
+ */
 export const addClinic = async (clinic_data, site_id) => {
   // Get the clinic info with all ids attached. 
 }
@@ -268,7 +263,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
     ];
 
     // Replace and update with newly added preceptor id.
-    await Clinics.item(id, id).patch(replaceOperation);
+    await Master.item(id, id).patch(replaceOperation);
   } catch (error) {
     throw new Error(`Issue while adding preceptor to clinic with id (${id}). Error is: ${error}`);
   }
@@ -278,6 +273,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
  * Updates a site's note with newly inputted data. 
  * @param {String} id UUID of site where note is attached.
  * @param {JSON} note_data New JSON data of the note to patch to the DB.
+ * @deprecated - Function has been converted to Sprocs
  */
 export async function updateSiteNote(id, note_data) {
   try {
@@ -289,7 +285,7 @@ export async function updateSiteNote(id, note_data) {
             value: note_data
         }
     ];
-    await Sites.item(id, id).patch(replaceOperation);
+    await Master.item(id, id).patch(replaceOperation);
   } catch (error) {
     throw new Error(`Issue while updating note to site with id (${id}). Error is: ${error}`);
   }
@@ -303,19 +299,18 @@ export async function updateSiteNote(id, note_data) {
  */
 export const removeClinic = async (id, siteId) => {
   try {
-    await Clinics.item(id, id).delete();
+    await Master.item(id, id).delete();
 
     // Update total number of clinics
-    const { resource: previous_num_clinics } = await Sites.item(siteId, siteId).read()
+    const { resource: previous_num_clinics } = await Master.item(siteId, siteId).read()
     const replaceOperation =
       [{
         op: "replace",
         path: "/total_clinics",
         value: previous_num_clinics["total_clinics"] - 1
       }]
-    await Sites.item(siteId, siteId).patch(replaceOperation)
+    await Master.item(siteId, siteId).patch(replaceOperation)
   } catch (error) {
-    console.log("Error is", error.code);
     throw new Error("Issue deleting clinic with id", id);
   }
 }
@@ -329,29 +324,24 @@ export const removeSite = async (id, regionId) => {
   try {
     // Query all related clinics
     const clinics = await getClinicsFromSite(id);
-    // const { resources: clinics } = await Clinics.items.query({
-    //   query: getClinicsConnectedToSite,
-    //   parameters: [{ name: "@site_id", value: id }]
-    // }).fetchAll();
 
     // Iterate through all clinics and delete
     for (const clinic of clinics) {
-      console.log("Removing clinc with id", clinic.id)
       removeClinic(clinic.id);
     }
 
     // Remove site itself. 
-    await Sites.item(id, id).delete();
+    await Master.item(id, id).delete();
 
     // Update number of sites left in region
-    const { resource: previous_num_sites } = await Regions.item(regionId, regionId).read()
+    const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
     const replaceOperation =
       [{
         op: "replace",
         path: "/total_sites",
         value: previous_num_sites["total_sites"] - 1
       }]
-    await Regions.item(regionId, regionId).patch(replaceOperation)
+    await Master.item(regionId, regionId).patch(replaceOperation)
 
   } catch (error) {
     throw new Error(`Issue deleting site with id (${id}). Error is: ${error}`);
@@ -364,7 +354,6 @@ export const removeSite = async (id, regionId) => {
  * @throws {Error} Error if any operation is unable to be completed.
  */
 export const removeRegion = async (id) => {
-  console.log("Passing");
   try {
     // Fetch all sites related to the current region. 
     const sites = await getSitesFromRegion(id);
@@ -381,7 +370,7 @@ export const removeRegion = async (id) => {
     }
 
     // Delete the specified region.
-    await Regions.item(id, id).delete();
+    await Master.item(id, id).delete();
 
   } catch (error) {
     throw new Error(`Issue deleting region with id (${id}). Error is: ${error}`);
@@ -396,7 +385,7 @@ export const removeRegion = async (id) => {
  */
 export const removeAdmin = async (id, index) => {
   try {
-    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    const { resource: clinic_obj } = await Master.item(id, id).read()
     let clinic_admins = [...clinic_obj.adminInfo]
     clinic_admins.splice(index, 1)
     const replaceOperation =
@@ -405,7 +394,7 @@ export const removeAdmin = async (id, index) => {
         path: "/adminInfo",
         value: clinic_admins
       }]
-    await Clinics.item(id, id).patch(replaceOperation)
+    await Master.item(id, id).patch(replaceOperation)
     return
 
   } catch (error) {
@@ -423,7 +412,7 @@ export const removeAdmin = async (id, index) => {
 export const removePreceptor = async (id, index) => {
   try {
     // EDIT Clinic Information
-    const { resource: clinic_obj } = await Clinics.item(id, id).read()
+    const { resource: clinic_obj } = await Master.item(id, id).read()
     const preceptor_id = clinic_obj.preceptorInfo[index]
     let clinic_preceptors = [...clinic_obj.preceptorInfo]
     clinic_preceptors.splice(index, 1)
@@ -433,7 +422,7 @@ export const removePreceptor = async (id, index) => {
         path: "/preceptorInfo",
         value: clinic_preceptors
       }]
-    await Clinics.item(id, id).patch(replaceClinicOperation)
+    await Master.item(id, id).patch(replaceClinicOperation)
 
     // EDIT Preceptor Information
     const { resource: precep_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
@@ -457,20 +446,21 @@ export const removePreceptor = async (id, index) => {
   }
 }
 
+
 export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const date = new Date();
     const today_date = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}/${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${date.getFullYear()}`
     
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
-    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: clinic_obj } = await Master.item(clinic_id, clinic_id).read()
     const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    new_student_assignment.isAssigned = true
-
+    
     if ( choice == "Primary" ) {
+      new_student_assignment.isAssigned = true
       new_student_assignment.primary_choice.clinic_id = clinic_id
       new_student_assignment.primary_choice.preceptor_id = preceptor_id
       new_student_assignment.primary_choice.date_assigned = today_date
@@ -523,7 +513,7 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
       }
     ]
 
-    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+    const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
 
     return [studentRes, preceptorRes, clinicRes]
 
@@ -532,17 +522,25 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
   }
 }
 
+/**
+ * This function removes the assignment of a student from the preceptor and clinic
+ * @param {*} student_id : UUID of the assigned student
+ * @param {*} clinic_id : UUID of the assigned clinic
+ * @param {*} preceptor_id : UUID of the assigned preceptor
+ * @param {*} choice : The priority to remove = first_choice, second_choice, ...
+ * @returns A list of the response status after updated student, preceptor, and clinic records
+ */
 export async function removeStudentFromPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
-    const { resource: clinic_obj } = await Clinics.item(clinic_id, clinic_id).read()
+    const { resource: clinic_obj } = await Master.item(clinic_id, clinic_id).read()
     const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    new_student_assignment.isAssigned = true
-
+    
     if ( choice == "Primary" ) {
+      new_student_assignment.isAssigned = false
       new_student_assignment.primary_choice.clinic_id = ""
       new_student_assignment.primary_choice.preceptor_id = ""
       new_student_assignment.primary_choice.date_assigned = ""
@@ -595,11 +593,113 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
       }
     ]
 
-    const clinicRes = await Clinics.item(clinic_id, clinic_id).patch(replaceClinicOperation)
+    const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
 
     return [studentRes, preceptorRes, clinicRes]
 
   } catch (error) {
     throw new Error(`Error happens when trying to assign a student to the preceptor. Error is: ${error}`)
+  }
+}
+
+/**
+ * This function queries the survey's metadata such as last_updated, ...
+ * @returns All the metadata correlated to the survey
+ */
+export async function getSurveyStatus() {
+  try {
+    const { resource: data } = await Master.item(SURVEY_ID, SURVEY_ID).read();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens when querying Survey Metadata. Error is: ${error}`)
+  }
+}
+
+/**
+ * This function updates the survey's last_updated metadata to
+ * the current date & time
+ */
+export async function updateSurveyStatus() {
+  const date = new Date()
+  const day = `${date.getDate() < 10 ? '0' : ''}${date.getDate()}`
+  const month = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}`
+  const hours = `${date.getHours() < 10 ? '0' : ''}${date.getHours()}`
+  const mins = `${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
+  const secs = `${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()}`
+  const newDate = `${month}/${day}/${date.getFullYear()} - ${hours}:${mins}:${secs}`
+  try {
+    const replaceClinicOperation =
+    [
+      {
+        op: "replace",
+        path: "/metadata/last_updated",
+        value: newDate
+      }
+    ]
+    await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
+  } catch (error) {
+    throw new Error(`Error happens when updating Survey Metadata. Error is: ${error}`)
+  }
+}
+
+/**
+ * This function checks whether the student's record has already existed within our system
+ * @param email : student's home email that we want to check against
+ * @returns true if the record exist and false if it's brand new
+ */
+export async function checkIfStudentExisted(email) {
+  try {
+    const { resources: data } = await Students.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data.length > 0;
+  } catch (error) {
+    throw new Error(`Error happens while fetching student data. Error is: ${error}`)
+  }
+}
+
+export async function editPreceptorInfo(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function editStudentInfo(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Students.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating student data. Error is: ${error}`)
+  }
+}
+
+export async function editPreceptorNote(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes", // This means replace the entire thing
+        value: new_data
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
   }
 }

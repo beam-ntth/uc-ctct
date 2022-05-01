@@ -2,6 +2,9 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from "../../api-lib/azure/azureConfig";
+import { checkIfStudentExisted } from "../../api-lib/azure/azureOps";
+import { mapCityToCounty } from "../shared/cityToCounty";
+import { mapCountyToLocationAffi } from "../shared/countyToAffiliation";
 
 export default function ValidateStudentDetails(props) {
   const [hover, setHover] = useState(false)
@@ -36,15 +39,21 @@ export default function ValidateStudentDetails(props) {
       const location = res.results[0].geometry.location
       newInfo.lat = location.lat
       newInfo.long = location.lng
+      newInfo.county = mapCityToCounty(newInfo.city)
+      newInfo.location_affiliation = mapCountyToLocationAffi(newInfo.county)
       newData.push(newInfo)
     }
     // Indicate to the user that we're done cleaning up data
     setCleaningFlag(false)
     
-    // Create new student item and add it to the container
+    // Create new student item and add it to the container, ONLY when the student
+    // record is brand new
     for (let i = 0; i < newData.length; i++) {
       setLoadCount(loadCount++)
-      await container.items.create(newData[i])
+      const studentExist = await checkIfStudentExisted(newData[i].email)
+      if (!studentExist) {
+        await container.items.create(newData[i])
+      }
     }
     props.setOpen(false);
     props.setCsv(null);

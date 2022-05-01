@@ -71,12 +71,12 @@ export default function Clinics({ data, site_data }) {
   }
 
   /**
-   * Remove clinic element and update total number of clinics in the site
-   * @param {String} remove_index - UUID of clinic to remove. 
+   * Remove a note from the site
+   * @param {String} remove_index - Index of the note that we want to remove. 
    */
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
-    const site_container = database.container("Sites");
+    const site_container = database.container("Master");
     site_data.notes.splice(remove_index, 1)
     const replaceOperation =
       [
@@ -141,7 +141,7 @@ export default function Clinics({ data, site_data }) {
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
             <Header header={`${site_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.generalBox}>
+            <div className={styles.generalBox} id={ styles.topBox } >
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>
                   <div>
@@ -175,7 +175,7 @@ export default function Clinics({ data, site_data }) {
                   <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently, you do not have any notes! </p>
                   :
                   site_data.notes.map((x, ind) => {
-                    return (<Accordion x={x} ind={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
+                    return (<Accordion x={x} ind={ind} key={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
                   })
                 }
               </div>
@@ -184,7 +184,7 @@ export default function Clinics({ data, site_data }) {
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Clinic Name..." onChange={(x) => searchClinicName(x.target.value)} />
               </div>
-              <div className={styles.row}>
+              <div className={styles.siteRow}>
                 <div style={{ width: '85%' }}>
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className="row1Clinics" style={{ marginLeft: '2rem' }}>Clinic Name</p>
@@ -202,7 +202,7 @@ export default function Clinics({ data, site_data }) {
                   const statusText = StatusParser("clinics", parseInt(x.status))
 
                   return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }}>
+                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }} key={x.id} >
                       <Link href={`/sites/database/clinics/clinic?name=${x['id']}`}>
                         <div key={`clinic_${ind}`} className="displayRow">
                           <div className="rowContentClinics">

@@ -1,29 +1,37 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { v4 as uuidv4 } from 'uuid';
-import { client } from '../../../api-lib/azure/azureConfig';
+import { editPreceptorNote, getPreceptor } from "../../../api-lib/azure/azureOps";
 
-/**
- * @deprecated Since 04/21/2022, the board has decided that 
- * there can only be 4 non-mutable affiliations
- */
-export default function AddNewRegion(props) {
+export default function EditPreceptorNote(props) {
     const [hover, setHover] = useState(false)
-    const [region, setRegion] = useState({ id: uuidv4().toString(), name: '', total_sites: 0})
+    const [id, index, data] = props.open
+    const [preceptorNote, setPreceptorNote] = useState("")
+    const [submittingForm, setSubmittingForm] = useState(false)
 
-    async function createNewRegion() {
-        const database = client.database("uc-ctct");
-        const region_container = database.container("Regions");
-        await region_container.items.create(region)
+    /**
+     * Filled in the form with pre-existing data.
+     * Needed to correctly update a note after it has been updated.
+     * Updates when state has been updated, i.e props.open.
+     */
+    useEffect(() => {
+        setPreceptorNote(data)
+    }, [])
+    
+    async function editElement() {
+        // Get the site object where note is stored. 
+        const preceptor = await getPreceptor(id);
+        // Access the notes.
+        const new_data = preceptor.notes;
+        // Get correct note from array of notes. 
+        new_data[index] = preceptorNote
+        await editPreceptorNote(preceptor.id, new_data);
         props.setOpen(false)
         props.reload()
     }
-
-    const [submittingForm, setSubmittingForm] = useState(false)
-
+ 
     return (
-        <React.Fragment>
+    <React.Fragment>
         <div className="backDrop" onClick={() => props.setOpen(false)}></div>
         <div className="editScreen">
             {
@@ -37,35 +45,39 @@ export default function AddNewRegion(props) {
                 :
                 (<React.Fragment>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Add New Affiliation</p>
+                        <p className="editTitle">Edit Region Name</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
-                    <div style={{width: '90%'}}>
-                        <p><strong>Name:</strong><input placeholder="Affiliation Name" onChange={(e) => {
-                            let newRegion = {...region}
-                            newRegion.name = e.target.value
-                            setRegion(newRegion)
-                            return
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Title:</strong><input value={preceptorNote.title} onChange={(e) => {
+                        let newNoteData = {...preceptorNote}
+                        newNoteData.title = e.target.value
+                        setPreceptorNote(newNoteData)
+                        return
                         }} /> </p>
                     </div>
-
-                    {/* No longer using the term region - Updated 4/5/22 */}
-                    {/* <span style={{marginTop: '0.4rem', fontSize: '0.8rem'}}>DO NOT: add the word 'Region' after the name. The system will automatically add that for you.</span> */}
-                    
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
-                        <div className="saveBtn" onClick={() => {
-                        createNewRegion()
+                    <div style={{ width: '90%'}}>
+                        <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={preceptorNote.note} onChange={(e) => {
+                        let newNoteData = {...preceptorNote}
+                        newNoteData.note = e.target.value
+                        setPreceptorNote(newNoteData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
+                        <div className="saveBtn" onClick={async () => {
+                        editElement()
                         setSubmittingForm(true)
                         return
-                    }}>Add Affiliation</div>
+                        }}>Save</div>
                     </div>
                 </React.Fragment>)
             }
         </div>
         <style jsx>
-            {
-                `
+        {
+            `
                 .backDrop {
                     height: 100vh;
                     width: 100vw;
@@ -81,7 +93,7 @@ export default function AddNewRegion(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 35vh;
+                    height: 65vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
@@ -105,6 +117,15 @@ export default function AddNewRegion(props) {
                     width: 50%;
                 }
                 
+                .editScreen textarea {
+                    margin-left: 0.4rem;
+                    border-radius: 0.5rem;
+                    border: solid 1px #c4c4c4;
+                    padding: 0.5rem;
+                    width: 80%;
+                    height: 15rem;
+                }
+                
                 .saveBtn {
                     background-color: #1AACFE;
                     height: 3rem;
@@ -119,7 +140,7 @@ export default function AddNewRegion(props) {
                     cursor: pointer;
                 }
                 `
-            }
+        }
         </style>
     </React.Fragment>
     )

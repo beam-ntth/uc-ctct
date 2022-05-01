@@ -1,9 +1,7 @@
 import Head from 'next/head'
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Match.module.css'
 
-import Dropdown from '../components/visualPage/dropDown/dropdown';
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import SearchString from '../components/shared/search'
@@ -26,28 +24,34 @@ export async function getServerSideProps(context) {
 export default function Matching({ clinics, students, preceptors, region_choices }) {
   const router = useRouter()
 
-  const [hover, setHover] = useState(false)
-  const [addHover, setAddHover] = useState(Array(students.length).fill(false))
+  /**
+   * All the states for the main page filters
+   * @var cohortFilter : Cohort year is defaulted as the current year
+   * @var campusFilter : Campus value is defaulted to UC Davis
+   */
+  const [cohortFilter, setCohortFilter] = useState((new Date()).getFullYear())
+  const [campusFilter, setCampusFilter] = useState('UC Davis')
+  const [countyFilter, setCountyFilter] = useState('Alameda')
+
+  /**
+   * All the states for manage buttons
+   */
+  const [manageUnassignedHover, setManageUnassignedHover] = useState(Array(students.filter(x => !x.assignment.isAssigned).length).fill(false))
+  const [manageAssignedHover, setManageAssignedHover] = useState(Array(students.filter(x => x.assignment.isAssigned).length).fill(false))
+  
+  /**
+   * All the states for when the page is loading, loaded, or in the dual-monitor mode
+   */
   const [matching, setMatching] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState(null)
 
-  // const [selectedClinic, setSelectedClinic] = useState(clinics[0])
-  const [showRegionDropdown, setShowRegionDropdown] = useState(false)
-  const [showMeetingDropdown, setMeetingDropdown] = useState(false);
-  const [showSetPopDropdown, setShowSetPopDropdown] = useState(false);
-
-  const regionChoices = region_choices;
-  const meetingChoices = ['Online', 'In Person', 'Hybrid'];
-  const settingPopChoices = [... new Set(clinics.map(x => x.description.population))];
-
-  const [regionFilter, setRegionFilter] = useState(Array(regionChoices.length).fill(""))
-
   /**
    * All the states when assigning a student to a preceptor and clinic
+   * @param clinic_id : Takes in a clinic ID
+   * @param preceptor_id : Takes in a preceptor ID
    */
   const [isUpdating, setIsUpdating] = useState(false)
   const [choiceRank, setChoiceRank] = useState('Primary')
-
   const assignStudent = async (clinic_id, preceptor_id) => {
     setIsUpdating(true)
     await addStudentToPreceptor(selectedStudent.id, clinic_id, preceptor_id, choiceRank)
@@ -57,9 +61,26 @@ export default function Matching({ clinics, students, preceptors, region_choices
   }
 
   /**
+   * @function getAvailablePreceptorPerClinic : Helper function to display preceptors
+   * @param clinic : Accepts a clinic object
+   */
+  const getAvailablePreceptorPerClinic = (clinic) => {
+    return preceptors.filter(p => {
+      // Filter the preceptor based on their ID and availability (from <= current_year <= to)
+      const fromYear = p.availability.from.substring(p.availability.from.length-4, p.availability.from.length)
+      const toYear = p.availability.from.substring(p.availability.to.length-4, p.availability.to.length)
+      return clinic.preceptorInfo.includes(p.id) && fromYear >= cohortFilter && toYear <= cohortFilter
+    })
+  }
+
+  const filterClinicByCounty = (clinics) => {
+    return clinics.filter(x => x.generalInformation.county == countyFilter)
+  }
+
+  /**
    * Activate loading on the client-side, [] means only load once
    */
-    useEffect(() => {
+  useEffect(() => {
     const stickyValue = window.localStorage.getItem('matchingPageSetting');
     if (stickyValue !== 'null') {
       setMatching(true)
@@ -111,60 +132,102 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 ) 
                 : 
                 <React.Fragment>
-                  <div className={styles.row}>
-                    <div style={{ display: 'flex', width: '80%' }}>
+                  <div className={styles.titleRow}>
+                    <div className={ styles.filterOptions }>
+                      <p>Cohort: </p>
+                      <select onChange={ x => setCohortFilter(x.target.value) }>
+                        {['2022', '2021'].map(x => <option key={x}>{x}</option>)}
+                      </select>
+                      <p>Campus: </p>
+                      <select onChange={ x => setCampusFilter(x.target.value) }>
+                        {['UC Davis', 'UC San Francisco', 'UC Irvine', 'UC Los Angeles'].map(x => <option key={x}>{x}</option>)}
+                      </select>
+                    </div>
+                    <div style={{ display: 'flex', width: '100%' }}>
                       <p className={styles.headerCol}>Unassigned Students</p>
                     </div>
                   </div>
                   <div className={ styles.titleAndRow }>
-                  <div className={styles.row} style={ matching ? { fontSize: '1rem' } : null }>
-                    <div style={{ display: 'flex', width: '85%' }}>
-                      <p className={styles.titleCol1}>Name</p>
-                      <p className={styles.titleCol2}>Primary Clinic</p>
-                      <p className={styles.titleCol3}>Primary Status</p>
-                      <p className={styles.titleCol4}>Secondary Clinic</p>
-                      <p className={styles.titleCol5}>Secondary Status</p>
-                    </div>
-                  </div >
-                  {
-                    students ? students.map((x, ind) => {
-                      return (
-                        <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
-                          <Link href={`/students/profile?id=${x.id}`}>
-                            <div className='displaySurveyRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
+                    <div className={styles.row} style={ matching ? { fontSize: '1rem' } : null }>
+                      <div style={{ display: 'flex', width: '85%' }}>
+                        <p className={styles.titleCol1}>Name</p>
+                        <p className={styles.titleCol2}>Primary Clinic</p>
+                        <p className={styles.titleCol3}>Primary Status</p>
+                        <p className={styles.titleCol4}>Secondary Clinic</p>
+                        <p className={styles.titleCol5}>Secondary Status</p>
+                      </div>
+                    </div >
+                    {
+                      students ? students.filter(x => !x.assignment.isAssigned && x.year == cohortFilter && x.location_affiliation == campusFilter).map((x, ind) => {
+                        return (
+                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
+                            <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
                               <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
                               <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
                               <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
                               <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
                             </div>
-                          </Link>
-                          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
-                            onMouseEnter={() => { let newStatus = [...addHover]; newStatus[ind] = true; setAddHover(newStatus); return; }}
-                            onMouseLeave={() => { let newStatus = [...addHover]; newStatus[ind] = false; setAddHover(newStatus); return; }} >
-                            <p onClick={() => {
-                              setSelectedStudent(x)
-                              setMatching(true)
-                            }} 
-                              style={addHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : 
-                              { fontSize: '0.8rem', transition: 'linear 0.2s' }}>
-                                Manage
-                            </p>
-                            <IoMdAdd color={addHover[ind] ? "#079CDB" : "#C4C4C4"} 
-                              size={addHover[ind] ? 22 : 20} 
-                              style={{ marginLeft: '1rem', transition: 'linear 0.2s' }} />
-                          </div>
-                        </div >
-                      )
-                    })
-                      :
-                      <p>Loading... Please wait</p>
-                  }
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
+                              onMouseEnter={() => { let newStatus = [...manageUnassignedHover]; newStatus[ind] = true; setManageUnassignedHover(newStatus); return; }}
+                              onMouseLeave={() => { let newStatus = [...manageUnassignedHover]; newStatus[ind] = false; setManageUnassignedHover(newStatus); return; }} >
+                              <p onClick={() => {
+                                setSelectedStudent(x)
+                                setMatching(true)
+                              }} 
+                                style={manageUnassignedHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : 
+                                { fontSize: '0.8rem', transition: 'linear 0.2s' }}>
+                                  Manage
+                              </p>
+                              <IoMdAdd color={manageUnassignedHover[ind] ? "#079CDB" : "#C4C4C4"} 
+                                size={manageUnassignedHover[ind] ? 22 : 20} 
+                                style={{ marginLeft: '1rem', transition: 'linear 0.2s' }} />
+                            </div>
+                          </div >
+                        )
+                      })
+                        :
+                        <p>Loading... Please wait</p>
+                    }
                   </div>
-                  <div className={styles.row}>
-                    <div style={{ display: 'flex', width: '80%' }}>
+                  <div className={styles.titleRow}>
+                    <div style={{ display: 'flex', width: '100%' }}>
                       <p className={styles.headerCol}>Assigned Students</p>
                     </div>
+                  </div>
+                  <div className={ styles.titleAndRow }>
+                    {
+                      students ? students.filter(x => x.assignment.isAssigned && x.year == cohortFilter && x.location_affiliation == campusFilter).map((x, ind) => {
+                        return (
+                          <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={ x.id }>
+                            <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
+                              <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                              <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
+                              <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
+                              <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
+                              <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
+                            </div>
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
+                              onMouseEnter={() => { let newStatus = [...manageAssignedHover]; newStatus[ind] = true; setManageAssignedHover(newStatus); return; }}
+                              onMouseLeave={() => { let newStatus = [...manageAssignedHover]; newStatus[ind] = false; setManageAssignedHover(newStatus); return; }} >
+                              <p onClick={() => {
+                                setSelectedStudent(x)
+                                setMatching(true)
+                              }} 
+                                style={manageAssignedHover[ind] ? { fontSize: '0.9rem', transition: 'linear 0.2s' } : 
+                                { fontSize: '0.8rem', transition: 'linear 0.2s' }}>
+                                  Manage
+                              </p>
+                              <IoMdAdd color={manageAssignedHover[ind] ? "#079CDB" : "#C4C4C4"} 
+                                size={manageAssignedHover[ind] ? 22 : 20} 
+                                style={{ marginLeft: '1rem', transition: 'linear 0.2s' }} />
+                            </div>
+                          </div >
+                        )
+                      })
+                      :
+                      <p>Loading... Please wait</p>
+                    }
                   </div>
                 </React.Fragment>
                 }
@@ -173,13 +236,18 @@ export default function Matching({ clinics, students, preceptors, region_choices
                 <div className={ styles.matchContent } style={ matching ? null : { display: 'none' } }>
                   <div className={styles.clinicSelect}>
                     <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>County: </p>
-                    <select>
+                    <select value={countyFilter} onChange={x => setCountyFilter(x.target.value)}>
                       {
                         CountyList().map(x => <option value={x} key={x} >{x}</option>)
                       }
-                      
                     </select>
-                    <p style={{ marginLeft: '2rem', marginRight: '1rem' }}>Choice: </p>
+                    <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Age: </p>
+                    <select>
+                      {
+                        ['Child/Adolescent'].map(x => <option value={x} key={x} >{x}</option>)
+                      }
+                    </select>
+                    <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Choice: </p>
                     <select onChange={x => setChoiceRank(x.target.value)}>
                       {
                         ['Primary', 'Secondary', 'Tertiary'].map(x => <option value={x} key={x} >{x}</option>)
@@ -193,7 +261,10 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   </div>
                   <div className={ styles.availableClinicSection }>
                     {
-                      clinics.map(clinic => 
+                      filterClinicByCounty(clinics).length == 0 ?
+                      <div>Currently, no clinics within this county</div>
+                      :
+                      filterClinicByCounty(clinics).map(clinic => 
                       <div className='clinicBar' key={ clinic.id }>
                         <div className='clinicTitle'>
                           <p>{ clinic.name }</p>
@@ -211,17 +282,22 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           {
                             clinic.preceptorInfo.length == 0 ?
                             <div>
-                              <p>No preceptors available at this clinic</p>
+                              <p>No preceptor at this clinic</p>
                             </div>
                             : 
-                              preceptors.filter(p => clinic.preceptorInfo.includes(p.id)).map(precep => 
-                                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
-                                    <p>{ precep.firstname } { precep.lastname } | <strong>Students Assigned: </strong> {precep.students.length}</p>
-                                    <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
-                                      Assign!
-                                    </div>
-                                </div>
-                              )
+                            getAvailablePreceptorPerClinic(clinic).length == 0 ?
+                            <div>
+                              <p>No preceptor available for this cohort</p>
+                            </div>
+                            :
+                            getAvailablePreceptorPerClinic(clinic).map(precep => 
+                              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
+                                  <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
+                                  <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                    Assign!
+                                  </div>
+                              </div>
+                            )
                           }
                         </div>
                       </div>)

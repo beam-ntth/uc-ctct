@@ -1,20 +1,20 @@
 .container {
-    height: 100vh;
-    width: 100vw;
+  height: 100vh;
+  width: 100vw;
 }
 
 .main {
-    height: 100%;
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: flex-start;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
 }
 
 .content {
-    height: 100%;
-    width: 92%;
+  height: 100%;
+  width: 92%;
 }
 
 .data {
@@ -106,22 +106,52 @@
   margin: 0 0.5rem 0 0;
 }
 
-.row {
+.row, .titleRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  height: 10%;
+  height: auto;
   width: 100%;
   font-family: 'Lato', sans-serif;
   font-weight: bold;
   font-size: 1.3rem;
 }
 
+.row {
+  font-size: 1rem;
+}
+
+.titleRow {
+  height: 20%;
+  flex-direction: column;
+}
+
 .titleAndRow {
   height: 60%;
   width: 96%;
   margin-left: 2rem;
+  overflow-y: scroll;
+}
+
+.filterOptions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.filterOptions p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: normal;
+  margin-right: 1rem;
+}
+
+.filterOptions select {
+  margin-right: 1rem;
 }
 
 .searchBar {

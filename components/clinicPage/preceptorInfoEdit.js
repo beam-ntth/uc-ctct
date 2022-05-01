@@ -1,33 +1,53 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { addPreceptorFromClinicsPage } from "../../api-lib/azure/azureOps";
+import { createNewPreceptor } from "../../api-lib/azure/azureExecute";
+import { addPreceptorFromClinicsPage, getClinic } from "../../api-lib/azure/azureOps";
+import { v4 as uuidv4 } from "uuid";
 import StatusParser from "../shared/status";
 
 export default function PreceptorInfoEdit(props) {
   const [hover, setHover] = useState(false);
 
   const [info, setInfo] = useState({
-    "firstname": null,
-    "lastname": null,
-    "position": null,
-    "credential": null,
-    "email": null,
-    "npi": "",
-    "phoneNumber": null,
-    "status": 0,
-    "description": {
-      "population": "Transitional Age Youth",
-      "experience": "Established"
+    id: uuidv4.toString(),
+    type: 'preceptor',
+    firstname: null,
+    lastname: null,
+    position: null,
+    credential: null,
+    email: null,
+    npi: "",
+    phoneNumber: null,
+    status: 0,
+    description: {
+      population: "Transitional Age Youth",
+      experience: "Established"
     },
-    "notes": [],
-    "clinics": [
+    survey: {
+      hasResponded: false,
+      responseDate: "",
+      data: {
+
+      }
+    },
+    students: [],
+    notes: [],
+    availability: {
+      from: "",
+      to: ""
+  },
+    clinics: [
       props.id
     ]
   });
 
   async function updateInfo() {
-    await addPreceptorFromClinicsPage(props.id, info);
+    const data = await getClinic(props.id)
+    let newData = [...data.preceptorInfo].push(info)
+    data.preceptorInfo = newData
+    await createNewPreceptor(data, info)
+    // await addPreceptorFromClinicsPage(props.id, info);
     props.setOpen(false);
     props.reload()
   }
@@ -106,6 +126,26 @@ export default function PreceptorInfoEdit(props) {
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.email = e.target.value
+                    setInfo(newInfo);
+                    return;
+                  }} />
+                </p>
+                <p><strong>Availability </strong>
+                from:
+                <input type={'date'}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    let newInfo = { ...info }
+                    newInfo.availability.from = `${val.substring(5, 7)}/${val.substring(8, 10)}/${val.substring(0, 4)}`
+                    setInfo(newInfo);
+                    return;
+                  }} />
+                to:
+                <input type={'date'}
+                  onChange={(e) => {
+                    const val = e.target.value
+                    let newInfo = { ...info }
+                    newInfo.availability.to = `${val.substring(5, 7)}/${val.substring(8, 10)}/${val.substring(0, 4)}`
                     setInfo(newInfo);
                     return;
                   }} />

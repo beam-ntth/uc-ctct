@@ -23,6 +23,7 @@ import AddNewClinic from "../../components/shared/forms/addClinic";
 import { removeClinic, getPreceptor, getClinic, getStudent } from "../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../components/clinicPage/preceptorInfoEdit";
+import EditStudentProfile from "../../components/shared/forms/editStudentProfile";
 
 export async function getServerSideProps(context) {
     const student = await getStudent(context.query.id);
@@ -30,19 +31,23 @@ export async function getServerSideProps(context) {
 }
 
 export default function StudentProfile({ student }) {
-  const [openNote, setOpenNote] = useState(false)
+  const surveyData = student.survey.data
 
+  /**
+   * States to keep track of all the pop-ups
+   */
+  const [openNewNote, setOpenNewNote] = useState(false)
+  const [openEditInfo, setOpenEditInfo] = useState(false)
+
+  /**
+   * Router object is used to reload the page
+   */
   const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
 
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
-    const site_container = database.container("Sites");
-    console.log("Remove index is:", remove_index)
+    const container = database.container("Students");
     note_data.notes.splice(remove_index, 1)
-    console.log(note_data.notes)
     const replaceOperation =
       [
         {
@@ -51,21 +56,20 @@ export default function StudentProfile({ student }) {
           value: note_data.notes
         }
       ]
-    await site_container.item(note_data.id, note_data.id).patch(replaceOperation)
-    setTimeout(() => refreshData(), 400)
+    await container.item(note_data.id, note_data.id).patch(replaceOperation)
+    router.reload()
   }
 
   async function removeElement(id) {
-    removeClinic(id, note_data.id)
-    setTimeout(() => refreshData(), 400)
+    await removeClinic(id, note_data.id)
+    router.reload()
     return
   }
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Students" id={student.id} /> : null}
-      {/* {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
-            {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={note_data.id} /> : null} */}
+      { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Students" id={student.id} /> : null }
+      { openEditInfo ? <EditStudentProfile open={openEditInfo} setOpen={setOpenEditInfo} data={student} reload={router.reload} id={student.id} /> : null }
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -83,13 +87,10 @@ export default function StudentProfile({ student }) {
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>
                 <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => {}}>Edit Profile</div>
+                    <div className={"editButton"} onClick={() => setOpenEditInfo(true)}>Edit Profile</div>
                 </div>
               </div>
               <div className={styles.bioTitle}>
-                {/* <div className={styles.profileImg}>
-                  <img src="/asset/images/user-image.png" />
-                </div> */}
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {student.firstName} {student.middleName} {student.lastName}</p>
@@ -124,10 +125,90 @@ export default function StudentProfile({ student }) {
             </div>
             <div className={styles.data} style={{ marginTop: '1rem' }}>
                 <div className={styles.bioTitle}>
-                  <h4>{student.firstName} {student.lastName}'s Clinical Placement</h4>
-                  <div style={{ width: '30%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => {}}>Edit Placement</div>
+                  <h4>Survey Data</h4>
+                </div>
+                { student.survey.hasResponded ? null : <p>Nothing has been assigned to this student so far!</p> }
+                <div className={styles.bioTitle}>
+                <div className={styles.profileInfo}>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Other Language(s) Spoken:</strong> {surveyData.otherLanguages.join(", ")}</p>
                   </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Preferred Location (Primary):</strong> {`${surveyData.preferredLocation.firstCity}, ${surveyData.preferredLocation.firstCounty}`}</p>
+                      <p><strong>Preferred Location (Secondary):</strong> {`${surveyData.preferredLocation.secondCity}, ${surveyData.preferredLocation.secondCounty}`}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ lineHeight: '2rem' }}><strong>Practice Setting Rank:</strong> {surveyData.practiceSetting.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ lineHeight: '2rem' }}><strong>Patient Population Rank:</strong> {surveyData.patientPopulation.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong>Age Group Rank:</strong> {surveyData.ageGroup.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Current Certification:</strong> {surveyData.currentCert}</p>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Primary Clinic Certification:</strong> {surveyData.primaryCert}</p>
+                      {surveyData.secondaryCert ? <p><strong>Secondary Clinic Certification:</strong> {surveyData.secondaryCert}</p> : null}
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>APRN Years of Experience:</strong> {surveyData.aprnWorkDuration}</p>
+                      <p><strong>Average Patient Volume:</strong> {surveyData.avgPatientVol}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong>PMHNP Time Commitment:</strong> {surveyData.planToWork}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong>Availability:</strong> {surveyData.daysAvailable}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong>Plans After Graduation:</strong> {surveyData.planAfterGraduate}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong>Current Working at Mental Health Facility:</strong> {surveyData.isWorkingAtMentalHealth}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p><strong style={{ textDecoration: 'underline' }}>Experience Working With</strong></p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Depression:</strong> {surveyData.mentalExperienceLevel.depression}</p>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Anxiety:</strong> {surveyData.mentalExperienceLevel.anxiety}</p>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Bipolar Disorder:</strong> {surveyData.mentalExperienceLevel.bipolarDisorder}</p>
+                      <p><strong>Eating Disorder:</strong> {surveyData.mentalExperienceLevel.eatingDisorders}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                      <p style={{ marginRight: '1.5rem' }}><strong>ADHD:</strong> {surveyData.mentalExperienceLevel.adhd}</p>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Schizophrenia:</strong> {surveyData.mentalExperienceLevel.schizophrenia}</p>
+                      <p style={{ marginRight: '1.5rem' }}><strong>Personality Disorder:</strong> {surveyData.mentalExperienceLevel.personalityDisorders}</p>
+                  </div>
+                  { surveyData.hasPreferredClinic == "Yes" ?
+                  <React.Fragment>
+                      <div className={styles.infoRow}>
+                          <p style={{ textDecoration: 'underline' }}><strong>Preferred Clinic</strong></p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Clinic Name:</strong> {surveyData.preferredClinic.clinicName}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Address:</strong> {surveyData.preferredClinic.address}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Point of Contact:</strong> {surveyData.preferredClinic.poc}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Phone Number:</strong> {surveyData.preferredClinic.phone}</p>
+                          <p><strong>Email:</strong> {surveyData.preferredClinic.email}</p>
+                      </div>
+                  </React.Fragment>
+                  : null }
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '1.5rem' }}><strong>Other Work Experience:</strong> {surveyData.otherExperience}</p>
+                    <p><strong>Other Interesting Facts:</strong> {surveyData.otherFacts}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.data} style={{ marginTop: '1rem' }}>
+                <div className={styles.bioTitle}>
+                  <h4>{student.firstName} {student.lastName}'s Clinical Placement</h4>
                 </div>
                 <p>Nothing has been assigned to this student so far!</p>
             </div>
@@ -136,10 +217,10 @@ export default function StudentProfile({ student }) {
                 <div style={{ width: '95%', display: 'flex', marginBottom: '2rem' }}>
                   <p className="titleClinics" style={{ width: '80%', margin: 0, display: 'flex', alignItems: 'center' }}>{student.firstName} {student.lastName}'s Notes</p>
                   <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}>
-                    <div className={"editButton"} onClick={() => setOpenNote(true)}>+ Add Notes</div>
+                    <div className={"editButton"} onClick={() => setOpenNewNote(true)}>+ Add Notes</div>
                   </div>
                 </div>
-                <div>
+                <div style={{ width: '90%' }}>
                   {
                     student.notes.length !== 0 ? student.notes.map((x, ind) => {
                       return (<Accordion x={x} ind={ind} />)

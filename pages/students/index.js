@@ -103,6 +103,7 @@ export default function Student({ students }) {
                 addressLine1: cleanUpName(x["pref_address1"]),
                 addressLine2: cleanUpName(x["pref_address2"]),
                 city: cleanUpName(x["pref_city"]),
+                county: "",
                 country: x["pref_country"],
                 postal: x["pref_postal_cd"],
                 state: x["pref_state"].toUpperCase(),
@@ -111,10 +112,30 @@ export default function Student({ students }) {
                 phoneNumber: x["primary_phone"].replace(/[^\d]/g, ""),
                 sex: x["sexual_orientation_descr"] == "" ? "Unspecified" : x["sexual_orientation_descr"],
                 usCitizen: x["us_citizen"] == "US" ? "Yes" : `No (${x["us_citizen"]})`,
+                status: "Active",
+                location_affiliation: "",
                 survey: {
-                  lastSent: "",
-                  sentCount: "0",
-                  responseDate: ""
+                  hasResponded: false,
+                  responseDate: "",
+                  data: {}
+                },
+                assignment: {
+                  isAssigned: false,
+                  primary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  },
+                  secondary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  },
+                  tertiary_choice: {
+                      clinic_id: "",
+                      preceptor_id: "",
+                      date_assigned: ""
+                  }
                 },
                 assignedPreceptor: false,
                 year: `${ new Date().getFullYear() }`,
@@ -217,6 +238,25 @@ export default function Student({ students }) {
             {/* Switching between pages */}
             { page === 'Default' ? 
             <div className={styles.selectUniversities}>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn3} onClick={() => setPage('UCD')}>
+                  <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
+                </div>
+                <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
+                  <img src='/asset/images/school_logos/UCSF_logo.png' />
+                </div>
+              </div>
+              <div className={styles.selectIndiUni}>
+                <div className={styles.universityBtn2} onClick={() => setPage('UCLA')}>
+                  <img src='/asset/images/school_logos/UCLA_logo.png'  height='15%'/>
+                </div>
+                <div className={styles.universityBtn4} onClick={() => setPage('UCI')}>
+                  <img src='/asset/images/school_logos/UCI_logo.png' height='15%'/>
+                </div>
+              </div>
+              <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
+                <p>Show all universities</p>
+              </div>
               <div className={styles.uploadBtns}>
                 <div className={styles.fileUpload} style={ addStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
                   onClick={() => fileElem != null ? fileElem.click() : null} 
@@ -245,31 +285,12 @@ export default function Student({ students }) {
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
                 </div>
               </div>
-              <div className={styles.allUniversities} onClick={() => setPage('ALL')}>
-                <p>Show all universities</p>
-              </div>
-              <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn3} onClick={() => setPage('UCD')}>
-                  <img src='/asset/images/school_logos/UCD_logo.png' height='15%' />
-                </div>
-                <div className={styles.universityBtn} onClick={() => setPage('UCSF')}>
-                  <img src='/asset/images/school_logos/UCSF_logo.png' />
-                </div>
-              </div>
-              <div className={styles.selectIndiUni}>
-                <div className={styles.universityBtn2} onClick={() => setPage('UCLA')}>
-                  <img src='/asset/images/school_logos/UCLA_logo.png'  height='15%'/>
-                </div>
-                <div className={styles.universityBtn4} onClick={() => setPage('UCI')}>
-                  <img src='/asset/images/school_logos/UCI_logo.png' height='15%'/>
-                </div>
-              </div>
             </div> : null }
 
-            { page === 'UCD' ? <DisplayUCD students={students} setPage={setPage} /> : null }
-            { page === 'UCLA' ? <DisplayUCLA students={students} setPage={setPage} /> : null }
-            { page === 'UCI' ? <DisplayUCI students={students} setPage={setPage} /> : null }
-            { page === 'UCSF' ? <DisplayUCSF students={students} setPage={setPage} /> : null }
+            { page === 'UCD' ? <DisplayUCD students={students.filter(x => x.location_affiliation == "UC Davis")} setPage={setPage} /> : null }
+            { page === 'UCLA' ? <DisplayUCLA students={students.filter(x => x.location_affiliation == "UC Los Angeles")} setPage={setPage} /> : null }
+            { page === 'UCI' ? <DisplayUCI students={students.filter(x => x.location_affiliation == "UC Irvine")} setPage={setPage} /> : null }
+            { page === 'UCSF' ? <DisplayUCSF students={students.filter(x => x.location_affiliation == "UC San Francisco")} setPage={setPage} /> : null }
             { page === 'ALL' ? <DisplayALL students={students} setPage={setPage} /> : null }
           </div >
         </main >

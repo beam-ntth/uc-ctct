@@ -1,32 +1,16 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { getSite } from "../../../api-lib/azure/azureOps";
-import { editSiteNote } from "../../../api-lib/azure/azureExecute";
+import { editPreceptorInfo } from "../../../api-lib/azure/azureOps";
+import StatusParser from "../status";
 
-export default function EditSiteNote(props) {
+export default function EditPreceptorProfile(props) {
     const [hover, setHover] = useState(false)
-    const [id, index, data] = props.open
-    const [siteNote, setSiteNote] = useState("")
+    const [data, setData] = useState(props.data)
     const [submittingForm, setSubmittingForm] = useState(false)
-
-    /**
-     * Filled in the form with pre-existing data.
-     * Needed to correctly update a note after it has been updated.
-     * Updates when state has been updated, i.e props.open.
-     */
-    useEffect(() => {
-        setSiteNote(data)
-    }, [])
     
     async function editElement() {
-        // Get the site object where note is stored. 
-        const site = await getSite(id);
-        // Access the notes.
-        const new_data = site.notes;
-        // Get correct note from array of notes. 
-        new_data[index] = siteNote
-        await editSiteNote(site, new_data);
+        await editPreceptorInfo(props.data.id, data);
         props.setOpen(false)
         props.reload()
     }
@@ -46,23 +30,76 @@ export default function EditSiteNote(props) {
                 :
                 (<React.Fragment>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Edit Region Name</p>
+                        <p className="editTitle">Edit Preceptor Information</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
                     <div style={{ width: '90%' }}>
-                        <p><strong>Title:</strong><input value={siteNote.title} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.title = e.target.value
-                        setSiteNote(newSite)
+                        <p><strong>First Name:</strong><input value={data.firstname} onChange={(e) => {
+                        let newData = {...data}
+                        newData.firstname = e.target.value
+                        setData(newData)
                         return
                         }} /> </p>
                     </div>
-                    <div style={{ width: '90%'}}>
-                        <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={siteNote.note} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.note = e.target.value
-                        setSiteNote(newSite)
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Last Name:</strong><input value={data.lastname} onChange={(e) => {
+                        let newData = {...data}
+                        newData.lastname = e.target.value
+                        setData(newData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>National Provider Identifier (NPI):</strong><input value={data.npi} onChange={(e) => {
+                        let newData = {...data}
+                        newData.npi = e.target.value
+                        setData(newData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p>
+                            <strong>Status:</strong>
+                            <select onChange={e => {
+                                let newData = {...data}
+                                newData.status = e.target.value
+                                setData(newData)
+                                return
+                            }}>
+                                { StatusParser("preceptors", -1) }
+                            </select>
+                        </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Credential:</strong><input value={data.credential} onChange={(e) => {
+                        let newData = {...data}
+                        newData.credential = e.target.value
+                        setData(newData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Position:</strong><input value={data.position} onChange={(e) => {
+                        let newData = {...data}
+                        newData.position = e.target.value
+                        setData(newData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Email:</strong><input value={data.email} onChange={(e) => {
+                        let newData = {...data}
+                        newData.email = e.target.value
+                        setData(newData)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Phone Number:</strong><input value={data.phoneNumber} onChange={(e) => {
+                        let newData = {...data}
+                        newData.phoneNumber = e.target.value
+                        setData(newData)
                         return
                         }} /> </p>
                     </div>
@@ -94,12 +131,12 @@ export default function EditSiteNote(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 65vh;
-                    width: 50vw;
+                    height: 85vh;
+                    width: 70vw;
                     background-color: #fff;
                     opacity: 100%;
-                    top: 20vh;
-                    left: 25vw;
+                    top: 5vh;
+                    left: 15vw;
                     z-index: 901;
                     display: flex;
                     flex-direction: column;
@@ -110,7 +147,7 @@ export default function EditSiteNote(props) {
                     overflow-y: scroll;
                 }
                 
-                .editScreen input {
+                .editScreen input, .editScreen select {
                     margin-left: 0.4rem;
                     border-radius: 0.5rem;
                     border: solid 1px #c4c4c4;
