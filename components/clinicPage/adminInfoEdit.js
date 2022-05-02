@@ -35,7 +35,8 @@ export default function AdminInfoEdit(props) {
       },
     ];
     await container.item(props.id, props.id).patch(replaceOperation);
-    setTimeout(() => props.reload(), 700)
+    props.reload()
+    props.setOpen(false);
   }
 
   // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
@@ -136,7 +137,7 @@ export default function AdminInfoEdit(props) {
                 className="saveBtn"
                 onClick={async () => {
                   await updateInfo();
-                  props.setOpen(false);
+                  setSubmittingForm(true)
                   return;
                 }}
               >

@@ -688,11 +688,27 @@ export async function editPreceptorNote(id, new_data) {
     [
       {
         op: "replace",
-        path: "/notes", // This means replace the entire thing
+        path: "/notes",
         value: new_data
       }
     ]
     await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function editStudentNote(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes",
+        value: new_data
+      }
+    ]
+    await Students.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
   }
@@ -713,5 +729,21 @@ export async function getPreceptorFromEmail(email) {
     return data;
   } catch (error) {
     throw new Error(`Error happens while finding a student matched to the email. Error is: ${error}`)
+  }
+}
+
+export async function updatePreceptorStatus(id, new_status) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/status",
+        value: new_status
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating a preceptor's status. Error is: ${error}`)
   }
 }

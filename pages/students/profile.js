@@ -1,6 +1,5 @@
 // Import React & Next modules
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "../../styles/Preceptor.module.css";
@@ -10,20 +9,15 @@ import Navbar from "../../components/shared/navbar/navbar";
 import Header from "../../components/shared/header/header";
 import NoteEdit from "../../components/clinicPage/noteEdit";
 import Accordion from "../../components/clinicPage/accordion";
-import StatusParser from "../../components/shared/status";
 
 // Import DB component
 import { client } from '../../api-lib/azure/azureConfig';
 
 // Import third-party icons
-import { IoMdAdd } from "react-icons/io";
-import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteNote from "../../components/shared/forms/editSiteNote";
-import AddNewClinic from "../../components/shared/forms/addClinic";
-import { removeClinic, getPreceptor, getClinic, getStudent } from "../../api-lib/azure/azureOps";
+import { getAllClinics, getAllPreceptors, getStudent } from "../../api-lib/azure/azureOps";
 
-import PreceptorInfoEdit from "../../components/clinicPage/preceptorInfoEdit";
 import EditStudentProfile from "../../components/shared/forms/editStudentProfile";
+import EditStudentNote from "../../components/shared/forms/editStudentNote";
 
 export async function getServerSideProps(context) {
     const student = await getStudent(context.query.id);
@@ -32,11 +26,49 @@ export async function getServerSideProps(context) {
 
 export default function StudentProfile({ student }) {
   const surveyData = student.survey.data
+  const clinic_id_1 = student.assignment.primary_choice.clinic_id
+  const precep_id_1 = student.assignment.primary_choice.preceptor_id
+  const date_assigned_1 = student.assignment.primary_choice.date_assigned
+
+  const clinic_id_2 = student.assignment.secondary_choice.clinic_id
+  const precep_id_2 = student.assignment.secondary_choice.preceptor_id
+  const date_assigned_2 = student.assignment.secondary_choice.date_assigned
+
+  const clinic_id_3 = student.assignment.tertiary_choice.clinic_id
+  const precep_id_3 = student.assignment.tertiary_choice.preceptor_id
+  const date_assigned_3 = student.assignment.tertiary_choice.date_assigned
+
+  /**
+   * States to keep track of the clinic and preceptor info
+   * to display the corresponding clinic and preceptor
+   */
+  const [clinicData, setClinicData] = useState(null)
+  const [preceptorData, setPreceptorData] = useState(null)
+
+  const getAssignedClinic = (id) => {
+    return clinicData.filter(x => x.id == id)[0]
+  }
+
+  const getAssignedPreceptor = (id) => {
+    return preceptorData.filter(x => x.id == id)[0]
+  }
+
+  /**
+   * Load the clinic and preceptor data
+   */
+  async function loadClinicAndPrecepData() {
+    const clinic = await getAllClinics();
+    const precep = await getAllPreceptors();
+    setClinicData(clinic)
+    setPreceptorData(precep)
+  }
+  useEffect(() => loadClinicAndPrecepData(), [])
 
   /**
    * States to keep track of all the pop-ups
    */
   const [openNewNote, setOpenNewNote] = useState(false)
+  const [openEditNote, setOpenEditNote] = useState(false)
   const [openEditInfo, setOpenEditInfo] = useState(false)
 
   /**
@@ -60,15 +92,10 @@ export default function StudentProfile({ student }) {
     router.reload()
   }
 
-  async function removeElement(id) {
-    await removeClinic(id, note_data.id)
-    router.reload()
-    return
-  }
-
   return (
     <React.Fragment>
       { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Students" id={student.id} /> : null }
+      { openEditNote ? <EditStudentNote open={openEditNote} setOpen={setOpenEditNote} reload={router.reload} /> : null }
       { openEditInfo ? <EditStudentProfile open={openEditInfo} setOpen={setOpenEditInfo} data={student} reload={router.reload} id={student.id} /> : null }
       <div className={styles.container}>
         <Head>
@@ -210,7 +237,36 @@ export default function StudentProfile({ student }) {
                 <div className={styles.bioTitle}>
                   <h4>{student.firstName} {student.lastName}'s Clinical Placement</h4>
                 </div>
-                <p>Nothing has been assigned to this student so far!</p>
+                {
+                  clinicData && preceptorData ? 
+                  <React.Fragment>
+                    <div className={ styles.choice }>
+                        <div className={ styles.choiceTitle }>
+                            <h4>Primary Choice |</h4>
+                        </div>
+                        <p><strong>Clinic: </strong>{ clinic_id_1 == "" ? 'Unassigned' : getAssignedClinic(clinic_id_1).name }</p>
+                        <p><strong>Preceptor: </strong>{ precep_id_1 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_1).firstname} ${getAssignedPreceptor(precep_id_1).lastname}` }</p>
+                        <p><strong>Date Assigned: </strong>{ date_assigned_1 == "" ? 'Unknown' : date_assigned_1 }</p>
+                    </div>
+                    <div className={ styles.choice }>
+                        <div className={ styles.choiceTitle }>
+                            <h4>Secondary Choice |</h4>
+                        </div>
+                        <p><strong>Clinic: </strong>{ clinic_id_2 == "" ? 'Unassigned' : getAssignedClinic(clinic_id_2).name }</p>
+                        <p><strong>Preceptor: </strong>{ precep_id_2 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_2).firstname} ${getAssignedPreceptor(precep_id_2).lastname}` }</p>
+                        <p><strong>Date Assigned: </strong>{ date_assigned_2 == "" ? 'Unknown' : date_assigned_2 }</p>
+                    </div>
+                    <div className={ styles.choice } style={{ marginBottom: '2rem' }}>
+                        <div className={ styles.choiceTitle }>
+                            <h4>Tertiary Choice |</h4>
+                        </div>
+                        <p><strong>Clinic: </strong>{ clinic_id_3 == "" ? 'Unassigned' : getAssignedClinic(clinic_id_3).name }</p>
+                        <p><strong>Preceptor: </strong>{ precep_id_3 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_2).firstname} ${getAssignedPreceptor(precep_id_2).lastname}` }</p>
+                        <p><strong>Date Assigned: </strong>{ date_assigned_3 == "" ? 'Unknown' : date_assigned_3 }</p>
+                    </div> 
+                  </React.Fragment>
+                  : null
+                }
             </div>
             <div className={styles.noteData}>
               <div style={{ width: '100%', display: 'flex', flexDirection: 'column', paddingTop: '2rem', justifyContent: 'center', alignItems: 'center' }}>
@@ -223,7 +279,7 @@ export default function StudentProfile({ student }) {
                 <div style={{ width: '90%' }}>
                   {
                     student.notes.length !== 0 ? student.notes.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} />)
+                      return (<Accordion x={x} ind={ind} open={openEditNote} setOpen={setOpenEditNote} id={student.id} remove={removeNoteEntry} />)
                     }) : <p style={{ width: '100%', textAlign: 'center' }}>Currently, you do not have any notes!</p>
                   }
                 </div>

@@ -86,3 +86,15 @@
     width: 80%;
     margin: 2rem 0 0.5rem 0;
 }
+
+.choice {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 95%;
+}
+
+.choice p, .choiceTitle {
+    margin-right: 1rem;
+}
