@@ -25,6 +25,8 @@ import styles from '../styles/Home.module.css'
 // const {resource: result} = await container.scripts.storedProcedure(sprocId).execute(newItem, {partitionKey: newItem[0].category});
 
 export default function Home() {
+  const [ displayError, setDisplayError ] = useState(false)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -56,6 +58,7 @@ export default function Home() {
               Sign in with Outlook
             </a>
           </div>
+          { displayError ? <p className={ styles.warning } >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null }
         </div>
       </main>
     </div>

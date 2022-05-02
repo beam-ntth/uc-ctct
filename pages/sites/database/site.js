@@ -18,6 +18,7 @@ import { getRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azur
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import ErrorPopUp from '../../../components/shared/errorPopUp';
 
 // Only load when user clicks on it to improve performance
 const AddNewSite = dynamic(() => import('../../../components/shared/forms/addSite'));
@@ -54,6 +55,13 @@ export default function SiteDetails({ data, region_data }) {
    */
   const [openForm, setOpenForm] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
+
+  /**
+   * States to set error messages
+   */
+  const [displayError, setDisplayError] = useState(false)
+  const [humanError, setHumanError] = useState("")
+  const [errorText, setErrorText] = useState("")
 
   /**
    * Create a refresh data function to reload page when there 
@@ -93,7 +101,9 @@ export default function SiteDetails({ data, region_data }) {
 
   return (
     <React.Fragment>
-      {openForm ? <AddNewSite open={openForm} setOpen={setOpenForm} reload={refreshData} regionId={region_data.id} /> : null}
+      {displayError ? <ErrorPopUp open={setDisplayError} text={humanError} error={errorText} /> : null}
+      {openForm ? <AddNewSite open={openForm} setOpen={setOpenForm} reload={refreshData} regionId={region_data.id}
+        displayError={setDisplayError} errorText={setErrorText} humanText={setHumanError} /> : null}
       {openEditForm ? <EditSite open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
