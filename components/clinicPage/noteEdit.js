@@ -5,7 +5,7 @@ import { IoClose } from "react-icons/io5";
 
 // Import DB modules
 import { client } from '../../api-lib/azure/azureConfig';
-import { getClinic, getSite } from "../../api-lib/azure/azureOps";
+import { getClinicOrSiteOrRegion } from "../../api-lib/azure/azureOps";
 
 const currentdate = new Date();
 
@@ -23,10 +23,10 @@ export default function NoteEdit(props) {
     let data;
     if (props.type == "Sites") {
       container = database.container("Master");
-      data = getSite(props.id)
+      data = getClinicOrSiteOrRegion(props.id)
     } else if (props.type == "Clinics") {
       container = database.container("Master");
-      data = getClinic(props.id) 
+      data = getClinicOrSiteOrRegion(props.id) 
     } else {
       container = database.container(props.type);
       const { resource: item } = await container.item(props.id, props.id).read();

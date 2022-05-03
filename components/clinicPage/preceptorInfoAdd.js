@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { createNewPreceptor } from "../../api-lib/azure/azureExecute";
-import { addPreceptorFromClinicsPage, getClinic } from "../../api-lib/azure/azureOps";
+import { addPreceptorFromClinicsPage, getClinicOrSiteOrRegion } from "../../api-lib/azure/azureOps";
 import { v4 as uuidv4 } from "uuid";
 import StatusParser from "../shared/status";
 
@@ -36,7 +36,7 @@ export default function PreceptorInfoAdd(props) {
   });
 
   async function updateInfo() {
-    const data = await getClinic(props.id)
+    const data = await getClinicOrSiteOrRegion(props.id)
     let newData = [...data.preceptorInfo].push(info)
     data.preceptorInfo = newData
     // await createNewPreceptor(data, info)

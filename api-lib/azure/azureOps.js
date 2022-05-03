@@ -88,23 +88,12 @@ export const getAllStudents = async () => {
 }
 
 /**
- * Query for singular region.
- * @param {String} id - UUID of region to query. 
- */
-export const getRegion = async (id) => {
-  try {
-    const { resource: data } = await Master.item(id, id).read();
-    return data;
-  } catch (error) {
-    throw new Error(`Issue fetching region with id (${id}). Error is: ${error}`);
-  }
-}
-
-/**
  * Query for singular clinic.
  * @param {String} id - UUID of clinic to query.
+ * getClinicSiteReg, choose one to get either Clinic Site or Region
  */
-export const getClinic = async (id) => {
+
+export const getClinicOrSiteOrRegion = async (id) => {
   try {
     const { resource: data } = await Master.item(id, id).read();
     return data;
@@ -124,19 +113,6 @@ export const getClinicsFromSite = async (id) => {
     throw new Error(`Issue fetching clinics connected to site ${id}. Error is: ${error}`);
   }
 }
-
-/**
- * Query for singular site.
- * @param {String} id - UUID of site to query.
- */
-export const getSite = async (id) => {
-  try {
-    const { resource: data } = await Master.item(id, id).read();
-    return data;
-  } catch (error) {
-    throw new Error(`Issue with fetching the site: ${id}. Error is: ${error}`);
-  }
-};
 
 /**
  * Get all sites connected to a specfic region.
@@ -243,7 +219,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
     const preceptor = await createNewPreceptor(preceptor_info);
 
     // Get clinic data to access array of preceptors.
-    const clinic = await getClinic(id);
+    const clinic = await getClinicOrSiteOrRegion(id);
     let preceptors = clinic.preceptorInfo;
 
     // Add new id of the recently created preceptor to array. 

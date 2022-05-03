@@ -20,7 +20,7 @@ import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClinic, getPreceptor, getClinic } from "../../../../api-lib/azure/azureOps";
+import { removeClinic, getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import EditPreceptorProfile from "../../../../components/shared/forms/editPreceptorProfile";
@@ -50,7 +50,7 @@ export default function Preceptors({ preceptor }) {
   async function lazyLoadClinic() {
     const all_clinics = []
     for (let i = 0; i < preceptor.clinics.length; i++) {
-      all_clinics.push(await getClinic(preceptor.clinics[i]))
+      all_clinics.push(await getClinicOrSiteOrRegion(preceptor.clinics[i]))
     }
     setAllClinics(all_clinics)
   }

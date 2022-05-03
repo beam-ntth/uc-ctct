@@ -12,7 +12,7 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { getRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
 
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
   // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
-  const region_data = await getRegion(location);
+  const region_data = await getClinicOrSiteOrRegion(location);
   const data = await getSitesFromRegion(location);
   return { props: { data, region_data } }
 }

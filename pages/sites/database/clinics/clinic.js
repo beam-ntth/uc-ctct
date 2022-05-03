@@ -15,23 +15,23 @@ import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 
 const ClinicInfoEdit = dynamic(() => import("../../../../components/clinicPage/generalInfoEdit"));
-const AdminInfoAdd = dynamic(() => import("../../../../components/clinicPage/adminInfoAdd"));
+const AdminInfoAdd = dynamic(() => import("../../../../components/shared/forms/adminInfoAdd"));
 const PreceptorInfoAdd = dynamic(() => import("../../../../components/clinicPage/preceptorInfoAdd"));
 const PlacementInfoEdit = dynamic(() => import("../../../../components/clinicPage/placementInfoEdit"));
 const NoteEdit = dynamic(() => import("../../../../components/clinicPage/noteEdit"));
-const AdminInfoEdit = dynamic(() => import("../../../../components/clinicPage/adminInfoEdit"));
+const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/adminInfoEdit"));
 
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic, getRegion, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
+import { getClinicOrSiteOrRegion,removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import Marker from "../../../../components/shared/marker/marker";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const data = await getClinic(clinicName);
+  const data = await getClinicOrSiteOrRegion(clinicName);
   return { props: { data } }
 }
 
@@ -82,7 +82,7 @@ export default function ClinicDetails({ data }) {
       const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
       all_preceptor_data.push(preceptor_data)
     }
-    const region_data = await getRegion(data.region_id)
+    const region_data = await getClinicOrSiteOrRegion(data.region_id)
     setPreceptorData(all_preceptor_data)
     setClinicRegion(region_data.name)
   }

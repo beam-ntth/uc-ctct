@@ -25,7 +25,7 @@ export default function AddNewSite(props) {
                 state: '',
                 postal: ''
             }, 
-            admins: [],
+            adminInfo: [],
             notes: []
         }
     )
