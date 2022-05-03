@@ -21,8 +21,8 @@ export default function DisplayPreceptor(props) {
 
   const positionChoices = [... new Set(props.data.map(x => x.position))];
   // const credentialChoices = props.data.map(x => x.credential);
-  const populationChoices = props.data[0].survey.data.population ? [... new Set(props.data.map(x => x.description.population))] : [];
-  const experienceChoices = props.data[0].survey.data.experience ? [... new Set(props.data.map(x => x.description.experience))] : [];
+  const populationChoices = []
+  const experienceChoices = []
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('preceptors', x))
 
   function searchPreceptorName(substr) {
@@ -112,9 +112,9 @@ export default function DisplayPreceptor(props) {
             <div key={`clinics_${ind}`} className='displayVizRow'>
               <div className="rowContentClinics">
                 <p className={styles.dataCol1}>{x.firstname} {x.lastname}</p>
-                <p className={styles.dataCol2}>{x.survey.data.position ? x.survey.data.position : "Waiting for response"}</p>
-                <p className={styles.dataCol3}>{x.survey.data.population ? x.survey.data.population : "Waiting for response"}</p>
-                <p className={styles.dataCol4}>{x.survey.data.experience ? x.survey.data.experience : "Waiting for response"}</p>
+                <p className={styles.dataCol2}>{x.survey.data.profession ? x.survey.data.profession : "Waiting for response"}</p>
+                <p className={styles.dataCol3}>{x.survey.data.patientPopulation ? x.survey.data.patientPopulation.join(", ") : "Waiting for response"}</p>
+                <p className={styles.dataCol4}>{x.survey.data.experienceWithPmhnp ? x.survey.data.experienceWithPmhnp : "Waiting for response"}</p>
                 <p className={styles.dataCol5}>{statusText}</p>
               </div>
               <div className={`preceptorTag${x['status']}`}></div>

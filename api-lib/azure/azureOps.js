@@ -723,3 +723,35 @@ export async function updatePreceptorStatus(id, new_status) {
     throw new Error(`Error happens while updating a preceptor's status. Error is: ${error}`)
   }
 }
+
+export async function incrementRegionSiteCount(region_id) {
+  try {
+    const data = await getClinicOrSiteOrRegion(region_id)
+    const cur_site_ct = data.total_sites
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/total_sites",
+          value: cur_site_ct + 1
+      }];
+    await Master.item(region_id, region_id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while incrementing region's site count. Error is: ${error}`)
+  }
+}
+
+export async function decrementRegionSiteCount(region_id) {
+  try {
+    const data = await getClinicOrSiteOrRegion(region_id)
+    const cur_site_ct = data.total_sites
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/total_sites",
+          value: cur_site_ct - 1
+      }];
+    await Master.item(region_id, region_id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while incrementing region's site count. Error is: ${error}`)
+  }
+}

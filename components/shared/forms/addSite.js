@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 import { CircularProgress } from "@mui/material";
+import { incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 
 export default function AddNewSite(props) {
     const [hover, setHover] = useState(false)
@@ -37,13 +38,9 @@ export default function AddNewSite(props) {
             const { resource: previous_num_sites } = await region_container.item(props.regionId, props.regionId).read()
             const site_container = database.container("Master");
             site_container.items.create(site)
-            const replaceOperation =
-                [{
-                    op: "replace",
-                    path: "/total_sites",
-                    value: previous_num_sites["total_sites"] + 1
-                }];
-            await region_container.item(props.regionId, props.regionId).patch(replaceOperation)
+            if (site.status == 8) {
+                incrementRegionSiteCount(props.regionId)
+            }
             props.setOpen(false)
             props.reload()
         } catch (error) {

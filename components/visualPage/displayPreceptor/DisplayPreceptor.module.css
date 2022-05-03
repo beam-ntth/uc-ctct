@@ -70,7 +70,7 @@
 }
 
 .titleCol1, .dataCol1 {
-    width: 30%;
+    width: 15%;
     margin-left: 2rem;
 }
 
@@ -83,12 +83,20 @@
     font-size: small;
 }
 
-.titleCol2, .dataCol2, .titleCol3, .dataCol3 {
+.titleCol2, .dataCol2 {
     width: 15%;
+}
+
+.titleCol3, .dataCol3 {
+    width: 35%;
 }
 
 .titleCol2, .titleCol3 {
     font-size: large;
+}
+
+.dataCol2, .dataCol3, .dataCol4 {
+    padding-right: 2rem;
 }
 
 .dataCol2, .dataCol3 {
@@ -97,7 +105,7 @@
 }
 
 .titleCol4 {
-    width: 15%;
+    width: 20%;
     font-size: large;
 }
 
@@ -107,7 +115,7 @@
 }
 
 .dataCol4 {
-    width: 15%;
+    width: 20%;
     flex-wrap: wrap;
     font-size: small;
 }
