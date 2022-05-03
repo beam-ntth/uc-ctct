@@ -25,7 +25,9 @@ import EditSite from "../../../../components/shared/forms/editSite";
 
 // Only import these components when the user clicks
 const EditSiteNote = dynamic(() => import("../../../../components/shared/forms/editSiteNote"));
+const AdminInfoAdd = dynamic(() => import("../../../../components/clinicPage/adminInfoAdd"));
 const AddNewClinic = dynamic(() => import("../../../../components/shared/forms/addClinic"));
+const AdminInfoEdit = dynamic(() => import("../../../../components/clinicPage/adminInfoEdit"));
 
 export async function getServerSideProps(context) {
   // TODO: JT - FIX AND GET RID OF ANY CODE NOT USING AZURE OP FUNC.
@@ -53,13 +55,17 @@ export default function Clinics({ data, site_data }) {
   const [openEditForm, setOpenEditForm] = useState(false)
   const [openAddClinic, setOpenAddClinic] = useState(false)
   const [generalOpen, setGeneralOpen] = useState(false);
+  const [adminAddOpen, setAdminAddOpen] = useState(false);
+  const [adminEditOpen, setAdminEditOpen] = useState(false);
 
   /**
    * Status of all the buttons, whether the user hovers over it
    * true = display as active, false = display as inactive
+   * const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
    */
   const [hover, setHover] = useState(false)
   const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+  
 
   /**
    * Create a refresh data function to reload page when there 
@@ -172,7 +178,26 @@ export default function Clinics({ data, site_data }) {
                 </div>
                 {
                   site_data.notes.length == 0 ?
-                  <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently, you do not have any notes! </p>
+                  <p style={{ margin: 0, paddingLeft: '2rem' }}> There are no admin contacts so far </p>
+                  :
+                  site_data.notes.map((x, ind) => {
+                    return (<Accordion x={x} ind={ind} key={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
+                  })
+                }
+              </div>
+            </div>
+            {/* added admin  */}
+            <div className={styles.data}>
+              <div style={{ width: '90%', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ width: '100%', display: 'flex', marginBottom: '0.5rem' }}>
+                  <p className="titleClinics" style={{ width: '80%', margin: 0, display: 'flex', alignItems: 'center' }}>Administrative and Other Site Information</p>
+                  <div style={{ width: '20%', display: 'flex', justifyContent: 'flex-end' }}>
+                    <div className='editButton' onClick={() => setOpenNote(true)}>+ Add Admin</div>
+                  </div>
+                </div>
+                {
+                  site_data.notes.length == 0 ?
+                  <p style={{ margin: 0, paddingLeft: '2rem' }}> Currently there are no administrative contacts </p>
                   :
                   site_data.notes.map((x, ind) => {
                     return (<Accordion x={x} ind={ind} key={ind} open={openEditForm} setOpen={setOpenEditForm} id={site_data.id} remove={removeNoteEntry} />)
@@ -200,6 +225,7 @@ export default function Clinics({ data, site_data }) {
               {
                 filteredData.map((x, ind) => {
                   const statusText = StatusParser("clinics", parseInt(x.status))
+                
 
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '4rem' }} key={x.id} >
