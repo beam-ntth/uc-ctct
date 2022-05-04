@@ -5,11 +5,11 @@ import { IoClose } from "react-icons/io5";
 
 // Import DB modules
 import { client } from '../../api-lib/azure/azureConfig';
-import { getClinic, getSite } from "../../api-lib/azure/azureOps";
+import { getClinicOrSiteOrRegion } from "../../api-lib/azure/azureOps";
 
 const currentdate = new Date();
 
-export default function NoteEdit(props) {
+export default function AddNewNote(props) {
   const [hover, setHover] = useState(false)
   const [note, setNote] = useState({
     title: "",
@@ -21,12 +21,9 @@ export default function NoteEdit(props) {
     const database = client.database("uc-ctct");
     let container;
     let data;
-    if (props.type == "Sites") {
+    if (props.type == "Sites" || props.type == "Clinics") {
       container = database.container("Master");
-      data = getSite(props.id)
-    } else if (props.type == "Clinics") {
-      container = database.container("Master");
-      data = getClinic(props.id) 
+      data = await getClinicOrSiteOrRegion(props.id)
     } else {
       container = database.container(props.type);
       const { resource: item } = await container.item(props.id, props.id).read();
@@ -34,7 +31,7 @@ export default function NoteEdit(props) {
     }
     
     let noteInfo = data.notes
-    console.log(noteInfo)
+    console.log(data)
     noteInfo.unshift(note)
     const replaceOperation =
       [{

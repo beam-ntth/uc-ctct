@@ -81,6 +81,7 @@ export default function Database({ data }) {
                   <p style={{ width: '40%' }}>Total Active Sites</p>
                 </div>
               </div >
+              
               {
                 data.map((x, ind) => {
                   return (

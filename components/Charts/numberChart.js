@@ -4,15 +4,15 @@ import { getAllSites } from "../../api-lib/azure/azureOps";
 export default function NumberChart() {
     const [data, setData] = useState([0, 0, 0])
 
-    const redStatus = [0, 1, 3, 4, 9]
-    const yellowStatus = [2, 5, 6, 8]
-    const greenStatus = 7
+    const redStatus = [11, 14]
+    const yellowStatus = [0, 1, 2, 3, 4, 5, 6, 7, 9, 12, 13]
+    const greenStatus = [8, 10]
 
     const loadData = async() => {
         const response = await getAllSites();
         const splitData = [0, 0, 0]
         response.forEach(x => {
-            if (parseInt(x.status) == greenStatus) {
+            if (greenStatus.includes(parseInt(x.status))) {
                 splitData[0]++
             } else if (yellowStatus.includes(parseInt(x.status))) {
                 splitData[1]++

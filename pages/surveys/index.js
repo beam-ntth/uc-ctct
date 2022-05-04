@@ -8,11 +8,11 @@ import Header from '../../components/shared/header/header';
 import { MdScience, MdOutlineEmojiPeople } from 'react-icons/md'
 import { FiRefreshCcw } from 'react-icons/fi'
 import { getAllPreceptors, getAllStudents, getSurveyStatus, updateSurveyStatus } from '../../api-lib/azure/azureOps';
-import { STUDENT_SURVEY, PRECEPTOR_SURVEY, startExportResponses, getSurveyExportProgress, downloadSurveyResponse } from '../../api-lib/qualtrics/qualtricsOps';
+import { STUDENT_SURVEY, PRECEPTOR_SURVEY, getSurveyExportProgress, downloadSurveyResponse } from '../../api-lib/qualtrics/qualtricsOps';
 import Loading from '../../components/shared/loading';
 import { useRouter } from 'next/router';
 import PopUp from '../../components/surveyPage/popUp';
-import { parseStudentData } from '../../components/surveyPage/parseQualtricsData';
+import { downloadSurveys } from '../../components/surveyPage/downloadSurveys';
 
 export default function StudentMgmt() {
     const [ lastUpdated, setLastUpdated ] = useState(null)
@@ -77,62 +77,14 @@ export default function StudentMgmt() {
         try {
             setIsRefreshing(true)
 
-            let student_file_id = null
-            let downloaded_data = null
-
-            // Start Exporting Section
-            const student_res = await startExportResponses(STUDENT_SURVEY)
-            const student_progress_id = student_res.result.progressId
-            setDisplayText("Initiated Survey Export Responses. Hang Tight!")
+            setDisplayText("START DOWNLOADING STUDENT SURVEYS")
+            await downloadSurveys("student", STUDENT_SURVEY, checkForProgress, waitToDownload, setDisplayText)
             
-            // Progress Section
-            const student_progress = await checkForProgress(STUDENT_SURVEY, student_progress_id)
-
-            let progressIsDone = false
-            if (student_progress == 400) {
-                progressIsDone = false
-            } else {
-                progressIsDone = true
-                student_file_id = student_progress
-            }
-
-            while (!progressIsDone) {
-                setDisplayText("Apparently, Qualtrics server was not ready. Retrying right now. Hang Tight!")
-                const checkResult = await checkForProgress(STUDENT_SURVEY, student_progress_id)
-                if (checkResult == 400) {
-                    progressIsDone = false
-                } else {
-                    progressIsDone = true
-                    student_file_id = checkResult
-                }
-            }
-
-            setDisplayText("Survey responses are ready to be exported. Hang Tight!")
-            setDisplayText("Downloading survey responses. Hang Tight!")
+            setDisplayText("START DOWNLOADING PRECEPTOR SURVEYS")
+            await downloadSurveys("preceptor", PRECEPTOR_SURVEY, checkForProgress, waitToDownload, setDisplayText)
             
-            // Download File Section
-            let downloadDone = false
-            // Usually have about 1 seconds delay, try to wait first
-            const downloadAttempt = await waitToDownload(STUDENT_SURVEY, student_file_id, 1000)
-            if (downloadAttempt == 400) {
-                downloadDone = false
-            } else {
-                downloadDone = true
-                downloaded_data = downloadAttempt
-            }
-            // If still cannot download, implement retry mechanism, delay 1 sec per each retry
-            while (!downloadDone) {
-                setDisplayText("Apparently, Qualtrics server was not ready. Retrying right now. Hang Tight!")
-                const nextAttempt = await waitToDownload(STUDENT_SURVEY, student_file_id, 1000)
-                if (nextAttempt != 400) {
-                    downloadDone = false
-                } else {
-                    downloadDone = true
-                    downloaded_data = nextAttempt
-                }
-            }
-            setDisplayText("Finished downloading survey responses. Yay!")
-            downloaded_data.forEach(x => console.log(JSON.stringify(parseStudentData(x))))
+            // FINISHED EVERYTHING - Update the refresh timestamp
+            setDisplayText("Finished Updating EVERTHING. Let's go!")
             await updateSurveyStatus()
             setIsRefreshing(false)
         } catch (error) {

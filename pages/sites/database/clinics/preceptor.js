@@ -8,7 +8,7 @@ import styles from "../../../../styles/Preceptor.module.css";
 // Import Next Components
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
-import NoteEdit from "../../../../components/clinicPage/noteEdit";
+import AddNewNote from "../../../../components/clinicPage/addNewNote";
 import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 
@@ -18,9 +18,9 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
+import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClinic, getPreceptor, getClinic } from "../../../../api-lib/azure/azureOps";
+import { removeClinic, getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import EditPreceptorProfile from "../../../../components/shared/forms/editPreceptorProfile";
@@ -39,13 +39,18 @@ export default function Preceptors({ preceptor }) {
   const [ openEditNote, setOpenEditNote ] = useState(false)
   const [ openEditInfo, setOpenEditInfo ] = useState(false)
 
+  /**
+   * Variable for preceptor survey data
+   */
+  const surveyData = preceptor.survey.data
+
   const router = useRouter()
 
   const [allClinics, setAllClinics] = useState(null)
   async function lazyLoadClinic() {
     const all_clinics = []
     for (let i = 0; i < preceptor.clinics.length; i++) {
-      all_clinics.push(await getClinic(preceptor.clinics[i]))
+      all_clinics.push(await getClinicOrSiteOrRegion(preceptor.clinics[i]))
     }
     setAllClinics(all_clinics)
   }
@@ -74,7 +79,7 @@ export default function Preceptors({ preceptor }) {
 
   return (
     <React.Fragment>
-      { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Preceptors" id={preceptor.id} /> : null }
+      { openNewNote ? <AddNewNote open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Preceptors" id={preceptor.id} /> : null }
       { openEditNote ? <EditPreceptorNote open={openEditNote} setOpen={setOpenEditNote} reload={router.reload} /> : null }
       { openEditInfo ? <EditPreceptorProfile open={openEditInfo} setOpen={setOpenEditInfo} data={preceptor} reload={router.reload} id={preceptor.id} /> : null }
       <div className={styles.container}>
@@ -96,31 +101,100 @@ export default function Preceptors({ preceptor }) {
                 <div className={"editButton"} onClick={() => setOpenEditInfo(true)}>Edit Information</div>
               </div>
               <div className={styles.bioTitle}>
-                <div className={styles.profileImg}>
-                  <img src="/asset/images/user-image.png" />
-                </div>
                 <div className={styles.profileInfo}>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Name:</strong> {preceptor.firstname} {preceptor.lastname}</p>
-                    <p><strong>National Provider Identifier (NPI):</strong> {preceptor.npi}</p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Email:</strong> {preceptor.email}</p>
+                    <p><strong>Phone Number:</strong> ({preceptor.phoneNumber.substring(0, 3)}) {preceptor.phoneNumber.substring(3, 6)}-{preceptor.phoneNumber.substring(6, 10)}</p>
                   </div>
                   <div className={styles.infoRow}>
                     <p style={{ marginRight: '2.5rem' }}><strong>Status:</strong> {StatusParser('preceptors', parseInt(preceptor.status))}</p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>National Provider Identifier (NPI):</strong> {preceptor.npi}</p>
                     <p><strong>Credentials:</strong> {preceptor.credential}</p>
                   </div>
-                  <div className={styles.infoRow}>
-                    <p style={{ marginRight: '2.5rem' }}><strong>Position:</strong> {preceptor.position}</p>
-                    <p><strong>Email:</strong> {preceptor.email}</p>
-                  </div>
-                  <p><strong>Phone Number:</strong> ({preceptor.phoneNumber.substring(0, 3)}) {preceptor.phoneNumber.substring(3, 6)}-{preceptor.phoneNumber.substring(6, 10)}</p>
                   <p>
-                    <strong>Clinic (s):</strong>
+                    <strong>Precepting Clinic (s):</strong>
                     {
                       (allClinics == null ? <p>Loading...</p> : allClinics.map(x => x ? <p style={{ margin: '0.4rem 0' }}>{x.name}</p> : <p>Clinic Unknown</p>))
                     }
                   </p>
                 </div>
               </div>
+            </div>
+            <div className={styles.data}>
+              <div className={styles.bioTitle}>
+                <h4>Survey Information</h4>
+              </div>
+              {
+              surveyData.homeEmail ?
+              <div className={styles.bioTitle}>
+                <div className={styles.profileInfo}>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Profession:</strong> {surveyData.profession}</p>
+                    <p style={{ marginRight: '2.5rem' }}>
+                      <strong>Preferred Contact Information:</strong> 
+                      {surveyData.preferredContact.includes("@") ? ` ${surveyData.preferredContact}` : ` (${surveyData.preferredContact.substring(0, 3)}) ${surveyData.preferredContact.substring(3, 6)}-${surveyData.preferredContact.substring(6, 10)}`}
+                    </p>
+                    <p><strong>Clinic Planned to Precep:</strong> {surveyData.clinicPlanned}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Practice Setting:</strong> {surveyData.practiceSetting.join(", ")}</p>
+                    <p><strong>Age Group:</strong> {surveyData.ageGroup.join(", ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Patient Population:</strong> {surveyData.patientPopulation.join(", ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Visit Type:</strong> {surveyData.visitType}</p>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Visit % In-Person:</strong> {surveyData.visitPercentInPerson ? surveyData.visitPercentInPerson : "Not Indicated"}</p>
+                    <p><strong>Visit % Online:</strong> {surveyData.visitPercentOnline ? surveyData.visitPercentOnline : "Not Indicated"}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Patient Volume:</strong> {surveyData.patientVolume}</p>
+                    <p><strong>Patient Acuity:</strong> {surveyData.patientAcuity}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Experience with PMHNP:</strong> {surveyData.experienceWithPmhnp}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Model of Precepting:</strong> {surveyData.modelOfPrecepting}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Order Entry:</strong> {surveyData.orderEntry}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Documents Practice:</strong> {surveyData.documentPractice.join(", ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Student Scheduling Preference:</strong> {surveyData.studentSchedule}</p>
+                  </div>
+                  {
+                    surveyData.interestInSupportOtherPrecep == "Yes" ?
+                    <div className={styles.infoRow}>
+                      <p><strong>Interested In Supporting Other Preceptors:</strong> Yes</p>
+                      <p><strong>Type(s) of support:</strong> {surveyData.typeOfSupport.join(", ")}</p>
+                    </div>
+                    : null
+                  }
+                  <div className={styles.infoRow}>
+                    <p><strong>Number of days for student to visit:</strong> {surveyData.daysForStudentToAttend}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p><strong>Preferred Days to Precep:</strong> {surveyData.preferredDaysToWork.join(", ")}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Helpful When Students Speak Other Languages:</strong> {surveyData.helpfulStudentOtherLangs}</p>
+                    <p><strong>Desired Languages:</strong> {surveyData.helpfulStudentOtherLangs == "Yes" ? surveyData.whatOtherLangs : "N/A"}</p>
+                  </div>
+                  <div className={styles.infoRow}>
+                    <p style={{ marginRight: '2.5rem' }}><strong>Preferred Communication Method:</strong> {surveyData.preferredCommMethod}</p>
+                    <p><strong>Other Comments:</strong> {surveyData.otherConcerns}</p>
+                  </div>
+                </div>
+              </div>
+              :
+              <div>Preceptor still hasn't responded to the survey</div>
+              }
             </div>
             <div className={styles.noteData}>
               <div style={{ width: '90%', display: 'flex', flexDirection: 'column', paddingTop: '2rem' }}>

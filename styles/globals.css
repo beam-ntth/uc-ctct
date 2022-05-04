@@ -117,7 +117,7 @@ a {
 }
 
 .siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7,
-.siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
+.siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13, .siteTag14 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -125,11 +125,11 @@ a {
 }
 
 .siteTag0 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag1 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag2 {
@@ -137,11 +137,11 @@ a {
 }
 
 .siteTag3 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag4 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag5 {
@@ -153,33 +153,37 @@ a {
 }
 
 .siteTag7 {
-  background-color: #89c85c;
-}
-
-.siteTag8 {
   background-color: #e7e453;
 }
 
-.siteTag9 {
-  background-color: #d24641;
+.siteTag8 {
+  background-color: #89c85c;
+}
 
+.siteTag9 {
+  background-color: #e7e453;
 }
 
 .siteTag10 {
-  background-color: rgb(62, 57, 57);
+  background-color:  #89c85c;;
 }
 
 .siteTag11 {
-  background-color: rgb(62, 57, 57);
+  background-color: #d24641;
 }
 
 .siteTag12 {
-  background-color: #d24641;
+  background-color: rgb(62, 57, 57);
 }
 
 .siteTag13 {
   background-color: rgb(62, 57, 57);
 }
+
+.siteTag14 {
+  background-color: #d24641;
+}
+
 
 .preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5,
 .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9 {

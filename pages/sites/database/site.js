@@ -12,23 +12,24 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { getRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
 
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
+import ErrorPopUp from '../../../components/shared/errorPopUp';
 
 // Only load when user clicks on it to improve performance
 const AddNewSite = dynamic(() => import('../../../components/shared/forms/addSite'));
 const EditSite = dynamic(() => import('../../../components/shared/forms/editSite'));
-const SearchString = dynamic(() => import('../../../components/shared/search'));
+const searchString = dynamic(() => import('../../../components/shared/search'));
 
 export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
   // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
-  const region_data = await getRegion(location);
+  const region_data = await getClinicOrSiteOrRegion(location);
   const data = await getSitesFromRegion(location);
   return { props: { data, region_data } }
 }
@@ -56,6 +57,13 @@ export default function SiteDetails({ data, region_data }) {
   const [openEditForm, setOpenEditForm] = useState(false)
 
   /**
+   * States to set error messages
+   */
+  const [displayError, setDisplayError] = useState(false)
+  const [humanError, setHumanError] = useState("")
+  const [errorText, setErrorText] = useState("")
+
+  /**
    * Create a refresh data function to reload page when there 
    * is any changes to the database
    */
@@ -69,7 +77,7 @@ export default function SiteDetails({ data, region_data }) {
    * @param {String} substr - search string inputted by the user 
    */
   function searchSiteName(substr) {
-    setFilteredData(SearchString(data, substr))
+    setFilteredData(searchString(data, substr))
   }
 
   /**
@@ -77,8 +85,8 @@ export default function SiteDetails({ data, region_data }) {
    * @param {String} id - UUID of site to remove. 
    * @param {String} regionId - UUID of region to update total number of sites. 
    */
-  async function removeElement(id, regionId) {
-    await removeSite(id, regionId);
+  async function removeElement(id, site_status, regionId) {
+    await removeSite(id, site_status, regionId);
     refreshData()
     return
   }
@@ -93,7 +101,9 @@ export default function SiteDetails({ data, region_data }) {
 
   return (
     <React.Fragment>
-      {openForm ? <AddNewSite open={openForm} setOpen={setOpenForm} reload={refreshData} regionId={region_data.id} /> : null}
+      {displayError ? <ErrorPopUp open={setDisplayError} text={humanError} error={errorText} /> : null}
+      {openForm ? <AddNewSite open={openForm} setOpen={setOpenForm} reload={refreshData} regionId={region_data.id}
+        displayError={setDisplayError} errorText={setErrorText} humanText={setHumanError} /> : null}
       {openEditForm ? <EditSite open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
       <div className={styles.container}>
         <Head>
@@ -168,7 +178,7 @@ export default function SiteDetails({ data, region_data }) {
                           setTrashHover(newStatus)
                           return
                         }} 
-                        onClick={() => removeElement(x.id, region_data.id)} />
+                        onClick={() => removeElement(x.id, parseInt(x.status), region_data.id)} />
                     </div>
                   )
                 })

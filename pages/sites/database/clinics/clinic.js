@@ -15,22 +15,24 @@ import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 
 const ClinicInfoEdit = dynamic(() => import("../../../../components/clinicPage/generalInfoEdit"));
-const AdminInfoAdd = dynamic(() => import("../../../../components/clinicPage/adminInfoAdd"));
-const PreceptorInfoEdit = dynamic(() => import("../../../../components/clinicPage/preceptorInfoEdit"));
+const AdminInfoAdd = dynamic(() => import("../../../../components/shared/forms/adminInfoAdd"));
+const PreceptorInfoAdd = dynamic(() => import("../../../../components/clinicPage/preceptorInfoAdd"));
 const PlacementInfoEdit = dynamic(() => import("../../../../components/clinicPage/placementInfoEdit"));
-const NoteEdit = dynamic(() => import("../../../../components/clinicPage/noteEdit"));
-const AdminInfoEdit = dynamic(() => import("../../../../components/clinicPage/adminInfoEdit"));
+const AddNewNote = dynamic(() => import("../../../../components/clinicPage/addNewNote"));
+const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/adminInfoEdit"));
 
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
 import { FiEdit } from "react-icons/fi";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { getClinic, removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
+import { getClinicOrSiteOrRegion,removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import Marker from "../../../../components/shared/marker/marker";
+import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
+import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
-  const data = await getClinic(clinicName);
+  const data = await getClinicOrSiteOrRegion(clinicName);
   return { props: { data } }
 }
 
@@ -40,9 +42,6 @@ export default function ClinicDetails({ data }) {
    * is any changes to the database
    */
   const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
 
   /**
    * Convert the encoded status to text
@@ -57,8 +56,10 @@ export default function ClinicDetails({ data }) {
   const [adminAddOpen, setAdminAddOpen] = useState(false);
   const [adminEditOpen, setAdminEditOpen] = useState(false);
   const [preceptorOpen, setPreceptorOpen] = useState(false);
+  const [preceptorEditOpen, setPreceptorEditOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
-  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteAddOpen, setNoteAddOpen] = useState(false);
+  const [noteEditOpen, setNoteEditOpen] = useState(false);
 
   /**
    * Status of all the forms in this page
@@ -66,12 +67,14 @@ export default function ClinicDetails({ data }) {
    */
   const [adminEditHover, setAdminEditHover] = useState(Array(data.adminInfo.length).fill(false))
   const [adminTrashHover, setAdminTrashHover] = useState(Array(data.adminInfo.length).fill(false))
+  const [precepEditHover, setPrecepEditHover] = useState(Array(data.preceptorInfo.length).fill(false))
   const [precepTrashHover, setPrecepTrashHover] = useState(Array(data.preceptorInfo.length).fill(false))
 
   /**
-   * Lazy loading preceptor data to speed up clinic page
+   * Lazy loading data to speed up clinic page
    * Call useEffect() to initiate loading
    */
+  const [clinicRegion, setClinicRegion] = useState("")
   const [preceptorData, setPreceptorData] = useState(null)
   async function clientLoadPreceptor() {
     const database = client.database("uc-ctct");
@@ -81,9 +84,32 @@ export default function ClinicDetails({ data }) {
       const { resource: preceptor_data } = await container.item(data.preceptorInfo[i], data.preceptorInfo[i]).read()
       all_preceptor_data.push(preceptor_data)
     }
+    const region_data = await getClinicOrSiteOrRegion(data.region_id)
     setPreceptorData(all_preceptor_data)
+    setClinicRegion(region_data.name)
   }
   useEffect(() => clientLoadPreceptor(), [data])
+
+  /**
+   * Remove a note from the clinic
+   * @param {String} remove_index - Index of the note that we want to remove. 
+   */
+  async function removeNoteEntry(remove_index) {
+  const database = client.database("uc-ctct");
+  const clinic_container = database.container("Master");
+  data.notes.splice(remove_index, 1)
+  const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes",
+        value: site_data.notes
+      }
+    ]
+  await clinic_container.item(data.id, data.id).patch(replaceOperation)
+  router.reload()
+  return 
+}
 
   /**
    * Remove admin data from clinic
@@ -91,7 +117,7 @@ export default function ClinicDetails({ data }) {
    */
   async function removeAdminElement(index) {
     await removeAdmin(data.id, index)
-    refreshData()
+    router.reload()
     return
   }
 
@@ -102,7 +128,7 @@ export default function ClinicDetails({ data }) {
    */
   async function removePreceptorElement(index) {
     await removePreceptor(data.id, index)
-    refreshData()
+    router.reload()
     return
   }
 
@@ -117,12 +143,14 @@ export default function ClinicDetails({ data }) {
 
   return (
     <React.Fragment>
-      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} id={data.id} /> : null}
-      {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={refreshData} id={data.id} /> : null}
-      {adminEditOpen ? <AdminInfoEdit open={adminEditOpen} setOpen={setAdminEditOpen} reload={refreshData} id={data.id} /> : null}
-      {preceptorOpen ? <PreceptorInfoEdit open={preceptorOpen} setOpen={setPreceptorOpen} reload={refreshData} id={data.id} /> : null}
-      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={refreshData} id={data.id} /> : null}
-      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={refreshData} type="Clinics" id={data.id} /> : null}
+      {generalOpen ? <ClinicInfoEdit data={data} open={generalOpen} setOpen={setGeneralOpen} reload={router.reload} id={data.id} /> : null}
+      {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={router.reload} id={data.id} /> : null}
+      {adminEditOpen ? <AdminInfoEdit open={adminEditOpen} setOpen={setAdminEditOpen} reload={router.reload} id={data.id} /> : null}
+      {preceptorOpen ? <PreceptorInfoAdd open={preceptorOpen} setOpen={setPreceptorOpen} reload={router.reload} id={data.id} region={clinicRegion} /> : null}
+      {preceptorEditOpen ? <PreceptorInfoEdit open={preceptorEditOpen} setOpen={setPreceptorEditOpen} reload={router.reload} /> : null}
+      {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={router.reload} id={data.id} /> : null}
+      {noteAddOpen ? <AddNewNote open={noteAddOpen} setOpen={setNoteAddOpen} reload={router.reload} type="Clinics" id={data.id} /> : null}
+      {noteEditOpen ? <EditSiteOrClinicNote open={noteEditOpen} setOpen={setNoteEditOpen} reload={router.reload} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -240,7 +268,6 @@ export default function ClinicDetails({ data }) {
                 <div style={{ marginTop: '2rem' }}>
                   {
                     preceptorData == null ? <p>Loading...</p> : (preceptorData.map((x, ind) => {
-                      console.log(preceptorData)
                       const status = StatusParser('preceptors', parseInt(x.status))
                       return (
                         <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }} key={x.id} >
@@ -254,6 +281,21 @@ export default function ClinicDetails({ data }) {
                               <div className={`clinicTag${x['status']}`}></div>
                             </div>
                           </Link>
+                          <FiEdit color={precepEditHover[ind] ? "#079CDB" : "#C4C4C4"} size={precepEditHover[ind] ? 40 : 35} 
+                          style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
+                            onMouseEnter={() => {
+                              let newStatus = [...precepEditHover]
+                              newStatus[ind] = true
+                              setPrecepEditHover(newStatus)
+                              return
+                            }
+                            } onMouseLeave={() => {
+                              let newStatus = [...precepEditHover]
+                              newStatus[ind] = false
+                              setPrecepEditHover(newStatus)
+                              return
+                            }}
+                            onClick={() => setPreceptorEditOpen([x.id, x.status])} />
                           <FaRegTrashAlt color={precepTrashHover[ind] ? "#CD0000" : "#C4C4C4"} size={precepTrashHover[ind] ? 38 : 35}
                             style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
                             onMouseEnter={() => {
@@ -299,7 +341,7 @@ export default function ClinicDetails({ data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Clinical Notes</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
+                  <div className={styles.editButton} onClick={() => setNoteAddOpen(true)}>+ Add Notes</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
@@ -307,7 +349,7 @@ export default function ClinicDetails({ data }) {
                     <p style={{ marginBottom: '2rem' }}> Currently, you do not have any notes! </p>
                     :
                     data.notes.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} setOpen={setNoteOpen} />)
+                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} open={noteEditOpen} setOpen={setNoteEditOpen} id={data.id} remove={removeNoteEntry} />)
                     })
                   }
                 </div>

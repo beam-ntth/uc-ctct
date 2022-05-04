@@ -4,12 +4,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 import { CircularProgress } from "@mui/material";
+import { incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 
 export default function AddNewSite(props) {
     const [hover, setHover] = useState(false)
     const [site, setSite] = useState(
         { 
             id: uuidv4().toString(), 
+            type: 'site',
             region_id: props.regionId, 
             name: '', 
             total_clinics: 0,
@@ -24,26 +26,27 @@ export default function AddNewSite(props) {
                 state: '',
                 postal: ''
             }, 
-            admins: [],
+            adminInfo: [],
             notes: []
         }
     )
 
     async function addSite() {
-        const database = client.database("uc-ctct");
-        const region_container = database.container("Regions");
-        const { resource: previous_num_sites} = await region_container.item(props.regionId, props.regionId).read()
-        const site_container = database.container("Sites");
-        site_container.items.create(site)
-        const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_sites",
-          value: previous_num_sites["total_sites"] + 1
-        }];
-        await region_container.item(props.regionId, props.regionId).patch(replaceOperation)
-        props.setOpen(false)
-        props.reload()
+        try {
+            const database = client.database("uc-ctct");
+            const site_container = database.container("Master");
+            await site_container.items.create(site)
+            if (site.status == 8 || site.status == 10) {
+                await incrementRegionSiteCount(props.regionId)
+            }
+            props.setOpen(false)
+            props.reload()
+        } catch (error) {
+            props.setOpen(false)
+            props.displayError(true)
+            props.humanText("There seems to be a problem with the database at this time.")
+            props.errorText(`${error}`)
+        }
     }
 
     const [submittingForm, setSubmittingForm] = useState(false)

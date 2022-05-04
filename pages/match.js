@@ -4,7 +4,7 @@ import styles from '../styles/Match.module.css'
 
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
-import SearchString from '../components/shared/search'
+import {searchString} from '../components/shared/search'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions, addStudentToPreceptor } from '../api-lib/azure/azureOps';
@@ -31,7 +31,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
    */
   const [cohortFilter, setCohortFilter] = useState((new Date()).getFullYear())
   const [campusFilter, setCampusFilter] = useState('UC Davis')
-  const [countyFilter, setCountyFilter] = useState('Alameda')
+  const [countyFilter, setCountyFilter] = useState('Sacramento')
+  const [ageGroupFilter, setAgeGroupFilter] = useState('All')
 
   /**
    * All the states for manage buttons
@@ -64,17 +65,29 @@ export default function Matching({ clinics, students, preceptors, region_choices
    * @function getAvailablePreceptorPerClinic : Helper function to display preceptors
    * @param clinic : Accepts a clinic object
    */
-  const getAvailablePreceptorPerClinic = (clinic) => {
+  const getAvailablePreceptorPerClinicAndFilters = (clinic) => {
     return preceptors.filter(p => {
       // Filter the preceptor based on their ID and availability (from <= current_year <= to)
       const fromYear = p.availability.from.substring(p.availability.from.length-4, p.availability.from.length)
       const toYear = p.availability.from.substring(p.availability.to.length-4, p.availability.to.length)
       return clinic.preceptorInfo.includes(p.id) && fromYear >= cohortFilter && toYear <= cohortFilter
+    }).filter(x => {
+      if (ageGroupFilter == "All") {
+        return true;
+      }
+      if (x.survey.data.ageGroup) {
+        return x.survey.data.ageGroup.includes(ageGroupFilter);
+      }
+      return false;
     })
   }
 
-  const filterClinicByCounty = (clinics) => {
+  const filterClinicByFilter = (clinics) => {
     return clinics.filter(x => x.generalInformation.county == countyFilter)
+  }
+
+  const getAssignedClinic = (id) => {
+    return clinics.filter(x => x.id == id)[0]
   }
 
   /**
@@ -152,9 +165,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                       <div style={{ display: 'flex', width: '85%' }}>
                         <p className={styles.titleCol1}>Name</p>
                         <p className={styles.titleCol2}>Primary Clinic</p>
-                        <p className={styles.titleCol3}>Primary Status</p>
-                        <p className={styles.titleCol4}>Secondary Clinic</p>
-                        <p className={styles.titleCol5}>Secondary Status</p>
+                        <p className={styles.titleCol3}>Secondary Clinic</p>
+                        <p className={styles.titleCol4}>Status</p>
                       </div>
                     </div >
                     {
@@ -163,10 +175,9 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                              <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                              <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
-                              <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                              <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id) : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id) : "Unassigned"}</p>
+                              <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
                               onMouseEnter={() => { let newStatus = [...manageUnassignedHover]; newStatus[ind] = true; setManageUnassignedHover(newStatus); return; }}
@@ -202,10 +213,9 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={ x.id }>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                              <p style={{ width: '15%' }}>{x.primaryClinic ? x.primaryClinic : "Unassigned"}</p>
-                              <p style={{ width: '15%' }}>{x.status ? x.status : "Unassigned"}</p>
-                              <p style={{ width: '18%' }}>{x.secondaryClinic ? x.secondaryClinic : "Unassigned"}</p>
-                              <p style={{ width: '18%' }}>{x.status ? x.status : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id).name : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id.name) : "Unassigned"}</p>
+                              <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
                               onMouseEnter={() => { let newStatus = [...manageAssignedHover]; newStatus[ind] = true; setManageAssignedHover(newStatus); return; }}
@@ -242,9 +252,9 @@ export default function Matching({ clinics, students, preceptors, region_choices
                       }
                     </select>
                     <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Age: </p>
-                    <select>
+                    <select value={ageGroupFilter} onChange={x => setAgeGroupFilter(x.target.value)}>
                       {
-                        ['Child/Adolescent'].map(x => <option value={x} key={x} >{x}</option>)
+                        ["All", "Adult", "Transitional age youth", 'Child / adolescent', "Older adult", "Across the lifespan"].map(x => <option value={x} key={x} >{x}</option>)
                       }
                     </select>
                     <p style={{ marginLeft: '1rem', marginRight: '1rem' }}>Choice: </p>
@@ -261,21 +271,21 @@ export default function Matching({ clinics, students, preceptors, region_choices
                   </div>
                   <div className={ styles.availableClinicSection }>
                     {
-                      filterClinicByCounty(clinics).length == 0 ?
+                      filterClinicByFilter(clinics).length == 0 ?
                       <div>Currently, no clinics within this county</div>
                       :
-                      filterClinicByCounty(clinics).map(clinic => 
+                      filterClinicByFilter(clinics).map(clinic => 
                       <div className='clinicBar' key={ clinic.id }>
                         <div className='clinicTitle'>
                           <p>{ clinic.name }</p>
                         </div>
-                        <div className='line'></div>
+                        {/* <div className='line'></div>
                         <div className='clinicDetails'>
                           <p><strong>Setting: </strong>{ clinic.description.settingLocation }</p>
                           <p><strong>Population: </strong>{ clinic.description.settingPopulation }</p>
                           <p><strong>Age Group: </strong>{ clinic.description.population }</p>
                           <p><strong>Acuity: </strong>{ clinic.description.patientAcuity }</p>
-                        </div>
+                        </div> */}
                         <div className='line'></div>
                         <div className='clinicDetails' style={{ marginBottom: '1rem' }}>
                           <p><strong>Preceptor(s) Available </strong></p>
@@ -285,18 +295,80 @@ export default function Matching({ clinics, students, preceptors, region_choices
                               <p>No preceptor at this clinic</p>
                             </div>
                             : 
-                            getAvailablePreceptorPerClinic(clinic).length == 0 ?
+                            getAvailablePreceptorPerClinicAndFilters(clinic).length == 0 ?
                             <div>
-                              <p>No preceptor available for this cohort</p>
+                              <p>No preceptor available based on the given filters</p>
                             </div>
                             :
-                            getAvailablePreceptorPerClinic(clinic).map(precep => 
-                              <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '1.6rem', marginTop: '0.5rem' }} key={ precep.id }>
-                                  <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
-                                  <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
-                                    Assign!
-                                  </div>
-                              </div>
+                            getAvailablePreceptorPerClinicAndFilters(clinic).map((precep, ind) => 
+                              {
+                                const surveyData = precep.survey.data
+                                return (
+                                  <React.Fragment>
+                                    <div className='clinicBox' key={ precep.id }>
+                                      <div className='preceptorInfo'>
+                                        <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
+                                        <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                          Assign!
+                                        </div>
+                                      </div>
+
+                                      {
+                                      surveyData.homeEmail ?
+                                      <React.Fragment>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Profession:</strong> {surveyData.profession}</p>
+                                          <p><strong>Age Group:</strong> {surveyData.ageGroup.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Practice Setting:</strong> {surveyData.practiceSetting.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Patient Population:</strong> {surveyData.patientPopulation.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit Type:</strong> {surveyData.visitType}</p>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit % In-Person:</strong> {surveyData.visitPercentInPerson ? surveyData.visitPercentInPerson : "Not Indicated"}</p>
+                                          <p><strong>Visit % Online:</strong> {surveyData.visitPercentOnline ? surveyData.visitPercentOnline : "Not Indicated"}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Patient Volume:</strong> {surveyData.patientVolume}</p>
+                                          <p><strong>Patient Acuity:</strong> {surveyData.patientAcuity}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Experience with PMHNP:</strong> {surveyData.experienceWithPmhnp}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Model of Precepting:</strong> {surveyData.modelOfPrecepting}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Order Entry:</strong> {surveyData.orderEntry}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Documents Practice:</strong> {surveyData.documentPractice.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Student Scheduling Preference:</strong> {surveyData.studentSchedule}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Number of days for student to visit:</strong> {surveyData.daysForStudentToAttend}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p><strong>Preferred Days to Precep:</strong> {surveyData.preferredDaysToWork.join(", ")}</p>
+                                        </div>
+                                        <div className='preceptorInfo'>
+                                          <p style={{ marginRight: '0.5rem' }}><strong>Helpful When Students Speak Other Languages:</strong> {surveyData.helpfulStudentOtherLangs}</p>
+                                          <p><strong>Desired Languages:</strong> {surveyData.helpfulStudentOtherLangs == "Yes" ? surveyData.whatOtherLangs : "N/A"}</p>
+                                        </div>
+                                      </React.Fragment>
+                                      :
+                                      <p>Preceptor Still Doesn't Respond to the Survey</p>
+                                      }
+                                    </div>
+                                    {ind == getAvailablePreceptorPerClinicAndFilters(clinic).length - 1 ? null : <div className='precepLine'></div>}
+                                  </React.Fragment>
+                                )
+                              }
                             )
                           }
                         </div>
@@ -334,7 +406,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
               margin: 1rem 0 0.5rem 1rem;
             }
 
-            .line {
+            .line, .precepLine {
               height: 2px;
               width: 80%;
               background-color: #C4C4C4;
@@ -343,7 +415,12 @@ export default function Matching({ clinics, students, preceptors, region_choices
               opacity: 50%;
             }
 
+            .precepLine {
+              margin: 0.5rem 0;
+            }
+
             .clinicDetails {
+              text-align: left;
               margin-left: 1rem;
             }
 
@@ -351,6 +428,22 @@ export default function Matching({ clinics, students, preceptors, region_choices
               margin: 0.3rem 0;
               font-size: 0.8rem;
               font-weight: normal;
+            }
+
+            .clinicBox {
+              display: flex;
+              flex-direction: column;
+              justify-content: flex-start;
+              align-items: flex-start;
+              height: auto;
+              margin-top: 0.5rem;
+            }
+
+            .preceptorInfo {
+              height: auto;
+              display: flex;
+              justify-content: flex-start;
+              align-items: flex-start;
             }
 
             .assignBar {

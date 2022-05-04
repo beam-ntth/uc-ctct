@@ -16,6 +16,21 @@ export async function getServerSideProps( context ) {
 }
 
 export default function PreceptorSurveys({ preceptors }) {
+    /**
+     * States to keep track of the filter status
+     */
+    const [ campusStatus, setCampusStatus ] = useState("ALL")
+
+    /**
+     * This function filters preceptor based on their campus
+     */
+    const filterPreceptorByStatus = () => {
+        if (campusStatus == "ALL") {
+            return preceptors
+        }
+        return preceptors.filter(x => x.location_affiliation == campusStatus)
+    }
+
     const getFormattedDate = () => {
         const curDate = new Date()
         return `${curDate.getMonth()+1 < 10 ? '0' : ''}${curDate.getMonth()+1}/${curDate.getDate() < 10 ? '0' : ''}${curDate.getDate()}/${curDate.getFullYear()}`
@@ -38,12 +53,13 @@ export default function PreceptorSurveys({ preceptors }) {
                         <div className={styles.data}>
                             <div style={{ width: '100%', marginTop: '1rem', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>
                                 <p style={{ marginRight: '1rem' }}>Please select preceptor campus: </p>
-                                <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}>
+                                <select style={{ borderRadius: '0.5rem', border: 'solid 1px #c4c4c4', padding: '0 0.5rem', height: '2rem' }}
+                                value={campusStatus} onChange={x => setCampusStatus(x.target.value)}>
                                     <option value={'ALL'}>All</option>
-                                    <option value={'UCD'}>UCD</option>
-                                    <option value={'UCSF'}>UCSF</option>
-                                    <option value={'UCLA'}>UCLA</option>
-                                    <option value={'UCI'}>UCI</option>
+                                    <option value={'UC Davis'}>UC Davis</option>
+                                    <option value={'UC San Francisco'}>UC San Francisco</option>
+                                    <option value={'UC Los Angeles'}>UC Los Anegles</option>
+                                    <option value={'UC Irvine'}>UC Irvine</option>
                                 </select>
                             </div>
                             <p className={ styles.displayLastUpdated } ><strong>Response Last updated:</strong> {getFormattedDate()}</p>
@@ -55,7 +71,10 @@ export default function PreceptorSurveys({ preceptors }) {
                                 </div>
                             </div >
                             {
-                                preceptors ? preceptors.map((x, ind) => {
+                                filterPreceptorByStatus().length == 0 ? 
+                                <div>No preceptor on this campus</div>
+                                :
+                                filterPreceptorByStatus().map((x, ind) => {
                                 return (
                                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                                         <Link href={`/students/profile?id=${x.id}`}>
@@ -68,8 +87,6 @@ export default function PreceptorSurveys({ preceptors }) {
                                     </div >
                                     )
                                 })
-                                :
-                                <p>Loading... Please wait</p>
                             }
                         </div>
                     </div>

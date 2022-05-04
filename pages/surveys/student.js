@@ -84,7 +84,7 @@ export default function StudentSurveys({ students }) {
                                 : 
                                 getFilteredStudents().map((x, ind) => {
                                 return (
-                                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
+                                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                                         <div className='displaySurveyRow' key={`elem_${ind}`}>
                                             <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstName} {x.lastName}</p>
                                             <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>

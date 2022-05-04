@@ -1,8 +1,8 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { client } from "../../api-lib/azure/azureConfig";
-import { getClinic, getSite } from "../../api-lib/azure/azureOps";
+import { client } from "../../../api-lib/azure/azureConfig";
+import { getClinicOrSiteOrRegion} from "../../../api-lib/azure/azureOps";
 
 export default function AdminInfoAdd(props) {
   const [hover, setHover] = useState(false)
@@ -16,7 +16,7 @@ export default function AdminInfoAdd(props) {
   async function updateInfo() {
     const database = client.database("uc-ctct");
     const container = database.container("Master");
-    const clinic_data = await getClinic(props.id);
+    const clinic_data = await getClinicOrSiteOrRegion(props.id);
     let adminInfo = clinic_data.adminInfo;
     adminInfo.push(info);
     const replaceOperation = [

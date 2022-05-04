@@ -6,6 +6,7 @@ const db = client.database("uc-ctct");
 const Master = db.container("Master");
 const Preceptors = db.container("Preceptors");
 const Students = db.container("Students");
+const Admins = db.container("Admins");
 
 // SQL Query Literals
 // TODO: Get better naming scheme to differentiate literals from the functions.
@@ -88,23 +89,12 @@ export const getAllStudents = async () => {
 }
 
 /**
- * Query for singular region.
- * @param {String} id - UUID of region to query. 
- */
-export const getRegion = async (id) => {
-  try {
-    const { resource: data } = await Master.item(id, id).read();
-    return data;
-  } catch (error) {
-    throw new Error(`Issue fetching region with id (${id}). Error is: ${error}`);
-  }
-}
-
-/**
  * Query for singular clinic.
  * @param {String} id - UUID of clinic to query.
+ * getClinicSiteReg, choose one to get either Clinic Site or Region
  */
-export const getClinic = async (id) => {
+
+export const getClinicOrSiteOrRegion = async (id) => {
   try {
     const { resource: data } = await Master.item(id, id).read();
     return data;
@@ -124,19 +114,6 @@ export const getClinicsFromSite = async (id) => {
     throw new Error(`Issue fetching clinics connected to site ${id}. Error is: ${error}`);
   }
 }
-
-/**
- * Query for singular site.
- * @param {String} id - UUID of site to query.
- */
-export const getSite = async (id) => {
-  try {
-    const { resource: data } = await Master.item(id, id).read();
-    return data;
-  } catch (error) {
-    throw new Error(`Issue with fetching the site: ${id}. Error is: ${error}`);
-  }
-};
 
 /**
  * Get all sites connected to a specfic region.
@@ -221,18 +198,12 @@ export const addClinic = async (clinic_data, site_id) => {
 /**
  * Expects JSON of preceptor_info with name, position, phone, and email.
  * @param  preceptor Information about the preceptor, created before the function call.
- * @param preceptor.name {String} - Name attached.
  * @returns preceptor - Preceptor that was recently added to Preceptors container.
  */
 const createNewPreceptor = async (preceptor) => {
   try {
-    const id = uuidv4().toString();
-    const actualPreceptor = {
-      id: id,
-      ...preceptor
-    }
-    await Preceptors.items.create(actualPreceptor);
-    return actualPreceptor;
+    await Preceptors.items.create(preceptor);
+    return preceptor;
   } catch (error) {
     throw new Error(`Issue while creating new preceptor profile. Error is: ${error}`);
   }
@@ -249,7 +220,7 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
     const preceptor = await createNewPreceptor(preceptor_info);
 
     // Get clinic data to access array of preceptors.
-    const clinic = await getClinic(id);
+    const clinic = await getClinicOrSiteOrRegion(id);
     let preceptors = clinic.preceptorInfo;
 
     // Add new id of the recently created preceptor to array. 
@@ -320,7 +291,7 @@ export const removeClinic = async (id, siteId) => {
  * Then will remove the site itself.
  * @param {String} id - UUID of the site that is being removed. 
  */
-export const removeSite = async (id, regionId) => {
+export const removeSite = async (id, status, regionId) => {
   try {
     // Query all related clinics
     const clinics = await getClinicsFromSite(id);
@@ -333,16 +304,19 @@ export const removeSite = async (id, regionId) => {
     // Remove site itself. 
     await Master.item(id, id).delete();
 
-    // Update number of sites left in region
-    const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
-    const replaceOperation =
-      [{
-        op: "replace",
-        path: "/total_sites",
-        value: previous_num_sites["total_sites"] - 1
-      }]
-    await Master.item(regionId, regionId).patch(replaceOperation)
+    console.log(status)
 
+    // Update number of active sites left in region, only if the site was active
+    if (status == 8 || status == 10) {
+      const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
+      const replaceOperation =
+        [{
+          op: "replace",
+          path: "/total_sites",
+          value: previous_num_sites["total_sites"] - 1
+        }]
+      await Master.item(regionId, regionId).patch(replaceOperation)
+    }
   } catch (error) {
     throw new Error(`Issue deleting site with id (${id}). Error is: ${error}`);
   }
@@ -694,12 +668,103 @@ export async function editPreceptorNote(id, new_data) {
     [
       {
         op: "replace",
-        path: "/notes", // This means replace the entire thing
+        path: "/notes",
         value: new_data
       }
     ]
     await Preceptors.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function editStudentNote(id, new_data) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes",
+        value: new_data
+      }
+    ]
+    await Students.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
+  }
+}
+
+export async function getStudentFromEmail(email) {
+  try {
+    const { resources: data } = await Students.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens while finding a student matched to the email. Error is: ${error}`)
+  }
+}
+
+export async function getPreceptorFromEmail(email) {
+  try {
+    const { resources: data } = await Preceptors.items.query(`${selectAllQuery} WHERE c.email = "${email}"`).fetchAll();
+    return data;
+  } catch (error) {
+    throw new Error(`Error happens while finding a student matched to the email. Error is: ${error}`)
+  }
+}
+
+export async function updatePreceptorStatus(id, new_status) {
+  try {
+    const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/status",
+        value: new_status
+      }
+    ]
+    await Preceptors.item(id, id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while updating a preceptor's status. Error is: ${error}`)
+  }
+}
+
+export async function incrementRegionSiteCount(region_id) {
+  try {
+    const data = await getClinicOrSiteOrRegion(region_id)
+    const cur_site_ct = data.total_sites
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/total_sites",
+          value: cur_site_ct + 1
+      }];
+    await Master.item(region_id, region_id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while incrementing region's site count. Error is: ${error}`)
+  }
+}
+
+export async function decrementRegionSiteCount(region_id) {
+  try {
+    const data = await getClinicOrSiteOrRegion(region_id)
+    const cur_site_ct = data.total_sites
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/total_sites",
+          value: cur_site_ct - 1
+      }];
+    await Master.item(region_id, region_id).patch(replaceOperation)
+  } catch (error) {
+    throw new Error(`Error happens while incrementing region's site count. Error is: ${error}`)
+  }
+}
+
+export async function checkIfAdminExist(admin_email) {
+  try {
+    const { resources: data } = await Admins.items.query(`${selectAllQuery} WHERE c.email = "${admin_email}"`).fetchAll();
+    return data.length > 0;
+  } catch (error) {
+    throw new Error(`Error happens while checking for admin's credential. Error is: ${error}`)
   }
 }
