@@ -19,24 +19,30 @@ import NumberChart from '../components/Charts/numberChart';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
+export async function getServerSideProps({ req, res }) {
+  const handler = nextConnect().use(...setup);
+  await handler.run(req, res);
+  const user = req.user;
+  console.log("Getting user: ", user)
+  if (!user) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/',
+      },
+    }
+  }
+  return {
+    props: { user: req.user },
+  };
+}
+// 0 is site, 1 is clinic, 2 is preceptor
+
 // export async function getServerSideProps({ req, res }) {
 //   const handler = nextConnect().use(...setup);
 //   await handler.run(req, res);
 //   const user = req.user;
-//   console.log("Getting user: ", user)
-//   if (!user) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: '/',
-//       },
-//     }
-//   }
-//   return {
-//     props: { user: req.user },
-//   };
 // }
-// 0 is site, 1 is clinic, 2 is preceptor
 
 export default function Main() {
   return (
@@ -68,7 +74,7 @@ export default function Main() {
             </div>
           </div>
           <div className={styles.mainCharts}>
-          <div className={styles.chart}>
+            <div className={styles.chart}>
               <div className={styles.chartTitle}>
                 <p>Matching Goal Percentage per Affiliation</p>
               </div>

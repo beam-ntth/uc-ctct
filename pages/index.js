@@ -25,7 +25,7 @@ import styles from '../styles/Home.module.css'
 // const {resource: result} = await container.scripts.storedProcedure(sprocId).execute(newItem, {partitionKey: newItem[0].category});
 
 export default function Home() {
-  const [ displayError, setDisplayError ] = useState(false)
+  const [displayError, setDisplayError] = useState(false)
 
   return (
     <div className={styles.container}>
@@ -49,7 +49,7 @@ export default function Home() {
             <h1 className={styles.title}>
               Sign In / Register
             </h1>
-            <a className={styles.signinBtn} href="/main">
+            <a className={styles.signinBtn} href="/api/auth/google">
               <img style={{ height: '60%', width: 'auto', paddingRight: '1rem' }} src='/asset/images/google-logo.png' alt='Google Logo' />
               Sign in with Google
             </a>
@@ -58,7 +58,7 @@ export default function Home() {
               Sign in with Outlook
             </a>
           </div>
-          { displayError ? <p className={ styles.warning } >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null }
+          {displayError ? <p className={styles.warning} >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null}
         </div>
       </main>
     </div>
