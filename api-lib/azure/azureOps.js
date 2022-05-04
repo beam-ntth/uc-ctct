@@ -6,6 +6,7 @@ const db = client.database("uc-ctct");
 const Master = db.container("Master");
 const Preceptors = db.container("Preceptors");
 const Students = db.container("Students");
+const Admins = db.container("Admins");
 
 // SQL Query Literals
 // TODO: Get better naming scheme to differentiate literals from the functions.
@@ -753,5 +754,14 @@ export async function decrementRegionSiteCount(region_id) {
     await Master.item(region_id, region_id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while incrementing region's site count. Error is: ${error}`)
+  }
+}
+
+export async function checkIfAdminExist(admin_email) {
+  try {
+    const { resources: data } = await Admins.items.query(`${selectAllQuery} WHERE c.email = "${admin_email}"`).fetchAll();
+    return data.length > 0;
+  } catch (error) {
+    throw new Error(`Error happens while checking for admin's credential. Error is: ${error}`)
   }
 }

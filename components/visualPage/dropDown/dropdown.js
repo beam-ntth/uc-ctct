@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import SearchString from '../../shared/search';
+import {searchString} from '../../shared/search';
 import styles from './Dropdown.module.css'
 
 export default function Dropdown(props) {
   const [filteredData, setFilteredData] = useState(props.choices);
 
   function searchName(substr) {
-    setFilteredData(SearchString(props.choices, substr))
+    setFilteredData(searchString(props.choices, substr))
   }
 
   return (
@@ -28,6 +28,7 @@ export default function Dropdown(props) {
                     } else {
                       newDropDown[ind] = ""
                     }
+                    console.log(newDropDown)
                     props.setddFilter(newDropDown)
                   }} 
                   />

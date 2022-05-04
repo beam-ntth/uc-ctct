@@ -94,6 +94,7 @@
 .warning {
   width: 90%;
   color: red;
+  text-align: center;
 }
 
 @keyframes fade {

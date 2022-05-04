@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import { AiOutlineDownload } from 'react-icons/ai'
 import styles from './DisplaySite.module.css'
-import SearchString from '../../shared/search'
+import {searchString} from '../../shared/search'
 import StatusParser from '../../shared/status';
 import Dropdown from '../dropDown/dropdown';
 import { parse } from 'json2csv';
@@ -46,7 +46,7 @@ export default function DisplaySite(props) {
    * @param {String} substr - search string inputted by the user 
    */
   function searchSiteData(substr) {
-    let finalSearch = SearchString(props.data, substr)
+    let finalSearch = searchString(props.data, substr)
     // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
 

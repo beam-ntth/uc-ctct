@@ -24,9 +24,18 @@ import styles from '../styles/Home.module.css'
 // const sprocId = "spCreateToDoItems";
 // const {resource: result} = await container.scripts.storedProcedure(sprocId).execute(newItem, {partitionKey: newItem[0].category});
 
-export default function Home() {
-  const [displayError, setDisplayError] = useState(false)
+export async function getServerSideProps(context) {
+  const authValue = context.query.auth
+  let displayWarning = null;
+  if (authValue == "failed") {
+    displayWarning = true
+  } else {
+    displayWarning = false
+  }
+  return { props: { displayWarning } }
+}
 
+export default function Home({ displayWarning }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -58,9 +67,9 @@ export default function Home() {
               Sign in with Outlook
             </a>
           </div>
-          {displayError ? <p className={styles.warning} >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null}
-        </div>
-      </main>
-    </div>
+          {displayWarning ? <p className={styles.warning} >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null}
+        </div >
+      </main >
+    </div >
   )
 }
