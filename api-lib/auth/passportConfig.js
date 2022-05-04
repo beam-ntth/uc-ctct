@@ -2,9 +2,9 @@ import passport from "passport";
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
 
 let googleLoginData = {
-  clientID: process.env.CLIENT_ID,
-  clientSecret: process.env.CLIENT_SECRET,
-  callbackURL: `${process.env.LOCAL_URL}api/auth/accepted`,
+  clientID: process.env.NEXT_PUBLIC_CLIENT_ID,
+  clientSecret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
+  callbackURL: `${process.env.NEXT_PUBLIC_LOCAL_URL}api/auth/accepted`,
   proxy: true
 };
 
