@@ -33,11 +33,6 @@ const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/
 export async function getServerSideProps(context) {
   // TODO: JT - FIX AND GET RID OF ANY CODE NOT USING AZURE OP FUNC.
   const location = context.query.location;
-  // const database = client.database("uc-ctct");
-  // const site_container = database.container("Sites");
-  // const clinic_container = database.container("Clinics");
-  // const { resources: data } = await clinic_container.items.query(`SELECT * from c WHERE c.site_id = '${location}'`).fetchAll();
-  // const { resource: site_data } = await site_container.item(location, location).read();
   const data = await getClinicsFromSite(location)
   const site_data = await getClinicOrSiteOrRegion(location)
   return { props: { data, site_data } }

@@ -60,7 +60,7 @@ export default function Main(props) {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header={props.user.name} imgSrc={props.user.photo ? props.user.photo : "/asset/images/user-image.png"} />
+          <Header header={`${(new Date()).getHours() < 12 ? "Good morning," : "Good afternoon,"} ${props.user.name}!`} imgSrc={props.user.photo ? props.user.photo : "/asset/images/user-image.png"} />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
