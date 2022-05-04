@@ -8,7 +8,7 @@ import styles from "../../../../styles/Preceptor.module.css";
 // Import Next Components
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
-import NoteEdit from "../../../../components/clinicPage/noteEdit";
+import AddNewNote from "../../../../components/clinicPage/addNewNote";
 import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 
@@ -18,7 +18,7 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteNote from "../../../../components/shared/forms/editSiteNote";
+import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
 import { removeClinic, getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
@@ -79,7 +79,7 @@ export default function Preceptors({ preceptor }) {
 
   return (
     <React.Fragment>
-      { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Preceptors" id={preceptor.id} /> : null }
+      { openNewNote ? <AddNewNote open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Preceptors" id={preceptor.id} /> : null }
       { openEditNote ? <EditPreceptorNote open={openEditNote} setOpen={setOpenEditNote} reload={router.reload} /> : null }
       { openEditInfo ? <EditPreceptorProfile open={openEditInfo} setOpen={setOpenEditInfo} data={preceptor} reload={router.reload} id={preceptor.id} /> : null }
       <div className={styles.container}>

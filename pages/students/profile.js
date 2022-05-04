@@ -7,7 +7,7 @@ import styles from "../../styles/Preceptor.module.css";
 // Import Next Components
 import Navbar from "../../components/shared/navbar/navbar";
 import Header from "../../components/shared/header/header";
-import NoteEdit from "../../components/clinicPage/noteEdit";
+import AddNewNote from "../../components/clinicPage/addNewNote";
 import Accordion from "../../components/clinicPage/accordion";
 
 // Import DB component
@@ -79,22 +79,22 @@ export default function StudentProfile({ student }) {
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
     const container = database.container("Students");
-    note_data.notes.splice(remove_index, 1)
+    student.notes.splice(remove_index, 1)
     const replaceOperation =
       [
         {
           op: "replace",
           path: "/notes",
-          value: note_data.notes
+          value: student.notes
         }
       ]
-    await container.item(note_data.id, note_data.id).patch(replaceOperation)
+    await container.item(student.id, student.id).patch(replaceOperation)
     router.reload()
   }
 
   return (
     <React.Fragment>
-      { openNewNote ? <NoteEdit open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Students" id={student.id} /> : null }
+      { openNewNote ? <AddNewNote open={openNewNote} setOpen={setOpenNewNote} reload={router.reload} type="Students" id={student.id} /> : null }
       { openEditNote ? <EditStudentNote open={openEditNote} setOpen={setOpenEditNote} reload={router.reload} /> : null }
       { openEditInfo ? <EditStudentProfile open={openEditInfo} setOpen={setOpenEditInfo} data={student} reload={router.reload} id={student.id} /> : null }
       <div className={styles.container}>
