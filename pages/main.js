@@ -16,21 +16,17 @@ import BarChart from '../components/Charts/barcharts';
 import LineChart from '../components/Charts/linechart';
 import React from 'react'
 import NumberChart from '../components/Charts/numberChart';
+import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
 export async function getServerSideProps({ req, res }) {
-  const handler = nextConnect().use(...setup);
-  await handler.run(req, res);
+  runAuthMiddleware(req, res);
   const user = req.user;
   console.log("Getting user: ", user)
+
   if (!user) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/',
-      },
-    }
+    return redirectLogin();
   }
   return {
     props: { user: req.user },
