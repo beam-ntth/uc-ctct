@@ -19,8 +19,6 @@ import NumberChart from '../components/Charts/numberChart';
 import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
-/* Suppress just for development */
-// Example code from https://github.com/hoangvvo/next-connect at .run
 export async function getServerSideProps({ req, res }) {
   runAuthMiddleware(req, res);
   const user = req.user;
@@ -45,17 +43,15 @@ export async function getServerSideProps({ req, res }) {
     props: { user: user },
   };
 }
-// 0 is site, 1 is clinic, 2 is preceptor
 
 export default function Main(props) {
-  console.log(props)
   return (
     <div className={styles.container}>
       <Head>
         <title>UC-CTCT: Main</title>
         <meta name="description" content="University of California - Clinic Coordination Tools" />
         <link rel="icon" href="/favicon.ico" />
-        {/* <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/> */}
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/>
       </Head>
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />

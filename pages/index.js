@@ -1,5 +1,8 @@
+import nextConnect from 'next-connect';
 import Head from 'next/head'
 import { useState } from 'react';
+import { checkIfAdminExist } from '../api-lib/azure/azureOps';
+import setup from '../api-lib/auth/passportSetup';
 import styles from '../styles/Home.module.css'
 
 // export async function getServerSideProps(context) {
@@ -25,6 +28,22 @@ import styles from '../styles/Home.module.css'
 // const {resource: result} = await container.scripts.storedProcedure(sprocId).execute(newItem, {partitionKey: newItem[0].category});
 
 export async function getServerSideProps(context) {
+  // Check if the cookie 
+  const handler = nextConnect().use(...setup);
+  await handler.run(context.req, context.res);
+  const user = context.req.user;
+  if (user) {
+    const adminExist = await checkIfAdminExist(user._json.email)
+    if (adminExist) {
+      return {
+        redirect: {
+          permanent: false,
+          destination: '/main',
+        },
+      }
+    }
+  }
+
   const authValue = context.query.auth
   let displayWarning = null;
   if (authValue == "failed") {
