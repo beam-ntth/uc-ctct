@@ -9,7 +9,7 @@ import styles from "../../../../styles/Database.module.css";
 // Import Next Components
 import Navbar from "../../../../components/shared/navbar/navbar";
 import Header from "../../../../components/shared/header/header";
-import NoteEdit from "../../../../components/clinicPage/noteEdit";
+import AddNewNote from "../../../../components/clinicPage/addNewNote";
 import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
 import {searchString} from "../../../../components/shared/search";
@@ -25,7 +25,7 @@ import EditSite from "../../../../components/shared/forms/editSite";
 import { FiEdit } from "react-icons/fi";
 
 // Only import these components when the user clicks
-const EditSiteNote = dynamic(() => import("../../../../components/shared/forms/editSiteNote"));
+const EditSiteOrClinicNote = dynamic(() => import("../../../../components/shared/forms/editSiteOrClinicNote"));
 const AdminInfoAdd = dynamic(() => import("../../../../components/shared/forms/adminInfoAdd"));
 const AddNewClinic = dynamic(() => import("../../../../components/shared/forms/addClinic"));
 const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/adminInfoEdit"));
@@ -33,11 +33,6 @@ const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/
 export async function getServerSideProps(context) {
   // TODO: JT - FIX AND GET RID OF ANY CODE NOT USING AZURE OP FUNC.
   const location = context.query.location;
-  // const database = client.database("uc-ctct");
-  // const site_container = database.container("Sites");
-  // const clinic_container = database.container("Clinics");
-  // const { resources: data } = await clinic_container.items.query(`SELECT * from c WHERE c.site_id = '${location}'`).fetchAll();
-  // const { resource: site_data } = await site_container.item(location, location).read();
   const data = await getClinicsFromSite(location)
   const site_data = await getClinicOrSiteOrRegion(location)
   return { props: { data, site_data } }
@@ -145,8 +140,8 @@ export default function Clinics({ data, site_data }) {
 
   return (
     <React.Fragment>
-      {openNote ? <NoteEdit open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={site_data.id} /> : null}
-      {openEditForm ? <EditSiteNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
+      {openNote ? <AddNewNote open={openNote} setOpen={setOpenNote} reload={refreshData} type="Sites" id={site_data.id} /> : null}
+      {openEditForm ? <EditSiteOrClinicNote open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
       {openAddClinic ? <AddNewClinic open={openAddClinic} setOpen={setOpenAddClinic} reload={refreshData} siteId={site_data.id} regionId={site_data.region_id} siteName={site_data.name} /> : null}
       {generalOpen ? <EditSite data={data} open={generalOpen} setOpen={setGeneralOpen} reload={refreshData} /> : null}
       {adminAddOpen ? <AdminInfoAdd open={adminAddOpen} setOpen={setAdminAddOpen} reload={router.reload} id={site_data.id} /> : null}

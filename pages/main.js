@@ -16,14 +16,19 @@ import BarChart from '../components/Charts/barcharts';
 import LineChart from '../components/Charts/linechart';
 import React from 'react'
 import NumberChart from '../components/Charts/numberChart';
+import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
 export async function getServerSideProps({ req, res }) {
-  const handler = nextConnect().use(...setup);
-  await handler.run(req, res);
+  runAuthMiddleware(req, res);
   const user = req.user;
-  const adminExist = await checkIfAdminExist(user._json.email)
-  if (!user || !adminExist) {
+  // If have not attempted to login, then redirect back to main login page. 
+  if (!user) {
+    return redirectLogin();
+  }
+  const adminExist = await checkIfAdminExist(user.email);
+  // If user does not have permission, then return to auth failed page
+  if (user && !adminExist) {
     return {
       redirect: {
         permanent: false,
@@ -32,7 +37,7 @@ export async function getServerSideProps({ req, res }) {
     }
   }
   return {
-    props: { user: req.user },
+    props: { user: user },
   };
 }
 
@@ -48,7 +53,7 @@ export default function Main(props) {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header={`${(new Date()).getHours() < 12 ? "Good morning," : "Good afternoon,"} ${props.user.displayName}!`} imgSrc={props.user.photos[0] ? props.user.photos[0].value : "/asset/images/user-image.png"} />
+          <Header header={`${(new Date()).getHours() < 12 ? "Good morning," : "Good afternoon,"} ${props.user.name}!`} imgSrc={props.user.photo ? props.user.photo : "/asset/images/user-image.png"} />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
@@ -66,7 +71,7 @@ export default function Main(props) {
             </div>
           </div>
           <div className={styles.mainCharts}>
-          <div className={styles.chart}>
+            <div className={styles.chart}>
               <div className={styles.chartTitle}>
                 <p>Matching Goal Percentage per Affiliation</p>
               </div>

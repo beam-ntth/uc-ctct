@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
-import { decrementRegionSiteCount, incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
+import { decrementRegionSiteCount, getClinicOrSiteOrRegion, incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 import StatusParser from "../status";
 
 export default function EditSite(props) {
@@ -11,9 +11,7 @@ export default function EditSite(props) {
     const [prevSiteStatus, setPrevSiteStatus] = useState(null)
 
     async function getCurrentData() {
-        const database = client.database("uc-ctct");
-        const site_container = database.container("Master")
-        const { resource: data } = await site_container.item(props.open, props.open).read()
+        const data = await getClinicOrSiteOrRegion(props.open)
         setSite(data)
         setPrevSiteStatus(data.status)
     }
@@ -25,16 +23,12 @@ export default function EditSite(props) {
         [
             {
                 op: "replace",
-                path: "/name",
-                value: site.name
-            },
-            {
-                op: "replace",
-                path: "/status",
-                value: site.status
-            },
+                path: "",
+                value: site
+            }
         ];
         await site_container.item(props.open, props.open).patch(replaceOperation);
+
         if ((prevSiteStatus != 8 || prevSiteStatus != 10) && (site.status == 8 || site.status == 10)) {
             await incrementRegionSiteCount(site.region_id)
         }

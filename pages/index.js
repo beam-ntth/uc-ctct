@@ -33,7 +33,7 @@ export async function getServerSideProps(context) {
   await handler.run(context.req, context.res);
   const user = context.req.user;
   if (user) {
-    const adminExist = await checkIfAdminExist(user._json.email)
+    const adminExist = await checkIfAdminExist(user.email)
     if (adminExist) {
       return {
         redirect: {
@@ -86,9 +86,9 @@ export default function Home({ displayWarning }) {
               Sign in with Outlook
             </a>
           </div>
-          { displayWarning ? <p className={ styles.warning } >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null }
-        </div>
-      </main>
-    </div>
+          {displayWarning ? <p className={styles.warning} >PERMISSION DENIED. Please make sure you use the correct email address or contact IT for support.</p> : null}
+        </div >
+      </main >
+    </div >
   )
 }

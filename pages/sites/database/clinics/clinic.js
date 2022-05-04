@@ -18,7 +18,7 @@ const ClinicInfoEdit = dynamic(() => import("../../../../components/clinicPage/g
 const AdminInfoAdd = dynamic(() => import("../../../../components/shared/forms/adminInfoAdd"));
 const PreceptorInfoAdd = dynamic(() => import("../../../../components/clinicPage/preceptorInfoAdd"));
 const PlacementInfoEdit = dynamic(() => import("../../../../components/clinicPage/placementInfoEdit"));
-const NoteEdit = dynamic(() => import("../../../../components/clinicPage/noteEdit"));
+const AddNewNote = dynamic(() => import("../../../../components/clinicPage/addNewNote"));
 const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/adminInfoEdit"));
 
 // Import DB component
@@ -28,6 +28,7 @@ import { FaRegTrashAlt } from "react-icons/fa";
 import { getClinicOrSiteOrRegion,removeAdmin, removePreceptor } from "../../../../api-lib/azure/azureOps";
 import Marker from "../../../../components/shared/marker/marker";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
+import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
 
 export async function getServerSideProps(context) {
   const clinicName = context.query.name
@@ -57,7 +58,8 @@ export default function ClinicDetails({ data }) {
   const [preceptorOpen, setPreceptorOpen] = useState(false);
   const [preceptorEditOpen, setPreceptorEditOpen] = useState(false);
   const [placementOpen, setPlacementOpen] = useState(false);
-  const [noteOpen, setNoteOpen] = useState(false);
+  const [noteAddOpen, setNoteAddOpen] = useState(false);
+  const [noteEditOpen, setNoteEditOpen] = useState(false);
 
   /**
    * Status of all the forms in this page
@@ -87,6 +89,27 @@ export default function ClinicDetails({ data }) {
     setClinicRegion(region_data.name)
   }
   useEffect(() => clientLoadPreceptor(), [data])
+
+  /**
+   * Remove a note from the clinic
+   * @param {String} remove_index - Index of the note that we want to remove. 
+   */
+  async function removeNoteEntry(remove_index) {
+  const database = client.database("uc-ctct");
+  const clinic_container = database.container("Master");
+  data.notes.splice(remove_index, 1)
+  const replaceOperation =
+    [
+      {
+        op: "replace",
+        path: "/notes",
+        value: site_data.notes
+      }
+    ]
+  await clinic_container.item(data.id, data.id).patch(replaceOperation)
+  router.reload()
+  return 
+}
 
   /**
    * Remove admin data from clinic
@@ -126,7 +149,8 @@ export default function ClinicDetails({ data }) {
       {preceptorOpen ? <PreceptorInfoAdd open={preceptorOpen} setOpen={setPreceptorOpen} reload={router.reload} id={data.id} region={clinicRegion} /> : null}
       {preceptorEditOpen ? <PreceptorInfoEdit open={preceptorEditOpen} setOpen={setPreceptorEditOpen} reload={router.reload} /> : null}
       {placementOpen ? <PlacementInfoEdit data={data} open={placementOpen} setOpen={setPlacementOpen} reload={router.reload} id={data.id} /> : null}
-      {noteOpen ? <NoteEdit open={noteOpen} setOpen={setNoteOpen} reload={router.reload} type="Clinics" id={data.id} /> : null}
+      {noteAddOpen ? <AddNewNote open={noteAddOpen} setOpen={setNoteAddOpen} reload={router.reload} type="Clinics" id={data.id} /> : null}
+      {noteEditOpen ? <EditSiteOrClinicNote open={noteEditOpen} setOpen={setNoteEditOpen} reload={router.reload} /> : null}
       <div className={styles.container}>
         <Head>
           <title>UC-CTCT: Site Management Systems</title>
@@ -317,7 +341,7 @@ export default function ClinicDetails({ data }) {
                   <div>
                     <p className={styles.generalTitleHeader}>Clinical Notes</p>
                   </div>
-                  <div className={styles.editButton} onClick={() => setNoteOpen(true)}>+ Add Notes</div>
+                  <div className={styles.editButton} onClick={() => setNoteAddOpen(true)}>+ Add Notes</div>
                 </div>
                 <div style={{ marginTop: '2rem' }}>
                   {
@@ -325,7 +349,7 @@ export default function ClinicDetails({ data }) {
                     <p style={{ marginBottom: '2rem' }}> Currently, you do not have any notes! </p>
                     :
                     data.notes.map((x, ind) => {
-                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} setOpen={setNoteOpen} />)
+                      return (<Accordion x={x} ind={ind} key={`notes_${ind}`} open={noteEditOpen} setOpen={setNoteEditOpen} id={data.id} remove={removeNoteEntry} />)
                     })
                   }
                 </div>

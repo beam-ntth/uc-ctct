@@ -1,10 +1,10 @@
 import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
-import { getClinicOrSiteOrRegion } from "../../../api-lib/azure/azureOps";
+import { getClinicOrSiteOrRegion, updateSiteNote } from "../../../api-lib/azure/azureOps";
 import { editSiteNote } from "../../../api-lib/azure/azureExecute";
 
-export default function EditSiteNote(props) {
+export default function EditSiteOrClinicNote(props) {
     const [hover, setHover] = useState(false)
     const [id, index, data] = props.open
     const [siteNote, setSiteNote] = useState("")
@@ -26,7 +26,7 @@ export default function EditSiteNote(props) {
         const new_data = site.notes;
         // Get correct note from array of notes. 
         new_data[index] = siteNote
-        await editSiteNote(site, new_data);
+        await updateSiteNote(id, new_data);
         props.setOpen(false)
         props.reload()
     }
