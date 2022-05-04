@@ -23,7 +23,7 @@ import ErrorPopUp from '../../../components/shared/errorPopUp';
 // Only load when user clicks on it to improve performance
 const AddNewSite = dynamic(() => import('../../../components/shared/forms/addSite'));
 const EditSite = dynamic(() => import('../../../components/shared/forms/editSite'));
-const SearchString = dynamic(() => import('../../../components/shared/search'));
+const searchString = dynamic(() => import('../../../components/shared/search'));
 
 export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
@@ -77,7 +77,7 @@ export default function SiteDetails({ data, region_data }) {
    * @param {String} substr - search string inputted by the user 
    */
   function searchSiteName(substr) {
-    setFilteredData(SearchString(data, substr))
+    setFilteredData(searchString(data, substr))
   }
 
   /**

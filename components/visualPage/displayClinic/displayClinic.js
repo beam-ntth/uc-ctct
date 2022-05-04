@@ -3,7 +3,7 @@ import Link from 'next/link'
 import styles from './DisplayClinic.module.css'
 import { IoIosArrowDown } from 'react-icons/io';
 import Dropdown from '../dropDown/dropdown';
-import SearchString from '../../shared/search'
+import {searchString} from '../../shared/search'
 import StatusParser from '../../shared/status';
 import { getAllSites } from '../../../api-lib/azure/azureOps';
 import { AiOutlineDownload } from 'react-icons/ai';
@@ -29,11 +29,11 @@ export default function DisplayClinic(props) {
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
 
   function searchClinicName(substr) {
-    setFilteredClinicData(SearchString(props.data, substr))
+    setFilteredClinicData(searchString(props.data, substr))
   }
 
   function searchSiteData(substr) {
-    let finalSearch = SearchString(props.data, substr)
+    let finalSearch = searchString(props.data, substr)
     // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
     // Check region

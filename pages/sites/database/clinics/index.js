@@ -12,7 +12,7 @@ import Header from "../../../../components/shared/header/header";
 import NoteEdit from "../../../../components/clinicPage/noteEdit";
 import Accordion from "../../../../components/clinicPage/accordion";
 import StatusParser from "../../../../components/shared/status";
-import SearchString from "../../../../components/shared/search";
+import {searchString} from "../../../../components/shared/search";
 
 // Import DB component
 import { client } from '../../../../api-lib/azure/azureConfig';
@@ -127,7 +127,7 @@ export default function Clinics({ data, site_data }) {
    * @param {String} substr - search string inputted by the user 
    */
   function searchClinicName(substr) {
-    setFilteredData(SearchString(data, substr))
+    setFilteredData(searchString(data, substr))
   }
 
   /**

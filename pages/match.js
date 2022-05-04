@@ -4,7 +4,7 @@ import styles from '../styles/Match.module.css'
 
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
-import SearchString from '../components/shared/search'
+import {searchString} from '../components/shared/search'
 import CircularProgress from '@mui/material/CircularProgress'
 
 import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions, addStudentToPreceptor } from '../api-lib/azure/azureOps';
