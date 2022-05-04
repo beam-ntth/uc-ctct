@@ -85,8 +85,8 @@ export default function SiteDetails({ data, region_data }) {
    * @param {String} id - UUID of site to remove. 
    * @param {String} regionId - UUID of region to update total number of sites. 
    */
-  async function removeElement(id, regionId) {
-    await removeSite(id, regionId);
+  async function removeElement(id, site_status, regionId) {
+    await removeSite(id, site_status, regionId);
     refreshData()
     return
   }
@@ -178,7 +178,7 @@ export default function SiteDetails({ data, region_data }) {
                           setTrashHover(newStatus)
                           return
                         }} 
-                        onClick={() => removeElement(x.id, region_data.id)} />
+                        onClick={() => removeElement(x.id, parseInt(x.status), region_data.id)} />
                     </div>
                   )
                 })

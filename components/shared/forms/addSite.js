@@ -34,12 +34,10 @@ export default function AddNewSite(props) {
     async function addSite() {
         try {
             const database = client.database("uc-ctct");
-            const region_container = database.container("Master");
-            const { resource: previous_num_sites } = await region_container.item(props.regionId, props.regionId).read()
             const site_container = database.container("Master");
-            site_container.items.create(site)
-            if (site.status == 8) {
-                incrementRegionSiteCount(props.regionId)
+            await site_container.items.create(site)
+            if (site.status == 8 || site.status == 10) {
+                await incrementRegionSiteCount(props.regionId)
             }
             props.setOpen(false)
             props.reload()

@@ -291,7 +291,7 @@ export const removeClinic = async (id, siteId) => {
  * Then will remove the site itself.
  * @param {String} id - UUID of the site that is being removed. 
  */
-export const removeSite = async (id, regionId) => {
+export const removeSite = async (id, status, regionId) => {
   try {
     // Query all related clinics
     const clinics = await getClinicsFromSite(id);
@@ -304,16 +304,19 @@ export const removeSite = async (id, regionId) => {
     // Remove site itself. 
     await Master.item(id, id).delete();
 
-    // Update number of sites left in region
-    const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
-    const replaceOperation =
-      [{
-        op: "replace",
-        path: "/total_sites",
-        value: previous_num_sites["total_sites"] - 1
-      }]
-    await Master.item(regionId, regionId).patch(replaceOperation)
+    console.log(status)
 
+    // Update number of active sites left in region, only if the site was active
+    if (status == 8 || status == 10) {
+      const { resource: previous_num_sites } = await Master.item(regionId, regionId).read()
+      const replaceOperation =
+        [{
+          op: "replace",
+          path: "/total_sites",
+          value: previous_num_sites["total_sites"] - 1
+        }]
+      await Master.item(regionId, regionId).patch(replaceOperation)
+    }
   } catch (error) {
     throw new Error(`Issue deleting site with id (${id}). Error is: ${error}`);
   }

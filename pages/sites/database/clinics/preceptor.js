@@ -18,7 +18,7 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteNote";
+import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
 import AddNewClinic from "../../../../components/shared/forms/addClinic";
 import { removeClinic, getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
