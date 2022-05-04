@@ -116,7 +116,7 @@
 }
 
 .selectIndiUni {
-  width: 173%;
+  width: 90%;
   height: 30%;
   display: flex;
   justify-content: center;
@@ -125,10 +125,9 @@
   margin-bottom: 2rem;
 }
 
-.universityBtn {
-  width: 25%;
+.universityBtn, .universityBtn2, .universityBtn3, .universityBtn4 {
+  width: 50%;
   height: 95%;
-  background-color: #71c982;
   margin-right: 2rem;
   cursor: pointer;
   color: #079CDB;
@@ -139,60 +138,28 @@
   font-size: 1rem;
   transition: linear 0.2s;
   border-radius: 1rem;
+}
+
+.universityBtn {
+  background-color: #71c982;
 }
 
 .universityBtn2 {
-  width: 25%;
-  height: 95%;
   background-color: #eb934f;
-  margin-right: 2rem;
-  cursor: pointer;
-  color: #079CDB;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  transition: linear 0.2s;
-  border-radius: 1rem;
 }
 
 .universityBtn3 {
-  width: 25%;
-  height: 95%;
   background-color: #5f99bd;
-  margin-right: 2rem;
-  cursor: pointer;
-  color: #079CDB;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  transition: linear 0.2s;
-  border-radius: 1rem;
 }
 
 .universityBtn4 {
-  width: 25%;
-  height: 95%;
   background-color: #9a74ce;
-  margin-right: 2rem;
-  cursor: pointer;
-  color: #079CDB;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 1rem;
-  transition: linear 0.2s;
-  border-radius: 1rem;
 }
 
 .universityBtn:hover, .universityBtn2:hover, .universityBtn3:hover, .universityBtn4:hover {
   font-size: 1.1rem;
   height: 100%;
-  width: 26%;
+  width: 51%;
 }
 
 .universityBtn p {
