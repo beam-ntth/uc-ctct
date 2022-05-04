@@ -20,22 +20,27 @@ import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware
 import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
 export async function getServerSideProps({ req, res }) {
-  runAuthMiddleware(req, res);
-  const user = req.user;
-  // If have not attempted to login, then redirect back to main login page. 
-  if (!user) {
-    return redirectLogin();
+  const response = await runAuthMiddleware(req, res);
+  // await runAuthMiddleware(req, res);
+  // const user = req.user;
+  // console.log("USER IN SERVERSIDE PROPS", req.user);
+  if (response) {
+    return response;
   }
-  const adminExist = await checkIfAdminExist(user.email);
-  // If user does not have permission, then return to auth failed page
-  if (user && !adminExist) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/?auth=failed',
-      },
-    }
-  }
+  // // If have not attempted to login, then redirect back to main login page. 
+  // if (!user) {
+  //   return redirectLogin();
+  // }
+  // const adminExist = await checkIfAdminExist(user.email);
+  // // If user does not have permission, then return to auth failed page
+  // if (user && !adminExist) {
+  //   return {
+  //     redirect: {
+  //       permanent: false,
+  //       destination: '/?auth=failed',
+  //     },
+  //   }
+  // }
   return {
     props: { user: user },
   };
@@ -48,7 +53,7 @@ export default function Main(props) {
         <title>UC-CTCT: Main</title>
         <meta name="description" content="University of California - Clinic Coordination Tools" />
         <link rel="icon" href="/favicon.ico" />
-        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/>
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css' />
       </Head>
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
