@@ -1,0 +1,189 @@
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.main {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.content {
+    height: 75vh;
+    width: 92%;
+}
+
+.lastUpdated {
+    width: 80%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.lastUpdated p {
+    margin-right: 2rem;
+}
+
+.menu {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.optionSection {
+    height: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainOption {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: auto;
+}
+
+.menuOption, .uploadOption {
+    background-color: #F5F5F5;
+    border-radius: 2rem;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: linear 0.2s;
+}
+
+.menuOption {
+    height: 85%;
+    min-width: 33rem;
+    width: 65%;
+    flex-direction: column;
+}
+
+.menuOption:hover {
+    height: 87%;
+    min-width: 35rem;
+    width: 67%;
+}
+
+.uploadOption {
+    height: 15%;
+    min-width: 33rem;
+    width: 65%;
+    flex-direction: row;
+}
+
+.uploadOption:hover {
+    height: 17%;
+    min-width: 35rem;
+    width: 67%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    height: 10%;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.rowTitle {
+    display: flex;
+    width: 85%;
+}
+
+.titleCol1 {
+    width: 25%;
+    margin-left: 2rem;
+    font-size: large;
+}
+
+.titleCol2 {
+    width: 30%;
+    font-size: large;
+}
+
+.titleCol3 {
+    width: 15%;
+    font-size: large;
+}
+
+.titleCol4 {
+    width: 15%;
+    font-size: large;
+}
+
+.titleCol5 {
+    width: 15%;
+    font-size: large;
+}
+
+.displayLastUpdated {
+    width: 100%;
+    text-align: left;
+    padding-left: 2rem;
+    margin: 0.5rem 0;
+}
+
+.data {
+    background-color: #F5F6FA;
+    margin: 2rem 0 0 7rem;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+    width: auto;
+    padding-left: 5rem;
+    padding-bottom: 4rem;
+    overflow-y: scroll;
+}
+
+.campusFilter, .cohortFilter {
+    border-radius: 0.5rem;
+    border: solid 1px #c4c4c4;
+    padding: 0 0.5rem;
+    height: 2rem;
+}
+
+.cohortFilter {
+    margin-right: 2rem;
+}
+
+/**
+* @deprecated - These stylings are no longer used
+*/
+.sendAllBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    height: 3rem;
+    width: 7rem;
+    border-radius: 0.5rem;
+    border: 1px solid #c4c4c4;
+    cursor: pointer;
+    margin-left: 2rem;
+}
+
+.sendAllBtn p {
+    margin: 0 0.5rem 0 0;
+    font-size: 0.8rem;
+    font-weight: normal;
+}

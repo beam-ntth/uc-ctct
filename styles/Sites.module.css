@@ -1,3 +1,11 @@
+.rowCenter {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem;
+}
+
 .container {
     height: 100vh;
     width: 100vw;
@@ -19,39 +27,112 @@
 }
 
 .menu {
+    height: 35%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0 1rem 0;
+}
+
+.menuOptionTop, .menuOptionBottom {
+    background-color: #F5F5F5;
+    border-radius: 2rem;
+    margin: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: linear 0.3s;
+    margin: 0.5rem;
+}
+
+.menuOptionTop, .menuOptionBottom {
+    height: 55%;
+    min-width: 33rem;
+    width: 85%;
+}
+
+.menuOptionTop:hover, .menuOptionBottom:hover {
+    height: 57%;
+    min-width: 35rem;
+    width: 87%;
+}
+
+.menuOptionTop h1, .menuOptionBottom h1 {
+    margin: 0.8rem;
+    color: #079CDB;
+}
+
+.menuOptionBottom h1 {
+    margin: 0.5rem;
+}
+
+.menuOptionTop p, .menuOptionBottom p {
+    margin: 0;
+    color: #AAB2C8;
+}
+
+.menuOptionBottom p {
+    font-size: 0.8rem;
+}
+
+.activities {
     height: 80%;
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    margin-bottom: 5rem;
 }
 
-.menuOption {
-    height: 75%;
-    width: 38rem;
-    background-color: #F5F5F5;
-    border-radius: 2rem;
-    margin: 1rem;
+.activityBox {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    cursor: pointer;
+    align-items: flex-start;
+    height: 100%;
+    width: 85%;
+    border-radius: 2rem;
+    background-color: #F5F5F5;
+    /* margin-top: 4rem; */
 }
 
-.menuOption:hover {
-    height: 80%;
-    width: 40rem;
-    transition: linear 0.3s;
-}
-
-.menuOption h1 {
-    margin: 1rem;
-    color: #079CDB;
-}
-
-.menuOption p {
+.legend {
     margin: 0;
-    color: #AAB2C8;
+    padding-left: 4rem;
+    display: inline;
+}
+
+
+.legend img {
+    height: 20px;
+    width: auto;
+}
+
+.mapFrame {
+    padding: 0 2rem;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mapContainer {
+    height: 90%;
+    width: 95%;
+}
+
+.actTitle {
+    font-family: 'Lato', sans-serif;
+    font-weight: bold;
+    font-size: 1.7rem;
+    text-align: left;
+    padding: 2rem 0 1rem 4rem;
+    margin: auto;
+    width: 100%;
 }

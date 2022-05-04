@@ -4,38 +4,50 @@ import { v4 as uuidv4 } from 'uuid';
 import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 import { CircularProgress } from "@mui/material";
+import { incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 
 export default function AddNewSite(props) {
     const [hover, setHover] = useState(false)
-    const [site, setSite] = useState({ id: uuidv4().toString(), region_id: props.regionId, affiliation: 'No Affiliation', name: '', total_clinics: 0, status: 0, notes: []})
+    const [site, setSite] = useState(
+        { 
+            id: uuidv4().toString(), 
+            type: 'site',
+            region_id: props.regionId, 
+            name: '', 
+            total_clinics: 0,
+            total_preceptors: 0, 
+            status: 0, 
+            generalInformation: {
+                phoneNumber: '',
+                faxNumber: '',
+                addressLine1: '',
+                addressLine2: '',
+                city: '',
+                state: '',
+                postal: ''
+            }, 
+            adminInfo: [],
+            notes: []
+        }
+    )
 
     async function addSite() {
-        const database = client.database("uc-ctct");
-        const region_container = database.container("Regions");
-        const { resource: previous_num_sites} = await region_container.item(props.regionId, props.regionId).read()
-        const site_container = database.container("Sites");
-        site_container.items.create(site)
-        const replaceOperation =
-        [{
-          op: "replace",
-          path: "/total_sites",
-          value: previous_num_sites["total_sites"] + 1
-        }];
-        await region_container.item(props.regionId, props.regionId).patch(replaceOperation)
-        props.setOpen(false)
-        props.reload()
+        try {
+            const database = client.database("uc-ctct");
+            const site_container = database.container("Master");
+            await site_container.items.create(site)
+            if (site.status == 8 || site.status == 10) {
+                await incrementRegionSiteCount(props.regionId)
+            }
+            props.setOpen(false)
+            props.reload()
+        } catch (error) {
+            props.setOpen(false)
+            props.displayError(true)
+            props.humanText("There seems to be a problem with the database at this time.")
+            props.errorText(`${error}`)
+        }
     }
-
-    // Allow the user to use 'Enter' to submit changes, on top of clicking 'Save'
-    // useEffect(() => {
-    //     document.addEventListener("keydown", e => {
-    //         if (e.key === 'Enter') {
-    //             createNewRegion()
-    //             props.setOpen(false)
-    //             return
-    //         }
-    //     })
-    // })
 
     const [submittingForm, setSubmittingForm] = useState(false)
 
@@ -54,23 +66,20 @@ export default function AddNewSite(props) {
                 :
                 (<React.Fragment>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Add New Region</p>
+                        <p className="editTitle">Add New Site</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
                     <div style={{width: '90%'}}>
-                        <p><strong>Name:</strong><input placeholder="Site Name" onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.name = e.target.value
-                            setSite(newSite)
-                            return
-                        }} /> </p>
-                        <p><strong>Affiliation:</strong><input placeholder="All Site Affiliations" onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.affiliation = e.target.value
-                            setSite(newSite)
-                            return
-                        }} /> </p>
+                        <p>
+                            <strong>Name:</strong>
+                            <input placeholder="Site Name" onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.name = e.target.value
+                                setSite(newSite)
+                                return
+                            }} /> 
+                        </p>
                         <p>
                             <strong>Status:</strong>
                             <select value={site.status} onChange={(e) => {
@@ -82,6 +91,64 @@ export default function AddNewSite(props) {
                                 { StatusParser("sites", -1) }
                             </select>
                         </p>
+                        <p className="editSubTitle">General Information</p>
+                        <p className="editCaption">You do not need to add everything right now</p>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.phoneNumber = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.faxNumber = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.addressLine1 = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.addressLine2 = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>City:</strong><input value={site.generalInformation.city} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.city = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>State:</strong><input value={site.generalInformation.state} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.state = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Postal:</strong><input value={site.generalInformation.postal} onChange={(e) => {
+                            let newSite = {...site}
+                            newSite.generalInformation.postal = e.target.value
+                            setSite(newSite)
+                            return
+                            }} /> </p>
+                        </div>
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
                         <div className="saveBtn" onClick={() => {
@@ -108,14 +175,26 @@ export default function AddNewSite(props) {
                     font-size: 1.3rem;
                     font-weight: bold;
                 }
+
+                .editSubTitle {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    margin: 0;
+                }
+
+                .editCaption {
+                    font-size: 0.8rem;
+                    margin-bottom: 0.5rem;
+                    color: #C4C4C4;
+                }
                 
                 .editScreen {
                     position: absolute;
-                    height: 45vh;
+                    height: 75vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
-                    top: 20vh;
+                    top: 10vh;
                     left: 25vw;
                     z-index: 901;
                     display: flex;

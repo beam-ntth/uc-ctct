@@ -10,33 +10,25 @@ import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
 
 import DisplaySite from '../../../components/visualPage/displaySite/displaySite';
-
 const DisplayClinic = dynamic(() => import('../../../components/visualPage/displayClinic/displayClinic'));
 const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/displayPreceptor/displayPreceptor'));
 
 // Import DB ops.
-import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions,
-   getAllRegions, getDistinctSiteAffiliations } from '../../../api-lib/azure/azureOps'
+import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions, getAllRegions } from '../../../api-lib/azure/azureOps'
+import { useRouter } from 'next/router';
 
 export async function getServerSideProps() {
-  // const database = client.database("uc-ctct");
-  // const site_container = database.container("Sites");
-  // const clinic_container = database.container("Clinics");
-  // const preceptor_container = database.container("Preceptors");
-  // const { resources: site_data } = await site_container.items.query("SELECT * FROM c").fetchAll();
-  // const { resources: clinic_data } = await clinic_container.items.query("SELECT * FROM c").fetchAll();
-  // const { resources: preceptor_data } = await preceptor_container.items.query("SELECT * FROM c").fetchAll();
   const site_data = await getAllSites();
   const regionChoices = await getDistinctRegions();
-  const affiliationChoices = await getDistinctSiteAffiliations();
-  return { props: { site_data, regionChoices, affiliationChoices } }
+  return { props: { site_data, regionChoices } }
 }
 
-export default function Visualization({ site_data, regionChoices, affiliationChoices }) {
+export default function Visualization({ site_data, regionChoices }) {
   /**
    * Status of search setting; 0 = Sites, 1 = Clinics, 2 = Preceptors
    */
   const [searchSetting, setSearchSetting] = useState(0)
+  const affiliationChoices = ["UCD", "UCSF", "UCLA", "UCI"]
 
   /**
    * Store lazy loaded data in UseState() so React knows to re-render component
@@ -65,7 +57,7 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
    */
   useEffect(() => {
     lazyLoadData()
-    const stickyValue = window.localStorage.getItem('pageSetting');
+    const stickyValue = window.localStorage.getItem('vizPageSetting');
     stickyValue !== null ? setSearchSetting(JSON.parse(stickyValue)) : setSearchSetting(0)
   }, [])
 
@@ -74,8 +66,10 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
    * in the browser, they don't have tp re-choose the page again
    */
   useEffect(() => {
-    window.localStorage.setItem('pageSetting', JSON.stringify(searchSetting))
+    window.localStorage.setItem('vizPageSetting', JSON.stringify(searchSetting))
   }, [searchSetting])
+
+  const router = useRouter();
 
   return (
     <React.Fragment>
@@ -88,7 +82,7 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" />
+            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" back={router.back} />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
                 <p className={styles.toggleTitle}
@@ -101,8 +95,7 @@ export default function Visualization({ site_data, regionChoices, affiliationCho
                   style={searchSetting === 2 ? { fontWeight: 'bold', opacity: '100%' } : { opacity: '60%' }}
                   onClick={() => setSearchSetting(2)} > Preceptor </p>
               </div>
-              {searchSetting === 0 ? <DisplaySite region_data={regionData} data={site_data}
-                region_choices={regionChoices} affiliation_choices={affiliationChoices} /> : null}
+              {searchSetting === 0 ? <DisplaySite region_data={regionData} data={site_data} region_choices={regionChoices} affiliation_choices={affiliationChoices} /> : null}
               {searchSetting === 1 ? (clinicData == null ? <p>Loading...</p> : <DisplayClinic data={clinicData} region_data={regionData} region_choices={regionChoices} sites={site_data} />) : null}
               {searchSetting === 2 ? (preceptorData == null ? <p>Loading...</p> : <DisplayPreceptor data={preceptorData} clinicData={clinicData} choices={regionChoices} />) : null}
             </div>

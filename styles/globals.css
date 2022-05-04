@@ -15,7 +15,7 @@ a {
   height: 4px !important;
 }
 
-.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow {
+.displayRow, .displayVizRow, .displayRegionRow, .displayStudentRow, .displaySurveyRow, .displayMatchRow {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -54,19 +54,26 @@ a {
 }
 
 .displayRegionRow {
-  width: 80%;
+  width: 90%;
 }
 
 .displayRegionRow:hover {
-  width: 81%;
+  width: 91%;
 }
 
 .displayStudentRow {
   width: 90%;
+  font-weight: normal;
 }
 
 .displayStudentRow:hover {
   width: 91%;
+}
+
+.displaySurveyRow, .displayMatchRow {
+  width: 85%;
+  font-weight: normal;
+  cursor: default;
 }
 
 .row1Sites {
@@ -109,7 +116,8 @@ a {
   font-weight: bold;
 }
 
-.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7, .siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13 {
+.siteTag0, .siteTag1, .siteTag2, .siteTag3, .siteTag4, .siteTag5, .siteTag6, .siteTag7,
+.siteTag8, .siteTag9, .siteTag10, .siteTag11, .siteTag12, .siteTag13, .siteTag14 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -117,11 +125,11 @@ a {
 }
 
 .siteTag0 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag1 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag2 {
@@ -129,53 +137,56 @@ a {
 }
 
 .siteTag3 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag4 {
-  background-color: #d24641;
+  background-color: #e7e453;
 }
 
 .siteTag5 {
   background-color: #e7e453;
- 
 }
 
 .siteTag6 {
   background-color: #e7e453;
-  
 }
 
 .siteTag7 {
-  background-color: #89c85c;
-}
-
-.siteTag8 {
   background-color: #e7e453;
 }
 
-.siteTag9 {
-  background-color:  #d24641;
+.siteTag8 {
+  background-color: #89c85c;
+}
 
+.siteTag9 {
+  background-color: #e7e453;
 }
 
 .siteTag10 {
-  background-color: rgb(62, 57, 57);
+  background-color:  #89c85c;;
 }
 
 .siteTag11 {
-  background-color: rgb(62, 57, 57);
+  background-color: #d24641;
 }
 
 .siteTag12 {
-  background-color: #d24641;
+  background-color: rgb(62, 57, 57);
 }
 
 .siteTag13 {
   background-color: rgb(62, 57, 57);
 }
 
-.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5, .preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9{
+.siteTag14 {
+  background-color: #d24641;
+}
+
+
+.preceptorTag0, .preceptorTag1, .preceptorTag2, .preceptorTag3, .preceptorTag4, .preceptorTag5,
+.preceptorTag6, .preceptorTag7, .preceptorTag8, .preceptorTag9 {
   height: 100%;
   width: 3%;
   border-start-end-radius: 1rem;
@@ -220,6 +231,45 @@ a {
 
 .preceptorTag9 {
   background-color: #d24641;
+}
+
+.clinicTag0, .clinicTag1, .clinicTag2, .clinicTag3, .clinicTag4, .clinicTag5, 
+.clinicTag6, .clinicTag7, .clinicTag8, .clinicTag9 {
+  height: 100%;
+  width: 3%;
+  border-start-end-radius: 1rem;
+  border-end-end-radius: 1rem;
+}
+
+.clinicTag0 {
+  background-color: #e7e453
+}
+.clinicTag1 {
+  background-color: #e7e453
+}
+.clinicTag2 {
+  background-color: #e7e453
+}
+.clinicTag3 {
+  background-color: #d24641
+}
+.clinicTag4 {
+  background-color: #d24641
+}
+.clinicTag5 {
+  background-color: #e7e453
+}
+.clinicTag6 {
+  background-color: #e7e453
+}
+.clinicTag7 {
+  background-color: #89c85c
+}
+.clinicTag8 {
+  background-color: #d24641
+}
+.clinicTag9 {
+  background-color: #e7e453
 }
 
 .editButton {

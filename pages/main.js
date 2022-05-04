@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import styles from '../styles/Main.module.css'
-import GoogleMapReact from 'google-map-react';
 // import '../styles/fonts.css'
 
 // Authentication Packages
@@ -14,95 +13,50 @@ import Chart from 'chart.js/auto'
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
 import BarChart from '../components/Charts/barcharts';
-import PieChart from '../components/Charts/piechart';
-import React, { useState, useEffect } from 'react'
-import Marker from '../components/shared/marker/marker';
-import { getAllClinics } from '../api-lib/azure/azureOps';
+import LineChart from '../components/Charts/linechart';
+import React from 'react'
+import NumberChart from '../components/Charts/numberChart';
+import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware';
+import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
-/* Suppress just for development */
-// Example code from https://github.com/hoangvvo/next-connect at .run
-// export async function getServerSideProps({ req, res }) {
-//   const handler = nextConnect().use(...setup);
-//   await handler.run(req, res);
-//   const user = req.user;
-//   console.log("Getting user: ", user)
-//   if (!user) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: '/',
-//       },
-//     }
-//   }
-//   return {
-//     props: { user: req.user },
-//   };
-// }
-// 0 is site, 1 is clinic, 2 is preceptor
-
-export default function Main() {
-  const [clinicData, setClinicData] = useState(null)
-
-  const center = {
-    lat: 37.227590,
-    lng: -120.388835
+export async function getServerSideProps({ req, res }) {
+  runAuthMiddleware(req, res);
+  const user = req.user;
+  // If have not attempted to login, then redirect back to main login page. 
+  if (!user) {
+    return redirectLogin();
   }
-  const zoom = 6
-
-  async function loadData() {
-    const cData = await getAllClinics();
-    setClinicData(cData)
+  const adminExist = await checkIfAdminExist(user.email);
+  // If user does not have permission, then return to auth failed page
+  if (user && !adminExist) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/?auth=failed',
+      },
+    }
   }
+  return {
+    props: { user: user },
+  };
+}
 
-  useEffect(() => {
-    loadData()
-  }, [])
-
+export default function Main(props) {
   return (
     <div className={styles.container}>
       <Head>
         <title>UC-CTCT: Main</title>
         <meta name="description" content="University of California - Clinic Coordination Tools" />
         <link rel="icon" href="/favicon.ico" />
-        {/* <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/> */}
       </Head>
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header="Welcome!" imgSrc="/asset/images/user-image.png" />
-          <div className={styles.activities}>
-            <div className={styles.activityBox}>
-              <h1 className={styles.actTitle}>Map of Clinics and Students</h1>
-              <h4 className={styles.legend}><img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} /> <img src='/asset/images/student-pin.png' />  Student</h4>
-              <div className={styles.mapFrame}>
-                <div className={styles.mapContainer}>
-                  <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
-                      {
-                        clinicData != null ?
-                        clinicData.map((x) => {
-                          const genInfo = x.generalInformation
-                          return <Marker lat={genInfo.lat} lng={genInfo.long} 
-                          type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
-                          addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
-                        })
-                        :
-                        null
-                      }
-                      {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={38 + Math.random() * 3} lng={-121 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
-                      }
-                      {
-                        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((x) => <Marker lat={33 + Math.random() * 3} lng={-116 - Math.random() * 2} type={'student'} name={`Student ${x}`} />)
-                      }
-                  </GoogleMapReact>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Header header={`${(new Date()).getHours() < 12 ? "Good morning," : "Good afternoon,"} ${props.user.name}!`} imgSrc={props.user.photo ? props.user.photo : "/asset/images/user-image.png"} />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Chart 1: Detail</p>
+                <p>Number of active students per Affiliation</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
                 <BarChart />
@@ -110,10 +64,18 @@ export default function Main() {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Chart 2: Detail</p>
+                <p>Number of Site based on Categories</p>
+              </div>
+              <NumberChart />
+            </div>
+          </div>
+          <div className={styles.mainCharts}>
+            <div className={styles.chart}>
+              <div className={styles.chartTitle}>
+                <p>Matching Goal Percentage per Affiliation</p>
               </div>
               <div style={{ height: '90%', width: 'auto' }}>
-                <PieChart />
+                <LineChart />
               </div>
             </div>
           </div>
