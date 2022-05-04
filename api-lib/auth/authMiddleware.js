@@ -45,13 +45,22 @@ function base() {
 
 /**
  * Using the base version of our NextConnect handler, run and initialize passport setup. 
- * @param {} req 
- * @param {*} res 
+ * @param {Request} req 
+ * @param {Response} res 
  */
 async function initMiddleware(req, res) {
   return base().run(req, res);
 }
 
+/**
+ * Runs auth middleware with passport logic. 
+ * Checks for authentication, and if user exists. 
+ * If failing any authentication, then returns redirect.
+ * Used in getServerSideProps()
+ * @param {Request} req 
+ * @param {Response} res 
+ * @returns Redirect if no user or user is not authorized. Otherwise null.
+ */
 export async function runAuthMiddleware(req, res) {
   await initMiddleware(req, res);
   const user = req.user;

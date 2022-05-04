@@ -20,29 +20,15 @@ import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware
 import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
 export async function getServerSideProps({ req, res }) {
-  const response = await runAuthMiddleware(req, res);
-  // await runAuthMiddleware(req, res);
-  // const user = req.user;
-  // console.log("USER IN SERVERSIDE PROPS", req.user);
-  if (response) {
-    return response;
+  const redirect = await runAuthMiddleware(req, res);
+
+  // 
+  if (redirect) {
+    return redirect;
   }
-  // // If have not attempted to login, then redirect back to main login page. 
-  // if (!user) {
-  //   return redirectLogin();
-  // }
-  // const adminExist = await checkIfAdminExist(user.email);
-  // // If user does not have permission, then return to auth failed page
-  // if (user && !adminExist) {
-  //   return {
-  //     redirect: {
-  //       permanent: false,
-  //       destination: '/?auth=failed',
-  //     },
-  //   }
-  // }
+
   return {
-    props: { user: user },
+    props: { user: req.user },
   };
 }
 
