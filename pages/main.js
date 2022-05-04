@@ -16,29 +16,32 @@ import BarChart from '../components/Charts/barcharts';
 import LineChart from '../components/Charts/linechart';
 import React from 'react'
 import NumberChart from '../components/Charts/numberChart';
+import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
 /* Suppress just for development */
 // Example code from https://github.com/hoangvvo/next-connect at .run
-// export async function getServerSideProps({ req, res }) {
-//   const handler = nextConnect().use(...setup);
-//   await handler.run(req, res);
-//   const user = req.user;
-//   console.log("Getting user: ", user)
-//   if (!user) {
-//     return {
-//       redirect: {
-//         permanent: false,
-//         destination: '/',
-//       },
-//     }
-//   }
-//   return {
-//     props: { user: req.user },
-//   };
-// }
+export async function getServerSideProps({ req, res }) {
+  const handler = nextConnect().use(...setup);
+  await handler.run(req, res);
+  const user = req.user;
+  const adminExist = await checkIfAdminExist(user._json.email)
+  // console.log("Getting user: ", user)
+  if (!user || !adminExist) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/?auth=failed',
+      },
+    }
+  }
+  return {
+    props: { user: req.user },
+  };
+}
 // 0 is site, 1 is clinic, 2 is preceptor
 
-export default function Main() {
+export default function Main(props) {
+  console.log(props)
   return (
     <div className={styles.container}>
       <Head>
@@ -50,7 +53,7 @@ export default function Main() {
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
         <div className={styles.content}>
-          <Header header="UC PMHNP Consortium Clinical Site Management" imgSrc="/asset/images/user-image.png" />
+          <Header header={props.user.displayName} imgSrc={props.user.photos[0] ? props.user.photos[0].value : "/asset/images/user-image.png"} />
           <div className={styles.mainCharts}>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
