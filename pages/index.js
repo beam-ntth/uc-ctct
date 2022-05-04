@@ -33,7 +33,7 @@ export async function getServerSideProps(context) {
   await handler.run(context.req, context.res);
   const user = context.req.user;
   if (user) {
-    const adminExist = await checkIfAdminExist(user._json.email)
+    const adminExist = await checkIfAdminExist(user.email)
     if (adminExist) {
       return {
         redirect: {

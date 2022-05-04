@@ -22,8 +22,6 @@ import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 export async function getServerSideProps({ req, res }) {
   runAuthMiddleware(req, res);
   const user = req.user;
-  console.log("Getting user: ", user)
-
   // If have not attempted to login, then redirect back to main login page. 
   if (!user) {
     return redirectLogin();
@@ -38,7 +36,6 @@ export async function getServerSideProps({ req, res }) {
       },
     }
   }
-
   return {
     props: { user: user },
   };
