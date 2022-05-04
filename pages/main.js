@@ -48,7 +48,6 @@ export default function Main(props) {
         <title>UC-CTCT: Main</title>
         <meta name="description" content="University of California - Clinic Coordination Tools" />
         <link rel="icon" href="/favicon.ico" />
-        <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'/>
       </Head>
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />
