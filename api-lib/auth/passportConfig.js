@@ -27,6 +27,7 @@ passport.deserializeUser(async (userid, done) => {
     userName: 'testUSerName'
   }
   done(null, JSON.stringify(testObject));
+  console.log("Test");
 });
 
 passport.use(new GoogleStrategy(googleLoginData, gotProfile));
