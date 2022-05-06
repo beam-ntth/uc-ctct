@@ -29,14 +29,19 @@ import { getClinicOrSiteOrRegion,removeAdmin, removePreceptor } from "../../../.
 import Marker from "../../../../components/shared/marker/marker";
 import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
+import { runAuthMiddleware } from "../../../../api-lib/auth/authMiddleware";
 
 export async function getServerSideProps(context) {
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const clinicName = context.query.name
   const data = await getClinicOrSiteOrRegion(clinicName);
-  return { props: { data } }
+  return { props: { data, user: context.req.user } }
 }
 
-export default function ClinicDetails({ data }) {
+export default function ClinicDetails({ data, user }) {
   /**
    * Create a refresh data function to reload page when there 
    * is any changes to the database
@@ -160,7 +165,7 @@ export default function ClinicDetails({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${data.name} - Details`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${data.name} - Details`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.generalBox} style={{ marginTop: '3rem' }}>
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>

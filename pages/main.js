@@ -16,15 +16,12 @@ import BarChart from '../components/Charts/barcharts';
 import LineChart from '../components/Charts/linechart';
 import React from 'react'
 import NumberChart from '../components/Charts/numberChart';
-import { redirectLogin, runAuthMiddleware } from '../api-lib/auth/authMiddleware';
-import { checkIfAdminExist } from '../api-lib/azure/azureOps';
+import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 
 export async function getServerSideProps({ req, res }) {
   const redirect = await runAuthMiddleware(req, res);
-
   // If the user is invalid then we redirect them back to the index.js page
   if (redirect) return redirect;
-
   return {
     props: { user: req.user },
   };

@@ -18,13 +18,18 @@ import { getAllClinics, getAllPreceptors, getStudent } from "../../api-lib/azure
 
 import EditStudentProfile from "../../components/shared/forms/editStudentProfile";
 import EditStudentNote from "../../components/shared/forms/editStudentNote";
+import { runAuthMiddleware } from "../../api-lib/auth/authMiddleware";
 
 export async function getServerSideProps(context) {
-    const student = await getStudent(context.query.id);
-    return { props: { student } }
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
+  const student = await getStudent(context.query.id);
+  return { props: { student, user: context.req.user } }
 }
 
-export default function StudentProfile({ student }) {
+export default function StudentProfile({ student, user }) {
   const surveyData = student.survey.data
   const clinic_id_1 = student.assignment.primary_choice.clinic_id
   const precep_id_1 = student.assignment.primary_choice.preceptor_id
@@ -109,7 +114,7 @@ export default function StudentProfile({ student }) {
         <main className={styles.main}>
           <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header={`Student: ${student.firstName} ${student.middleName} ${student.lastName}`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`Student: ${student.firstName} ${student.lastName}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.data}>
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>

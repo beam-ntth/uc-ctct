@@ -7,15 +7,19 @@ import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
 
 import { getAllPreceptors } from '../../api-lib/azure/azureOps';
-import { IoSend } from 'react-icons/io5';
 import { useRouter } from 'next/router';
+import { runAuthMiddleware } from '../../api-lib/auth/authMiddleware';
 
-export async function getServerSideProps( context ) {
+export async function getServerSideProps( {req, res} ) {
+    const redirect = await runAuthMiddleware(req, res);
+    // If the user is invalid then we redirect them back to the index.js page
+    if (redirect) return redirect;
+
     const preceptors = await getAllPreceptors();
-    return { props: { preceptors } }
+    return { props: { preceptors, user: req.user } }
 }
 
-export default function PreceptorSurveys({ preceptors }) {
+export default function PreceptorSurveys({ preceptors, user }) {
     /**
      * States to keep track of the filter status
      */
@@ -48,7 +52,7 @@ export default function PreceptorSurveys({ preceptors }) {
             <main className={styles.main}>
                 <Navbar icons={[false, false, false, true, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Surveys Management" imgSrc="/asset/images/user-image.png" back={router.back}/>
+                    <Header header="Surveys Management" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back}/>
                     <div className={styles.content}>
                         <div className={styles.data}>
                             <div style={{ width: '100%', marginTop: '1rem', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>

@@ -13,8 +13,18 @@ import Loading from '../../components/shared/loading';
 import { useRouter } from 'next/router';
 import PopUp from '../../components/surveyPage/popUp';
 import { downloadSurveys } from '../../components/surveyPage/downloadSurveys';
+import { runAuthMiddleware } from '../../api-lib/auth/authMiddleware';
 
-export default function StudentMgmt() {
+export async function getServerSideProps({ req, res }) {
+    const redirect = await runAuthMiddleware(req, res);
+    // If the user is invalid then we redirect them back to the index.js page
+    if (redirect) return redirect;
+    return {
+        props: { user: req.user },
+    };
+}  
+
+export default function StudentMgmt({ user }) {
     const [ lastUpdated, setLastUpdated ] = useState(null)
 
     /**
@@ -128,7 +138,7 @@ export default function StudentMgmt() {
                 { sendAllEmail ? <PopUp open={setSendAllEmail} emailList={allEmailAddress} setEmailList={setAllEmailAddress} url={surveyUrl} setUrl={setSurveyUrl} /> : null }
                 <Navbar icons={[false, false, false, true, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Site Management Tools" imgSrc="/asset/images/user-image.png" />
+                    <Header header="Site Management Tools" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
                     <div className={styles.menu}>
                         <div className={ styles.lastUpdated }>
                             <p>Surveys Last Updated: { lastUpdated ? lastUpdated : 'Loading...' }</p>

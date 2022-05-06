@@ -12,16 +12,21 @@ import { IoMdAdd } from 'react-icons/io';
 import CountyList from '../components/shared/countyList';
 import StudentPreview from '../components/matchingPage/displayProfile';
 import { useRouter } from 'next/router';
+import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 
 export async function getServerSideProps(context) {
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const clinics = await getAllClinics();
   const students = await getAllStudents();
   const preceptors = await getAllPreceptors();
   const region_choices = await getDistinctRegions();
-  return { props: { clinics, students, preceptors, region_choices } }
+  return { props: { clinics, students, preceptors, region_choices, user: context.req.user } }
 }
 
-export default function Matching({ clinics, students, preceptors, region_choices }) {
+export default function Matching({ clinics, students, preceptors, region_choices, user }) {
   const router = useRouter()
 
   /**
@@ -122,7 +127,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
         <main className={styles.main}>
           <Navbar icons={[false, false, false, false, true]} />
           <div className={styles.content}>
-            <Header header="Student - Clinic Matching Tool" imgSrc="/asset/images/user-image.png" />
+            <Header header="Student - Clinic Matching Tool" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
             <div className={styles.data}>
               <div className={styles.studentSection} style={ matching ? { width: '47%', marginRight: '1rem', transition: 'linear 0.2s' } : { transition: 'linear 0.2s' } }>
                 {

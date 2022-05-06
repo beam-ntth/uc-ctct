@@ -16,14 +16,19 @@ const DisplayPreceptor = dynamic(() => import('../../../components/visualPage/di
 // Import DB ops.
 import { getAllClinics, getAllSites, getAllPreceptors, getDistinctRegions, getAllRegions } from '../../../api-lib/azure/azureOps'
 import { useRouter } from 'next/router';
+import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
-export async function getServerSideProps() {
+export async function getServerSideProps({req, res}) {
+  const redirect = await runAuthMiddleware(req, res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const site_data = await getAllSites();
   const regionChoices = await getDistinctRegions();
-  return { props: { site_data, regionChoices } }
+  return { props: { site_data, regionChoices, user: req.user } }
 }
 
-export default function Visualization({ site_data, regionChoices }) {
+export default function Visualization({ site_data, regionChoices, user }) {
   /**
    * Status of search setting; 0 = Sites, 1 = Clinics, 2 = Preceptors
    */
@@ -82,7 +87,7 @@ export default function Visualization({ site_data, regionChoices }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Data Analytics" imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header="Data Analytics" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.data}>
               <div className={styles.toggleRow}>
                 <p className={styles.toggleTitle}

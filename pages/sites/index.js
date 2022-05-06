@@ -3,10 +3,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { IoMdAdd } from 'react-icons/io'
-import { FiEdit } from 'react-icons/fi'
+import React, { useState } from 'react';
 import styles from '../../styles/Database.module.css'
 
 // Import DB operation
@@ -15,31 +12,28 @@ import { getAllRegions, removeRegion } from '../../api-lib/azure/azureOps';
 // Importing components
 import Navbar from '../../components/shared/navbar/navbar';
 import Header from '../../components/shared/header/header';
+import { runAuthMiddleware } from '../../api-lib/auth/authMiddleware';
 
 // Only load when user clicks on it to improve performance
 const AddNewRegion = dynamic(() => import('../../components/shared/forms/addRegion'));
 const EditRegion = dynamic(() => import('../../components/shared/forms/editRegion'));
 
-export async function getServerSideProps() {
+export async function getServerSideProps( {req, res} ) {
+  const redirect = await runAuthMiddleware(req, res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const data = await getAllRegions();
-  return { props: { data } }
+  return { props: { data, user: req.user } }
 }
 
-export default function Database({ data }) {
+export default function Database({ data, user }) {
   /**
    * Status of all the forms in this page
    * true = open form, false = close form
    */ 
   const [openForm, setOpenForm] = useState(false)
   const [openEditForm, setOpenEditForm] = useState(false)
-  
-  /**
-   * Status of all the buttons, whether the user hovers over it
-   * true = display as active, false = display as inactive
-   */
-  const [hover, setHover] = useState(false)
-  const [editHover, setEditHover] = useState(Array(data.length).fill(false))
-  // const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
 
   /**
    * Create a refresh data function to reload page when there 
@@ -48,16 +42,6 @@ export default function Database({ data }) {
   const router = useRouter()
   const refreshData = () => {
     router.replace(router.asPath);
-  }
-
-  /**
-   * Remove site element and update total number of sites in the region
-   * @param {String} id - UUID of region to remove. 
-   */
-  async function removeElement(id) {
-    await removeRegion(id);
-    refreshData()
-    return
   }
 
   return (
@@ -73,7 +57,7 @@ export default function Database({ data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header="Management Overview" imgSrc="/asset/images/user-image.png" />
+            <Header header="Management Overview" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
             <div className={styles.data}>
               <div className={styles.row}>
                 <div style={{ display: 'flex', width: '90%' }}>

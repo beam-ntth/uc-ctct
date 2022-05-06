@@ -8,13 +8,18 @@ import Header from '../../components/shared/header/header';
 
 import { getAllStudents } from '../../api-lib/azure/azureOps';
 import { useRouter } from 'next/router';
+import { runAuthMiddleware } from '../../api-lib/auth/authMiddleware';
 
-export async function getServerSideProps( context ) {
+export async function getServerSideProps( {req, res} ) {
+    const redirect = await runAuthMiddleware(req, res);
+    // If the user is invalid then we redirect them back to the index.js page
+    if (redirect) return redirect;
+
     const students = await getAllStudents();
-    return { props: { students } }
+    return { props: { students, user: req.user } }
 }
 
-export default function StudentSurveys({ students }) {
+export default function StudentSurveys({ students, user }) {
     const currentYear = (new Date()).getFullYear()
     const [cohortFilter, setCohortFilter] = useState(currentYear)
     const [campusFilter, setCampusFilter] = useState('ALL')
@@ -48,7 +53,7 @@ export default function StudentSurveys({ students }) {
             <main className={styles.main}>
                 <Navbar icons={[false, false, false, true, false]} /> 
                 <div className={styles.content}>
-                    <Header header="Surveys Management" imgSrc="/asset/images/user-image.png" back={router.back}/>
+                    <Header header="Surveys Management" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back}/>
                     <div className={styles.content}>
                         <div className={styles.data}>
                             <div style={{ width: '100%', marginTop: '1rem', paddingLeft: '2rem', display: 'flex', alignItems: 'center' }}>

@@ -13,17 +13,21 @@ import { useRouter } from 'next/router';
 // Import DB component
 import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
 import { getAllClinics, getAllStudents } from '../../../api-lib/azure/azureOps';
+import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
 export async function getServerSideProps(context) {
+    const redirect = await runAuthMiddleware(context.req, context.res);
+    // If the user is invalid then we redirect them back to the index.js page
+    if (redirect) return redirect;
     // ID for the region location, passed in as query param by previous page. 
     const location = context.query.location
     // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
     const region_data = await getClinicOrSiteOrRegion(location);
     const data = await getSitesFromRegion(location);
-    return { props: { data, region_data, location } }
+    return { props: { data, region_data, location, user: context.req.user } }
   }
 
-export default function SiteMgmt({ data, region_data, location }) {
+export default function SiteMgmt({ data, region_data, location, user }) {
     const [clinicData, setClinicData] = useState(null)
     const [studentData, setStudentData] = useState(null)
     const [mapIsLoading, setMapIsLoading] = useState(true)
@@ -58,7 +62,7 @@ export default function SiteMgmt({ data, region_data, location }) {
             <main className={styles.main}>
                 <Navbar icons={[false, true, false, false, false]} /> 
                 <div className={styles.content}>
-                    <Header header={`Site Management Tools: ${region_data.name}`} imgSrc="/asset/images/user-image.png" back={router.back} />
+                    <Header header={`Site Management Tools: ${region_data.name}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
                     <div className={styles.menu}>
                         <Link href={`/sites/database/site?location=${location}`}>
                             <div className={styles.menuOptionTop}>
