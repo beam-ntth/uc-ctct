@@ -319,55 +319,55 @@ export default function Matching({ clinics, students, preceptors, region_choices
                                       </div>
 
                                       {
-                                      surveyData.homeEmail ?
-                                      <React.Fragment>
-                                        <div className='preceptorInfo'>
-                                          <p style={{ marginRight: '0.5rem' }}><strong>Profession:</strong> {surveyData.profession}</p>
-                                          <p><strong>Age Group:</strong> {surveyData.ageGroup.join(", ")}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Practice Setting:</strong> {surveyData.practiceSetting.join(", ")}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Patient Population:</strong> {surveyData.patientPopulation.join(", ")}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit Type:</strong> {surveyData.visitType}</p>
-                                          <p style={{ marginRight: '0.5rem' }}><strong>Visit % In-Person:</strong> {surveyData.visitPercentInPerson ? surveyData.visitPercentInPerson : "Not Indicated"}</p>
-                                          <p><strong>Visit % Online:</strong> {surveyData.visitPercentOnline ? surveyData.visitPercentOnline : "Not Indicated"}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p style={{ marginRight: '0.5rem' }}><strong>Patient Volume:</strong> {surveyData.patientVolume}</p>
-                                          <p><strong>Patient Acuity:</strong> {surveyData.patientAcuity}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Experience with PMHNP:</strong> {surveyData.experienceWithPmhnp}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Model of Precepting:</strong> {surveyData.modelOfPrecepting}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Order Entry:</strong> {surveyData.orderEntry}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Documents Practice:</strong> {surveyData.documentPractice.join(", ")}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Student Scheduling Preference:</strong> {surveyData.studentSchedule}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Number of days for student to visit:</strong> {surveyData.daysForStudentToAttend}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p><strong>Preferred Days to Precep:</strong> {surveyData.preferredDaysToWork.join(", ")}</p>
-                                        </div>
-                                        <div className='preceptorInfo'>
-                                          <p style={{ marginRight: '0.5rem' }}><strong>Helpful When Students Speak Other Languages:</strong> {surveyData.helpfulStudentOtherLangs}</p>
-                                          <p><strong>Desired Languages:</strong> {surveyData.helpfulStudentOtherLangs == "Yes" ? surveyData.whatOtherLangs : "N/A"}</p>
-                                        </div>
-                                      </React.Fragment>
-                                      :
-                                      <p>Preceptor Still Doesn't Respond to the Survey</p>
+                                        surveyData.homeEmail ?
+                                        <React.Fragment>
+                                          <div className='preceptorInfo'>
+                                            <p style={{ marginRight: '0.5rem' }}><strong>Profession:</strong> {surveyData.profession}</p>
+                                            <p><strong>Age Group:</strong> {surveyData.ageGroup.join(", ")}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Practice Setting:</strong> {surveyData.practiceSetting.join(", ")}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Patient Population:</strong> {surveyData.patientPopulation.join(", ")}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p style={{ marginRight: '0.5rem' }}><strong>Visit Type:</strong> {surveyData.visitType}</p>
+                                            <p style={{ marginRight: '0.5rem' }}><strong>Visit % In-Person:</strong> {surveyData.visitPercentInPerson ? surveyData.visitPercentInPerson : "Not Indicated"}</p>
+                                            <p><strong>Visit % Online:</strong> {surveyData.visitPercentOnline ? surveyData.visitPercentOnline : "Not Indicated"}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p style={{ marginRight: '0.5rem' }}><strong>Patient Volume:</strong> {surveyData.patientVolume}</p>
+                                            <p><strong>Patient Acuity:</strong> {surveyData.patientAcuity}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Experience with PMHNP:</strong> {surveyData.experienceWithPmhnp}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Model of Precepting:</strong> {surveyData.modelOfPrecepting}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Order Entry:</strong> {surveyData.orderEntry}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Documents Practice:</strong> {surveyData.documentPractice.join(", ")}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Student Scheduling Preference:</strong> {surveyData.studentSchedule}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Number of days for student to visit:</strong> {surveyData.daysForStudentToAttend}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p><strong>Preferred Days to Precep:</strong> {surveyData.preferredDaysToWork.join(", ")}</p>
+                                          </div>
+                                          <div className='preceptorInfo'>
+                                            <p style={{ marginRight: '0.5rem' }}><strong>Helpful When Students Speak Other Languages:</strong> {surveyData.helpfulStudentOtherLangs}</p>
+                                            <p><strong>Desired Languages:</strong> {surveyData.helpfulStudentOtherLangs == "Yes" ? surveyData.whatOtherLangs : "N/A"}</p>
+                                          </div>
+                                        </React.Fragment>
+                                        :
+                                        <p>Preceptor Still Doesn't Respond to the Survey</p>
                                       }
                                     </div>
                                     {ind == getAvailablePreceptorPerClinicAndFilters(clinic).length - 1 ? null : <div className='precepLine'></div>}
