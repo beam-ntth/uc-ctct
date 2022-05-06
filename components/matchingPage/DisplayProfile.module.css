@@ -120,3 +120,7 @@
 .unassignBtn:hover {
     padding: 0.35rem 1.1rem;
 }
+
+.noResponse {
+    font-size: 0.8rem;
+}
