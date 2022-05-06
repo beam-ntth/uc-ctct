@@ -2,41 +2,39 @@ import { CircularProgress } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
+import { decrementRegionSiteCount, getClinicOrSiteOrRegion, incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 import StatusParser from "../status";
 
 export default function EditSite(props) {
     const [hover, setHover] = useState(false)
-    const [site, setSite] = useState({ name: 'Loading...', affiliation: 'Loading...' })
+    const [site, setSite] = useState({ name: 'Loading...', generalInformation: { phoneNumber: 'Loading...' } })
+    const [prevSiteStatus, setPrevSiteStatus] = useState(null)
 
     async function getCurrentData() {
-        const database = client.database("uc-ctct");
-        const site_container = database.container("Sites")
-        const { resource: data } = await site_container.item(props.open, props.open).read()
+        const data = await getClinicOrSiteOrRegion(props.open)
         setSite(data)
+        setPrevSiteStatus(data.status)
     }
 
     async function editElement() {
         const database = client.database("uc-ctct");
-        const site_container = database.container("Sites");
+        const site_container = database.container("Master");
         const replaceOperation =
         [
             {
-            op: "replace",
-            path: "/name",
-            value: site.name
-            },
-            {
-            op: "replace",
-            path: "/affiliation",
-            value: site.affiliation
-            },
-            {
-            op: "replace",
-            path: "/status",
-            value: site.status
-            },
+                op: "replace",
+                path: "",
+                value: site
+            }
         ];
         await site_container.item(props.open, props.open).patch(replaceOperation);
+
+        if ((prevSiteStatus != 8 || prevSiteStatus != 10) && (site.status == 8 || site.status == 10)) {
+            await incrementRegionSiteCount(site.region_id)
+        }
+        if ((prevSiteStatus == 8 || prevSiteStatus == 10) && (site.status != 8 || site.status != 10)) {
+            await decrementRegionSiteCount(site.region_id)
+        }
         props.setOpen(false)
         props.reload()
     }
@@ -62,8 +60,8 @@ export default function EditSite(props) {
                 </div>
                 :
                 (<React.Fragment>
-                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem'}}>
-                        <p className="editTitle">Edit Region Name</p>
+                    <div style={{width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                        <p className="editTitle">Edit Site Information</p>
                         <IoClose color={hover ? "#CD0000" : "#C4C4C4"} size={hover ? 38 : 35} style={{transition: '0.2s linear', cursor: 'pointer'}} 
                         onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
                     </div>
@@ -71,14 +69,6 @@ export default function EditSite(props) {
                         <p><strong>Name:</strong><input value={site.name} onChange={(e) => {
                         let newSite = {...site}
                         newSite.name = e.target.value
-                        setSite(newSite)
-                        return
-                        }} /> </p>
-                    </div>
-                    <div style={{ width: '90%' }}>
-                        <p><strong>Affiliation:</strong><input value={site.affiliation} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.affiliation = e.target.value
                         setSite(newSite)
                         return
                         }} /> </p>
@@ -95,6 +85,63 @@ export default function EditSite(props) {
                                 { StatusParser("sites", -1) }
                             </select> 
                         </p>
+                    </div>
+                    <p className="editSubTitle">General Information</p>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.phoneNumber = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.faxNumber = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.addressLine1 = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.addressLine2 = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>City:</strong><input value={site.generalInformation.city} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.city = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>State:</strong><input value={site.generalInformation.state} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.state = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
+                    </div>
+                    <div style={{ width: '90%' }}>
+                        <p><strong>Postal:</strong><input value={site.generalInformation.postal} onChange={(e) => {
+                        let newSite = {...site}
+                        newSite.generalInformation.postal = e.target.value
+                        setSite(newSite)
+                        return
+                        }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={() => {
@@ -121,14 +168,21 @@ export default function EditSite(props) {
                     font-size: 1.3rem;
                     font-weight: bold;
                 }
+
+                .editSubTitle {
+                    font-size: 1rem;
+                    font-weight: bold;
+                    margin: 0.5rem 0 0 0;
+                    color: #626262;
+                }
                 
                 .editScreen {
                     position: absolute;
-                    height: 45vh;
+                    height: 75vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
-                    top: 20vh;
+                    top: 10vh;
                     left: 25vw;
                     z-index: 901;
                     display: flex;

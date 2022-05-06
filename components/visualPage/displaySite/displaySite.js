@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import { AiOutlineDownload } from 'react-icons/ai'
 import styles from './DisplaySite.module.css'
-import SearchString from '../../shared/search'
+import {searchString} from '../../shared/search'
 import StatusParser from '../../shared/status';
 import Dropdown from '../dropDown/dropdown';
 import { parse } from 'json2csv';
@@ -23,7 +23,7 @@ export default function DisplaySite(props) {
    * true = display dropdown, false = hide dropdown
    */
   const [showRegionDropdown, setShowRegionDropdown] = useState(false)
-  const [showSiteDropdown, setShowSiteDropdown] = useState(false)
+  // const [showSiteDropdown, setShowSiteDropdown] = useState(false)
   const [showStatusDropdown, setShowStatusDropdown] = useState(false)
 
   /**
@@ -46,23 +46,25 @@ export default function DisplaySite(props) {
    * @param {String} substr - search string inputted by the user 
    */
   function searchSiteData(substr) {
-    let finalSearch = SearchString(props.data, substr)
+    let finalSearch = searchString(props.data, substr)
     // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
+
     // Check region
     if (!allEqual(regionFilter)) {
       finalSearch = finalSearch.filter(d => {
         const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == d.region_id)[0].name)
-        console.log(regionName)
         return regionFilter.includes(regionName)
       })
     }
+    
     // Check affiliation
-    if (!allEqual(affiFilter)) {
-      finalSearch = finalSearch.filter(d => {
-        return affiFilter.includes(d.affiliation)
-      })
-    }
+    // if (!allEqual(affiFilter)) {
+    //   finalSearch = finalSearch.filter(d => {
+    //     return affiFilter.includes(d.affiliation)
+    //   })
+    // }
+
     // Check status
     if (!allEqual(statusFilter)) {
       finalSearch = finalSearch.filter(d => {
@@ -96,20 +98,20 @@ export default function DisplaySite(props) {
         </div>
         <div className={styles.regionForm}>
           <div className={styles.formTitle} onClick={() => setShowRegionDropdown(!showRegionDropdown)}>
-            <p>Region</p>
+            <p>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showRegionDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch open={showRegionDropdown} setOpen={setShowRegionDropdown}
             choices={regionChoices} ddFilter={regionFilter} setddFilter={setRegionFilter} />
         </div>
-        <div className={styles.siteForm}>
+        {/* <div className={styles.siteForm}>
           <div className={styles.formTitle} onClick={() => setShowSiteDropdown(!showSiteDropdown)}>
             <p>Affiliation</p>
             <IoIosArrowDown color='#079CDB' style={showSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch open={showSiteDropdown} setOpen={setShowSiteDropdown}
             choices={affiChoices} ddFilter={affiFilter} setddFilter={setAffiFilter} />
-        </div>
+        </div> */}
         <div className={styles.statusForm}>
           <div className={styles.formTitle} onClick={() => setShowStatusDropdown(!showStatusDropdown)}>
             <p>Status</p>
@@ -126,9 +128,8 @@ export default function DisplaySite(props) {
       <div className={styles.row}>
         <div style={{display: 'flex', width: '97%'}}>
           <p className={styles.titleCol1}>Site Name</p>
-          <p className={styles.titleCol2}>Region</p>
-          <p className={styles.titleCol3}>Affiliation</p>
-          <p className={styles.titleCol4}>Status</p>
+          <p className={styles.titleCol2}>Affiliation</p>
+          <p className={styles.titleCol3}>Status</p>
         </div>
         <p style={{width: '3%'}}></p>
       </div>
@@ -136,14 +137,33 @@ export default function DisplaySite(props) {
         filteredData.map((x, ind) => {
           const statusText = StatusParser("sites", parseInt(x.status))
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
+          let displayAffi = "N/A"
+          if (regionName != null) {
+            switch (regionName[0].name) {
+              case "UC Davis":
+                displayAffi = "UCD";
+                break;
+              case "UC San Francisco":
+                displayAffi = "UCSF";
+                break;
+              case "UC Los Angeles":
+                displayAffi = "UCLA";
+                break;
+              case "UC Irvine":
+                displayAffi = "UCI";
+                break;
+              default:
+                displayAffi = "N/A";
+                break;
+            }
+          }
           return (
             <Link href={`/sites/database/clinics?location=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
-                  <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{props.region_data == null ? 'Loading...' : regionName[0].name}</p>
-                  <p className={styles.dataCol3}>{x.affiliation}</p>
-                  <p className={styles.dataCol4}>{statusText}</p>
+                  <p className={styles.dataCol1}>{ x.name }</p>
+                  <p className={styles.dataCol2}>{ displayAffi }</p>
+                  <p className={styles.dataCol3}>{ statusText }</p>
                 </div>
                 <div className={`siteTag${x['status']}`}></div>
               </div>

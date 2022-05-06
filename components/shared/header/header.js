@@ -7,11 +7,17 @@ export default function Header(props) {
   const monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"];
   
+  /**
+   * Initialize the time on the dashboard
+   */
   const [datetime, setDatetime] = useState(`Today: ${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, 
   ${currentdate.getFullYear()} - ${currentdate.getHours() < 10 ? `0${currentdate.getHours()}`
   : currentdate.getHours()}:${currentdate.getMinutes() < 10 ? `0${currentdate.getMinutes()}`
   : currentdate.getMinutes()}:${currentdate.getSeconds() < 10 ? `0${currentdate.getSeconds()}` : currentdate.getSeconds()}`)
   
+  /**
+   * Update the time on the dashboard every second
+   */
   useEffect(() => {
     setTimeout(() => setDatetime(`Today: ${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, 
     ${currentdate.getFullYear()} - ${currentdate.getHours() < 10 ? `0${currentdate.getHours()}`

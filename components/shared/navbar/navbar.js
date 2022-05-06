@@ -37,22 +37,19 @@ export default function Navbar(props) {
             <p style={{ textAlign: 'center' }}>Student<br />Management</p>
           </div>
         </Link>
-        <Link href="/404">
+        <Link href="/surveys">
           <div className={styles.dashboard}>
             <RiSurveyFill size={icons[3] ? 40 : 30} color={icons[3] ? '#079CDB' : '#E0E0E0'} />
             <p>Surveys</p>
           </div>
         </Link>
-        <Link href="/404">
+        <Link href="/match">
           <div className={styles.dashboard}>
             <FaPeopleArrows size={icons[4] ? 40 : 30} color={icons[4] ? '#079CDB' : '#E0E0E0'} />
             <p>Matching</p>
           </div>
         </Link>
       </div>
-      <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;1,400;1,500&display=swap');
-      </style>
     </React.Fragment>
   )
 }

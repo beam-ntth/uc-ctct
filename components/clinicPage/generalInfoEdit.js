@@ -4,6 +4,7 @@ import DescriptionGenerator from "./description";
 import { client } from '../../api-lib/azure/azureConfig';
 import { IoClose } from "react-icons/io5";
 import { CircularProgress } from "@mui/material";
+import { mapCityToCounty } from "../shared/cityToCounty";
 
 export default function ClinicInfoEdit(props) {
   const [hover, setHover] = useState(false)
@@ -13,8 +14,7 @@ export default function ClinicInfoEdit(props) {
 
   async function updateInfo() {
     const database = client.database("uc-ctct");
-    const container = database.container("Clinics");
-    const { resource: clinic_data } = await container.item(props.id, props.id).read();
+    const container = database.container("Master");
     const replaceOperation =
       [{
         op: "replace",
@@ -110,6 +110,12 @@ export default function ClinicInfoEdit(props) {
                   setGeneralInfo(newInfo)
                 }} /></p>
                 <p><strong>City:</strong><input value={generalInfo.city} onChange={(e) => {
+                  let newInfo = { ...generalInfo }
+                  newInfo.city = e.target.value
+                  newInfo.county = mapCityToCounty(e.target.value)
+                  setGeneralInfo(newInfo)
+                }} /></p>
+                <p><strong>County:</strong><input disabled value={generalInfo.county} onChange={(e) => {
                   let newInfo = { ...generalInfo }
                   newInfo.city = e.target.value
                   setGeneralInfo(newInfo)

@@ -1,0 +1,126 @@
+.data, .noteData {
+    background-color: #F5F6FA;
+    border-radius: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.noteData {
+    margin-top: 0rem;
+}
+
+.profileImg {
+    height: auto;
+    width: 15%;
+    background-color: #fff;
+}
+
+.profileImg img {
+    height: 100%;
+    width: 100%;
+}
+
+.profileInfo {
+    height: auto;
+    width: 100%;
+    font-size: 0.8rem;
+}
+
+.infoRow {
+    display: flex;
+}
+
+.bioTitle {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    width: 95%;
+}
+
+.bioTitle h4 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 80%;
+    margin: 0;
+    margin-top: 1rem;
+}
+
+.goBackBar {
+    height: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.goBackBtn {
+    height: 2.3rem;
+    width: 30%;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 1rem;
+    padding: 1rem;
+    margin: 1rem 0 0 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    transition: linear 0.2s;
+}
+
+.goBackBtn:hover {
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.choice {
+    height: auto;
+    width: 95%;
+}
+
+.choice h4, .choice p {
+    margin: 0;
+}
+
+.choice h4 {
+    font-size: 1rem;
+    margin: 0.5rem 0;
+}
+
+.choice p {
+    font-size: 0.8rem;
+    margin: 0.4rem 0;
+}
+
+.choiceTitle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.unassignBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+    padding: 0.3rem 1rem;
+    border-radius: 1rem;
+    margin-left: 1rem;
+    color: #fff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: linear 0.2s;
+}
+
+.unassignBtn:hover {
+    padding: 0.35rem 1.1rem;
+}
+
+.noResponse {
+    font-size: 0.8rem;
+}

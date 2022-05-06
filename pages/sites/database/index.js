@@ -1,139 +1,128 @@
-// Importing Next and React modules
+import { useEffect, useState } from 'react';
 import Head from 'next/head'
+import styles from '../../../styles/Sites.module.css'
 import Link from 'next/link'
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
-import { FaRegTrashAlt } from 'react-icons/fa';
-import { IoMdAdd } from 'react-icons/io'
-import { FiEdit } from 'react-icons/fi'
-import styles from '../../../styles/Database.module.css'
+import GoogleMapReact from 'google-map-react';
 
-// Import DB operation
-import { getAllRegions, removeRegion } from '../../../api-lib/azure/azureOps';
-
-// Importing components
 import Navbar from '../../../components/shared/navbar/navbar';
 import Header from '../../../components/shared/header/header';
+import { FaChartPie, FaDatabase } from 'react-icons/fa';
+import Marker from '../../../components/shared/marker/marker';
+import { useRouter } from 'next/router';
 
-// Only load when user clicks on it to improve performance
-const AddNewRegion = dynamic(() => import('../../../components/shared/forms/addRegion'));
-const EditRegion = dynamic(() => import('../../../components/shared/forms/editRegion'));
+// Import DB component
+import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { getAllClinics, getAllStudents } from '../../../api-lib/azure/azureOps';
+import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
-export async function getServerSideProps() {
-  const data = await getAllRegions();
-  return { props: { data } }
-}
+export async function getServerSideProps(context) {
+    const redirect = await runAuthMiddleware(context.req, context.res);
+    // If the user is invalid then we redirect them back to the index.js page
+    if (redirect) return redirect;
+    // ID for the region location, passed in as query param by previous page. 
+    const location = context.query.location
+    // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
+    const region_data = await getClinicOrSiteOrRegion(location);
+    const data = await getSitesFromRegion(location);
+    return { props: { data, region_data, location, user: context.req.user } }
+  }
 
-export default function Database({ data }) {
-  /**
-   * Status of all the forms in this page
-   * true = open form, false = close form
-   */ 
-  const [openForm, setOpenForm] = useState(false)
-  const [openEditForm, setOpenEditForm] = useState(false)
+export default function SiteMgmt({ data, region_data, location, user }) {
+    const [clinicData, setClinicData] = useState(null)
+    const [studentData, setStudentData] = useState(null)
+    const [mapIsLoading, setMapIsLoading] = useState(true)
   
-  /**
-   * Status of all the buttons, whether the user hovers over it
-   * true = display as active, false = display as inactive
-   */
-  const [hover, setHover] = useState(false)
-  const [editHover, setEditHover] = useState(Array(data.length).fill(false))
-  const [trashHover, setTrashHover] = useState(Array(data.length).fill(false))
+    const center = {
+      lat: 36.427590,
+      lng: -120.388835
+    }
+    const zoom = 9
+  
+    async function loadData() {
+      const cData = await getAllClinics();
+      const sData = await getAllStudents();
+      setClinicData(cData)
+      setStudentData(sData)
+      setMapIsLoading(false)
+    }
+  
+    useEffect(() => {
+      loadData()
+    }, [])
 
-  /**
-   * Create a refresh data function to reload page when there 
-   * is any changes to the database
-   */
-  const router = useRouter()
-  const refreshData = () => {
-    router.replace(router.asPath);
-  }
+    const router = useRouter()
 
-  /**
-   * Remove site element and update total number of sites in the region
-   * @param {String} id - UUID of region to remove. 
-   */
-  async function removeElement(id) {
-    await removeRegion(id);
-    refreshData()
-    return
-  }
-
-  return (
-    <React.Fragment>
-      {openEditForm ? <EditRegion open={openEditForm} setOpen={setOpenEditForm} reload={refreshData} /> : null}
-      {openForm ? <AddNewRegion open={openForm} setOpen={setOpenForm} reload={refreshData} /> : null}
-      <div className={styles.container}>
-        <Head>
-          <title>UC-CTCT: Site Management Systems</title>
-          <meta name="description" content="University of California - Clinic Coordination Tools" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <main className={styles.main}>
-          <Navbar icons={[false, true, false, false, false]} />
-          <div className={styles.content}>
-            <Header header="Management Overview" imgSrc="/asset/images/user-image.png" back={router.back} />
-            <div className={styles.data}>
-              <div className={styles.row}>
-                <div style={{ display: 'flex', width: '80%' }}>
-                  <p style={{ width: '70%', marginLeft: '2rem' }}>Region Name</p>
-                  <p style={{ width: '20%' }}>Total sites</p>
-                </div>
-                <IoMdAdd color={hover ? "#079CDB" : "#C4C4C4"} size={hover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => setOpenForm(true)} />
-              </div >
-              {
-                data.map((x, ind) => {
-                  return (
-                    <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                      <Link href={`/sites/database/site?location=${x['id']}`}>
-                        <div className='displayRegionRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '70%' }}>{x['name']} Region</p>
-                          <p style={{ width: '20%', textAlign: 'left', paddingLeft: '1.5rem' }}>{x['total_sites']}</p>
+    return (
+        <div className={styles.container}>
+            <Head>
+                <title>UC-CTCT: Site Management Systems</title>
+                <meta name="description" content="University of California - Clinic Coordination Tools" />
+                <link rel="icon" href="/favicon.ico" />
+            </Head>
+            <main className={styles.main}>
+                <Navbar icons={[false, true, false, false, false]} /> 
+                <div className={styles.content}>
+                    <Header header={`Site Management Tools: ${region_data.name}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
+                    <div className={styles.menu}>
+                        <Link href={`/sites/database/site?location=${location}`}>
+                            <div className={styles.menuOptionTop}>
+                                <div className={styles.rowCenter}>
+                                    <FaDatabase size={30} color='#079CDB'/>
+                                    <h1>Manage Clinical Sites</h1>
+                                </div>
+                                <p style={{ marginBottom: '1rem'}}>Add more clinics, sites, or regions and edit existing information</p>
+                            </div>
+                        </Link>
+                        <Link href={`/sites/visual?location=${location}`}>
+                            <div className={styles.menuOptionBottom}>
+                                <div className={styles.rowCenter}>
+                                    <FaChartPie size={30} color='#079CDB'/>
+                                    <h1>Clinical Site Overview</h1>
+                                </div>
+                                <p style={{ marginBottom: '1rem'}}>Quick overview of all the clinics and chart analysis</p>
+                            </div>
+                        </Link>
+                    </div>
+                    <div className={styles.activities}>
+                        <div className={styles.activityBox}>
+                        <h1 className={styles.actTitle}>Map Overview for { region_data.name }</h1>
+                        <h4 className={styles.legend}>
+                            <img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} />
+                            <img src='/asset/images/student-pin.png' />  Student (Assigned) <span style={{marginRight: '2rem'}} />
+                            <img src="/asset/images/student-unassigned-pin.png" /> Student (Unassigned)
+                            </h4>
+                        {mapIsLoading ? <p style={{ margin: '1rem 0 0 2rem', padding: 0 }}>Loading student and clinic data. Please wait...</p> : null}
+                        <div className={styles.mapFrame}>
+                            <div className={styles.mapContainer}>
+                            <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
+                                {
+                                    clinicData != null ?
+                                    clinicData.map((x) => {
+                                    const genInfo = x.generalInformation
+                                    return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}
+                                    type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
+                                    addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
+                                    })
+                                    :
+                                    null
+                                }
+                                {
+                                    studentData != null ?
+                                    studentData.map(x => {
+                                    const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
+                                    return <Marker lat={x.lat} lng={x.long} type={x.assignedPreceptor ? 'student-assigned' : 'student-unassigned'} 
+                                    id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
+                                    })
+                                    :
+                                    null
+                                }
+                            </GoogleMapReact>
+                            </div>
                         </div>
-                      </Link>
-                      <FiEdit color={editHover[ind] ? "#079CDB" : "#C4C4C4"} size={editHover[ind] ? 38 : 35}
-                        style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                        onMouseEnter={() => {
-                          let newStatus = [...editHover]
-                          newStatus[ind] = true
-                          setEditHover(newStatus)
-                          return
-                        }
-                        } onMouseLeave={() => {
-                          let newStatus = [...editHover]
-                          newStatus[ind] = false
-                          setEditHover(newStatus)
-                          return
-                        }
-                        }
-                        onClick={() => setOpenEditForm([x.id, x.name])} />
-                      <FaRegTrashAlt color={trashHover[ind] ? "#CD0000" : "#C4C4C4"} size={trashHover[ind] ? 38 : 35}
-                        style={{ cursor: 'pointer', transition: '0.2s linear', marginLeft: '1rem' }}
-                        onMouseEnter={() => {
-                          let newStatus = [...trashHover]
-                          newStatus[ind] = true
-                          setTrashHover(newStatus)
-                          return
-                        }
-                        } onMouseLeave={() => {
-                          let newStatus = [...trashHover]
-                          newStatus[ind] = false
-                          setTrashHover(newStatus)
-                          return
-                        }
-                        } onClick={() => removeElement(x.id)} />
-                    </div >
-                  )
-                })
-              }
-            </div >
-          </div >
-        </main >
-      </div >
-      <style >
-      </style>
-    </React.Fragment >
-  )
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    )
 }

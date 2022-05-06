@@ -91,6 +91,12 @@
   animation-fill-mode: forwards
 }
 
+.warning {
+  width: 90%;
+  color: red;
+  text-align: center;
+}
+
 @keyframes fade {
   0% { opacity: 0 }
   50% { opacity: 0.5 }

@@ -1,7 +1,6 @@
-export default function SearchString(data, substr) {
+export function searchString(data, substr) {
     return data.filter((clinic) => {
         const cleanedSearch = substr.toLowerCase();
-        console.log(cleanedSearch)
         let cleanedName = '';
         try {
             cleanedName = clinic.name.toLowerCase()
@@ -9,5 +8,13 @@ export default function SearchString(data, substr) {
             cleanedName = clinic.toLowerCase()
         } 
         return cleanedName.includes(cleanedSearch)
+    })
+}
+
+export function searchPreceptorName(data, substr) {
+    return data.filter(preceptor => {
+        const cleanedSearch = substr.toLowerCase();
+        const name = `${preceptor.firstname} ${preceptor.lastname}`.toLowerCase()
+        return name.includes(cleanedSearch)
     })
 }
