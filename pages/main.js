@@ -22,10 +22,8 @@ import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 export async function getServerSideProps({ req, res }) {
   const redirect = await runAuthMiddleware(req, res);
 
-  // 
-  if (redirect) {
-    return redirect;
-  }
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
 
   return {
     props: { user: req.user },

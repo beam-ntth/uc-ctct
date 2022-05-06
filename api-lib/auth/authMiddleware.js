@@ -73,9 +73,6 @@ export async function runAuthMiddleware(req, res) {
   }
 }
 
-
-
-
 /**
  * Creates JSON object to route back to login page on unsuccessful login.
  * @param {JSON} user
@@ -94,4 +91,3 @@ export async function redirectLogin(user) {
   }
 
 }
-
