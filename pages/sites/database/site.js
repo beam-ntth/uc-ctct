@@ -19,6 +19,7 @@ import { FiEdit } from 'react-icons/fi';
 import { IoMdAdd } from 'react-icons/io';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import ErrorPopUp from '../../../components/shared/errorPopUp';
+import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
 // Only load when user clicks on it to improve performance
 const AddNewSite = dynamic(() => import('../../../components/shared/forms/addSite'));
@@ -26,15 +27,19 @@ const EditSite = dynamic(() => import('../../../components/shared/forms/editSite
 const searchString = dynamic(() => import('../../../components/shared/search'));
 
 export async function getServerSideProps(context) {
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
   // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
   const region_data = await getClinicOrSiteOrRegion(location);
   const data = await getSitesFromRegion(location);
-  return { props: { data, region_data } }
+  return { props: { data, region_data, user: context.req.user } }
 }
 
-export default function SiteDetails({ data, region_data }) {
+export default function SiteDetails({ data, region_data, user }) {
   /**
    * Global state of the current displayed data
    * - Initialized with all the site data
@@ -114,7 +119,7 @@ export default function SiteDetails({ data, region_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${region_data.name} - All Sites`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${region_data.name} - All Sites`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.data} id={ styles.topBox }>
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />

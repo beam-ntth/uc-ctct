@@ -78,7 +78,7 @@ export const downloadSurveys = async(type, STUDENT_SURVEY, checkForProgress, wai
         })
     } else {
         setDisplayText("Finished downloading survey responses. Yay!")
-        downloaded_data.forEach(x => console.log(JSON.stringify(parsePrecpetorData(x))))
+        // downloaded_data.forEach(x => console.log(JSON.stringify(parsePrecpetorData(x))))
         setDisplayText("Updating PRECEPTOR survey responses to the records in the database. Hang Tight!")
         downloaded_data.map(preceptor => parsePrecpetorData(preceptor)).forEach(async(preceptor) => {
             const checkPreceptor = await getPreceptorFromEmail(preceptor.homeEmail)

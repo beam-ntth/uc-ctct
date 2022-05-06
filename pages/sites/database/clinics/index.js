@@ -23,6 +23,7 @@ import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
 import EditSite from "../../../../components/shared/forms/editSite";
 import { FiEdit } from "react-icons/fi";
+import { runAuthMiddleware } from "../../../../api-lib/auth/authMiddleware";
 
 // Only import these components when the user clicks
 const EditSiteOrClinicNote = dynamic(() => import("../../../../components/shared/forms/editSiteOrClinicNote"));
@@ -31,14 +32,17 @@ const AddNewClinic = dynamic(() => import("../../../../components/shared/forms/a
 const AdminInfoEdit = dynamic(() => import("../../../../components/shared/forms/adminInfoEdit"));
 
 export async function getServerSideProps(context) {
-  // TODO: JT - FIX AND GET RID OF ANY CODE NOT USING AZURE OP FUNC.
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const location = context.query.location;
   const data = await getClinicsFromSite(location)
   const site_data = await getClinicOrSiteOrRegion(location)
-  return { props: { data, site_data } }
+  return { props: { data, site_data, user: context.req.user } }
 }
 
-export default function Clinics({ data, site_data }) {
+export default function Clinics({ data, site_data, user }) {
   /**
    * Global state of the current displayed data
    * - Initialized with all the site data
@@ -158,7 +162,7 @@ export default function Clinics({ data, site_data }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${site_data.name} - All Clinics`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`${site_data.name} - All Clinics`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.generalBox} id={ styles.topBox } >
               <div className={styles.generalContent}>
                 <div className={styles.generalTitle}>

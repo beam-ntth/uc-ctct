@@ -85,11 +85,11 @@ export default function DisplayUCD (props) {
                       <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
                           <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                          <p style={{ width: '10%' }}>{surveyData.otherLanguages[0]}</p>
+                          <p style={{ width: '10%' }}>{surveyData.otherLanguages ? surveyData.otherLanguages[0] : "N/A"}</p>
                           <p style={{ width: '10%' }}>{x.county}</p>
-                          <p style={{ width: '10%' }}>{surveyData.practiceSetting[0]}</p>
+                          <p style={{ width: '10%' }}>{surveyData.practiceSetting ? surveyData.practiceSetting[0]: "N/A"}</p>
                           <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.state}, ${x.postal}` : "TBD"}</p>
-                          <p style={{ width: '18%' }}>{surveyData.patientPopulation[0]}</p>
+                          <p style={{ width: '18%' }}>{surveyData.patientPopulation ? surveyData.patientPopulation[0] : "N/A"}</p>
                           <p style={{ width: '15%' }}>{x.metadata ? x.metadata.date_last_updated : "TBD"}</p>
                         </div>
                       </Link>

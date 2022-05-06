@@ -25,8 +25,13 @@ const DisplayUCSF = dynamic(() => import('../../components/studentPage/displaySF
 import { getAllStudents } from '../../api-lib/azure/azureOps';
 import { client } from '../../api-lib/azure/azureConfig';
 import ValidateEditStudentDetails from '../../components/studentPage/validateEditDetails';
+import { runAuthMiddleware } from '../../api-lib/auth/authMiddleware';
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps({ req, res }) {
+  const redirect = await runAuthMiddleware(req, res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const students = await getAllStudents();
 
   /**
@@ -37,10 +42,10 @@ export async function getServerSideProps(context) {
   // const container = database.container("Students");
   // students.map(x => container.item(x.id, x.id).delete())
 
-  return { props: { students } }
+  return { props: { students, user: req.user } }
 }
 
-export default function Student({ students }) {
+export default function Student({ students, user }) {
   const [addStudentHover, setAddStudentHover] = useState(false)
   const [editStudentHover, setEditStudentHover] = useState(false)
   const [page, setPage] = useState('Default')
@@ -229,7 +234,7 @@ export default function Student({ students }) {
         <main className={styles.main}>
           <Navbar icons={[false, false, true, false, false]} />
           <div className={styles.content}>
-            <Header header={`Student Management ${ page == 'Default' ? 'Full Overview' : '- ' + page }`} imgSrc="/asset/images/user-image.png" />
+            <Header header={`Student Management ${ page == 'Default' ? 'Full Overview' : '- ' + page }`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
 
             {/* Hidden file upload button */}
             <input type={'file'} id={'fileElem'} style={{display: 'none'}} onChange={(e) => setCsvFile(e.target.files[0])} />

@@ -18,20 +18,22 @@ import { client } from '../../../../api-lib/azure/azureConfig';
 // Import third-party icons
 import { IoMdAdd } from "react-icons/io";
 import { FaRegTrashAlt } from "react-icons/fa";
-import EditSiteOrClinicNote from "../../../../components/shared/forms/editSiteOrClinicNote";
-import AddNewClinic from "../../../../components/shared/forms/addClinic";
-import { removeClinic, getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
+import { getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
-import PreceptorInfoEdit from "../../../../components/clinicPage/preceptorInfoEdit";
 import EditPreceptorProfile from "../../../../components/shared/forms/editPreceptorProfile";
 import EditPreceptorNote from "../../../../components/shared/forms/editPreceptorNote";
+import { runAuthMiddleware } from "../../../../api-lib/auth/authMiddleware";
 
 export async function getServerSideProps(context) {
+  const redirect = await runAuthMiddleware(context.req, context.res);
+  // If the user is invalid then we redirect them back to the index.js page
+  if (redirect) return redirect;
+
   const preceptor = await getPreceptor(context.query.preceptor_id);
-  return { props: { preceptor } }
+  return { props: { preceptor, user: context.req.user } }
 }
 
-export default function Preceptors({ preceptor }) {
+export default function Preceptors({ preceptor, user }) {
   /**
    * States to keep track of all the pop-ups
    */
@@ -94,7 +96,7 @@ export default function Preceptors({ preceptor }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`Preceptor: ${preceptor.firstname} ${preceptor.lastname}`} imgSrc="/asset/images/user-image.png" back={router.back} />
+            <Header header={`Preceptor: ${preceptor.firstname} ${preceptor.lastname}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.data}>
               <div className={styles.bioTitle}>
                 <h4>General Profile Information</h4>
