@@ -9,10 +9,15 @@ export default function DisplayUCSF (props) {
     /**
      * Keep track of all the dropdown states
      */
-    const [showPrimeSiteDropdown, setShowPrimeSiteDropdown] = useState(false);
-    const [showPrimeStatusDropdown, setShowPrimeStatusDropdown] = useState(false);
-    const [showSecSiteDropdown, setShowSecSiteDropdown] = useState(false);
-    const [showSecStatusDropdown, setShowSecStatusDropdown] = useState(false);
+    const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
+    const [showCountyDropdown, setShowCountyDropdown] = useState(false);
+    const [showPopDropdown, setShowPopDropdown] = useState(false);
+    const [showPopPrefDropdown, setShowPopPrefDropdown] = useState(false);
+
+    const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
+    const setCountyChoices = [... new Set(props.students.map(x => x.county).filter(x => x != null))];
+    const setPopulationChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
+    const setPopulationPrefChoices = [... new Set(props.students.map(x => x.survey.data.patientPopulation).flat().filter(x => x != null))];
      
     return (
         <React.Fragment>
@@ -34,32 +39,32 @@ export default function DisplayUCSF (props) {
                   <input className={styles.searchInput} placeholder="Enter Student Name ..." onChange={(x) => searchClinicName(x.target.value)} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowPrimeSiteDropdown(!showPrimeSiteDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Primary Site</p>
-                    <IoIosArrowDown color='#079CDB' style={showPrimeSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  <div className={styles.formTitle} onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>Language</p>
+                    <IoIosArrowDown color='#079CDB' style={showLanguageDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showPrimeSiteDropdown} setOpen={setShowPrimeSiteDropdown} choices={["N/A"]} />
+                  <Dropdown disableSearch displayOnly open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={setLanguageChoices} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowPrimeStatusDropdown(!showPrimeStatusDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Primary Status</p>
-                    <IoIosArrowDown color='#079CDB' style={showPrimeStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  <div className={styles.formTitle} onClick={() => setShowCountyDropdown(!showCountyDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>County</p>
+                    <IoIosArrowDown color='#079CDB' style={showCountyDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showPrimeStatusDropdown} setOpen={setShowPrimeStatusDropdown} choices={["N/A"]} />
+                  <Dropdown disableSearch displayOnly open={showCountyDropdown} setOpen={setShowCountyDropdown} choices={setCountyChoices} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowSecSiteDropdown(!showSecSiteDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Secondary Site</p>
-                    <IoIosArrowDown color='#079CDB' style={showSecSiteDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>Population</p>
+                    <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showSecSiteDropdown} setOpen={setShowSecSiteDropdown} choices={["N/A"]} />
+                  <Dropdown disableSearch displayOnly open={showPopDropdown} setOpen={setShowPopDropdown} choices={setPopulationChoices} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowSecStatusDropdown(!showSecStatusDropdown)}>
-                    <p style={{ fontSize: '0.7rem' }}>Secondary Status</p>
-                    <IoIosArrowDown color='#079CDB' style={showSecStatusDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  <div className={styles.formTitle} onClick={() => setShowPopPrefDropdown(!showPopPrefDropdown)}>
+                    <p style={{ fontSize: '0.7rem' }}>Population Pref</p>
+                    <IoIosArrowDown color='#079CDB' style={showPopPrefDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showSecStatusDropdown} setOpen={setShowSecStatusDropdown} choices={["N/A"]} />
+                  <Dropdown disableSearch displayOnly open={showPopPrefDropdown} setOpen={setShowPopPrefDropdown} choices={setPopulationPrefChoices} />
                 </div>
               </div>
 
@@ -81,11 +86,11 @@ export default function DisplayUCSF (props) {
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
                       <Link href={`/students/profile?id=${x.id}`}>
                         <div className='displayStudentRow' key={`elem_${ind}`}>
-                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
+                          <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.lastName}</p>
                           <p style={{ width: '10%' }}>{surveyData.otherLanguages ? surveyData.otherLanguages[0] : "N/A"}</p>
                           <p style={{ width: '10%' }}>{x.county}</p>
-                          <p style={{ width: '10%' }}>{surveyData.practiceSetting ? surveyData.practiceSetting[0]: "N/A"}</p>
-                          <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.state}, ${x.postal}` : "TBD"}</p>
+                          <p style={{ width: '10%', paddingRight: '1rem' }}>{surveyData.practiceSetting ? surveyData.practiceSetting[0]: "N/A"}</p>
+                          <p style={{ width: '15%', paddingRight: '1rem' }}>{x.addressLine1 ? `${x.addressLine1}, ${x.addressLine2 ? x.addressLine2 + ', ' : ''}${x.city}, ${x.postal.substring(0, 5)}` : "TBD"}</p>
                           <p style={{ width: '18%' }}>{surveyData.patientPopulation ? surveyData.patientPopulation[0] : "N/A"}</p>
                           <p style={{ width: '15%' }}>{x.metadata ? x.metadata.date_last_updated : "TBD"}</p>
                         </div>
