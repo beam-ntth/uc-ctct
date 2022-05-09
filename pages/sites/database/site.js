@@ -12,7 +12,7 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { getAllSites, getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
 
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
@@ -34,9 +34,13 @@ export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
   // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
-  const region_data = await getClinicOrSiteOrRegion(location);
-  const data = await getSitesFromRegion(location);
-  return { props: { data, region_data, user: context.req.user } }
+  if (location) {
+    const region_data = await getClinicOrSiteOrRegion(location);
+    const data = await getSitesFromRegion(location);
+    return { props: { data, region_data, user: context.req.user } }
+  }
+  const data = await getAllSites()
+  return { props: { data, user: context.req.user } }
 }
 
 export default function SiteDetails({ data, region_data, user }) {
@@ -119,7 +123,7 @@ export default function SiteDetails({ data, region_data, user }) {
         <main className={styles.main}>
           <Navbar icons={[false, true, false, false, false]} />
           <div className={styles.content}>
-            <Header header={`${region_data.name} - All Sites`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
+            <Header header={`${region_data ? region_data.name : "All Affiliations"} - All Sites`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
             <div className={styles.data} id={ styles.topBox }>
               <div className={styles.searchBar}>
                 <input className={styles.searchInput} placeholder="Search Site Name..." onChange={(x) => searchSiteName(x.target.value)} />
@@ -135,8 +139,12 @@ export default function SiteDetails({ data, region_data, user }) {
                   {/* Fake color tab for alignment */}
                   <p style={{ width: '3%', margin: 0 }}></p>
                 </div>
-                <IoMdAdd color={addHover ? "#079CDB" : "#C4C4C4"} size={addHover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
-                  onMouseEnter={() => setAddHover(true)} onMouseLeave={() => setAddHover(false)} onClick={() => setOpenForm(true)} />
+                {
+                  region_data ? 
+                  <IoMdAdd color={addHover ? "#079CDB" : "#C4C4C4"} size={addHover ? 45 : 40} style={{ cursor: 'pointer', transition: '0.2s linear' }}
+                    onMouseEnter={() => setAddHover(true)} onMouseLeave={() => setAddHover(false)} onClick={() => setOpenForm(true)} />
+                  : null
+                }
               </div>
               {
                 filteredData.map((x, ind) => {
