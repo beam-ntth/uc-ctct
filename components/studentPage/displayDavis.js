@@ -14,17 +14,17 @@ export default function DisplayUCD (props) {
    */
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showCountyDropdown, setShowCountyDropdown] = useState(false);
-  const [showPopDropdown, setShowPopDropdown] = useState(false);
+  const [showSettingDropdown, setShowSettingDropdown] = useState(false);
   const [showPopPrefDropdown, setShowPopPrefDropdown] = useState(false);
 
   const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
   const setCountyChoices = [... new Set(props.students.map(x => x.county).filter(x => x != null))];
-  const setPopulationChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
+  const setSettingChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
   const setPopulationPrefChoices = [... new Set(props.students.map(x => x.survey.data.patientPopulation).flat().filter(x => x != null))];
 
   const [languageFilter, setLanguageFilter] = useState(Array(setLanguageChoices.length).fill(""))
   const [countyFilter, setCountyFilter] = useState(Array(setCountyChoices.length).fill(""))
-  const [populationFilter, setPopulationFilter] = useState(Array(setPopulationChoices.length).fill(""))
+  const [settingFilter, setSettingFilter] = useState(Array(setSettingChoices.length).fill(""))
   const [preferencesFilter, setPopulationPrefFilter] = useState(Array(setPopulationPrefChoices.length).fill(""))
 
 
@@ -52,19 +52,21 @@ export default function DisplayUCD (props) {
       })
     }
 
-    if (!allEqual(populationFilter)) {
+    //only want to take the student's first choice
+    if (!allEqual(settingFilter)) {
       finalSearch = finalSearch.filter(student => {
         if (student.survey.data.practiceSetting) {
-          return populationFilter.includes(student.survey.data.practiceSetting[0])
+          return settingFilter.includes(student.survey.data.practiceSetting[0])
         }
         return false;
       })
     }
 
+    //only want to take the student's first choice
     if (!allEqual(preferencesFilter)) {
     finalSearch = finalSearch.filter(student => {
       if (student.survey.data.patientPopulation) {
-        return languageFilter.some(e => student.survey.data.patientPopulation.includes(e))
+        return preferencesFilter.includes(student.survey.data.patientPopulation[0])
       }
       return false;
     })
@@ -81,7 +83,7 @@ export default function DisplayUCD (props) {
    */
   useEffect(() => {
     searchStudentData('')
-  }, [languageFilter, countyFilter, populationFilter, preferencesFilter])
+  }, [languageFilter, countyFilter, settingFilter, preferencesFilter])
 
 
   return (
@@ -122,12 +124,12 @@ export default function DisplayUCD (props) {
                   ddFilter={countyFilter} setddFilter={setCountyFilter} />
               </div>
               <div className={styles.regionForm}>
-                <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
+                <div className={styles.formTitle} onClick={() => setShowSettingDropdown(!showSettingDropdown)}>
                   <p style={{ fontSize: '0.7rem' }}>Setting</p>
-                  <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                  <IoIosArrowDown color='#079CDB' style={showSettingDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
-                <Dropdown disableSearch open={showPopDropdown} setOpen={setShowPopDropdown} choices={setPopulationChoices} 
-                  ddFilter={populationFilter} setddFilter={setPopulationFilter} />
+                <Dropdown disableSearch open={showSettingDropdown} setOpen={setShowSettingDropdown} choices={setSettingChoices} 
+                  ddFilter={settingFilter} setddFilter={setSettingFilter} />
               </div>
               <div className={styles.regionForm}>
                 <div className={styles.formTitle} onClick={() => setShowPopPrefDropdown(!showPopPrefDropdown)}>
