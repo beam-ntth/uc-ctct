@@ -14,11 +14,14 @@ export default function DisplayALL (props) {
     const [showPopDropdown, setShowPopDropdown] = useState(false);
     const [showPopPrefDropdown, setShowPopPrefDropdown] = useState(false);
     const [showStatusDropdown, setShowStatusDropdown] = useState(false);
+    const [showLastAccessedDropdown, setLastAccessedDropdown] = useState(false);
 
     const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
     const setCountyChoices = [... new Set(props.students.map(x => x.county).filter(x => x != null))];
     const setPopulationChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
     const setPopulationPrefChoices = [... new Set(props.students.map(x => x.survey.data.patientPopulation).flat().filter(x => x != null))];
+    const setLastAccessedChoices = [... new Set(props.students.map(x => x.metadata.date_last_updated))];
+
 
     return (
         <React.Fragment>
@@ -77,11 +80,11 @@ export default function DisplayALL (props) {
                   <Dropdown disableSearch displayOnly open={showStatusDropdown} setOpen={setShowStatusDropdown} choices={["Active", "Inactive"]} />
                 </div>
                 <div className={styles.regionForm}>
-                  <div className={styles.formTitle} onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}>
+                  <div className={styles.formTitle} onClick={() => setLastAccessedDropdown(!showLastAccessedDropdown)}>
                     <p style={{ fontSize: '0.7rem' }}>Last Accessed</p>
-                    <IoIosArrowDown color='#079CDB' style={showLanguageDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+                    <IoIosArrowDown color='#079CDB' style={showLastAccessedDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={["N/A"]} />
+                  <Dropdown disableSearch displayOnly open={showLastAccessedDropdown} setOpen={setLastAccessedDropdown} choices={setLastAccessedChoices} />
                 </div>
               </div>
               <div className={styles.row}>
