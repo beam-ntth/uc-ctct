@@ -3,10 +3,15 @@ import Link from 'next/link'
 import styles from './Display.module.css'
 import { IoArrowBack } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
+import { searchStudentName } from '../shared/search'
 import Dropdown from '../visualPage/dropDown/dropdown';
+import { useEffect } from 'react';
+
 
 export default function DisplayUCI (props) {
+  const [filteredStudentData, setFilteredStudentData] = useState(props.students);
     /**
+     * 
      * Keep track of all the dropdown states
      */
     const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
@@ -18,6 +23,64 @@ export default function DisplayUCI (props) {
     const setCountyChoices = [... new Set(props.students.map(x => x.county).filter(x => x != null))];
     const setPopulationChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
     const setPopulationPrefChoices = [... new Set(props.students.map(x => x.survey.data.patientPopulation).flat().filter(x => x != null))];
+
+    const [languageFilter, setLanguageFilter] = useState(Array(setLanguageChoices.length).fill(""))
+    const [countyFilter, setCountyFilter] = useState(Array(setCountyChoices.length).fill(""))
+    const [populationFilter, setPopulationFilter] = useState(Array(setPopulationChoices.length).fill(""))
+    const [preferencesFilter, setPopulationPrefFilter] = useState(Array(setPopulationPrefChoices.length).fill(""))
+
+
+    function searchStudentData(substr) {
+      let finalSearch = searchStudentName(props.students, substr)
+          // If all the elements are "", means we're not filtering anything
+      const allEqual = arr => arr.every(v => v === "")
+
+      //add filtering here
+
+        if (!allEqual(languageFilter)) {
+          finalSearch = finalSearch.filter(student => {
+            if (student.survey.data.otherLanguages) {
+              return languageFilter.some(e => student.survey.data.otherLanguages.includes(e))
+            }
+            return false;
+          })
+          
+        }
+        if (!allEqual(countyFilter)) {
+          finalSearch = finalSearch.filter(student => {
+            if (student.survey.data.county) {
+              return countyFilter.some(e => student.survey.data.county.includes(e))
+            }
+            return false;
+          })
+        }
+  
+        if (!allEqual(populationFilter)) {
+          finalSearch = finalSearch.filter(student => {
+            if (student.survey.data.patientPopulation) {
+              return populationFilter.some(e => student.survey.data.patientPopulation.includes(e))
+           }
+            return false;
+          })
+        }
+  
+       if (!allEqual(preferencesFilter)) {
+        finalSearch = finalSearch.filter(student => {
+          if (student.survey.data.patientPopulation) {
+            return languageFilter.some(e => student.survey.data.patientPopulation.includes(e))
+          }
+          return false;
+        })
+      }
+
+      setFilteredStudentData(finalSearch)
+    }
+
+    useEffect(() => {
+      searchStudentData('')
+    }, [languageFilter, countyFilter, populationFilter, preferencesFilter])
+  
+
 
     return (
         <React.Fragment>
@@ -38,14 +101,15 @@ export default function DisplayUCI (props) {
               {/* Filtering */}
               <div className={styles.filterRow}>
                 <div className={styles.searchBar}>
-                  <input className={styles.searchInput} placeholder="Enter Student Name ..." onChange={(x) => searchClinicName(x.target.value)} />
+                  <input className={styles.searchInput} placeholder="Enter Student Name ..." onChange={(x) => searchStudentData(x.target.value)} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowLanguageDropdown(!showLanguageDropdown)}>
                     <p style={{ fontSize: '0.7rem' }}>Language</p>
                     <IoIosArrowDown color='#079CDB' style={showLanguageDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                   </div>
-                  <Dropdown disableSearch displayOnly open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={setLanguageChoices} />
+                    <Dropdown disableSearch open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={setLanguageChoices} 
+                    ddFilter={languageFilter} setddFilter={setLanguageFilter} />
                 </div>
                 <div className={styles.regionForm}>
                   <div className={styles.formTitle} onClick={() => setShowCountyDropdown(!showCountyDropdown)}>
@@ -82,7 +146,7 @@ export default function DisplayUCI (props) {
                 </div>
               </div >
               {
-                props.students.map((x, ind) => {
+                filteredStudentData.map((x, ind) => {
                   const surveyData = x.survey.data
                   return (
                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>

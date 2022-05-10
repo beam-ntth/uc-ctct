@@ -30,7 +30,6 @@ export default function DisplayUCD (props) {
 
   function searchStudentData(substr) {
     let finalSearch = searchStudentName(props.students, substr)
-    // let finalSearch = props.data
     // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
 
@@ -43,17 +42,33 @@ export default function DisplayUCD (props) {
         return false;
       })
     }
+    
+    if (!allEqual(countyFilter)) {
+      finalSearch = finalSearch.filter(student => {
+        if (student.county) {
+          return countyFilter.includes(student.county)
+        }
+        return false;
+      })
+    }
 
+    if (!allEqual(populationFilter)) {
+      finalSearch = finalSearch.filter(student => {
+        if (student.survey.data.practiceSetting) {
+          return populationFilter.includes(student.survey.data.practiceSetting[0])
+        }
+        return false;
+      })
+    }
 
-
-    // if (!allEqual(populationFilter)) {
-    //   finalSearch = finalSearch.filter(student => {
-    //     if (student.survey.data.patientPopulation) {
-    //       return populationFilter.some(e => student.survey.data.patientPopulation.includes(e))
-    //     }
-    //     return false;
-    //   })
-    // }
+    if (!allEqual(preferencesFilter)) {
+    finalSearch = finalSearch.filter(student => {
+      if (student.survey.data.patientPopulation) {
+        return languageFilter.some(e => student.survey.data.patientPopulation.includes(e))
+      }
+      return false;
+    })
+  }
 
     setFilteredStudentData(finalSearch)
   }
@@ -108,7 +123,7 @@ export default function DisplayUCD (props) {
               </div>
               <div className={styles.regionForm}>
                 <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-                  <p style={{ fontSize: '0.7rem' }}>Population</p>
+                  <p style={{ fontSize: '0.7rem' }}>Setting</p>
                   <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
                 <Dropdown disableSearch open={showPopDropdown} setOpen={setShowPopDropdown} choices={setPopulationChoices} 
