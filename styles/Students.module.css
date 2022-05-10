@@ -105,12 +105,12 @@
 
 .allUniversities {
   width: 90%;
-  height:40%;
+  height: 40%;
 }
 
 .allUniversities:hover {
   width: 91%;
-  height: 11%;
+  height: 41%;
   font-size: 1.1rem;
   transition: linear 0.2s;
 }
@@ -142,7 +142,6 @@
 
 .allUniversities{
   background-color: #f3e67e;
-
 }
 
 .universityBtn {

@@ -27,12 +27,10 @@ export default function DisplayUCD (props) {
   const [settingFilter, setSettingFilter] = useState(Array(setSettingChoices.length).fill(""))
   const [preferencesFilter, setPopulationPrefFilter] = useState(Array(setPopulationPrefChoices.length).fill(""))
 
-
   function searchStudentData(substr) {
     let finalSearch = searchStudentName(props.students, substr)
     // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
-
 
     if (!allEqual(languageFilter)) {
       finalSearch = finalSearch.filter(student => {
@@ -64,17 +62,16 @@ export default function DisplayUCD (props) {
 
     //only want to take the student's first choice
     if (!allEqual(preferencesFilter)) {
-    finalSearch = finalSearch.filter(student => {
-      if (student.survey.data.patientPopulation) {
-        return preferencesFilter.includes(student.survey.data.patientPopulation[0])
-      }
-      return false;
-    })
-  }
+      finalSearch = finalSearch.filter(student => {
+        if (student.survey.data.patientPopulation) {
+          return preferencesFilter.includes(student.survey.data.patientPopulation[0])
+        }
+        return false;
+      })
+    }
 
     setFilteredStudentData(finalSearch)
   }
-
 
   /**
    * This function takes 'effect' by calling searchStudentData()
@@ -84,7 +81,6 @@ export default function DisplayUCD (props) {
   useEffect(() => {
     searchStudentData('')
   }, [languageFilter, countyFilter, settingFilter, preferencesFilter])
-
 
   return (
       <React.Fragment>

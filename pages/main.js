@@ -32,8 +32,8 @@ export default function Main(props) {
     <div className={styles.container}>
       <Head>
         <title>UC-CTCT: Main</title>
+        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <meta name="description" content="University of California - Clinic Coordination Tools" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
         <Navbar icons={[true, false, false, false, false]} />

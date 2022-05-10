@@ -57,9 +57,9 @@ export default function DisplayClinic(props) {
       })
     }
     // Check  population
-    if (!allEqual(populationFilter)) {
+    if (!allEqual(settingFilter)) {
       finalSearch = finalSearch.filter(d => {
-        return populationFilter.includes(d.population)
+        return settingFilter.includes(d.population)
       })
     }
     // Check patient acuity
