@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import StatusParser from "../status";
 import { addNewClinic, incrementClinicCount } from "../../../api-lib/azure/azureExecute";
 import { mapCityToCounty } from "../cityToCounty";
+import { cleanFormName, removeAllAlphabets, removeAllNumbers } from "./formUtils";
 
 export default function AddNewClinic(props) {
   const currentdate = new Date();
@@ -15,6 +16,7 @@ export default function AddNewClinic(props) {
   const datetime = `${monthNames[currentdate.getMonth()]} ${currentdate.getDate()}, ${currentdate.getFullYear()}`
 
   const [hover, setHover] = useState(false)
+  const [requiredTextError, setRequiredTextError] = useState(false)
 
   const [clinic, setClinic] = useState({
     id: uuidv4().toString(),
@@ -87,7 +89,7 @@ export default function AddNewClinic(props) {
   }
 
   const [coorLoading, setCoorLoading] = useState(false)
-  const [errorText, setErrorText] = useState(false)
+  const [coorErrorText, setCoorErrorText] = useState(false)
   const [successText, setSuccessText] = useState(false)
 
   async function searchCoordinates() {
@@ -96,7 +98,7 @@ export default function AddNewClinic(props) {
     const res = await (await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${addr}&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}`)).json()
     // Set the flags whether to show error text or not
     if (res.status == "ZERO_RESULTS") {
-      setErrorText(true)
+      setCoorErrorText(true)
       setCoorLoading(false)
       return
     }
@@ -106,7 +108,7 @@ export default function AddNewClinic(props) {
     newInfo.generalInformation.long = location.lng
     setClinic(newInfo)
     // Hide loading icon back
-    setErrorText(false)
+    setCoorErrorText(false)
     setSuccessText(true)
     setCoorLoading(false)
   }
@@ -134,64 +136,65 @@ export default function AddNewClinic(props) {
             <div style={{ width: '90%' }}>
               <p><strong>Name:</strong><input placeholder="Clinic Name" onChange={(e) => {
                 let newClinic = { ...clinic }
-                newClinic.name = e.target.value
+                newClinic.name = cleanFormName(e.target.value)
                 setClinic(newClinic)
                 return
               }} /> </p>
+              {requiredTextError ? <p className="errorText">Name Is Required. Please Try Again.</p> : null}
               <p className="editSubTitle">General Information</p>
               <p style={{ marginRight: '2rem', width: "90%" }}><strong>Site:</strong>
                 <input style={{ width: "80%" }} value={clinic.generalInformation.site} disabled />
               </p>
               <p><strong>Phone Number:</strong><input value={clinic.generalInformation.phoneNumber} min={10} max={10} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.phoneNumber = e.target.value
+                newInfo.generalInformation.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
                 setClinic(newInfo)
               }} /></p>
               <p><strong>Fax Number:</strong><input value={clinic.generalInformation.faxNumber} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.faxNumber = e.target.value
+                newInfo.generalInformation.faxNumber = removeAllAlphabets(e.target.value).substring(0, 10)
                 setClinic(newInfo)
               }} /></p>
               <p><strong>Address Line 1:</strong><input value={clinic.generalInformation.addressLine1} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.addressLine1 = e.target.value
+                newInfo.generalInformation.addressLine1 = cleanFormName(e.target.value)
                 setClinic(newInfo)
               }} /></p>
               <p><strong>Address Line 2:</strong><input value={clinic.generalInformation.addressLine2} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.addressLine2 = e.target.value
+                newInfo.generalInformation.addressLine2 = cleanFormName(e.target.value)
                 setClinic(newInfo)
               }} /></p>
               <p><strong>City:</strong><input value={clinic.generalInformation.city} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.city = e.target.value
+                newInfo.generalInformation.city = cleanFormName(removeAllNumbers(e.target.value))
                 setClinic(newInfo)
               }} /></p>
               <p><strong>State (Abbreviated, CA):</strong> <input value={clinic.generalInformation.state} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.state = e.target.value
+                newInfo.generalInformation.state = removeAllNumbers(e.target.value.toUpperCase())
                 setClinic(newInfo)
               }} /></p>
               <p><strong>Postal Code:</strong><input value={clinic.generalInformation.postal} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.postal = e.target.value
+                newInfo.generalInformation.postal = removeAllAlphabets(e.target.value)
                 setClinic(newInfo)
               }} /></p>
               <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                 <div className="coorSearchBtn" onClick={() => { setCoorLoading(true); searchCoordinates(); return; }}>Search Coordinates</div>
                 {coorLoading ? <CircularProgress color="primary" size={'1.5rem'} /> : null}
-                {(!errorText && !successText) ? <p style={{ color: '#000', fontSize: '0.8rem', margin: 0 }}>Click after filling in the address, if you do not know the coordinates</p> : null}
-                {errorText ? <p style={{ color: 'red', fontSize: '0.8rem', margin: 0 }}>Cannot find coordinates! Please check the address again.</p> : null}
+                {(!coorErrorText && !successText) ? <p style={{ color: '#000', fontSize: '0.8rem', margin: 0 }}>Click after filling in the address, if you do not know the coordinates</p> : null}
+                {coorErrorText ? <p style={{ color: 'red', fontSize: '0.8rem', margin: 0 }}>Cannot find coordinates! Please check the address again.</p> : null}
                 {successText ? <p style={{ color: 'green', fontSize: '0.8rem', margin: 0 }}>Coordinates Found!</p> : null}
               </div>
               <p><strong>Latitude:</strong><input value={clinic.generalInformation.lat == 38 ? "Input or Search Coordinates" : clinic.generalInformation.lat} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.lat = e.target.value
+                newInfo.generalInformation.lat = removeAllAlphabets(e.target.value)
                 setClinic(newInfo)
               }} /></p>
               <p><strong>Longitude:</strong><input value={clinic.generalInformation.long == -121 ? "Input or Search Coordinates" : clinic.generalInformation.long} onChange={(e) => {
                 let newInfo = { ...clinic }
-                newInfo.generalInformation.long = e.target.value
+                newInfo.generalInformation.long = removeAllAlphabets(e.target.value)
                 setClinic(newInfo)
               }} /></p>
               <p>
@@ -305,20 +308,13 @@ export default function AddNewClinic(props) {
                   </React.Fragment>
                 )
               })}
-              {/* <p className="editSubTitle">Map Direction</p>
-            <p>
-              <strong>Map Code:</strong>
-              <input placeholder="<iframe> ... </iframe>" onChange={(e) => {
-                let newClinic = { ...clinic }
-                newClinic.map.displayUrl = e.target.value
-                setClinic(newClinic)
-                return
-              }} />
-            </p>
-            <span style={{ marginTop: '0.4rem', fontSize: '0.8rem' }}>Learn how to extract code from Google Map <a>HERE</a></span> */}
             </div>
             <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
               <div className="saveBtn" onClick={() => {
+                if (clinic.name == "") {
+                  setRequiredTextError(true);
+                  return;
+                }
                 addClinic()
                 setSubmittingForm(true)
                 return
@@ -424,6 +420,12 @@ export default function AddNewClinic(props) {
                     color: #fff;
                     border-radius: 0.5rem;
                     margin-right: 1rem;
+                }
+
+                .errorText {
+                  font-size: 0.8rem;
+                  color: red;
+                  margin: 0;
                 }
                 `
         }

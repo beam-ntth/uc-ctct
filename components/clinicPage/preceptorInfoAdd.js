@@ -5,16 +5,19 @@ import { createNewPreceptor } from "../../api-lib/azure/azureExecute";
 import { addPreceptorFromClinicsPage, getClinicOrSiteOrRegion } from "../../api-lib/azure/azureOps";
 import { v4 as uuidv4 } from "uuid";
 import StatusParser from "../shared/status";
+import { cleanFormName, removeAllAlphabets } from "../shared/forms/formUtils";
 
 export default function PreceptorInfoAdd(props) {
   const [hover, setHover] = useState(false);
+  const [emailError, setEmailError] = useState(false)
+  const [requiredTextError, setRequiredTextError] = useState(false)
 
   const [info, setInfo] = useState({
     id: uuidv4().toString(),
     type: 'preceptor',
-    firstname: null,
-    lastname: null,
-    email: null,
+    firstname: "",
+    lastname: "",
+    email: "",
     npi: "",
     phoneNumber: null,
     status: 0,
@@ -70,23 +73,25 @@ export default function PreceptorInfoAdd(props) {
                 <p><strong>First Name:</strong><input placeholder="Ex: John"
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.firstname = e.target.value
+                    newInfo.firstname = cleanFormName(e.target.value)
                     setInfo(newInfo);
                     return;
                   }} />
                 </p>
+                {requiredTextError ? <p className="errorText">This Field Is Required. Please Try Again.</p> : null}
                 <p><strong>Last Name:</strong><input placeholder="Ex: Doe"
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.lastname = e.target.value
+                    newInfo.lastname = cleanFormName(e.target.value)
                     setInfo(newInfo);
                     return;
                   }} />
                 </p>
+                {requiredTextError ? <p className="errorText">This Field Is Required. Please Try Again.</p> : null}
                 <p><strong>National Provider Identifier (NPI):</strong><input placeholder="NPI: (0000000000)"
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.npi = e.target.value
+                    newInfo.npi = removeAllAlphabets(e.target.value)
                     setInfo(newInfo);
                     return;
                   }} />
@@ -94,7 +99,7 @@ export default function PreceptorInfoAdd(props) {
                 <p><strong>Phone Number:</strong><input placeholder="0000000000"
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.phoneNumber = e.target.value
+                    newInfo.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
                     setInfo(newInfo);
                     return;
                   }} />
@@ -102,11 +107,12 @@ export default function PreceptorInfoAdd(props) {
                 <p><strong>Email Address:</strong><input placeholder="Email Address"
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.email = e.target.value
+                    newInfo.email = e.target.value.toLowerCase()
                     setInfo(newInfo);
                     return;
                   }} />
                 </p>
+                {emailError ? <p className="errorText">Invalid Email Address. Please Try Again.</p> : null}
                 <p><strong>Availability </strong><br />
                 from:
                 <input type={'date'}
@@ -143,6 +149,17 @@ export default function PreceptorInfoAdd(props) {
               </div>
               <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                 <div className="saveBtn" onClick={async () => {
+                  // Check for form errors
+                  if (info.firstname == "" || info.lastname == "") {
+                    setRequiredTextError(true)
+                  }
+                  if (!info.email.includes("@") || !info.email.includes(".")) {
+                    setEmailError(true)
+                  }
+                  if (info.firstname == "" || info.lastname == "" || !info.email.includes("@") || !info.email.includes(".")) {
+                    return;
+                  }
+
                   await updateInfo();
                   setSubmittingForm(true)
                 }}>Add Contact</div>
@@ -204,6 +221,12 @@ export default function PreceptorInfoAdd(props) {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
+                }
+                
+                .errorText {
+                  font-size: 0.8rem;
+                  color: red;
+                  margin: 0;
                 }
                 `
         }

@@ -4,6 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { client } from '../../../api-lib/azure/azureConfig';
 import { decrementRegionSiteCount, getClinicOrSiteOrRegion, incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
 import StatusParser from "../status";
+import { cleanFormName, removeAllAlphabets, removeAllNumbers } from "./formUtils";
 
 export default function EditSite(props) {
     const [hover, setHover] = useState(false)
@@ -67,10 +68,10 @@ export default function EditSite(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Name:</strong><input value={site.name} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.name = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.name = cleanFormName(e.target.value)
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
@@ -89,65 +90,65 @@ export default function EditSite(props) {
                     <p className="editSubTitle">General Information</p>
                     <div style={{ width: '90%' }}>
                         <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.phoneNumber = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.faxNumber = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.faxNumber = removeAllAlphabets(e.target.value).substring(0, 10)
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.addressLine1 = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.addressLine1 = cleanFormName(e.target.value)
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.addressLine2 = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.addressLine2 = cleanFormName(e.target.value)
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>City:</strong><input value={site.generalInformation.city} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.city = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.city = cleanFormName(removeAllNumbers(e.target.value))
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>State:</strong><input value={site.generalInformation.state} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.state = e.target.value
-                        setSite(newSite)
-                        return
+                            let newSite = {...site}
+                            newSite.generalInformation.state = removeAllNumbers(e.target.value).toUpperCase()
+                            setSite(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Postal:</strong><input value={site.generalInformation.postal} onChange={(e) => {
-                        let newSite = {...site}
-                        newSite.generalInformation.postal = e.target.value
-                        setSite(newSite)
+                            let newSite = {...site}
+                            newSite.generalInformation.postal = removeAllAlphabets(e.target.value).substring(0, 5)
+                            setSite(newSite)
                         return
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={() => {
-                        editElement()
-                        setSubmittingForm(true)
-                        return
+                            editElement()
+                            setSubmittingForm(true)
+                            return
                         }}>Save</div>
                     </div>
                 </React.Fragment>)

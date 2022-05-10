@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from "../../../api-lib/azure/azureConfig";
 import { getClinicOrSiteOrRegion } from "../../../api-lib/azure/azureOps";
+import { cleanFormName, removeAllAlphabets } from "./formUtils";
 
 export default function AdminInfoEdit(props) {
   const [_, index] = props.open
@@ -13,6 +14,7 @@ export default function AdminInfoEdit(props) {
     phone: null,
     email: null,
   });
+  const [emailError, setEmailError] = useState(false)
 
   async function getInitialInfo() {
     const clinic_data = await getClinicOrSiteOrRegion(props.id);
@@ -67,7 +69,7 @@ export default function AdminInfoEdit(props) {
                   value={info.name}
                   onChange={(e) => {
                     let newInfo = { ...info };
-                    newInfo.name = e.target.value;
+                    newInfo.name = cleanFormName(e.target.value);
                     setInfo(newInfo);
                     return;
                   }}
@@ -79,7 +81,7 @@ export default function AdminInfoEdit(props) {
                   value={info.position}
                   onChange={(e) => {
                     let newInfo = { ...info };
-                    newInfo.position = e.target.value;
+                    newInfo.position = cleanFormName(e.target.value);
                     setInfo(newInfo);
                     return;
                   }}
@@ -91,9 +93,7 @@ export default function AdminInfoEdit(props) {
                   value={info.phone}
                   onChange={(e) => {
                     let newInfo = { ...info };
-                    newInfo.phone = e.target.value
-                      .replace(/\D/g, "")
-                      .substring(0, 10);
+                    newInfo.phone = removeAllAlphabets(e.target.value).substring(0, 10);
                     setInfo(newInfo);
                     return;
                   }}
@@ -106,12 +106,13 @@ export default function AdminInfoEdit(props) {
                   type={"email"}
                   onChange={(e) => {
                     let newInfo = { ...info };
-                    newInfo.email = e.target.value;
+                    newInfo.email = e.target.value.toLowerCase();
                     setInfo(newInfo);
                     return;
                   }}
                 />
               </p>
+              {emailError ? <p className="errorText">Invalid Email Address. Please Try Again.</p> : null}
             </div>
             <div
               style={{
@@ -125,6 +126,10 @@ export default function AdminInfoEdit(props) {
               <div
                 className="saveBtn"
                 onClick={async () => {
+                  if (!info.email.includes("@") || !info.email.includes(".")) {
+                    setEmailError(true)
+                    return;
+                  }
                   await updateInfo();
                   setSubmittingForm(true)
                   return;
@@ -153,7 +158,7 @@ export default function AdminInfoEdit(props) {
 
           .editScreen {
             position: absolute;
-            height: 45vh;
+            height: 55vh;
             width: 50vw;
             background-color: #fff;
             opacity: 100%;
@@ -189,6 +194,11 @@ export default function AdminInfoEdit(props) {
             justify-content: center;
             align-items: center;
             cursor: pointer;
+          }
+
+          .errorText {
+            font-size: 0.8rem;
+            color: red;
           }
         `}
       </style>
