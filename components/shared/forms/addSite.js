@@ -5,6 +5,7 @@ import { client } from '../../../api-lib/azure/azureConfig';
 import StatusParser from "../status";
 import { CircularProgress } from "@mui/material";
 import { incrementRegionSiteCount } from "../../../api-lib/azure/azureOps";
+import { cleanFormName, removeAllAlphabets, removeAllNumbers } from "./formUtils";
 
 export default function AddNewSite(props) {
     const [hover, setHover] = useState(false)
@@ -73,9 +74,9 @@ export default function AddNewSite(props) {
                     <div style={{width: '90%'}}>
                         <p>
                             <strong>Name:</strong>
-                            <input placeholder="Site Name" onChange={(e) => {
+                            <input placeholder="Site Name" value={site.name} onChange={(e) => {
                                 let newSite = {...site}
-                                newSite.name = e.target.value
+                                newSite.name = cleanFormName(e.target.value)
                                 setSite(newSite)
                                 return
                             }} /> 
@@ -94,59 +95,67 @@ export default function AddNewSite(props) {
                         <p className="editSubTitle">General Information</p>
                         <p className="editCaption">You do not need to add everything right now</p>
                         <div style={{ width: '90%' }}>
-                            <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.phoneNumber = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>Phone Number:</strong><input value={site.generalInformation.phoneNumber} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
+                                setSite(newSite)
+                                return
+                            }} /></p>
+                        </div>
+                        <div style={{ width: '90%' }}>
+                            <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.faxNumber = removeAllAlphabets(e.target.value).substring(0, 10)
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                         <div style={{ width: '90%' }}>
-                            <p><strong>Fax Number:</strong><input value={site.generalInformation.faxNumber} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.faxNumber = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.addressLine1 = cleanFormName(e.target.value)
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                         <div style={{ width: '90%' }}>
-                            <p><strong>Address Line 1:</strong><input value={site.generalInformation.addressLine1} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.addressLine1 = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.addressLine2 = cleanFormName(e.target.value)
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                         <div style={{ width: '90%' }}>
-                            <p><strong>Address Line 2:</strong><input value={site.generalInformation.addressLine2} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.addressLine2 = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>City:</strong><input value={site.generalInformation.city} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.city = cleanFormName(removeAllNumbers(e.target.value))
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                         <div style={{ width: '90%' }}>
-                            <p><strong>City:</strong><input value={site.generalInformation.city} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.city = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>State (Abbv.):</strong><input value={site.generalInformation.state} 
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.state = removeAllNumbers(e.target.value).toUpperCase()
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                         <div style={{ width: '90%' }}>
-                            <p><strong>State:</strong><input value={site.generalInformation.state} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.state = e.target.value
-                            setSite(newSite)
-                            return
-                            }} /> </p>
-                        </div>
-                        <div style={{ width: '90%' }}>
-                            <p><strong>Postal:</strong><input value={site.generalInformation.postal} onChange={(e) => {
-                            let newSite = {...site}
-                            newSite.generalInformation.postal = e.target.value
-                            setSite(newSite)
-                            return
+                            <p><strong>Postal:</strong><input value={site.generalInformation.postal} 
+                            type='number'
+                            onChange={(e) => {
+                                let newSite = {...site}
+                                newSite.generalInformation.postal = removeAllAlphabets(e.target.value).substring(0, 5)
+                                setSite(newSite)
+                                return
                             }} /> </p>
                         </div>
                     </div>
@@ -190,7 +199,7 @@ export default function AddNewSite(props) {
                 
                 .editScreen {
                     position: absolute;
-                    height: 75vh;
+                    height: 85vh;
                     width: 50vw;
                     background-color: #fff;
                     opacity: 100%;
