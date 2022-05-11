@@ -6,6 +6,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import Dropdown from '../visualPage/dropDown/dropdown';
 import { searchStudentName } from "../shared/search";
 
+
 export default function DisplayUCLA (props) {
   const [filteredStudentData, setFilteredStudentData] = useState(props.students);
   /**

@@ -16,58 +16,57 @@ export default function DisplayUCI (props) {
    */
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false);
   const [showCountyDropdown, setShowCountyDropdown] = useState(false);
-  const [showPopDropdown, setShowPopDropdown] = useState(false);
+  const [showSettingDropdown, setShowSettingDropdown] = useState(false);
   const [showPopPrefDropdown, setShowPopPrefDropdown] = useState(false);
 
   const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
   const setCountyChoices = [... new Set(props.students.map(x => x.county).filter(x => x != null))];
-  const setPopulationChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
+  const setSettingChoices = [... new Set(props.students.map(x => x.survey.data.practiceSetting).flat().filter(x => x != null))];
   const setPopulationPrefChoices = [... new Set(props.students.map(x => x.survey.data.patientPopulation).flat().filter(x => x != null))];
 
   const [languageFilter, setLanguageFilter] = useState(Array(setLanguageChoices.length).fill(""))
   const [countyFilter, setCountyFilter] = useState(Array(setCountyChoices.length).fill(""))
-  const [settingFilter, setSettingFilter] = useState(Array(setPopulationChoices.length).fill(""))
+  const [settingFilter, setSettingFilter] = useState(Array(setSettingChoices.length).fill(""))
   const [preferencesFilter, setPopulationPrefFilter] = useState(Array(setPopulationPrefChoices.length).fill(""))
-
 
   function searchStudentData(substr) {
     let finalSearch = searchStudentName(props.students, substr)
-        // If all the elements are "", means we're not filtering anything
+    // If all the elements are "", means we're not filtering anything
     const allEqual = arr => arr.every(v => v === "")
 
-    //add filtering here
+    if (!allEqual(languageFilter)) {
+      finalSearch = finalSearch.filter(student => {
+        if (student.survey.data.otherLanguages) {
+          return languageFilter.some(e => student.survey.data.otherLanguages.includes(e))
+        }
+        return false;
+      })
+    }
+    
+    if (!allEqual(countyFilter)) {
+      finalSearch = finalSearch.filter(student => {
+        if (student.county) {
+          return countyFilter.includes(student.county)
+        }
+        return false;
+      })
+    }
 
-      if (!allEqual(languageFilter)) {
-        finalSearch = finalSearch.filter(student => {
-          if (student.survey.data.otherLanguages) {
-            return languageFilter.some(e => student.survey.data.otherLanguages.includes(e))
-          }
-          return false;
-        })
-        
-      }
-      if (!allEqual(countyFilter)) {
-        finalSearch = finalSearch.filter(student => {
-          if (student.survey.data.county) {
-            return countyFilter.some(e => student.survey.data.county.includes(e))
-          }
-          return false;
-        })
-      }
+    //only want to take the student's first choice
+    if (!allEqual(settingFilter)) {
+      finalSearch = finalSearch.filter(student => {
+        if (student.survey.data.practiceSetting) {
+          return settingFilter.includes(student.survey.data.practiceSetting[0])
+        }
+        return false;
+      })
+    }
 
-      if (!allEqual(settingFilter)) {
-        finalSearch = finalSearch.filter(student => {
-          if (student.survey.data.patientPopulation) {
-            return settingFilter.some(e => student.survey.data.patientPopulation.includes(e))
-          }
-          return false;
-        })
-      }
-
-      if (!allEqual(preferencesFilter)) {
+    //only want to take the student's first choice
+    if (!allEqual(preferencesFilter)) {
       finalSearch = finalSearch.filter(student => {
         if (student.survey.data.patientPopulation) {
-          return languageFilter.some(e => student.survey.data.patientPopulation.includes(e))
+          return preferencesFilter.includes(student.survey.data.patientPopulation[0])
         }
         return false;
       })
@@ -106,23 +105,23 @@ export default function DisplayUCI (props) {
                   <p style={{ fontSize: '0.7rem' }}>Language</p>
                   <IoIosArrowDown color='#079CDB' style={showLanguageDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
-                  <Dropdown disableSearch open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={setLanguageChoices} 
-                    ddFilter={languageFilter} setddFilter={setLanguageFilter} />
+                <Dropdown disableSearch open={showLanguageDropdown} setOpen={setShowLanguageDropdown} choices={setLanguageChoices} 
+                  ddFilter={languageFilter} setddFilter={setLanguageFilter} />
               </div>
               <div className={styles.regionForm}>
                 <div className={styles.formTitle} onClick={() => setShowCountyDropdown(!showCountyDropdown)}>
                   <p style={{ fontSize: '0.7rem' }}>County</p>
                   <IoIosArrowDown color='#079CDB' style={showCountyDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
-                <Dropdown disableSearch open={showCountyDropdown} setOpen={setShowCountyDropdown} choices={setCountyChoices}
+                <Dropdown disableSearch open={showCountyDropdown} setOpen={setShowCountyDropdown} choices={setCountyChoices} 
                   ddFilter={countyFilter} setddFilter={setCountyFilter} />
               </div>
               <div className={styles.regionForm}>
-                <div className={styles.formTitle} onClick={() => setShowPopDropdown(!showPopDropdown)}>
-                  <p style={{ fontSize: '0.7rem' }}>Population</p>
-                  <IoIosArrowDown color='#079CDB' style={showPopDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
+              <div className={styles.formTitle} onClick={() => setShowSettingDropdown(!showSettingDropdown)}>
+                  <p style={{ fontSize: '0.7rem' }}>Setting</p>
+                  <IoIosArrowDown color='#079CDB' style={showSettingDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
                 </div>
-                <Dropdown disableSearch open={showPopDropdown} setOpen={setShowPopDropdown} choices={setPopulationChoices}
+                <Dropdown disableSearch open={showSettingDropdown} setOpen={setShowSettingDropdown} choices={setSettingChoices} 
                   ddFilter={settingFilter} setddFilter={setSettingFilter} />
               </div>
               <div className={styles.regionForm}>
