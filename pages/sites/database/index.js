@@ -112,7 +112,7 @@ export default function SiteMgmt({ region_data, location, user }) {
                                     studentData != null ?
                                     studentData.map(x => {
                                     const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
-                                    return <Marker lat={x.lat} lng={x.long} type={x.assignedPreceptor ? 'student-assigned' : 'student-unassigned'} 
+                                    return <Marker lat={x.lat} lng={x.long} type={x.assignment.isAssigned ? 'student-assigned' : 'student-unassigned'} 
                                     id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
                                     })
                                     :
