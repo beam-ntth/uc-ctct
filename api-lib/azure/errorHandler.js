@@ -3,11 +3,11 @@
  * If an error occurs during a GET or POST operation, the result will have an error which will be checked in the props of the resulting page.
  * If an error occurs during a delete, we do not throw an error and handle gracefully.
  */
- class ErrorHandler {
+class ErrorHandler {
   constructor() {
     this._strategy = new ErrorHandlerStrategy();
   }
-  
+
   Set(strategy) {
     this._strategy = strategy;
   }

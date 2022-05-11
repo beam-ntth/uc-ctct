@@ -1,4 +1,6 @@
 import { parse } from 'json2csv';
+import StatusParser from '../../components/shared/status'
+// Documentation: https://www.npmjs.com/package/json2csv
 
 /**
  * Removes meta data related to the Cosmos DB. 
@@ -11,6 +13,9 @@ function removeMetaTags(data) {
     delete x._etag;
     delete x._attachments;
     delete x._ts;
+    delete x.type;
+    delete x.notes;
+    delete x.id;
   })
 }
 
@@ -18,11 +23,12 @@ function removeMetaTags(data) {
  * Used in a page to create a downloadable csv file in the browser.
  * @param {JSON} data Data that will be parsed into a CSV file.  
  * @param {String} name The name we wish to give the csv file on download.
+ * @param {JSON} opts Options to pass to parser. Used to set order of fields. 
  */
-export function createDownloadLink(data, name) {
+export function createDownloadLink(data, name, opts) {
   removeMetaTags(data);
   // Turn JSON into csv.
-  const csv = parse(data);
+  const csv = parse(data, opts);
   // Create hidden element for download.
   const hiddenElement = document.createElement('a');
   hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
@@ -32,3 +38,39 @@ export function createDownloadLink(data, name) {
   // Download element.
   hiddenElement.click();
 }
+
+/**
+ * Used to create CSV file for site data.
+ * @param {JSON} data Site data from DB to parse into JSON. 
+ */
+export function createSiteCSV(data) {
+  // Convert general info object into separate fields. 
+  data.map((x) => {
+    x.phone_number = x.generalInformation.phoneNumber;
+    x.fax_number = x.generalInformation.faxNumber;
+    x.address_line_1 = x.generalInformation.addressLine1;
+    x.address_line_2 = x.generalInformation.addressLine2;
+    x.city = x.generalInformation.city;
+    x.state = x.generalInformation.state;
+    x.postal = x.generalInformation.postal;
+    delete x.generalInformation;
+    delete x.region_id;
+    x.status = StatusParser("sites", parseInt(x.status))
+    x.admin = x.adminInfo;
+  })
+
+  // Set the order of fields.
+  const fields = ["name", "status", "total_clinics", "total_preceptors", "address_line_1", "address_line_2", "city", "state", "postal", "admin"]
+  const opts = { fields }
+  createDownloadLink(data, "site-overview", opts);
+}
+
+export function createClinicCSV(data) {
+
+}
+
+
+
+
+
+
