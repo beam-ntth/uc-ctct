@@ -50,17 +50,20 @@ export function createSiteCSV(data) {
     x.fax_number = x.generalInformation.faxNumber;
     x.address_line_1 = x.generalInformation.addressLine1;
     x.address_line_2 = x.generalInformation.addressLine2;
-    x.city = x.generalInformation.city;
-    x.state = x.generalInformation.state;
-    x.postal = x.generalInformation.postal;
+    x.City = x.generalInformation.city;
+    x.State = x.generalInformation.state;
+    x.Postal = x.generalInformation.postal;
     delete x.generalInformation;
     delete x.region_id;
-    x.status = StatusParser("sites", parseInt(x.status))
-    x.admin = x.adminInfo;
+    x.Status = StatusParser("sites", parseInt(x.status))
+    x.Admin = x.adminInfo;
   })
 
   // Set the order of fields.
-  const fields = ["name", "status", "total_clinics", "total_preceptors", "address_line_1", "address_line_2", "city", "state", "postal", "admin"]
+  const fields = ["name", "status", { label: 'Num of Clinics', value: "total_clinics" },
+    { label: 'Num of Preceptors', value: "total_preceptors" },
+    { label: "Address Line 1", value: "address_line_1" },
+    { label: "Address Line 2", value: "address_line_2" }, "City", "State", "Postal", { label: "Phone Number", value: "phone_number" }, { label: "Fax Number", value: "fax_number" }, "Admin"]
   const opts = { fields }
   createDownloadLink(data, "site-overview", opts);
 }
