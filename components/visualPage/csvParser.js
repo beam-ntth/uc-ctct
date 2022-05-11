@@ -56,7 +56,7 @@ export function createSiteCSV(data) {
     delete x.generalInformation;
     delete x.region_id;
     x.Status = StatusParser("sites", parseInt(x.status))
-    x.Admin = x.adminInfo;
+    x.Admin = x.adminInfo.map(x => (`Name: ${x.name} Pos: ${x.position} Phone: ${x.phone} Email: ${x.email}`)).join('\n');
   })
 
   // Set the order of fields.
