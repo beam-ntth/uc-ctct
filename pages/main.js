@@ -50,7 +50,7 @@ export default function Main(props) {
             </div>
             <div className={styles.chart}>
               <div className={styles.chartTitle}>
-                <p>Number of Site based on Categories</p>
+                <p>Number of Sites per Category</p>
               </div>
               <NumberChart />
             </div>

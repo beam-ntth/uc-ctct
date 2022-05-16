@@ -9,6 +9,10 @@ import { cleanFormName, removeAllAlphabets } from "../shared/forms/formUtils";
 
 export default function PreceptorInfoAdd(props) {
   const [hover, setHover] = useState(false);
+
+  /**
+   * States for error checking
+   */
   const [emailError, setEmailError] = useState(false)
   const [requiredTextError, setRequiredTextError] = useState(false)
 

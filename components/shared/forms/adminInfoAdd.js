@@ -8,12 +8,26 @@ import { cleanFormName, removeAllAlphabets } from "./formUtils";
 export default function AdminInfoAdd(props) {
   const [hover, setHover] = useState(false)
   const [info, setInfo] = useState({
-    name: null,
-    position: null,
-    phone: null,
-    email: null,
+    name: "",
+    position: "",
+    phone: "",
+    email: "",
   });
+
+  /**
+   * States for error checking
+   */
+  const [requiredName, setRequiredName] = useState(false)
   const [emailError, setEmailError] = useState(false)
+
+  const checkForErrors = () => {
+    let errorExist = false
+    if (info.name === "") {
+      errorExist = true
+      setRequiredName(true)
+    }
+    return errorExist
+  }
 
   async function updateInfo() {
     const database = client.database("uc-ctct");
@@ -68,6 +82,7 @@ export default function AdminInfoAdd(props) {
                     }}
                   />
                 </p>
+                {requiredName ? <p className="errorText">This field is required!</p> : null}
                 <p>
                   <strong>Position:</strong>
                   <input
@@ -122,7 +137,11 @@ export default function AdminInfoAdd(props) {
                 <div
                   className="saveBtn"
                   onClick={async () => {
-                    if (!info.email.includes("@") || !info.email.includes(".")) {
+                    if (checkForErrors()) {
+                      return;
+                    }
+                    if (info.email.length > 0 && (!info.email.includes("@") || !info.email.includes("."))) {
+                      // If the user types in something, and the email is invalid
                       setEmailError(true)
                       return;
                     }

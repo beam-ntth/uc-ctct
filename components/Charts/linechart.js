@@ -23,21 +23,32 @@ export default function LineChart() {
   const loadData = async() => {
     const response = await getAllStudents();
     const splitData = [0, 0, 0, 0]
+    const allStudentCt = [0, 0, 0, 0]
     response.forEach(x => {
-      if (x.assignment.isAssigned) {
         if (x.location_affiliation == "UC Davis") {
-          splitData[0]++
+          if (x.assignment.isAssigned) {
+            splitData[0]++
+          }
+          allStudentCt[0]++
         } else if (x.location_affiliation == "UC Los Angeles") {
-          splitData[1]++
+          if (x.assignment.isAssigned) {
+            splitData[1]++
+          }
+          allStudentCt[1]++
         } else if (x.location_affiliation == "UC San Francisco") {
-          splitData[2]++
+          if (x.assignment.isAssigned) {
+            splitData[2]++
+          }
+          allStudentCt[2]++
         } else {
-          splitData[3]++
+          if (x.assignment.isAssigned) {
+            splitData[3]++
+          }
+          allStudentCt[3]++
         }
-      }
-      return
     })
-    setData(splitData)
+    const finalRatio = splitData.map((x, ind) => x/allStudentCt[ind])
+    setData(finalRatio)
   }
 
   useEffect(() => loadData(), [])
@@ -48,13 +59,29 @@ export default function LineChart() {
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
-        legend:{
-          boxWidth: 9,
-          display:false,
-          position:'top',
-          pointStyle: "circle",
+          legend:{
+            boxWidth: 9,
+            display:false,
+            position:'top',
+            pointStyle: "circle",
+          },
+          tooltip: {
+            callbacks: {
+                label: function(context) {
+                    return `Matched: ${(parseFloat(context.parsed.y) * 100).toFixed(2)}%`;
+                }
+            }
+          }
+        },
+        scales: {
+          yAxes: {
+            ticks: {
+              callback: function (value) {
+                return `${(value * 100).toFixed(2)}%`
+              },
+            }
+          }
         }
-      }
       }}
       />
     </React.Fragment>

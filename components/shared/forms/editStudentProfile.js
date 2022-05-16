@@ -4,6 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { editStudentInfo } from "../../../api-lib/azure/azureOps";
 import { mapCityToCounty } from "../cityToCounty";
 import StatusParser from "../status";
+import { removeAllAlphabets, removeAllNumbers } from "./formUtils";
 
 export default function EditStudentProfile(props) {
     const [closeHover, setCloseHover] = useState(false)
@@ -37,34 +38,34 @@ export default function EditStudentProfile(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>First Name:</strong><input value={data.firstName} onChange={(e) => {
-                        let newData = {...data}
-                        newData.firstName = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.firstName = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Middle Name:</strong><input value={data.middleName} onChange={(e) => {
-                        let newData = {...data}
-                        newData.middleName = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.middleName = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Last Name:</strong><input value={data.lastName} onChange={(e) => {
-                        let newData = {...data}
-                        newData.lastName = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.lastName = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Date of Birth:</strong><input value={data.dob} onChange={(e) => {
-                        let newData = {...data}
-                        newData.dob = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.dob = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
@@ -83,59 +84,59 @@ export default function EditStudentProfile(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Address Line 1:</strong><input value={data.addressLine1} onChange={(e) => {
-                        let newData = {...data}
-                        newData.addressLine1 = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.addressLine1 = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Address Line 2:</strong><input value={data.addressLine2} onChange={(e) => {
-                        let newData = {...data}
-                        newData.addressLine2 = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.addressLine2 = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>City:</strong><input value={data.city} onChange={(e) => {
-                        let newData = {...data}
-                        newData.city = e.target.value
-                        newData.county = mapCityToCounty(e.target.value)
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.city = e.target.value
+                            newData.county = mapCityToCounty(e.target.value)
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>County:</strong><input disabled value={data.county} onChange={(e) => {
-                        let newData = {...data}
-                        newData.county = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.county = removeAllNumbers(e.target.value)
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Postal:</strong><input value={data.postal} onChange={(e) => {
-                        let newData = {...data}
-                        newData.postal = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.postal = removeAllAlphabets(e.target.value).substring(0, 5)
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Phone Number:</strong><input value={data.phoneNumber} onChange={(e) => {
-                        let newData = {...data}
-                        newData.phoneNumber = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Email:</strong><input value={data.email} onChange={(e) => {
-                        let newData = {...data}
-                        newData.email = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.email = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>

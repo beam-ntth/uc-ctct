@@ -32,6 +32,20 @@ export default function AddNewSite(props) {
         }
     )
 
+    /**
+     * States for error checking
+     */
+    const [requiredName, setRequiredName] = useState(false)
+
+    const checkForErrors = () => {
+        let errorExist = false
+        if (site.name === "") {
+          errorExist = true
+          setRequiredName(true)
+        }
+        return errorExist
+    }
+
     async function addSite() {
         try {
             const database = client.database("uc-ctct");
@@ -81,6 +95,7 @@ export default function AddNewSite(props) {
                                 return
                             }} /> 
                         </p>
+                        {requiredName ? <p className="errorText">This field is required!</p> : null}
                         <p>
                             <strong>Status:</strong>
                             <select value={site.status} onChange={(e) => {
@@ -161,9 +176,12 @@ export default function AddNewSite(props) {
                     </div>
                     <div style={{width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem'}}>
                         <div className="saveBtn" onClick={() => {
-                        addSite()
-                        setSubmittingForm(true)
-                        return
+                            if (checkForErrors()) {
+                                return
+                            }
+                            addSite()
+                            setSubmittingForm(true)
+                            return
                     }}>Create Site</div>
                     </div>
                 </React.Fragment>)
@@ -236,6 +254,11 @@ export default function AddNewSite(props) {
                     align-items: center;
                     cursor: pointer;
                 }
+
+                .errorText {
+                    font-size: 0.8rem;
+                    color: red;
+                  }
                 `
             }
         </style>
