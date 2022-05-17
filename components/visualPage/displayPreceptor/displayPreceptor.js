@@ -31,6 +31,8 @@ export default function DisplayPreceptor(props) {
       "Pharmacist",
       "Psychologist"
     ]
+
+  
   const populationChoices = ["Mild/ Moderate Mental Illness", "Severe and persistent mental ilness", "Substance Use / Addiction", "Homeless", "Adult jail/ prison", "Juvenile Justice", "HIV", "LGBTQIA", "Native American Health", "Private or for profit clinic", "Public Mental Health", "School Based K-12", "University Student Health", "Veterans Health Adminstration", "Women's Health", "Other"]
   const experienceChoices = ["Never precepted before", "1-4 years", "5-8 years", "9+ years of precepting"]
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('preceptors', x))
