@@ -79,12 +79,13 @@
 }
 
 .dataCol1 {
+    width: 23%;
     flex-wrap: wrap;
     font-size: small;
 }
 
 .titleCol2, .dataCol2, .titleCol3, .dataCol3 {
-    width: 13%;
+    width: 12%;
 }
 
 .titleCol2, .titleCol3 {
@@ -97,7 +98,7 @@
 }
 
 .titleCol4 {
-    width: 13%;
+    width: 16%;
     font-size: large;
 }
 
@@ -117,7 +118,7 @@
 }
 
 .dataCol4 {
-    width: 13%;
+    width: 16%;
     flex-wrap: wrap;
     font-size: small;
 }

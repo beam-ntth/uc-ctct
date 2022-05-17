@@ -183,8 +183,8 @@ export default function DisplayClinic(props) {
       <div className={styles.row}>
         <div style={{ display: 'flex', width: '97%' }}>
           <p className={styles.titleCol1}>Clinic Name</p>
-          <p className={styles.titleCol2}>Status</p>
-          <p className={styles.titleCol3}>Affiliation</p>
+          <p className={styles.titleCol2}>Affiliation</p>
+          <p className={styles.titleCol3}>Status</p>
           <p className={styles.titleCol4}>Setting</p>
           <p className={styles.titleCol5}>Population</p>
           <p className={styles.titleCol6}>Age Group</p>
@@ -221,8 +221,8 @@ export default function DisplayClinic(props) {
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
                   <p className={styles.dataCol1}>{x.name}</p>
-                  <p className={styles.dataCol2}>{statusText}</p>
-                  <p className={styles.dataCol3}>{displayAffi}</p>
+                  <p className={styles.dataCol2}>{displayAffi}</p>
+                  <p className={styles.dataCol3}>{statusText}</p>
                   <p className={styles.dataCol4}>{getAllPreceptorsInClinic(x).length == 0 ? "No Preceptor" : getClinicSettings(getAllPreceptorsInClinic(x))}</p>
                   <p className={styles.dataCol5}>{x.description.settingPopulation}</p>
                   <p className={styles.dataCol6}>{x.description.population}</p>
