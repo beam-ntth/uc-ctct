@@ -118,17 +118,17 @@
 }
 
 .dataCol4 {
-    width: 16%;
+    width: 17%;
     flex-wrap: wrap;
     font-size: small;
 }
 .dataCol5 {
-    width: 13%;
+    width: 15%;
     flex-wrap: wrap;
     font-size: small;
 }
 .dataCol6 {
-    width: 13%;
+    width: 11%;
     flex-wrap: wrap;
     font-size: small;
 }
