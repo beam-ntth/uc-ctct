@@ -22,10 +22,10 @@ export default function DisplayClinic(props) {
 
   const regionChoices = props.region_choices;
   const settingChoices = ["In-patient acute care", "In-patient consult liaison", "In-patient long term care", "Partial hospital program", "Acute stabilization unit <23 hours", "Out-patient community mental health", "Out-patient integrated care setting (primary or specialty care with psychiatry)", "Out-patient private or for-profit practice", "Out-patient urgent care", "Intensive outpatient"]
-  const populationChoices = ["Mild/ Moderate Mental Illness", "Severe and persistent mental ilness", "Substance Use / Addiction", "Homeless", "Adult jail/ prison", "Juvenile Justice", "HIV", "LGBTQIA", "Native American Health", "Private or for profit clinic", "Public Mental Health", "School Based K-12", "University Student Health", "Veterans Health Adminstration", "Women's Health", "Other"]
+  const populationChoices = ["Mild/ Moderate Mental Illness", "Severe and persistent mental illness", "Substance Use / Addiction", "Homeless", "Adult jail/ prison", "Juvenile Justice", "HIV", "LGBTQIA", "Native American Health", "Private or for profit clinic", "Public Mental Health", "School Based K-12", "University Student Health", "Veterans Health Adminstration", "Women's Health", "Other"]
   const ageGroupChoices = ["Adult", "Transitional age youth", "Child / adolescent", "Older adult", "Across the lifespan"]
   const patientAcuityChoices = ["Low acuity (routine visits every 4-12 weeks)", "Moderate acuity (visits every 1-4 weeks)", "High acuity out-patient (visits are daily)", "High acuity in-patient", "Other"]
-  const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('clinics', x))
+  const statusChoices = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ].map((x) => StatusParser('clinics', x))
   
   const [regionFilter, setRegionFilter] = useState(Array(regionChoices.length).fill(""))
   const [settingFilter, setSettingFilter] = useState(Array(settingChoices.length).fill(""))
@@ -51,6 +51,30 @@ export default function DisplayClinic(props) {
     }
     return settings[0]
   }
+
+  const getClinicPopulation = (preceps) => {
+    const settings = preceps.map(p => p.survey.data.patientPopulation).flat().filter(x => x != null)
+    if (settings.length == 0) {
+      return "Need Preceptor Response"
+    }
+    return settings[0]
+  }
+
+   const getClinicAgeGroup = (preceps) => {
+    const settings = preceps.map(p => p.survey.data.ageGroup).flat().filter(x => x != null)
+    if (settings.length == 0) {
+      return "Need Preceptor Response"
+    }
+    return settings[0]
+  }
+
+  const getClinicPatientAcuity = (preceps) => {
+    const settings = preceps.map(p => p.survey.data.patientAcuity).flat().filter(x => x != null)
+    if (settings.length == 0) {
+      return "Need Preceptor Response"
+    }
+    return settings[0]
+  }
   
   // function searchClinicName(substr) {
   //   setFilteredClinicData(searchString(props.data, substr))
@@ -63,45 +87,62 @@ export default function DisplayClinic(props) {
 
     // region filter
     if (!allEqual(regionFilter)) {
-      finalSearch = finalSearch.filter(d => {
-        const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == d.region_id)[0].name)
+      finalSearch = finalSearch.filter(clinic => {
+        const regionName = (props.region_data == null ? '' : props.region_data.filter((r) => r.id == clinic.region_id)[0].name)
         console.log(regionName)
         return regionFilter.includes(regionName)
       })
     }
+    //status filtr
     if (!allEqual(statusFilter)) {
-      finalSearch = finalSearch.filter(d => {
-        return statusFilter.includes(StatusParser("clinics", parseInt(d.status)))
+      finalSearch = finalSearch.filter(clinic => {
+        return statusFilter.includes(StatusParser("clinics", parseInt(clinic.status)))
       })
     }
 
-    // new setting filter
+    //  setting filter
     if (!allEqual(settingFilter)) {
-      finalSearch = finalSearch.filter(preceptor => {
-        if (preceptor.survey.data.patientPopulation) {
-          return settingFilter.some(e => preceptor.survey.data.practiceSetting.includes(e))
+      finalSearch = finalSearch.filter(clinic => {
+        const allPreceptor = getAllPreceptorsInClinic(clinic)
+        const clinicSettings = allPreceptor.map(p => p.survey.data.practiceSetting).flat().filter(x => x != null)
+        if (clinicSettings.length > 0) {
+          return settingFilter.some(e => clinicSettings.includes(e))
         }
         return false;
       })
     }
- 
-     // Check patient population new
-     if (!allEqual(populationFilter)) {
-      finalSearch = finalSearch.filter( preceptor => {
-        return populationFilter.some(e => preceptor.survey.data.patientPopulation.includes(e))
-      })
-    }
-    // Check patient acuity new
-    if (!allEqual(ageGroupFilter)) {
-      finalSearch = finalSearch.filter( preceptor => {
-        return ageGroupFilter.some(e => preceptor.survey.data.ageGroup.includes(e))
+
+    // Check patient population new
+    if (!allEqual(populationFilter)) {
+      finalSearch = finalSearch.filter(clinic => {
+        const allPreceptor = getAllPreceptorsInClinic(clinic)
+        const clinicSettings = allPreceptor.map(p => p.survey.data.patientPopulation).flat().filter(x => x != null)
+        if (clinicSettings.length > 0) {
+          return populationFilter.some(e => clinicSettings.includes(e))
+        }
+        return false;
       })
     }
 
-    // Check patient acuity new
+    if (!allEqual(ageGroupFilter)) {
+      finalSearch = finalSearch.filter(clinic => {
+        const allPreceptor = getAllPreceptorsInClinic(clinic)
+        const clinicSettings = allPreceptor.map(p => p.survey.data.ageGroup).flat().filter(x => x != null)
+        if (clinicSettings.length > 0) {
+          return ageGroupFilter.some(e => clinicSettings.includes(e))
+        }
+        return false;
+      })
+    }
+
     if (!allEqual(patientAcuityFilter)) {
-      finalSearch = finalSearch.filter( preceptor => {
-        return patientAcuityFilter.some(e => preceptor.survey.data.patientAcuity.includes(e))
+      finalSearch = finalSearch.filter(clinic => {
+        const allPreceptor = getAllPreceptorsInClinic(clinic)
+        const clinicSettings = allPreceptor.map(p => p.survey.data.patientAcuity).flat().filter(x => x != null)
+        if (clinicSettings.length > 0) {
+          return patientAcuityFilter.some(e => clinicSettings.includes(e))
+        }
+        return false;
       })
     }
     setFilteredClinicData(finalSearch)
@@ -194,7 +235,7 @@ export default function DisplayClinic(props) {
 
       {
         filteredClinicData.map((x, ind) => {
-          const statusText = StatusParser("sites", parseInt(x.status));
+          const statusText = StatusParser("clinics", parseInt(x.status));
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           let displayAffi = "N/A"
           if (regionName != null) {
@@ -216,6 +257,7 @@ export default function DisplayClinic(props) {
                 break;
             }
           }
+
           return (
             <Link href={`/sites/database/clinics/clinic?name=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayVizRow'>
@@ -224,9 +266,9 @@ export default function DisplayClinic(props) {
                   <p className={styles.dataCol2}>{displayAffi}</p>
                   <p className={styles.dataCol3}>{statusText}</p>
                   <p className={styles.dataCol4}>{getAllPreceptorsInClinic(x).length == 0 ? "No Preceptor" : getClinicSettings(getAllPreceptorsInClinic(x))}</p>
-                  <p className={styles.dataCol5}>{x.description.settingPopulation}</p>
-                  <p className={styles.dataCol6}>{x.description.population}</p>
-                  <p className={styles.dataCol7}>{x.description.patientAcuity}</p>
+                  <p className={styles.dataCol5}>{getAllPreceptorsInClinic(x).length == 0 ? "No Preceptor" : getClinicPopulation(getAllPreceptorsInClinic(x))}</p>
+                  <p className={styles.dataCol6}>{getAllPreceptorsInClinic(x).length == 0 ? "No Preceptor" : getClinicAgeGroup(getAllPreceptorsInClinic(x))}</p>
+                  <p className={styles.dataCol7}>{getAllPreceptorsInClinic(x).length == 0 ? "No Preceptor" : getClinicPatientAcuity(getAllPreceptorsInClinic(x))}</p>
                 </div>
               </div>
             </Link>
