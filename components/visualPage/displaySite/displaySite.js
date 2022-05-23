@@ -141,7 +141,8 @@ export default function DisplaySite(props) {
           const statusText = StatusParser("sites", parseInt(x.status))
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           let displayAffi = "N/A"
-          if (regionName != null) {
+          console.log(regionName)
+          if (regionName !== null && regionName.length > 0) {
             switch (regionName[0].name) {
               case "UC Davis":
                 displayAffi = "UCD";
