@@ -31,13 +31,15 @@ export default function DisplayPreceptor(props) {
       "Pharmacist",
       "Psychologist"
     ]
+
+  
   const populationChoices = ["Mild/ Moderate Mental Illness", "Severe and persistent mental ilness", "Substance Use / Addiction", "Homeless", "Adult jail/ prison", "Juvenile Justice", "HIV", "LGBTQIA", "Native American Health", "Private or for profit clinic", "Public Mental Health", "School Based K-12", "University Student Health", "Veterans Health Adminstration", "Women's Health", "Other"]
   const experienceChoices = ["Never precepted before", "1-4 years", "5-8 years", "9+ years of precepting"]
   const statusChoices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => StatusParser('preceptors', x))
 
 
   const [positionFilter, setPositionFilter] = useState(Array(positionChoices.length).fill(""))
-  const [populationFilter, setPopulationFlter] = useState(Array(populationChoices.length).fill(""))
+  const [settingFilter, setPopulationFlter] = useState(Array(populationChoices.length).fill(""))
   const [experienceFilter, setExperienceFilter] = useState(Array(experienceChoices.length).fill(""))
   const [statusFilter, setStatusFilter] = useState(Array(statusChoices.length).fill(""))
 
@@ -89,10 +91,10 @@ export default function DisplayPreceptor(props) {
       })
     }
     
-    if (!allEqual(populationFilter)) {
+    if (!allEqual(settingFilter)) {
       finalSearch = finalSearch.filter(preceptor => {
         if (preceptor.survey.data.patientPopulation) {
-          return populationFilter.some(e => preceptor.survey.data.patientPopulation.includes(e))
+          return settingFilter.some(e => preceptor.survey.data.patientPopulation.includes(e))
         }
         return false;
       })
@@ -124,7 +126,7 @@ export default function DisplayPreceptor(props) {
    */
   useEffect(() => {
     searchPreceptorData('')
-  }, [positionFilter, experienceFilter, populationFilter, statusFilter])
+  }, [positionFilter, experienceFilter, settingFilter, statusFilter])
 
   return (
     <React.Fragment>
@@ -146,7 +148,7 @@ export default function DisplayPreceptor(props) {
             <IoIosArrowDown color='#079CDB' style={showPopulationDropdown ? { transform: 'rotate(180deg)', transition: '0.3s linear' } : { transform: 'rotate(0deg)', transition: '0.3s linear' }} />
           </div>
           <Dropdown disableSearch open={showPopulationDropdown} setOpen={setShowPopulationDropdown} choices={populationChoices}
-          ddFilter={populationFilter} setddFilter={setPopulationFlter} />
+          ddFilter={settingFilter} setddFilter={setPopulationFlter} />
         </div>
         <div className={styles.expForm}>
           <div className={styles.formTitle} onClick={() => setShowExperienceDropdown(!showExperienceDropdown)}>

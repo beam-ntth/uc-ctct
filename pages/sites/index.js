@@ -65,7 +65,14 @@ export default function Database({ data, user }) {
                   <p style={{ width: '40%' }}>Total Active Sites</p>
                 </div>
               </div >
-              
+              <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Link href={`/sites/database/`}>
+                  <div className='displayRegionRow' key={`elem_ALL`}>
+                    <p style={{ marginLeft: '2rem', width: '50%' }}>All Affiliations</p>
+                    <p style={{ width: '40%', textAlign: 'left', paddingLeft: '1.5rem' }}>{data.map(x => x.total_sites).reduce((acc, a) => acc + a, 0)}</p>
+                  </div>
+                </Link>
+              </div >
               {
                 data.map((x, ind) => {
                   return (

@@ -3,11 +3,10 @@ import Link from 'next/link'
 import { IoIosArrowDown } from 'react-icons/io';
 import { AiOutlineDownload } from 'react-icons/ai'
 import styles from './DisplaySite.module.css'
-import {searchString} from '../../shared/search'
+import { searchString } from '../../shared/search'
 import StatusParser from '../../shared/status';
 import Dropdown from '../dropDown/dropdown';
-import { parse } from 'json2csv';
-import { createDownloadLink } from '../csvParser';
+import { createSiteCSV } from '../csvParser';
 
 export default function DisplaySite(props) {
   /**
@@ -57,7 +56,7 @@ export default function DisplaySite(props) {
         return regionFilter.includes(regionName)
       })
     }
-    
+
     // Check affiliation
     // if (!allEqual(affiFilter)) {
     //   finalSearch = finalSearch.filter(d => {
@@ -80,6 +79,9 @@ export default function DisplaySite(props) {
    * as specified in the second argument 
    */
   useEffect(() => {
+    console.log(props.data[1]);
+  }, [])
+  useEffect(() => {
     searchSiteData('')
   }, [regionFilter, affiFilter, statusFilter])
 
@@ -87,7 +89,8 @@ export default function DisplaySite(props) {
    * Converts JSON data to CSV data, then create a file for the user to download
    */
   function download_csv_file() {
-    createDownloadLink(props.data, "site-overview");
+    // createDownloadLink(props.data, "site-overview");
+    createSiteCSV(props.data);
   }
 
   return (
@@ -126,19 +129,20 @@ export default function DisplaySite(props) {
         </div>
       </div>
       <div className={styles.row}>
-        <div style={{display: 'flex', width: '97%'}}>
+        <div style={{ display: 'flex', width: '97%' }}>
           <p className={styles.titleCol1}>Site Name</p>
           <p className={styles.titleCol2}>Affiliation</p>
           <p className={styles.titleCol3}>Status</p>
         </div>
-        <p style={{width: '3%'}}></p>
+        <p style={{ width: '3%' }}></p>
       </div>
       {
         filteredData.map((x, ind) => {
           const statusText = StatusParser("sites", parseInt(x.status))
           const regionName = (props.region_data == null ? null : props.region_data.filter((r) => r.id == x.region_id))
           let displayAffi = "N/A"
-          if (regionName != null) {
+          console.log(regionName)
+          if (regionName !== null && regionName.length > 0) {
             switch (regionName[0].name) {
               case "UC Davis":
                 displayAffi = "UCD";
@@ -161,9 +165,9 @@ export default function DisplaySite(props) {
             <Link href={`/sites/database/clinics?location=${x.id}`}>
               <div key={`clinics_${ind}`} className='displayVizRow'>
                 <div className="rowContentClinics">
-                  <p className={styles.dataCol1}>{ x.name }</p>
-                  <p className={styles.dataCol2}>{ displayAffi }</p>
-                  <p className={styles.dataCol3}>{ statusText }</p>
+                  <p className={styles.dataCol1}>{x.name}</p>
+                  <p className={styles.dataCol2}>{displayAffi}</p>
+                  <p className={styles.dataCol3}>{statusText}</p>
                 </div>
                 <div className={`siteTag${x['status']}`}></div>
               </div>

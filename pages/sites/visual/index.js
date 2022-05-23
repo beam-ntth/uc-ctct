@@ -101,7 +101,7 @@ export default function Visualization({ site_data, regionChoices, user }) {
                   onClick={() => setSearchSetting(2)} > Preceptor </p>
               </div>
               {searchSetting === 0 ? <DisplaySite region_data={regionData} data={site_data} region_choices={regionChoices} affiliation_choices={affiliationChoices} /> : null}
-              {searchSetting === 1 ? (clinicData == null ? <p>Loading...</p> : <DisplayClinic data={clinicData} region_data={regionData} region_choices={regionChoices} sites={site_data} />) : null}
+              {searchSetting === 1 ? (clinicData == null ? <p>Loading...</p> : <DisplayClinic data={clinicData} preceptorData={preceptorData} region_data={regionData} region_choices={regionChoices} sites={site_data} />) : null}
               {searchSetting === 2 ? (preceptorData == null ? <p>Loading...</p> : <DisplayPreceptor data={preceptorData} clinicData={clinicData} choices={regionChoices} />) : null}
             </div>
           </div>

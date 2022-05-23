@@ -52,25 +52,25 @@ export default function EditSiteOrClinicNote(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Title:</strong><input value={siteNote.title} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.title = e.target.value
-                        setSiteNote(newSite)
-                        return
+                            let newSite = {...siteNote}
+                            newSite.title = e.target.value
+                            setSiteNote(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%'}}>
                         <p style={{display: 'flex'}}><strong>Note:</strong><textarea value={siteNote.note} onChange={(e) => {
-                        let newSite = {...siteNote}
-                        newSite.note = e.target.value
-                        setSiteNote(newSite)
-                        return
+                            let newSite = {...siteNote}
+                            newSite.note = e.target.value
+                            setSiteNote(newSite)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={async () => {
-                        editElement()
-                        setSubmittingForm(true)
-                        return
+                            editElement()
+                            setSubmittingForm(true)
+                            return
                         }}>Save</div>
                     </div>
                 </React.Fragment>)

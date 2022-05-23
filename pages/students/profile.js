@@ -159,84 +159,88 @@ export default function StudentProfile({ student, user }) {
                 <div className={styles.bioTitle}>
                   <h4>Survey Data</h4>
                 </div>
-                { student.survey.hasResponded ? null : <p>Nothing has been assigned to this student so far!</p> }
-                <div className={styles.bioTitle}>
-                <div className={styles.profileInfo}>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Other Language(s) Spoken:</strong> {surveyData.otherLanguages.join(", ")}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Preferred Location (Primary):</strong> {`${surveyData.preferredLocation.firstCity}, ${surveyData.preferredLocation.firstCounty}`}</p>
-                      <p><strong>Preferred Location (Secondary):</strong> {`${surveyData.preferredLocation.secondCity}, ${surveyData.preferredLocation.secondCounty}`}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ lineHeight: '2rem' }}><strong>Practice Setting Rank:</strong> {surveyData.practiceSetting.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ lineHeight: '2rem' }}><strong>Patient Population Rank:</strong> {surveyData.patientPopulation.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong>Age Group Rank:</strong> {surveyData.ageGroup.map((x, ind) => `${ind+1}. ${x}`).join(" | ")}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Current Certification:</strong> {surveyData.currentCert}</p>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Primary Clinic Certification:</strong> {surveyData.primaryCert}</p>
-                      {surveyData.secondaryCert ? <p><strong>Secondary Clinic Certification:</strong> {surveyData.secondaryCert}</p> : null}
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>APRN Years of Experience:</strong> {surveyData.aprnWorkDuration}</p>
-                      <p><strong>Average Patient Volume:</strong> {surveyData.avgPatientVol}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong>PMHNP Time Commitment:</strong> {surveyData.planToWork}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong>Availability:</strong> {surveyData.daysAvailable}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong>Plans After Graduation:</strong> {surveyData.planAfterGraduate}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong>Current Working at Mental Health Facility:</strong> {surveyData.isWorkingAtMentalHealth}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p><strong style={{ textDecoration: 'underline' }}>Experience Working With</strong></p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Depression:</strong> {surveyData.mentalExperienceLevel.depression}</p>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Anxiety:</strong> {surveyData.mentalExperienceLevel.anxiety}</p>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Bipolar Disorder:</strong> {surveyData.mentalExperienceLevel.bipolarDisorder}</p>
-                      <p><strong>Eating Disorder:</strong> {surveyData.mentalExperienceLevel.eatingDisorders}</p>
-                  </div>
-                  <div className={styles.infoRow}>
-                      <p style={{ marginRight: '1.5rem' }}><strong>ADHD:</strong> {surveyData.mentalExperienceLevel.adhd}</p>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Schizophrenia:</strong> {surveyData.mentalExperienceLevel.schizophrenia}</p>
-                      <p style={{ marginRight: '1.5rem' }}><strong>Personality Disorder:</strong> {surveyData.mentalExperienceLevel.personalityDisorders}</p>
-                  </div>
-                  { surveyData.hasPreferredClinic == "Yes" ?
-                  <React.Fragment>
+                { student.survey.hasResponded ? 
+                  <div className={styles.bioTitle}>
+                    <div className={styles.profileInfo}>
                       <div className={styles.infoRow}>
-                          <p style={{ textDecoration: 'underline' }}><strong>Preferred Clinic</strong></p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Other Language(s) Spoken:</strong> {surveyData.otherLanguages ? surveyData.otherLanguages.join(", ") : "N/A"}</p>
                       </div>
                       <div className={styles.infoRow}>
-                          <p style={{ marginRight: '1.5rem' }}><strong>Clinic Name:</strong> {surveyData.preferredClinic.clinicName}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Preferred Location (Primary):</strong> {surveyData.preferredLocation ? `${surveyData.preferredLocation.firstCity}, ${surveyData.preferredLocation.firstCounty}` : "N/A"}</p>
+                          <p><strong>Preferred Location (Secondary):</strong> {surveyData.preferredLocation ? `${surveyData.preferredLocation.secondCity}, ${surveyData.preferredLocation.secondCounty}` : "N/A"}</p>
                       </div>
                       <div className={styles.infoRow}>
-                          <p style={{ marginRight: '1.5rem' }}><strong>Address:</strong> {surveyData.preferredClinic.address}</p>
+                          <p style={{ lineHeight: '2rem' }}><strong>Practice Setting Rank:</strong> {surveyData.practiceSetting ? surveyData.practiceSetting.map((x, ind) => `${ind+1}. ${x}`).join(" | ") : "N/A"}</p>
                       </div>
                       <div className={styles.infoRow}>
-                          <p style={{ marginRight: '1.5rem' }}><strong>Point of Contact:</strong> {surveyData.preferredClinic.poc}</p>
-                          <p style={{ marginRight: '1.5rem' }}><strong>Phone Number:</strong> {surveyData.preferredClinic.phone}</p>
-                          <p><strong>Email:</strong> {surveyData.preferredClinic.email}</p>
+                          <p style={{ lineHeight: '2rem' }}><strong>Patient Population Rank:</strong> {surveyData.patientPopulation ? surveyData.patientPopulation.map((x, ind) => `${ind+1}. ${x}`).join(" | ") : "N/A"}</p>
                       </div>
-                  </React.Fragment>
-                  : null }
-                  <div className={styles.infoRow}>
-                    <p style={{ marginRight: '1.5rem' }}><strong>Other Work Experience:</strong> {surveyData.otherExperience}</p>
-                    <p><strong>Other Interesting Facts:</strong> {surveyData.otherFacts}</p>
+                      <div className={styles.infoRow}>
+                          <p><strong>Age Group Rank:</strong> {surveyData.ageGroup ? surveyData.ageGroup.map((x, ind) => `${ind+1}. ${x}`).join(" | ") : "N/A"}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Current Certification:</strong> {surveyData.currentCert}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Primary Clinic Certification:</strong> {surveyData.primaryCert}</p>
+                          {surveyData.secondaryCert ? <p><strong>Secondary Clinic Certification:</strong> {surveyData.secondaryCert}</p> : null}
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>APRN Years of Experience:</strong> {surveyData.aprnWorkDuration}</p>
+                          <p><strong>Average Patient Volume:</strong> {surveyData.avgPatientVol}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p><strong>PMHNP Time Commitment:</strong> {surveyData.planToWork}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p><strong>Availability:</strong> {surveyData.daysAvailable}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p><strong>Plans After Graduation:</strong> {surveyData.planAfterGraduate}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p><strong>Current Working at Mental Health Facility:</strong> {surveyData.isWorkingAtMentalHealth}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p><strong style={{ textDecoration: 'underline' }}>Experience Working With</strong></p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Depression:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.depression : "Waiting for response"}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Anxiety:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.anxiety : "Waiting for response"}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Bipolar Disorder:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.bipolarDisorder : "Waiting for response"}</p>
+                          <p><strong>Eating Disorder:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.eatingDisorders : "Waiting for response"}</p>
+                      </div>
+                      <div className={styles.infoRow}>
+                          <p style={{ marginRight: '1.5rem' }}><strong>ADHD:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.adhd : "Waiting for response"}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Schizophrenia:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.schizophrenia : "Waiting for response"}</p>
+                          <p style={{ marginRight: '1.5rem' }}><strong>Personality Disorder:</strong> {surveyData.mentalExperienceLevel ? surveyData.mentalExperienceLevel.personalityDisorders : "Waiting for response"}</p>
+                      </div>
+                      { surveyData.hasPreferredClinic == "Yes" ?
+                      <React.Fragment>
+                          <div className={styles.infoRow}>
+                              <p style={{ textDecoration: 'underline' }}><strong>Preferred Clinic</strong></p>
+                          </div>
+                          <div className={styles.infoRow}>
+                              <p style={{ marginRight: '1.5rem' }}><strong>Clinic Name:</strong> {surveyData.preferredClinic.clinicName}</p>
+                          </div>
+                          <div className={styles.infoRow}>
+                              <p style={{ marginRight: '1.5rem' }}><strong>Address:</strong> {surveyData.preferredClinic.address}</p>
+                          </div>
+                          <div className={styles.infoRow}>
+                              <p style={{ marginRight: '1.5rem' }}><strong>Point of Contact:</strong> {surveyData.preferredClinic.poc}</p>
+                              <p style={{ marginRight: '1.5rem' }}><strong>Phone Number:</strong> {surveyData.preferredClinic.phone}</p>
+                              <p><strong>Email:</strong> {surveyData.preferredClinic.email}</p>
+                          </div>
+                      </React.Fragment>
+                      : null }
+                      
+                      <div className={styles.infoRow}>
+                        <p style={{ marginRight: '1.5rem' }}><strong>Other Work Experience:</strong> {surveyData.otherExperience}</p>
+                        <p><strong>Other Interesting Facts:</strong> {surveyData.otherFacts}</p>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
+                  : 
+                  <p>The student still hasn't responded to the survey</p> 
+                }
             </div>
             <div className={styles.data} style={{ marginTop: '1rem' }}>
                 <div className={styles.bioTitle}>

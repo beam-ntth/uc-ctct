@@ -3,15 +3,31 @@ import React, { useState, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { client } from "../../../api-lib/azure/azureConfig";
 import { getClinicOrSiteOrRegion} from "../../../api-lib/azure/azureOps";
+import { cleanFormName, removeAllAlphabets } from "./formUtils";
 
 export default function AdminInfoAdd(props) {
   const [hover, setHover] = useState(false)
   const [info, setInfo] = useState({
-    name: null,
-    position: null,
-    phone: null,
-    email: null,
+    name: "",
+    position: "",
+    phone: "",
+    email: "",
   });
+
+  /**
+   * States for error checking
+   */
+  const [requiredName, setRequiredName] = useState(false)
+  const [emailError, setEmailError] = useState(false)
+
+  const checkForErrors = () => {
+    let errorExist = false
+    if (info.name === "") {
+      errorExist = true
+      setRequiredName(true)
+    }
+    return errorExist
+  }
 
   async function updateInfo() {
     const database = client.database("uc-ctct");
@@ -56,22 +72,25 @@ export default function AdminInfoAdd(props) {
                 <p>
                   <strong>Name:</strong>
                   <input
-                    placeholder="First Last"
+                    placeholder="Firstname Lastname"
+                    value={info.name}
                     onChange={(e) => {
                       let newInfo = { ...info };
-                      newInfo.name = e.target.value;
+                      newInfo.name = cleanFormName(e.target.value)
                       setInfo(newInfo);
                       return;
                     }}
                   />
                 </p>
+                {requiredName ? <p className="errorText">This field is required!</p> : null}
                 <p>
                   <strong>Position:</strong>
                   <input
                     placeholder="Position"
+                    value={info.position}
                     onChange={(e) => {
                       let newInfo = { ...info };
-                      newInfo.position = e.target.value;
+                      newInfo.position = cleanFormName(e.target.value);
                       setInfo(newInfo);
                       return;
                     }}
@@ -84,9 +103,7 @@ export default function AdminInfoAdd(props) {
                     value={info.phone}
                     onChange={(e) => {
                       let newInfo = { ...info };
-                      newInfo.phone = e.target.value
-                        .replace(/\D/g, "")
-                        .substring(0, 10);
+                      newInfo.phone = removeAllAlphabets(e.target.value).substring(0, 10)
                       setInfo(newInfo);
                       return;
                     }}
@@ -97,14 +114,16 @@ export default function AdminInfoAdd(props) {
                   <input
                     placeholder="Email Address"
                     type={"email"}
+                    value={info.email}
                     onChange={(e) => {
                       let newInfo = { ...info };
-                      newInfo.email = e.target.value;
+                      newInfo.email = e.target.value.toLowerCase();
                       setInfo(newInfo);
                       return;
                     }}
                   />
                 </p>
+                {emailError ? <p className="errorText">Invalid Email Address. Please Try Again.</p> : null}
               </div>
               <div
                 style={{
@@ -118,6 +137,14 @@ export default function AdminInfoAdd(props) {
                 <div
                   className="saveBtn"
                   onClick={async () => {
+                    if (checkForErrors()) {
+                      return;
+                    }
+                    if (info.email.length > 0 && (!info.email.includes("@") || !info.email.includes("."))) {
+                      // If the user types in something, and the email is invalid
+                      setEmailError(true)
+                      return;
+                    }
                     await updateInfo();
                     setSubmittingForm(true)
                     return;
@@ -146,7 +173,7 @@ export default function AdminInfoAdd(props) {
 
           .editScreen {
             position: absolute;
-            height: 45vh;
+            height: 55vh;
             width: 50vw;
             background-color: #fff;
             opacity: 100%;
@@ -182,6 +209,11 @@ export default function AdminInfoAdd(props) {
             justify-content: center;
             align-items: center;
             cursor: pointer;
+          }
+
+          .errorText {
+            font-size: 0.8rem;
+            color: red;
           }
         `}
       </style>
