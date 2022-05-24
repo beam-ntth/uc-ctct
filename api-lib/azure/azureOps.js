@@ -788,3 +788,21 @@ export async function checkIfAdminExist(admin_email) {
     throw new Error(`Error happens while checking for admin's credential. Error is: ${error}`)
   }
 }
+
+/**
+ * Temporary Functions
+ * @deprecated - should only be used once during the initial data transferring
+ */
+export async function convertAllSitesToActive() {
+  const sites = await getAllSites()
+  for (let i = 0; i < sites.length; i++) {
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/status",
+          value: "8"
+      }];
+    await Master.item(sites[i].id, sites[i].id).patch(replaceOperation)
+  }
+  return 0
+}

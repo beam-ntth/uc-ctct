@@ -1,13 +1,5 @@
 import Head from 'next/head'
 import styles from '../styles/Main.module.css'
-// import '../styles/fonts.css'
-
-// Authentication Packages
-import { isAuthenticated } from './api/auth/isAuthenticated';
-import passport from 'passport';
-import nextConnect from 'next-connect';
-import setup from '../api-lib/auth/passportSetup';
-import Chart from 'chart.js/auto'
 
 // Component Packages
 import Navbar from '../components/shared/navbar/navbar';
