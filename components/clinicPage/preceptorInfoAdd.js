@@ -24,7 +24,7 @@ export default function PreceptorInfoAdd(props) {
     email: "",
     npi: "",
     phoneNumber: null,
-    status: 0,
+    status: "7",
     location_affiliation: props.region,
     survey: {
       hasResponded: false,
@@ -74,7 +74,9 @@ export default function PreceptorInfoAdd(props) {
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
               </div>
               <div style={{ width: '90%' }}>
-                <p><strong>First Name:</strong><input placeholder="Ex: John"
+                <p><strong>First Name:</strong><input 
+                  placeholder="Ex: John"
+                  value={info.firstname}
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.firstname = cleanFormName(e.target.value)
@@ -83,7 +85,9 @@ export default function PreceptorInfoAdd(props) {
                   }} />
                 </p>
                 {requiredTextError ? <p className="errorText">This Field Is Required. Please Try Again.</p> : null}
-                <p><strong>Last Name:</strong><input placeholder="Ex: Doe"
+                <p><strong>Last Name:</strong><input 
+                  placeholder="Ex: Doe"
+                  value={info.lastname}
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.lastname = cleanFormName(e.target.value)
@@ -92,15 +96,19 @@ export default function PreceptorInfoAdd(props) {
                   }} />
                 </p>
                 {requiredTextError ? <p className="errorText">This Field Is Required. Please Try Again.</p> : null}
-                <p><strong>National Provider Identifier (NPI):</strong><input placeholder="NPI: (0000000000)"
+                <p><strong>National Provider Identifier (NPI):</strong><input 
+                  placeholder="NPI: (0000000000)"
+                  value={info.npi}
                   onChange={(e) => {
                     let newInfo = { ...info }
-                    newInfo.npi = removeAllAlphabets(e.target.value)
+                    newInfo.npi = removeAllAlphabets(e.target.value.substring(0, 10))
                     setInfo(newInfo);
                     return;
                   }} />
                 </p>
-                <p><strong>Phone Number:</strong><input placeholder="0000000000"
+                <p><strong>Phone Number:</strong><input 
+                  placeholder="0000000000"
+                  value={info.phoneNumber}
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.phoneNumber = removeAllAlphabets(e.target.value).substring(0, 10)
@@ -108,7 +116,9 @@ export default function PreceptorInfoAdd(props) {
                     return;
                   }} />
                 </p>
-                <p><strong>Email Address:</strong><input placeholder="Email Address"
+                <p><strong>Email Address:</strong><input 
+                  placeholder="Email Address"
+                  value={info.email}
                   onChange={(e) => {
                     let newInfo = { ...info }
                     newInfo.email = e.target.value.toLowerCase()
