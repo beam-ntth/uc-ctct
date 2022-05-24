@@ -1,13 +1,17 @@
+// Main Packages
+import React from 'react'
 import Head from 'next/head'
 import styles from '../styles/Main.module.css'
 
 // Component Packages
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
+import Chart from 'chart.js/auto'
 import BarChart from '../components/Charts/barcharts';
 import LineChart from '../components/Charts/linechart';
-import React from 'react'
 import NumberChart from '../components/Charts/numberChart';
+
+// DB Functions
 import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 
 export async function getServerSideProps({ req, res }) {
