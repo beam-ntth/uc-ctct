@@ -788,3 +788,46 @@ export async function checkIfAdminExist(admin_email) {
     throw new Error(`Error happens while checking for admin's credential. Error is: ${error}`)
   }
 }
+
+/**
+ * Temporary Function
+ * @deprecated - should only be used once during the initial data transferring
+ */
+export async function convertAllSitesToActive() {
+  const sites = await getAllSites()
+  for (let i = 0; i < sites.length; i++) {
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/status",
+          value: "8"
+      }];
+    await Master.item(sites[i].id, sites[i].id).patch(replaceOperation)
+  }
+  return 0
+}
+
+/**
+ * Temporary Function
+ * @deprecated - should only be used once during the initial data transferring
+ */
+export async function insertClinicInitialData() {
+  const schema = [
+    { "title": "Clerance Timeline", "note": "" },
+    { "title": "Clerance Requirement", "note": "" },
+    { "title": "Orientation", "note": "" },
+    { "title": "Tips & Tricks", "note": "" },
+    { "title": "Attire", "note": "" }
+  ]
+  const clinics = await getAllClinics()
+  for (let i = 0; i < clinics.length; i++) {
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/clinicPlacementDetail",
+          value: schema
+      }];
+    await Master.item(clinics[i].id, clinics[i].id).patch(replaceOperation)
+  }
+  return 0
+}

@@ -20,30 +20,22 @@
 
 .data {
   background-color: #f5f6fa;
-  margin: 3rem 3rem 0 1rem;
+  margin: 3rem 0 0 2rem;
   border-radius: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-
-  /* height: 550px; */
-  width: 98%;
+  width: 95%;
   margin-bottom: 3rem;
   padding-bottom: 4rem;
-  /* padding: 1rem; */
 }
 
 .view1 {
   display: flex;
   flex-direction: row;
   padding-top: 2rem;
-  /* justify-content: flex-start;
-  /* align-items: flex-start; */
-  /* margin: 3rem; */
   margin-left: 30%;
-  /* margin: 2rem 2rem 0 2rem; */
-  /* margin-left: 2.5rem; */
   height: 10%;
   width: 40%;
   font-family: "Lato", sans-serif;
@@ -108,8 +100,6 @@
   width: 90%;
   border: 1px solid #C4C4C4;
   border-radius: 0.3rem;
-  /* border-top-left-radius: 0.3rem;
-  border-bottom-left-radius: 0.3rem; */
   padding-left: 0.5rem;
 }
 
@@ -163,9 +153,6 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  /* margin: 4rem 2rem 1rem 2rem; */
-  /* margin: 2rem 2rem 0 2rem; */
-  /* margin-left: 2.5rem; */
   height: 10%;
   width: 90%;
   font-family: "Lato", sans-serif;
@@ -228,4 +215,11 @@
 }
 .dataCol4 {
   width: 20%;
+}
+
+@media only screen and (max-width: 1025px) {
+  .data {
+    margin: 3rem 0 0 0.5rem;
+    width: 98%;
+  }
 }

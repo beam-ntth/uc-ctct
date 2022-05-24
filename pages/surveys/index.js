@@ -25,6 +25,9 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function StudentMgmt({ user }) {
+  /**
+   * State to keep track of the last updated timestamp
+   */
   const [lastUpdated, setLastUpdated] = useState(null)
 
   /**
@@ -33,6 +36,9 @@ export default function StudentMgmt({ user }) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [displayText, setDisplayText] = useState("Refreshing usually takes about 1 minute. Hang Tight!")
 
+  /**
+   * Lazy load data of the last updated timestamp
+   */
   const loadData = async () => {
     const data = await getSurveyStatus()
     setLastUpdated(data.metadata.last_updated)

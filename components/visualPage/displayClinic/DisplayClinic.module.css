@@ -79,7 +79,6 @@
 }
 
 .dataCol1 {
-    width: 23%;
     flex-wrap: wrap;
     font-size: small;
 }
@@ -97,14 +96,30 @@
     font-size: small;
 }
 
-.titleCol4 {
+.titleCol4, .dataCol4 {
     width: 16%;
+}
+
+.titleCol4 {
     font-size: large;
 }
 
-.titleCol5 {
+.dataCol4 {
+    flex-wrap: wrap;
+    font-size: small;
+}
+
+.titleCol5, .dataCol5 {
     width: 13%;
+}
+
+.titleCol5 {
     font-size: large;
+}
+
+.dataCol5 {
+    flex-wrap: wrap;
+    font-size: small;
 }
 
 .titleCol6 {
@@ -117,21 +132,12 @@
     font-size: large;
 }
 
-.dataCol4 {
-    width: 17%;
-    flex-wrap: wrap;
-    font-size: small;
-}
-.dataCol5 {
-    width: 15%;
-    flex-wrap: wrap;
-    font-size: small;
-}
 .dataCol6 {
-    width: 11%;
+    width: 13%;
     flex-wrap: wrap;
     font-size: small;
 }
+
 .dataCol7 {
     width: 13%;
     flex-wrap: wrap;
