@@ -811,6 +811,24 @@ export async function convertAllSitesToActive() {
  * Temporary Function
  * @deprecated - should only be used once during the initial data transferring
  */
+ export async function convertAllClinicsToActive() {
+  const clinics = await getAllClinics()
+  for (let i = 0; i < clinics.length; i++) {
+    const replaceOperation =
+      [{
+          op: "replace",
+          path: "/status",
+          value: "7"
+      }];
+    await Master.item(clinics[i].id, clinics[i].id).patch(replaceOperation)
+  }
+  return 0
+}
+
+/**
+ * Temporary Function
+ * @deprecated - should only be used once during the initial data transferring
+ */
 export async function insertClinicInitialData() {
   const schema = [
     { "title": "Clerance Timeline", "note": "" },
