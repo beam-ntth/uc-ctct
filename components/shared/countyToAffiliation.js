@@ -27,5 +27,6 @@ const mapper = {
     "Orange": "UC Irvine",
     "Riverside": "UC Irvine",
     "San Bernardino": "UC Irvine",
-    "San Diego": "UC Irvine"
+    "San Diego": "UC Irvine",
+    "San Mateo": "UC San Francisco"
 }

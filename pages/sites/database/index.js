@@ -15,6 +15,9 @@ import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../.
 import { getAllClinics, getAllStudents } from '../../../api-lib/azure/azureOps';
 import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
+
+// const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
+
 export async function getServerSideProps(context) {
     const redirect = await runAuthMiddleware(context.req, context.res);
     // If the user is invalid then we redirect them back to the index.js page
@@ -99,9 +102,15 @@ export default function SiteMgmt({ region_data, location, user }) {
                             <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
                                 {
                                     clinicData != null ?
-                                    clinicData.map((x) => {
+                                    clinicData.filter(x => {
+                                        if (region_data) {
+                                            return x.region_id == region_data.id
+                                        }
+                                        return true
+                                    }).map((x) => {
                                     const genInfo = x.generalInformation
-                                    return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}
+                                    
+                                    return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}  
                                     type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
                                     addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
                                     })
@@ -110,7 +119,12 @@ export default function SiteMgmt({ region_data, location, user }) {
                                 }
                                 {
                                     studentData != null ?
-                                    studentData.map(x => {
+                                    studentData.filter(x => {
+                                        if (region_data) {
+                                            return x.location_affiliation == region_data.name
+                                        }
+                                        return true
+                                    }).map(x => {
                                     const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
                                     return <Marker lat={x.lat} lng={x.long} type={x.assignment.isAssigned ? 'student-assigned' : 'student-unassigned'} 
                                     id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
