@@ -15,9 +15,6 @@ import { getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../.
 import { getAllClinics, getAllStudents } from '../../../api-lib/azure/azureOps';
 import { runAuthMiddleware } from '../../../api-lib/auth/authMiddleware';
 
-
-// const setLanguageChoices = [... new Set(props.students.map(x => x.survey.data.otherLanguages).flat().filter(x => x != null))];
-
 export async function getServerSideProps(context) {
     const redirect = await runAuthMiddleware(context.req, context.res);
     // If the user is invalid then we redirect them back to the index.js page
