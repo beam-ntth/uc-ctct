@@ -18,3 +18,10 @@ export function searchPreceptorName(data, substr) {
         return name.includes(cleanedSearch)
     })
 }
+export function searchStudentName(data, substr) {
+    return data.filter(student => {
+        const cleanedSearch = substr.toLowerCase();
+        const name = `${student.firstName} ${student.lastName}`.toLowerCase()
+        return name.includes(cleanedSearch)
+    })
+}

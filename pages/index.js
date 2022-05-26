@@ -1,34 +1,14 @@
-import nextConnect from 'next-connect';
+// Main Packages
 import Head from 'next/head'
-import { useState } from 'react';
-import { checkIfAdminExist } from '../api-lib/azure/azureOps';
-import setup from '../api-lib/auth/passportSetup';
 import styles from '../styles/Home.module.css'
 
-// export async function getServerSideProps(context) {
-//   // Get clinic data to access array of preceptors.
-//   // const precepID = addPreceptorSproc.id;
-//   // const container = client.database("myDatabase").container("myContainer");
-//   // const sprocId = "spAddPreceptor";
-//   // const { resource: result } = await container.scripts.storedProcedure(sprocId).execute(newItem, { partitionKey: newItem[0].category });
-
-//   const container = CONTAINER;
-//   await container.scripts.storedProcedure(addPreceptorSproc.id).execute(preceptor_data.id, preceptor_data);
-//   return
-// }
-
-// const newItem = [{
-//   category: "Personal",
-//   name: "Groceries",
-//   description: "Pick up strawberries",
-//   isComplete: false
-// }];
-// const container = client.database("myDatabase").container("myContainer");
-// const sprocId = "spCreateToDoItems";
-// const {resource: result} = await container.scripts.storedProcedure(sprocId).execute(newItem, {partitionKey: newItem[0].category});
+// DB Functions
+import nextConnect from 'next-connect';
+import setup from '../api-lib/auth/passportSetup';
+import { checkIfAdminExist } from '../api-lib/azure/azureOps';
 
 export async function getServerSideProps(context) {
-  // Check if the cookie 
+  // Check if the cookie exist, if so we do not require them to login
   const handler = nextConnect().use(...setup);
   await handler.run(context.req, context.res);
   const user = context.req.user;
@@ -44,6 +24,7 @@ export async function getServerSideProps(context) {
     }
   }
 
+  // If the user didn't login properly, we redirect them and give them a warning
   const authValue = context.query.auth
   let displayWarning = null;
   if (authValue == "failed") {

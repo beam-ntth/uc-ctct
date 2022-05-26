@@ -36,26 +36,26 @@ export default function EditPreceptorProfile(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>First Name:</strong><input value={data.firstname} onChange={(e) => {
-                        let newData = {...data}
-                        newData.firstname = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.firstname = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Last Name:</strong><input value={data.lastname} onChange={(e) => {
-                        let newData = {...data}
-                        newData.lastname = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.lastname = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>National Provider Identifier (NPI):</strong><input value={data.npi} onChange={(e) => {
-                        let newData = {...data}
-                        newData.npi = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.npi = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
@@ -73,41 +73,41 @@ export default function EditPreceptorProfile(props) {
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Credential:</strong><input value={data.credential} onChange={(e) => {
-                        let newData = {...data}
-                        newData.credential = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.credential = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Position:</strong><input value={data.position} onChange={(e) => {
-                        let newData = {...data}
-                        newData.position = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.position = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Email:</strong><input value={data.email} onChange={(e) => {
-                        let newData = {...data}
-                        newData.email = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.email = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '90%' }}>
                         <p><strong>Phone Number:</strong><input value={data.phoneNumber} onChange={(e) => {
-                        let newData = {...data}
-                        newData.phoneNumber = e.target.value
-                        setData(newData)
-                        return
+                            let newData = {...data}
+                            newData.phoneNumber = e.target.value
+                            setData(newData)
+                            return
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                         <div className="saveBtn" onClick={async () => {
-                        editElement()
-                        setSubmittingForm(true)
-                        return
+                            editElement()
+                            setSubmittingForm(true)
+                            return
                         }}>Save</div>
                     </div>
                 </React.Fragment>)

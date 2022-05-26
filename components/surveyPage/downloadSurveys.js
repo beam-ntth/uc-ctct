@@ -2,6 +2,13 @@ import { editPreceptorInfo, editStudentInfo, getPreceptorFromEmail, getStudentFr
 import { startExportResponses } from "../../api-lib/qualtrics/qualtricsOps";
 import { parsePrecpetorData, parseStudentData } from "./parseQualtricsData";
 
+const getTodayDate = () => {
+    const date = new Date()
+    const month = `${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : `${date.getMonth() + 1}`}`
+    const day = `${date.getDate() < 10 ? `0${date.getDate()}` : `${date.getDate()}`}`
+    return `${month}/${day}/${date.getFullYear()}`
+}
+
 export const downloadSurveys = async(type, STUDENT_SURVEY, checkForProgress, waitToDownload, setDisplayText) => {
     if (type != "student" && type != "preceptor") {
         throw new Error(`Invalid type (${type}). Needs to be either "student" or "preceptor"`)
@@ -64,6 +71,7 @@ export const downloadSurveys = async(type, STUDENT_SURVEY, checkForProgress, wai
 
     if (type == "student") {
         setDisplayText("Finished downloading survey responses. Yay!")
+        downloaded_data.forEach(x => console.log(x))
         // downloaded_data.forEach(x => console.log(parseStudentData(x)))
     
         setDisplayText("Updating STUDENT survey responses to the records in the database. Hang Tight!")
@@ -72,8 +80,12 @@ export const downloadSurveys = async(type, STUDENT_SURVEY, checkForProgress, wai
             // You should only find one student to match with the email
             if (checkStudent.length == 1) {
                 let newStudentData = {...checkStudent[0]}
-                newStudentData.survey.data = student
-                editStudentInfo(newStudentData.id, newStudentData)
+                if (!newStudentData.survey.hasResponded) {
+                    newStudentData.survey.hasResponded = true
+                    newStudentData.survey.responseDate = getTodayDate()
+                    newStudentData.survey.data = student
+                    editStudentInfo(newStudentData.id, newStudentData)
+                }
             }
         })
     } else {
@@ -85,8 +97,12 @@ export const downloadSurveys = async(type, STUDENT_SURVEY, checkForProgress, wai
             // You should only find one preceptor to match with the email
             if (checkPreceptor.length == 1) {
                 let newPrecepData = {...checkPreceptor[0]}
-                newPrecepData.survey.data = preceptor
-                editPreceptorInfo(newPrecepData.id, newPrecepData)
+                if (!newPrecepData.survey.hasResponded) {
+                    newPrecepData.survey.hasResponded = true
+                    newPrecepData.survey.responseDate = getTodayDate()
+                    newPrecepData.survey.data = preceptor
+                    editPreceptorInfo(newPrecepData.id, newPrecepData)
+                }
             }
         })
     }

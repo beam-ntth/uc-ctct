@@ -1,17 +1,21 @@
+// Main Packages
 import Head from 'next/head'
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import styles from '../styles/Match.module.css'
 
+// Component Packages
 import Navbar from '../components/shared/navbar/navbar';
 import Header from '../components/shared/header/header';
-import {searchString} from '../components/shared/search'
 import CircularProgress from '@mui/material/CircularProgress'
-
-import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions, addStudentToPreceptor } from '../api-lib/azure/azureOps';
 import { IoMdAdd } from 'react-icons/io';
+
+// Utility Components
 import CountyList from '../components/shared/countyList';
 import StudentPreview from '../components/matchingPage/displayProfile';
-import { useRouter } from 'next/router';
+
+// DB Functions
+import { getAllClinics, getAllStudents, getAllPreceptors, getDistinctRegions, addStudentToPreceptor } from '../api-lib/azure/azureOps';
 import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 
 export async function getServerSideProps(context) {
@@ -87,10 +91,19 @@ export default function Matching({ clinics, students, preceptors, region_choices
     })
   }
 
+  /**
+   * @function filterClinicByFilter: Filter clinics based on the user's selection in dropdown
+   * @param clinics: list of all the clinics
+   */
   const filterClinicByFilter = (clinics) => {
     return clinics.filter(x => x.generalInformation.county == countyFilter)
   }
 
+  /**
+   * @function getAssignedClinic: Get Preceptor's Clinic
+   * @param id: Preceptor's id
+   * @returns: Clinic that the preceptor is assigned to
+   */
   const getAssignedClinic = (id) => {
     return clinics.filter(x => x.id == id)[0]
   }
@@ -129,7 +142,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
           <div className={styles.content}>
             <Header header="Student - Clinic Matching Tool" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
             <div className={styles.data}>
-              <div className={styles.studentSection} style={ matching ? { width: '47%', marginRight: '1rem', transition: 'linear 0.2s' } : { transition: 'linear 0.2s' } }>
+              <div className={styles.studentSection} style={ matching ? { height: '100%', width: '47%', marginRight: '1rem', transition: 'linear 0.2s' } : { transition: 'linear 0.2s' } }>
                 {
                 matching 
                 ? 

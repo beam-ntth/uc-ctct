@@ -33,3 +33,15 @@
     padding-left: 2rem;
     width: 85%;
 }
+
+.displayFullDetail {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 1025px) {
+    .displayFullDetail p, .noteTitle p {
+        font-size: 0.8rem;
+    }
+}

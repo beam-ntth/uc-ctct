@@ -16,6 +16,25 @@ export default function AddNewNote(props) {
     note: ""
   })
 
+  /**
+   * States for error checking
+   */
+  const [requiredTitle, setRequiredTitle] = useState(false)
+  const [requiredNote, setRequiredNote] = useState(false)
+
+  const checkForErrors = () => {
+    let errorExist = false
+    if (note.title === "") {
+      errorExist = true
+      setRequiredTitle(true)
+    }
+    if (note.note === "") {
+      errorExist = true
+      setRequiredNote(true)
+    }
+    return errorExist
+  }
+
   // TODO: JT - CREATE A FUNCTION FOR PATCHING TO NOTES WITH THIS CAPABILITY.
   async function updateInfo() {
     const database = client.database("uc-ctct");
@@ -66,12 +85,16 @@ export default function AddNewNote(props) {
                   onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onClick={() => props.setOpen(false)} />
               </div>
               <div style={{ height: 'auto', width: '90%' }}>
-                <p><strong>Title:</strong><input placeholder="Add Title Here" onChange={(x) => {
-                  let newValue = { ...note }
-                  newValue.title = x.target.value + ` | Added: ${currentdate.getMonth()}/${currentdate.getDate()}/${currentdate.getFullYear()}`
-                  setNote(newValue)
-                  return
-                }} /></p>
+                <p>
+                  <strong>Title:</strong>
+                  <input placeholder="Add Title Here" onChange={(x) => {
+                    let newValue = { ...note }
+                    newValue.title = x.target.value + ` | Added: ${currentdate.getMonth()}/${currentdate.getDate()}/${currentdate.getFullYear()}`
+                    setNote(newValue)
+                    return
+                  }} />
+                </p>
+                {requiredTitle ? <p className="errorText">This field is required!</p> : null}
                 <div style={{ display: 'flex' }}>
                   <strong>Note:</strong>
                   <textarea placeholder="Add Notes Here" onChange={(x) => {
@@ -81,9 +104,14 @@ export default function AddNewNote(props) {
                     return
                   }}></textarea>
                 </div>
+                {requiredNote ? <p className="errorText">This field is required!</p> : null}
               </div>
               <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
                 <div className="saveBtn" onClick={async () => {
+                  if (checkForErrors()) {
+                    // If there is an error in the form, do not allow the user to submit
+                    return
+                  }
                   await updateInfo()
                   setSubmittingForm(true)
                   return
@@ -150,6 +178,11 @@ export default function AddNewNote(props) {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
+                }
+
+                .errorText {
+                  font-size: 0.8rem;
+                  color: #FF0000;
                 }
                 `
         }

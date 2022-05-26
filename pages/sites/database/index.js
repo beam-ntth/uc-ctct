@@ -22,12 +22,14 @@ export async function getServerSideProps(context) {
     // ID for the region location, passed in as query param by previous page. 
     const location = context.query.location
     // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
-    const region_data = await getClinicOrSiteOrRegion(location);
-    const data = await getSitesFromRegion(location);
-    return { props: { data, region_data, location, user: context.req.user } }
+    if (location) {
+        const region_data = await getClinicOrSiteOrRegion(location);
+        return { props: { region_data, location, user: context.req.user } }
+    } 
+    return { props: { user: context.req.user } }
   }
 
-export default function SiteMgmt({ data, region_data, location, user }) {
+export default function SiteMgmt({ region_data, location, user }) {
     const [clinicData, setClinicData] = useState(null)
     const [studentData, setStudentData] = useState(null)
     const [mapIsLoading, setMapIsLoading] = useState(true)
@@ -62,9 +64,9 @@ export default function SiteMgmt({ data, region_data, location, user }) {
             <main className={styles.main}>
                 <Navbar icons={[false, true, false, false, false]} /> 
                 <div className={styles.content}>
-                    <Header header={`Site Management Tools: ${region_data.name}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
+                    <Header header={`Site Management Tools: ${region_data ? region_data.name : "All Affiliations"}`} imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} back={router.back} />
                     <div className={styles.menu}>
-                        <Link href={`/sites/database/site?location=${location}`}>
+                        <Link href={location ? `/sites/database/site?location=${location}` : `/sites/database/site`}>
                             <div className={styles.menuOptionTop}>
                                 <div className={styles.rowCenter}>
                                     <FaDatabase size={30} color='#079CDB'/>
@@ -73,7 +75,7 @@ export default function SiteMgmt({ data, region_data, location, user }) {
                                 <p style={{ marginBottom: '1rem'}}>Add more clinics, sites, or regions and edit existing information</p>
                             </div>
                         </Link>
-                        <Link href={`/sites/visual?location=${location}`}>
+                        <Link href={location ? `/sites/visual?location=${location}` : `/sites/visual`}>
                             <div className={styles.menuOptionBottom}>
                                 <div className={styles.rowCenter}>
                                     <FaChartPie size={30} color='#079CDB'/>
@@ -85,7 +87,7 @@ export default function SiteMgmt({ data, region_data, location, user }) {
                     </div>
                     <div className={styles.activities}>
                         <div className={styles.activityBox}>
-                        <h1 className={styles.actTitle}>Map Overview for { region_data.name }</h1>
+                        <h1 className={styles.actTitle}>Map Overview for { region_data ? region_data.name : "All Affiliations" }</h1>
                         <h4 className={styles.legend}>
                             <img src='/asset/images/clinic-pin.png' /> Clinic <span style={{marginRight: '2rem'}} />
                             <img src='/asset/images/student-pin.png' />  Student (Assigned) <span style={{marginRight: '2rem'}} />
@@ -97,9 +99,15 @@ export default function SiteMgmt({ data, region_data, location, user }) {
                             <GoogleMapReact bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY }} defaultCenter={center} defaultZoom={zoom} >
                                 {
                                     clinicData != null ?
-                                    clinicData.map((x) => {
+                                    clinicData.filter(x => {
+                                        if (region_data) {
+                                            return x.region_id == region_data.id
+                                        }
+                                        return true
+                                    }).map((x) => {
                                     const genInfo = x.generalInformation
-                                    return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}
+                                    
+                                    return <Marker lat={genInfo.lat} lng={genInfo.long} id={x.id}  
                                     type={'clinic'} name={x.name} phoneNumber={genInfo.phoneNumber}
                                     addr={`${genInfo.addressLine1}, ${genInfo.addressLine2 ? `${genInfo.addressLine2}, ` : ''}${genInfo.city}, ${genInfo.state}, ${genInfo.postal}`} />
                                     })
@@ -108,9 +116,14 @@ export default function SiteMgmt({ data, region_data, location, user }) {
                                 }
                                 {
                                     studentData != null ?
-                                    studentData.map(x => {
+                                    studentData.filter(x => {
+                                        if (region_data) {
+                                            return x.location_affiliation == region_data.name
+                                        }
+                                        return true
+                                    }).map(x => {
                                     const addr = `${x.addressLine1}, ${x.addressLine2 == "" ? "" : x.addressLine2 + ', '}${x.city}, ${x.state} ${x.postal}`
-                                    return <Marker lat={x.lat} lng={x.long} type={x.assignedPreceptor ? 'student-assigned' : 'student-unassigned'} 
+                                    return <Marker lat={x.lat} lng={x.long} type={x.assignment.isAssigned ? 'student-assigned' : 'student-unassigned'} 
                                     id={x.id} name={`${x.firstName} ${x.lastName}`} phoneNumber={x.phoneNumber} addr={addr} />
                                     })
                                     :

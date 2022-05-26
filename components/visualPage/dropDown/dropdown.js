@@ -18,19 +18,21 @@ export default function Dropdown(props) {
             filteredData.map((x, ind) => <div className={styles.dropDownValue}>
                 {
                   // Temporary since not all dropdowns are implemented with search functionality
-                  props.displayOnly ? <input type='checkbox' id={x} key={`${x}_${ind}`} /> :
+                  props.displayOnly ? 
+                  <input type='checkbox' id={x} key={`${x}_${ind}`} /> 
+                  :
                   <input type='checkbox' id={x} key={`${x}_${ind}`} 
                   value={props.ddFilter[ind]} 
                   onChange={() => {
-                    let newDropDown = [...props.ddFilter]
-                    if (newDropDown[ind] === "") {
-                      newDropDown[ind] = x
-                    } else {
-                      newDropDown[ind] = ""
-                    }
-                    console.log(newDropDown)
-                    props.setddFilter(newDropDown)
-                  }} 
+                      let newDropDown = [...props.ddFilter]
+                      if (newDropDown[ind] === "") {
+                        newDropDown[ind] = x
+                      } else {
+                        newDropDown[ind] = ""
+                      }
+                      console.log(newDropDown)
+                      props.setddFilter(newDropDown)
+                    }} 
                   />
                 }
                 <label htmlFor={x} key={ind}>{x}</label>
