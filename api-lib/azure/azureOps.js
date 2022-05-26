@@ -81,7 +81,7 @@ export const getAllPreceptors = async () => {
  */
 export const getAllStudents = async () => {
   try {
-    const { resources: data } = await Students.items.query(`${selectAllQuery} ORDER by c.lastName ASC`).fetchAll();
+    const { resources: data } = await Students.items.query(`${selectAllQuery} ORDER by c.firstName ASC`).fetchAll();
     return data;
   } catch (error) {
     throw new Error(`Issue getting all students: ${error}`);
@@ -606,6 +606,25 @@ export async function getSurveyStatus() {
     return data;
   } catch (error) {
     throw new Error(`Error happens when querying Survey Metadata. Error is: ${error}`)
+  }
+}
+
+/**
+ * 
+ */
+export async function updateSurveyLink(type, newLink) {
+  try {
+      const replaceClinicOperation =
+      [
+        {
+          op: "replace",
+          path: `/links/${type}`,
+          value: newLink
+        }
+      ]
+      await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
+  } catch (error) {
+    
   }
 }
 

@@ -1,5 +1,3 @@
-import { amber } from "@mui/material/colors";
-
 function capitalizeText(text) {
     return `${text.substring(0, 1).toUpperCase()}${text.substring(1, text.length).toLowerCase()}`
 }
@@ -31,10 +29,10 @@ export function parseStudentData(student) {
 
     // Add preferred location
     const preferredLocation = {
-        firstCity: cleanName(data.QID62_1),
-        firstCounty: cleanName(data.QID62_2),
-        secondCity: cleanName(data.QID63_1),
-        secondCounty: cleanName(data.QID63_2)
+        firstCity: data.QID62_1 ? cleanName(data.QID62_1) : "None",
+        firstCounty: data.QID62_2 ? cleanName(data.QID62_2) : "None",
+        secondCity: data.QID63_1 ? cleanName(data.QID63_1) : "None",
+        secondCounty: data.QID63_2 ? cleanName(data.QID63_2) : "None"
     }
     returnResult.preferredLocation = preferredLocation
 
