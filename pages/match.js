@@ -142,7 +142,7 @@ export default function Matching({ clinics, students, preceptors, region_choices
           <div className={styles.content}>
             <Header header="Student - Clinic Matching Tool" imgSrc={user.photo ? user.photo : "/asset/images/user-image.png"} />
             <div className={styles.data}>
-              <div className={styles.studentSection} style={ matching ? { width: '47%', marginRight: '1rem', transition: 'linear 0.2s' } : { transition: 'linear 0.2s' } }>
+              <div className={styles.studentSection} style={ matching ? { height: '100%', width: '47%', marginRight: '1rem', transition: 'linear 0.2s' } : { transition: 'linear 0.2s' } }>
                 {
                 matching 
                 ? 
