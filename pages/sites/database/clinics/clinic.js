@@ -279,10 +279,9 @@ export default function ClinicDetails({ data, user }) {
                           <Link href={`/sites/database/clinics/preceptor?preceptor_id=${x.id}`}>
                             <div key={`preceptor_${ind}`} className="displayPrecepRow">
                               <p className="preceptorCol1">{x.firstname} {x.lastname}</p>
-                              <p className="preceptorCol2">{x.credential}</p>
-                              <p className="preceptorCol3">{x.phoneNumber}</p>
-                              <p className="preceptorCol4">{x.email}</p>
-                              <p className="preceptorCol5">{status}</p>
+                              <p className="preceptorCol2">{x.phoneNumber}</p>
+                              <p className="preceptorCol3">{x.email}</p>
+                              <p className="preceptorCol4">{status}</p>
                               <div className={`clinicTag${x['status']}`}></div>
                             </div>
                           </Link>
@@ -411,43 +410,47 @@ export default function ClinicDetails({ data, user }) {
             }
 
             .adminCol1 {
-                width: 50%;
+              width: 50%;
             }
             
             .adminCol2 {
-                width: 25%;
+              width: 25%;
             }
             
             .adminCol3 {
-                width: 25%;
+              width: 25%;
             }
             
             .preceptorCol1 {
-                width: 25%;
+              width: 25%;
             }
             
             .preceptorCol2 {
-                width: 10%
+              width: 20%;
             }
             
             .preceptorCol3 {
-                width: 15%;
-            }
-            
-            .preceptorCol4 {
-                width: 25%;
+              width: 30%;
             }
 
-            .preceptorCol5 {
-                width: 25%;
+            .preceptorCol4 {
+              text-align: right;
+              padding-right: 1.5rem;
+              width: 25%;
             }
             
             .placementCol1 {
-                width: 80%;
+              width: 80%;
             }
             
             .adminCol1, .preceptorCol1 {
-                padding-left: 2rem;
+              padding-left: 2rem;
+            }
+
+            @media (max-width: 1025px) {
+              .preceptorCol1, .preceptorCol2, .preceptorCol3, .preceptorCol4 {
+                font-size: 0.8rem;
+              }
             }
             `
         }
