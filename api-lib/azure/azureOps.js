@@ -610,6 +610,25 @@ export async function getSurveyStatus() {
 }
 
 /**
+ * 
+ */
+export async function updateSurveyLink(type, newLink) {
+  try {
+      const replaceClinicOperation =
+      [
+        {
+          op: "replace",
+          path: `/links/${type}`,
+          value: newLink
+        }
+      ]
+      await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
+  } catch (error) {
+    
+  }
+}
+
+/**
  * This function updates the survey's last_updated metadata to
  * the current date & time
  */
