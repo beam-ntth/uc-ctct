@@ -6,8 +6,8 @@ const handler = nextConnect();
 
 handler.use(...setup);
 
-// API endpoint for redirects from Passport.
-handler.get('api/auth/accepted', passport.authenticate('azure_ad_oauth2'),
+// Redirection to the public page once logged in with Google. 
+handler.get('api/auth/accepted', passport.authenticate(['google', 'windowslive']),
   (req, res) => {
     res.redirect('/main')
   });

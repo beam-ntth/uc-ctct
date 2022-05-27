@@ -359,9 +359,14 @@
   "resolved" "https://registry.npmjs.org/@next/react-refresh-utils/-/react-refresh-utils-12.0.8.tgz"
   "version" "12.0.8"
 
-"@next/swc-darwin-x64@12.0.8":
-  "integrity" "sha512-todxgQOGP/ucz5UH2kKR3XGDdkWmWr0VZAAbzgTbiFm45Ol4ih602k2nNR3xSbza9IqNhxNuUVsMpBgeo19CFQ=="
-  "resolved" "https://registry.npmjs.org/@next/swc-darwin-x64/-/swc-darwin-x64-12.0.8.tgz"
+"@next/swc-linux-x64-gnu@12.0.8":
+  "integrity" "sha512-rHxTGtTEDFsdT9/VjewzxE19S7W1NE+aZpm4TwbT1pSNGK9KQxQGcXjqoHMeB+VZCFknzNEoIU/vydbjZMlAuw=="
+  "resolved" "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-12.0.8.tgz"
+  "version" "12.0.8"
+
+"@next/swc-linux-x64-musl@12.0.8":
+  "integrity" "sha512-1F4kuFRQE10GSx7LMSvRmjMXFGpxT30g8rZzq9r/p/WKdErA4WB4uxaKEX0P8AINfuN63i4luKdR+LoacgBhYw=="
+  "resolved" "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-12.0.8.tgz"
   "version" "12.0.8"
 
 "@opentelemetry/api@^1.0.1":
@@ -1327,12 +1332,36 @@
     "json-parse-even-better-errors" "^2.3.0"
     "lines-and-columns" "^1.1.6"
 
+"passport-azure-ad-oauth2@^0.0.4":
+  "integrity" "sha1-GgnYhp79Sv0JURbiKJQZYbOlwSA="
+  "resolved" "https://registry.npmjs.org/passport-azure-ad-oauth2/-/passport-azure-ad-oauth2-0.0.4.tgz"
+  "version" "0.0.4"
+  dependencies:
+    "passport-oauth" "1.0.x"
+
 "passport-google-oauth20@^2.0.0":
   "integrity" "sha512-KSk6IJ15RoxuGq7D1UKK/8qKhNfzbLeLrG3gkLZ7p4A6DBCcv7xpyQwuXtWdpyR0+E0mwkpjY1VfPOhxQrKzdQ=="
   "resolved" "https://registry.npmjs.org/passport-google-oauth20/-/passport-google-oauth20-2.0.0.tgz"
   "version" "2.0.0"
   dependencies:
     "passport-oauth2" "1.x.x"
+
+"passport-oauth@1.0.x":
+  "integrity" "sha1-kK/2M4dUDwIImvKM2tOep/gNd98="
+  "resolved" "https://registry.npmjs.org/passport-oauth/-/passport-oauth-1.0.0.tgz"
+  "version" "1.0.0"
+  dependencies:
+    "passport-oauth1" "1.x.x"
+    "passport-oauth2" "1.x.x"
+
+"passport-oauth1@1.x.x":
+  "integrity" "sha512-Sv2YWodC6jN12M/OXwmR4BIXeeIHjjbwYTQw4kS6tHK4zYzSEpxBgSJJnknBjICA5cj0ju3FSnG1XmHgIhYnLg=="
+  "resolved" "https://registry.npmjs.org/passport-oauth1/-/passport-oauth1-1.2.0.tgz"
+  "version" "1.2.0"
+  dependencies:
+    "oauth" "0.9.x"
+    "passport-strategy" "1.x.x"
+    "utils-merge" "1.x.x"
 
 "passport-oauth2@1.x.x":
   "integrity" "sha512-ZbV43Hq9d/SBSYQ22GOiglFsjsD1YY/qdiptA+8ej+9C1dL1TVB+mBE5kDH/D4AJo50+2i8f4bx0vg4/yDDZCQ=="
@@ -1344,6 +1373,13 @@
     "passport-strategy" "1.x.x"
     "uid2" "0.0.x"
     "utils-merge" "1.x.x"
+
+"passport-outlook@^3.0.0":
+  "integrity" "sha512-H3U+LCCd9mxnkheKduog/P6Nyh2rAd7X3LXwlmiQVgbA2FmTOE3OR0B+kCBQPjELOERnzoniuqrVr4RUIxhnHA=="
+  "resolved" "https://registry.npmjs.org/passport-outlook/-/passport-outlook-3.0.0.tgz"
+  "version" "3.0.0"
+  dependencies:
+    "passport-oauth2" "1.x.x"
 
 "passport-strategy@1.x.x":
   "integrity" "sha1-tVOaqPwiWj0a0XlHbd8ja0QPUuQ="
