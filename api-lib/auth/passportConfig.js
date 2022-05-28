@@ -60,9 +60,9 @@ passport.use(new OutlookStrategy({
   function (req, accessToken, refreshToken, profile, done) {
     console.log("PROFILE", profile);
     var user = {
+      displayName: profile._json.DisplayName,
       _json: {
         email: profile._json.EmailAddress,
-        displayName: profile._json.DisplayName,
         picture: null
       }
     }
