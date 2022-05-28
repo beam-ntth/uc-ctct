@@ -262,13 +262,13 @@ export const addPreceptorFromClinicsPage = async (id, preceptor_info) => {
 export async function updateSiteNote(id, note_data) {
   try {
     const replaceOperation =
-    [
+      [
         {
-            op: "replace",
-            path: "/notes",
-            value: note_data
+          op: "replace",
+          path: "/notes",
+          value: note_data
         }
-    ];
+      ];
     await Master.item(id, id).patch(replaceOperation);
   } catch (error) {
     throw new Error(`Issue while updating note to site with id (${id}). Error is: ${error}`);
@@ -446,21 +446,21 @@ export const removePreceptor = async (id, index) => {
 export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id, choice) {
   try {
     const date = new Date();
-    const today_date = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}/${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${date.getFullYear()}`
-    
+    const today_date = `${date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}/${date.getDate() < 10 ? '0' : ''}${date.getDate()}/${date.getFullYear()}`
+
     const { resource: student_obj } = await Students.item(student_id, student_id).read()
     const { resource: clinic_obj } = await Master.item(clinic_id, clinic_id).read()
     const { resource: preceptor_obj } = await Preceptors.item(preceptor_id, preceptor_id).read()
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    
-    if ( choice == "Primary" ) {
+
+    if (choice == "Primary") {
       new_student_assignment.isAssigned = true
       new_student_assignment.primary_choice.clinic_id = clinic_id
       new_student_assignment.primary_choice.preceptor_id = preceptor_id
       new_student_assignment.primary_choice.date_assigned = today_date
-    } else if ( choice == "Secondary" ) {
+    } else if (choice == "Secondary") {
       new_student_assignment.secondary_choice.clinic_id = clinic_id
       new_student_assignment.secondary_choice.preceptor_id = preceptor_id
       new_student_assignment.secondary_choice.date_assigned = today_date
@@ -471,28 +471,28 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
     }
 
     const replaceStudentOperation =
-    [
-      {
-        op: "replace",
-        path: "/assignment",
-        value: new_student_assignment
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/assignment",
+          value: new_student_assignment
+        }
+      ]
 
     const studentRes = await Students.item(student_id, student_id).patch(replaceStudentOperation)
 
-    if ( choice == "Primary" ) {
+    if (choice == "Primary") {
       // Update Preceptor Information
       let new_preceptor_assignment = [...preceptor_obj.students]
       new_preceptor_assignment.push(student_id)
       const replacePreceptorOperation =
-      [
-        {
-          op: "replace",
-          path: "/students",
-          value: new_preceptor_assignment
-        }
-      ]
+        [
+          {
+            op: "replace",
+            path: "/students",
+            value: new_preceptor_assignment
+          }
+        ]
 
       const preceptorRes = await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
 
@@ -500,13 +500,13 @@ export async function addStudentToPreceptor(student_id, clinic_id, preceptor_id,
       let new_clinic_assignment = [...clinic_obj.students]
       new_clinic_assignment.push(student_id)
       const replaceClinicOperation =
-      [
-        {
-          op: "replace",
-          path: "/students",
-          value: new_clinic_assignment
-        }
-      ]
+        [
+          {
+            op: "replace",
+            path: "/students",
+            value: new_clinic_assignment
+          }
+        ]
 
       const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
       return [studentRes, preceptorRes, clinicRes]
@@ -533,13 +533,13 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
 
     // Update student information
     let new_student_assignment = { ...student_obj.assignment }
-    
-    if ( choice == "Primary" ) {
+
+    if (choice == "Primary") {
       new_student_assignment.isAssigned = false
       new_student_assignment.primary_choice.clinic_id = ""
       new_student_assignment.primary_choice.preceptor_id = ""
       new_student_assignment.primary_choice.date_assigned = ""
-    } else if ( choice == "Secondary" ) {
+    } else if (choice == "Secondary") {
       new_student_assignment.secondary_choice.clinic_id = ""
       new_student_assignment.secondary_choice.preceptor_id = ""
       new_student_assignment.secondary_choice.date_assigned = ""
@@ -550,28 +550,28 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
     }
 
     const replaceStudentOperation =
-    [
-      {
-        op: "replace",
-        path: "/assignment",
-        value: new_student_assignment
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/assignment",
+          value: new_student_assignment
+        }
+      ]
 
     const studentRes = await Students.item(student_id, student_id).patch(replaceStudentOperation)
 
-    if ( choice == "Primary" ) {
+    if (choice == "Primary") {
       // Update Preceptor Information
       let new_preceptor_assignment = [...preceptor_obj.students]
       new_preceptor_assignment.splice(new_preceptor_assignment.indexOf(student_id), 1)
       const replacePreceptorOperation =
-      [
-        {
-          op: "replace",
-          path: "/students",
-          value: new_preceptor_assignment
-        }
-      ]
+        [
+          {
+            op: "replace",
+            path: "/students",
+            value: new_preceptor_assignment
+          }
+        ]
 
       const preceptorRes = await Preceptors.item(preceptor_id, preceptor_id).patch(replacePreceptorOperation)
 
@@ -579,13 +579,13 @@ export async function removeStudentFromPreceptor(student_id, clinic_id, precepto
       let new_clinic_assignment = [...clinic_obj.students]
       new_clinic_assignment.splice(new_clinic_assignment.indexOf(student_id), 1)
       const replaceClinicOperation =
-      [
-        {
-          op: "replace",
-          path: "/students",
-          value: new_clinic_assignment
-        }
-      ]
+        [
+          {
+            op: "replace",
+            path: "/students",
+            value: new_clinic_assignment
+          }
+        ]
 
       const clinicRes = await Master.item(clinic_id, clinic_id).patch(replaceClinicOperation)
       return [studentRes, preceptorRes, clinicRes]
@@ -614,7 +614,7 @@ export async function getSurveyStatus() {
  */
 export async function updateSurveyLink(type, newLink) {
   try {
-      const replaceClinicOperation =
+    const replaceClinicOperation =
       [
         {
           op: "replace",
@@ -622,9 +622,9 @@ export async function updateSurveyLink(type, newLink) {
           value: newLink
         }
       ]
-      await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
+    await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
   } catch (error) {
-    
+
   }
 }
 
@@ -635,20 +635,20 @@ export async function updateSurveyLink(type, newLink) {
 export async function updateSurveyStatus() {
   const date = new Date()
   const day = `${date.getDate() < 10 ? '0' : ''}${date.getDate()}`
-  const month = `${date.getMonth()+1 < 10 ? '0' : ''}${date.getMonth()+1}`
+  const month = `${date.getMonth() + 1 < 10 ? '0' : ''}${date.getMonth() + 1}`
   const hours = `${date.getHours() < 10 ? '0' : ''}${date.getHours()}`
   const mins = `${date.getMinutes() < 10 ? '0' : ''}${date.getMinutes()}`
   const secs = `${date.getSeconds() < 10 ? '0' : ''}${date.getSeconds()}`
   const newDate = `${month}/${day}/${date.getFullYear()} - ${hours}:${mins}:${secs}`
   try {
     const replaceClinicOperation =
-    [
-      {
-        op: "replace",
-        path: "/metadata/last_updated",
-        value: newDate
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/metadata/last_updated",
+          value: newDate
+        }
+      ]
     await Master.item(SURVEY_ID, SURVEY_ID).patch(replaceClinicOperation)
   } catch (error) {
     throw new Error(`Error happens when updating Survey Metadata. Error is: ${error}`)
@@ -672,13 +672,13 @@ export async function checkIfStudentExisted(email) {
 export async function editPreceptorInfo(id, new_data) {
   try {
     const replaceOperation =
-    [
-      {
-        op: "replace",
-        path: "", // This means replace the entire thing
-        value: new_data
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "", // This means replace the entire thing
+          value: new_data
+        }
+      ]
     await Preceptors.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
@@ -688,13 +688,13 @@ export async function editPreceptorInfo(id, new_data) {
 export async function editStudentInfo(id, new_data) {
   try {
     const replaceOperation =
-    [
-      {
-        op: "replace",
-        path: "", // This means replace the entire thing
-        value: new_data
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "", // This means replace the entire thing
+          value: new_data
+        }
+      ]
     await Students.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating student data. Error is: ${error}`)
@@ -704,13 +704,13 @@ export async function editStudentInfo(id, new_data) {
 export async function editPreceptorNote(id, new_data) {
   try {
     const replaceOperation =
-    [
-      {
-        op: "replace",
-        path: "/notes",
-        value: new_data
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/notes",
+          value: new_data
+        }
+      ]
     await Preceptors.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
@@ -720,13 +720,13 @@ export async function editPreceptorNote(id, new_data) {
 export async function editStudentNote(id, new_data) {
   try {
     const replaceOperation =
-    [
-      {
-        op: "replace",
-        path: "/notes",
-        value: new_data
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/notes",
+          value: new_data
+        }
+      ]
     await Students.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating preceptor data. Error is: ${error}`)
@@ -754,13 +754,13 @@ export async function getPreceptorFromEmail(email) {
 export async function updatePreceptorStatus(id, new_status) {
   try {
     const replaceOperation =
-    [
-      {
-        op: "replace",
-        path: "/status",
-        value: new_status
-      }
-    ]
+      [
+        {
+          op: "replace",
+          path: "/status",
+          value: new_status
+        }
+      ]
     await Preceptors.item(id, id).patch(replaceOperation)
   } catch (error) {
     throw new Error(`Error happens while updating a preceptor's status. Error is: ${error}`)
@@ -773,9 +773,9 @@ export async function incrementRegionSiteCount(region_id) {
     const cur_site_ct = data.total_sites
     const replaceOperation =
       [{
-          op: "replace",
-          path: "/total_sites",
-          value: cur_site_ct + 1
+        op: "replace",
+        path: "/total_sites",
+        value: cur_site_ct + 1
       }];
     await Master.item(region_id, region_id).patch(replaceOperation)
   } catch (error) {
@@ -789,9 +789,9 @@ export async function decrementRegionSiteCount(region_id) {
     const cur_site_ct = data.total_sites
     const replaceOperation =
       [{
-          op: "replace",
-          path: "/total_sites",
-          value: cur_site_ct - 1
+        op: "replace",
+        path: "/total_sites",
+        value: cur_site_ct - 1
       }];
     await Master.item(region_id, region_id).patch(replaceOperation)
   } catch (error) {
@@ -801,7 +801,9 @@ export async function decrementRegionSiteCount(region_id) {
 
 export async function checkIfAdminExist(admin_email) {
   try {
+    console.log("ADMIN EMAIL", admin_email);
     const { resources: data } = await Admins.items.query(`${selectAllQuery} WHERE c.email = "${admin_email}"`).fetchAll();
+    console.log("DATA", data);
     return data.length > 0;
   } catch (error) {
     throw new Error(`Error happens while checking for admin's credential. Error is: ${error}`)
@@ -817,9 +819,9 @@ export async function convertAllSitesToActive() {
   for (let i = 0; i < sites.length; i++) {
     const replaceOperation =
       [{
-          op: "replace",
-          path: "/status",
-          value: "8"
+        op: "replace",
+        path: "/status",
+        value: "8"
       }];
     await Master.item(sites[i].id, sites[i].id).patch(replaceOperation)
   }
@@ -830,14 +832,14 @@ export async function convertAllSitesToActive() {
  * Temporary Function
  * @deprecated - should only be used once during the initial data transferring
  */
- export async function convertAllClinicsToActive() {
+export async function convertAllClinicsToActive() {
   const clinics = await getAllClinics()
   for (let i = 0; i < clinics.length; i++) {
     const replaceOperation =
       [{
-          op: "replace",
-          path: "/status",
-          value: "7"
+        op: "replace",
+        path: "/status",
+        value: "7"
       }];
     await Master.item(clinics[i].id, clinics[i].id).patch(replaceOperation)
   }
@@ -860,9 +862,9 @@ export async function insertClinicInitialData() {
   for (let i = 0; i < clinics.length; i++) {
     const replaceOperation =
       [{
-          op: "replace",
-          path: "/clinicPlacementDetail",
-          value: schema
+        op: "replace",
+        path: "/clinicPlacementDetail",
+        value: schema
       }];
     await Master.item(clinics[i].id, clinics[i].id).patch(replaceOperation)
   }

@@ -12,6 +12,7 @@ export async function getServerSideProps(context) {
   const handler = nextConnect().use(...setup);
   await handler.run(context.req, context.res);
   const user = context.req.user;
+  console.log("GETTING USER", user);
   if (user) {
     const adminExist = await checkIfAdminExist(user.email)
     if (adminExist) {
