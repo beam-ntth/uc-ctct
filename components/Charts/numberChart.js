@@ -34,9 +34,9 @@ export default function NumberChart() {
                 <p className='dataCol3' >{ data[2] }</p>
             </div>
             <div className='label'>
-                <p className='siteCol' >Active</p>
-                <p className='siteCol' >In Progress</p>
-                <p className='siteCol' >No Go</p>
+                <p className='siteCol'>Active</p>
+                <p className='siteCol'>In Progress</p>
+                <p className='siteCol'>No Go</p>
             </div>
             <style jsx>
                 {
