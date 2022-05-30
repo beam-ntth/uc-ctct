@@ -12,7 +12,7 @@ import Header from '../../../components/shared/header/header';
 import StatusParser from '../../../components/shared/status';
 
 // Import DB component
-import { getAllSites, getClinicOrSiteOrRegion, getSitesFromRegion, removeSite } from '../../../api-lib/azure/azureOps';
+import { getAllSites, getClinicOrSiteOrRegion, getSitesFromRegion, removeSite, getAllClinics } from '../../../api-lib/azure/azureOps';
 
 // Import third-party icons
 import { FiEdit } from 'react-icons/fi';
@@ -40,10 +40,11 @@ export async function getServerSideProps(context) {
     return { props: { data, region_data, user: context.req.user } }
   }
   const data = await getAllSites()
-  return { props: { data, user: context.req.user } }
+  const clinic_data = await getAllClinics()
+  return { props: { clinic_data, data, user: context.req.user } }
 }
 
-export default function SiteDetails({ data, region_data, user }) {
+export default function SiteDetails({ clinic_data, data, region_data, user }) {
   /**
    * Global state of the current displayed data
    * - Initialized with all the site data
@@ -87,6 +88,10 @@ export default function SiteDetails({ data, region_data, user }) {
    */
   function searchSiteName(substr) {
     setFilteredData(searchString(data, substr))
+  }
+
+  const getActivePreceptors = (site_id) => {
+    return clinic_data.filter(clinic => clinic.site_id == site_id).map(clinic => clinic.preceptorInfo.length).reduce((prev, cur) => prev + cur, 0)
   }
 
   /**
@@ -133,7 +138,7 @@ export default function SiteDetails({ data, region_data, user }) {
                   <div style={{ display: 'flex', width: '97%' }}>
                   <p className='row1Sites'>Site Name</p>
                   <p className='row2Sites'>Total Clinics</p>
-                  <p className='row3Sites'>Active Preceptors</p>
+                  <p className='row3Sites'>Total Preceptors</p>
                   <p className='row4Sites'>Status</p>
                   </div>
                   {/* Fake color tab for alignment */}
@@ -156,7 +161,7 @@ export default function SiteDetails({ data, region_data, user }) {
                           <div className='rowContentClinics'>
                             <p className='row1Sites'>{x['name']}</p>
                             <p className='row2Sites'>{x['total_clinics']}</p>
-                            <p className='row3Sites'>0</p>
+                            <p className='row3Sites'>{getActivePreceptors(x.id)}</p>
                             <p className="row4Sites">{statusText}</p>
                           </div>
                           <div className={`siteTag${x['status']}`}></div>

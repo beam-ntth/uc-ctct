@@ -13,13 +13,14 @@ import NumberChart from '../components/Charts/numberChart';
 
 // DB Functions
 import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
-import { getSurveyStatus } from '../api-lib/azure/azureOps'
+import { addLastUpdatedToAllClinics, getSurveyStatus } from '../api-lib/azure/azureOps'
 
 
 export async function getServerSideProps({ req, res }) {
   const redirect = await runAuthMiddleware(req, res);
   // If the user is invalid then we redirect them back to the index.js page
   if (redirect) return redirect;
+  // await addLastUpdatedToAllClinics()
   return {
     props: { user: req.user },
   };
