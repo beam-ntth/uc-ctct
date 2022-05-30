@@ -263,7 +263,7 @@ export default function Student({ students, user }) {
                 <p>Show all universities</p>
               </div>
               <div className={styles.uploadBtns}>
-                <div className={styles.fileUpload} style={ addStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
+                <div className={styles.fileUpload} style={ addStudentHover ? { height: '96%', width: '101%', transition: 'linear 0.2s' } : {} }
                   onClick={() => fileElem != null ? fileElem.click() : null} 
                   onMouseEnter={() => setAddStudentHover(true)} 
                   onMouseLeave={() => setAddStudentHover(false)} >
@@ -274,7 +274,7 @@ export default function Student({ students, user }) {
                   <FiUpload color={ addStudentHover ? "#079CDB" : "#C4C4C4" } size={ addStudentHover ? 35 : 30 } 
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
                 </div>
-                <div className={styles.fileUpload} style={ editStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
+                {/* <div className={styles.fileUpload} style={ editStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
                   onClick={() => {
                       alert(`BEFORE UPLOADING THE FILE!\nPlease make sure the first two columns are:\n1. Student Name\n2. Student Home Email\nThe system will not match student records correctly if the two fields are not correct.`)
                       updateInfoFileElem != null ? updateInfoFileElem.click() : null
@@ -288,7 +288,7 @@ export default function Student({ students, user }) {
                   </p>
                   <FiUpload color={ editStudentHover ? "#079CDB" : "#C4C4C4" } size={ editStudentHover ? 35 : 30 } 
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
-                </div>
+                </div> */}
               </div>
             </div> : null }
 

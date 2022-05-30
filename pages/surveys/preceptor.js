@@ -81,13 +81,11 @@ export default function PreceptorSurveys({ preceptors, user }) {
                                 filterPreceptorByStatus().map((x, ind) => {
                                 return (
                                     <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }}>
-                                        <Link href={`/students/profile?id=${x.id}`}>
-                                            <div className='displaySurveyRow' key={`elem_${ind}`}>
-                                                <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstname} {x.lastname}</p>
-                                                <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>
-                                                <p style={{ width: '15%' }}>{(x.survey != null && x.survey.responseDate) != "" ? x.survey.responseDate : "No Response"}</p>
-                                            </div>
-                                        </Link>
+                                        <div className='displaySurveyRow' key={`elem_${ind}`}>
+                                            <p style={{ marginLeft: '2rem', width: '25%' }}>{x.firstname} {x.lastname}</p>
+                                            <p style={{ width: '30%' }}>{x.email ? x.email : "Unknown"}</p>
+                                            <p style={{ width: '15%' }}>{(x.survey != null && x.survey.responseDate) != "" ? x.survey.responseDate : "No Response"}</p>
+                                        </div>
                                     </div >
                                     )
                                 })
