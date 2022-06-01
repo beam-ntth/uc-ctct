@@ -54,7 +54,7 @@ passport.deserializeUser(async (user, done) => {
 passport.use(new OutlookStrategy({
   clientID: process.env.NEXT_PUBLIC_OUTLOOK_CLIENT_ID,
   clientSecret: process.env.NEXT_PUBLIC_OUTLOOK_CLIENT_SECRET,
-  callbackURL: `${process.env.NEXT_PUBLIC_LOCAL_URL}api/auth/accepted`,
+  callbackURL: `${process.env.NEXT_PUBLIC_LOCAL_URL}api/auth/outlookAccepted`,
   passReqToCallback: true
 },
   function (req, accessToken, refreshToken, profile, done) {

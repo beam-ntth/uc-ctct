@@ -7,7 +7,7 @@ const handler = nextConnect();
 handler.use(...setup);
 
 // API endpoint for redirects from Passport.
-handler.get('api/auth/accepted', passport.authenticate(['windowslive', 'google']),
+handler.get('api/auth/accepted', passport.authenticate('google'),
   (req, res) => {
     res.redirect('/main')
   });
