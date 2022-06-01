@@ -13,10 +13,7 @@ import NumberChart from '../components/Charts/numberChart';
 
 // DB Functions
 import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
-import { getSurveyStatus } from '../api-lib/azure/azureOps'
-import { client } from '../api-lib/azure/azureConfig'
-
-
+import { addLastUpdatedToAllClinics, getSurveyStatus } from '../api-lib/azure/azureOps'
 
 
 export async function getServerSideProps({ req, res }) {
@@ -26,6 +23,7 @@ export async function getServerSideProps({ req, res }) {
   // Master.item.delete("hello world", "hello world")
 
   if (redirect) return redirect;
+  // await addLastUpdatedToAllClinics()
   return {
     props: { user: req.user },
   };

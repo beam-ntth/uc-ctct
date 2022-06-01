@@ -23,7 +23,7 @@ export default function PreceptorInfoAdd(props) {
     lastname: "",
     email: "",
     npi: "",
-    phoneNumber: null,
+    phoneNumber: "",
     status: "7",
     location_affiliation: props.region,
     survey: {
