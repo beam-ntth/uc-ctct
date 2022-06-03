@@ -193,8 +193,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id) : "Unassigned"}</p>
-                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id) : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id).name : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id).name : "Unassigned"}</p>
                               <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}

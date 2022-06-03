@@ -10,11 +10,25 @@ export default function EditStudentProfile(props) {
     const [closeHover, setCloseHover] = useState(false)
     const [data, setData] = useState(props.data)
     const [submittingForm, setSubmittingForm] = useState(false)
+    const [error, setError] = useState({
+        birthday: false
+    })
     
     async function editElement() {
         await editStudentInfo(props.data.id, data);
         props.setOpen(false)
         props.reload()
+    }
+
+    const checkForErrors = () => {
+        let containsError = false
+        if (!/(\d{2}[/]\d{2}[/]\d{4})/.test(data.dob)) {
+            setError({
+                birthday: true
+            })
+            containsError = true
+        }
+        return containsError   
     }
  
     return (
@@ -39,7 +53,7 @@ export default function EditStudentProfile(props) {
                     <div style={{ width: '90%' }}>
                         <p><strong>First Name:</strong><input value={data.firstName} onChange={(e) => {
                             let newData = {...data}
-                            newData.firstName = e.target.value
+                            newData.firstName = removeAllNumbers(e.target.value)
                             setData(newData)
                             return
                         }} /> </p>
@@ -47,7 +61,7 @@ export default function EditStudentProfile(props) {
                     <div style={{ width: '90%' }}>
                         <p><strong>Middle Name:</strong><input value={data.middleName} onChange={(e) => {
                             let newData = {...data}
-                            newData.middleName = e.target.value
+                            newData.middleName = removeAllNumbers(e.target.value)
                             setData(newData)
                             return
                         }} /> </p>
@@ -55,7 +69,7 @@ export default function EditStudentProfile(props) {
                     <div style={{ width: '90%' }}>
                         <p><strong>Last Name:</strong><input value={data.lastName} onChange={(e) => {
                             let newData = {...data}
-                            newData.lastName = e.target.value
+                            newData.lastName = removeAllNumbers(e.target.value)
                             setData(newData)
                             return
                         }} /> </p>
@@ -68,6 +82,7 @@ export default function EditStudentProfile(props) {
                             return
                         }} /> </p>
                     </div>
+                    {error.birthday ? <p className="errorText">Invalid Birthday Format. Please make sure it is: mm/dd/yyyy.</p> : null}
                     <div style={{ width: '90%' }}>
                         <p>
                             <strong>Status:</strong>
@@ -140,10 +155,13 @@ export default function EditStudentProfile(props) {
                         }} /> </p>
                     </div>
                     <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: '1rem' }}>
-                        <div className="saveBtn" onClick={async () => {
-                        editElement()
-                        setSubmittingForm(true)
-                        return
+                        <div className="saveBtn" 
+                            onClick={async () => {
+                                if (checkForErrors()) {
+                                    return
+                            }
+                            editElement()
+                            setSubmittingForm(true)
                         }}>Save</div>
                     </div>
                 </React.Fragment>)
@@ -212,6 +230,11 @@ export default function EditStudentProfile(props) {
                     justify-content: center;
                     align-items: center;
                     cursor: pointer;
+                }
+
+                .errorText {
+                    font-size: 0.8rem;
+                    color: red;
                 }
                 `
         }
