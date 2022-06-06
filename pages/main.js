@@ -13,8 +13,6 @@ import NumberChart from '../components/Charts/numberChart';
 
 // DB Functions
 import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
-import { addLastUpdatedToAllClinics, getSurveyStatus } from '../api-lib/azure/azureOps'
-
 
 export async function getServerSideProps({ req, res }) {
   const redirect = await runAuthMiddleware(req, res);

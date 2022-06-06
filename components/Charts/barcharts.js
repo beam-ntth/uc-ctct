@@ -22,6 +22,9 @@ export default function BarChart() {
     ]
   }
 
+  /**
+   * @function loadData : Load all of the student data and assign them to the appropriate region
+   */
   const loadData = async() => {
     const response = await getAllStudents();
     const splitData = [0, 0, 0, 0]
@@ -42,6 +45,9 @@ export default function BarChart() {
     setData(splitData)
   }
 
+  /**
+   * Load data lazily by calling useEffect to initialize data after page is loaded
+   */
   useEffect(() => loadData(), [])
 
   return (

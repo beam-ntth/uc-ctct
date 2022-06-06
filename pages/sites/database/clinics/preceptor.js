@@ -1,6 +1,5 @@
 // Import React & Next modules
 import Head from "next/head";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import styles from "../../../../styles/Preceptor.module.css";
@@ -16,8 +15,6 @@ import StatusParser from "../../../../components/shared/status";
 import { client } from '../../../../api-lib/azure/azureConfig';
 
 // Import third-party icons
-import { IoMdAdd } from "react-icons/io";
-import { FaRegTrashAlt } from "react-icons/fa";
 import { getPreceptor, getClinicOrSiteOrRegion } from "../../../../api-lib/azure/azureOps";
 
 import EditPreceptorProfile from "../../../../components/shared/forms/editPreceptorProfile";

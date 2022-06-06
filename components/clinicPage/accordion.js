@@ -9,6 +9,7 @@ export default function Accordion(props) {
     const [accordion, setAccordion] = useState(false)
     const [noteEditHover, setNoteEditHover] = useState(false)
     const [noteTrashHover, setNoteTrashHover] = useState(false)
+    
     return (
         <div style={{width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
             <div key={`placement_${props.ind}`} className={styles.noteContainer} onClick={() => setAccordion(!accordion)} style={{cursor: 'pointer'}}>
