@@ -270,7 +270,7 @@ export default function StudentProfile({ student, user }) {
                             <h4>Tertiary Choice |</h4>
                         </div>
                         <p><strong>Clinic: </strong>{ clinic_id_3 == "" ? 'Unassigned' : getAssignedClinic(clinic_id_3).name }</p>
-                        <p><strong>Preceptor: </strong>{ precep_id_3 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_2).firstname} ${getAssignedPreceptor(precep_id_2).lastname}` }</p>
+                        <p><strong>Preceptor: </strong>{ precep_id_3 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_3).firstname} ${getAssignedPreceptor(precep_id_3).lastname}` }</p>
                         <p><strong>Date Assigned: </strong>{ date_assigned_3 == "" ? 'Unknown' : date_assigned_3 }</p>
                     </div> 
                   </React.Fragment>

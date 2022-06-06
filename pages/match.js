@@ -26,12 +26,15 @@ export async function getServerSideProps(context) {
   const clinics = await getAllClinics();
   const students = await getAllStudents();
   const preceptors = await getAllPreceptors();
-  const region_choices = await getDistinctRegions();
-  return { props: { clinics, students, preceptors, region_choices, user: context.req.user } }
+  return { props: { clinics, students, preceptors, user: context.req.user } }
 }
 
-export default function Matching({ clinics, students, preceptors, region_choices, user }) {
+export default function Matching({ clinics, students, preceptors, user }) {
   const router = useRouter()
+  const [error, setError] = useState({
+    dup_choice: false,
+    dup_precep: false
+  })
 
   /**
    * All the states for the main page filters
@@ -106,6 +109,35 @@ export default function Matching({ clinics, students, preceptors, region_choices
    */
   const getAssignedClinic = (id) => {
     return clinics.filter(x => x.id == id)[0]
+  }
+
+  /**
+   * @function checkIfAlreadyAssigned: Check if the clinic has already been assigned to the student's choice
+   * @param {*} student_id: Student's id
+   * @returns: Boolean - If the clinic has already been assigned
+   */
+  const checkIfAlreadyAssigned = (student_id) => {
+    const student = students.filter(x => x.id == student_id)[0]
+    if (choiceRank == "Primary") {
+      return student.assignment.primary_choice.clinic_id == ""
+    }
+    if (choiceRank == "Secondary") {
+      return student.assignment.secondary_choice.clinic_id == ""
+    }
+    return student.assignment.tertiary_choice.clinic_id == ""
+  }
+
+  /**
+   * @function checkForDuplicatePreceptor: Check if the preceptor already existed in the student's record
+   * @param {*} student_id: Student's id
+   * @param {*} preceptor_id: Preceptor's id
+   * @returns: Boolean - if the preceptor's id is in any of the student's assignment choices
+   */
+  const checkForDuplicatePreceptor = (student_id, preceptor_id) => {
+    const student = students.filter(x => x.id == student_id)[0]
+    return student.assignment.primary_choice.preceptor_id == preceptor_id ||
+    student.assignment.secondary_choice.preceptor_id == preceptor_id ||
+    student.assignment.tertiary_choice.preceptor_id == preceptor_id
   }
 
   /**
@@ -193,8 +225,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                           <div style={{ width: '100%', height: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'flex-start' }} key={x.id}>
                             <div className='displayMatchRow' key={`elem_${ind}`} style={ matching ? { fontSize: '0.8rem' } : null }>
                               <p style={{ marginLeft: '2rem', width: '20%' }}>{x.firstName} {x.middleName} {x.lastName}</p>
-                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id) : "Unassigned"}</p>
-                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id) : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.primary_choice.clinic_id ? getAssignedClinic(x.assignment.primary_choice.clinic_id).name : "Unassigned"}</p>
+                              <p style={{ width: '35%' }}>{x.assignment.secondary_choice.clinic_id ? getAssignedClinic(x.assignment.secondary_choice.clinic_id).name : "Unassigned"}</p>
                               <p style={{ width: '10%' }}>{x.status ? x.status : "Unassigned"}</p>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginLeft: '2rem', cursor: 'pointer' }}
@@ -287,6 +319,8 @@ export default function Matching({ clinics, students, preceptors, region_choices
                       <p className={styles.headerCol}>Clinics Available</p>
                     </div>
                   </div>
+                  {error.dup_choice ? <p className='errorText'>This clinic has already been assigned on the student for this choice, please select other choices</p> : null}
+                  {error.dup_precep ? <p className='errorText'>This preceptor has already been assigned to the student, please select other preceptors</p> : null}
                   <div className={ styles.availableClinicSection }>
                     {
                       filterClinicByFilter(clinics).length == 0 ?
@@ -297,13 +331,6 @@ export default function Matching({ clinics, students, preceptors, region_choices
                         <div className='clinicTitle'>
                           <p>{ clinic.name }</p>
                         </div>
-                        {/* <div className='line'></div>
-                        <div className='clinicDetails'>
-                          <p><strong>Setting: </strong>{ clinic.description.settingLocation }</p>
-                          <p><strong>Population: </strong>{ clinic.description.settingPopulation }</p>
-                          <p><strong>Age Group: </strong>{ clinic.description.population }</p>
-                          <p><strong>Acuity: </strong>{ clinic.description.patientAcuity }</p>
-                        </div> */}
                         <div className='line'></div>
                         <div className='clinicDetails' style={{ marginBottom: '1rem' }}>
                           <p><strong>Preceptor(s) Available </strong></p>
@@ -326,7 +353,19 @@ export default function Matching({ clinics, students, preceptors, region_choices
                                     <div className='clinicBox' key={ precep.id }>
                                       <div className='preceptorInfo'>
                                         <p>{ precep.firstname } { precep.lastname } | <strong>Availability:</strong> {precep.availability.from} - {precep.availability.to} | <strong>Students Assigned: </strong> {precep.students.length}</p>
-                                        <div className='assignBtn' onClick={() => assignStudent(clinic.id, precep.id)}>
+                                        <div className='assignBtn' onClick={() => {
+                                            if (!checkIfAlreadyAssigned(selectedStudent.id)) {
+                                              // If the id is not an empty string, then that means the choice has already been assigned
+                                              setError({ dup_choice: true, dup_precep: false })
+                                              return
+                                            }
+                                            if (checkForDuplicatePreceptor(selectedStudent.id, precep.id)) {
+                                              // If there is an existence of the preceptor in student record, throw an error
+                                              setError({ dup_choice: false, dup_precep: true })
+                                              return
+                                            }
+                                            assignStudent(clinic.id, precep.id)
+                                          }}>
                                           Assign!
                                         </div>
                                       </div>
@@ -490,6 +529,12 @@ export default function Matching({ clinics, students, preceptors, region_choices
             .assignBtn:hover {
               height: 1.6rem;
               width: 5.1rem;
+            }
+
+            .errorText {
+              font-size: 0.8rem;
+              color: red;
+              margin: 0 0 0 2rem;
             }
           `
         }
