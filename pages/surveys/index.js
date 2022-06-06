@@ -48,6 +48,7 @@ export default function StudentMgmt({ user }) {
     setPreceptorLink(data.links.preceptor)
     return
   }
+  useEffect(() => loadData(), [isRefreshing])
 
   /**
    * This function checks to see if Qualtrics server is ready for us to download
@@ -93,16 +94,17 @@ export default function StudentMgmt({ user }) {
     })
   }
 
+  /**
+   * @function refreshSurveyResponse : Download all the survey responses for students and preceptors
+   */
   const refreshSurveyResponse = async () => {
     try {
       setIsRefreshing(true)
-
+      // Downloading survey responses and parse data
       setDisplayText("START DOWNLOADING STUDENT SURVEYS")
       await downloadSurveys("student", STUDENT_SURVEY, checkForProgress, waitToDownload, setDisplayText)
-
       setDisplayText("START DOWNLOADING PRECEPTOR SURVEYS")
       await downloadSurveys("preceptor", PRECEPTOR_SURVEY, checkForProgress, waitToDownload, setDisplayText)
-
       // FINISHED EVERYTHING - Update the refresh timestamp
       setDisplayText("Finished Updating EVERTHING. Let's go!")
       await updateSurveyStatus()
@@ -113,8 +115,6 @@ export default function StudentMgmt({ user }) {
     }
   }
 
-  useEffect(() => loadData(), [isRefreshing])
-
   /**
    * States for sending emails to all the students
    */
@@ -123,6 +123,10 @@ export default function StudentMgmt({ user }) {
   const [allEmailAddress, setAllEmailAddress] = useState([])
   const [surveyUrl, setSurveyUrl] = useState("")
 
+  /**
+   * @function getAllUnrespondedEmails : Create an email list of all the students or preceptors who didn't respond to the survey
+   * @param {*} choice : Whether user clicked on the student or preceptor button
+   */
   const getAllUnrespondedEmails = async (choice) => {
     if (choice == "student") {
       const student_data = await getAllStudents()
