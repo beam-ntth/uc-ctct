@@ -34,13 +34,13 @@ export async function getServerSideProps(context) {
   // ID for the region location, passed in as query param by previous page. 
   const location = context.query.location
   // TODO: CREATE GETTERS FOR REGION AND CLINIC -> THEN IMPLEMENT ERROR HANDLING WITH ERROR PAGE BY NEXTJS
+  const clinic_data = await getAllClinics()
   if (location) {
     const region_data = await getClinicOrSiteOrRegion(location);
     const data = await getSitesFromRegion(location);
-    return { props: { data, region_data, user: context.req.user } }
+    return { props: { clinic_data, data, region_data, user: context.req.user } }
   }
   const data = await getAllSites()
-  const clinic_data = await getAllClinics()
   return { props: { clinic_data, data, user: context.req.user } }
 }
 
