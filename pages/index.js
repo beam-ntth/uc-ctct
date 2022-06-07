@@ -12,6 +12,7 @@ export async function getServerSideProps(context) {
   const handler = nextConnect().use(...setup);
   await handler.run(context.req, context.res);
   const user = context.req.user;
+  console.log("GETTING USER", user);
   if (user) {
     const adminExist = await checkIfAdminExist(user.email)
     if (adminExist) {
@@ -62,7 +63,7 @@ export default function Home({ displayWarning }) {
               <img style={{ height: '60%', width: 'auto', paddingRight: '1rem' }} src='/asset/images/google-logo.png' alt='Google Logo' />
               Sign in with Google
             </a>
-            <a className={styles.signinBtn} href="/main">
+            <a className={styles.signinBtn} href="/api/auth/outlook">
               <img style={{ height: '60%', width: 'auto', paddingRight: '1rem' }} src='/asset/images/outlook-logo.png' alt='Google Logo' />
               Sign in with Outlook
             </a>

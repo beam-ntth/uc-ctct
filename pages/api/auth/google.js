@@ -8,5 +8,5 @@ handler.use(...setup);
 
 // Redirection to the Google login page. 
 handler.get('api/auth/google',
-    passport.authenticate("google", { scope: ['profile', 'email'] }));
+  passport.authenticate("google", { scope: ['profile', 'email'] }));
 export default handler;

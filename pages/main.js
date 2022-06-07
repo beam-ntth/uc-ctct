@@ -17,11 +17,15 @@ import { runAuthMiddleware } from '../api-lib/auth/authMiddleware';
 export async function getServerSideProps({ req, res }) {
   const redirect = await runAuthMiddleware(req, res);
   // If the user is invalid then we redirect them back to the index.js page
+  // Master.items.create({ id: "2be67c94-063f-491a-aa46-487ad247765e", type: "BUG" })
+  // Master.item.delete("hello world", "hello world")
+
   if (redirect) return redirect;
   // await addLastUpdatedToAllClinics()
   return {
     props: { user: req.user },
   };
+
 }
 
 export default function Main(props) {
