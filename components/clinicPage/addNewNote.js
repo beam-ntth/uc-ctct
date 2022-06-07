@@ -22,6 +22,10 @@ export default function AddNewNote(props) {
   const [requiredTitle, setRequiredTitle] = useState(false)
   const [requiredNote, setRequiredNote] = useState(false)
 
+  /**
+   * @function checkForErrors : Check to see if the user filled out title and note sections properly
+   * @returns Boolean - True if the error exists
+   */
   const checkForErrors = () => {
     let errorExist = false
     if (note.title === "") {
@@ -35,7 +39,9 @@ export default function AddNewNote(props) {
     return errorExist
   }
 
-  // TODO: JT - CREATE A FUNCTION FOR PATCHING TO NOTES WITH THIS CAPABILITY.
+  /**
+   * @function updateInfo : Add new note to the database
+   */
   async function updateInfo() {
     const database = client.database("uc-ctct");
     let container;
@@ -50,7 +56,6 @@ export default function AddNewNote(props) {
     }
     
     let noteInfo = data.notes
-    console.log(data)
     noteInfo.unshift(note)
     const replaceOperation =
       [{

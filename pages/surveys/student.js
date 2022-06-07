@@ -24,13 +24,17 @@ export default function StudentSurveys({ students, user }) {
     const [cohortFilter, setCohortFilter] = useState(currentYear)
     const [campusFilter, setCampusFilter] = useState('ALL')
 
+    /**
+     * @function getFormattedDate : Get a date in the format of mm/dd/yyyy
+     * @returns : String
+     */
     const getFormattedDate = () => {
         const curDate = new Date()
         return `${curDate.getMonth()+1 < 10 ? '0' : ''}${curDate.getMonth()+1}/${curDate.getDate() < 10 ? '0' : ''}${curDate.getDate()}/${curDate.getFullYear()}`
     }
 
     /**
-     * Filter all the students based on their cohort and campus
+     * @function getFilteredStudents : Filter all the students based on their cohort and campus
      */
     const getFilteredStudents = () => {
         if ( campusFilter === "ALL" ) {

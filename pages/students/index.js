@@ -274,21 +274,6 @@ export default function Student({ students, user }) {
                   <FiUpload color={ addStudentHover ? "#079CDB" : "#C4C4C4" } size={ addStudentHover ? 35 : 30 } 
                   style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
                 </div>
-                {/* <div className={styles.fileUpload} style={ editStudentHover ? { height: '96%', width: '49%', transition: 'linear 0.2s' } : {} }
-                  onClick={() => {
-                      alert(`BEFORE UPLOADING THE FILE!\nPlease make sure the first two columns are:\n1. Student Name\n2. Student Home Email\nThe system will not match student records correctly if the two fields are not correct.`)
-                      updateInfoFileElem != null ? updateInfoFileElem.click() : null
-                    }
-                  } 
-                  onMouseEnter={() => setEditStudentHover(true)} 
-                  onMouseLeave={() => setEditStudentHover(false)} >
-                  <p style={ editStudentHover ? { fontSize: '1.1rem', marginRight: '1rem', transition: 'linear 0.2s' } 
-                  : { marginRight: '1rem', transition: 'linear 0.2s' } }>
-                    Edit student profile with CSV
-                  </p>
-                  <FiUpload color={ editStudentHover ? "#079CDB" : "#C4C4C4" } size={ editStudentHover ? 35 : 30 } 
-                  style={{ cursor: 'pointer', transition: 'linear 0.2s' }} />
-                </div> */}
               </div>
             </div> : null }
 

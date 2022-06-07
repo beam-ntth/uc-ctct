@@ -30,6 +30,9 @@ export async function getServerSideProps(context) {
 }
 
 export default function StudentProfile({ student, user }) {
+  /**
+   * Placeholders for all the element to access in this page
+   */
   const surveyData = student.survey.data
   const clinic_id_1 = student.assignment.primary_choice.clinic_id
   const precep_id_1 = student.assignment.primary_choice.preceptor_id
@@ -50,10 +53,20 @@ export default function StudentProfile({ student, user }) {
   const [clinicData, setClinicData] = useState(null)
   const [preceptorData, setPreceptorData] = useState(null)
 
+  /**
+   * @function getAssignedClinic : Get a clinic detail
+   * @param {*} id : Clinic's id
+   * @returns : Object - of the corresponding clinic
+   */
   const getAssignedClinic = (id) => {
     return clinicData.filter(x => x.id == id)[0]
   }
 
+    /**
+   * @function getAssignedPreceptor : Get a preceptor detail
+   * @param {*} id : Preceptor's id
+   * @returns : Object - of the corresponding preceptor
+   */
   const getAssignedPreceptor = (id) => {
     return preceptorData.filter(x => x.id == id)[0]
   }
@@ -81,6 +94,10 @@ export default function StudentProfile({ student, user }) {
    */
   const router = useRouter()
 
+  /**
+   * @function removeNoteEntry : remove a note from the student profile
+   * @param {*} remove_index : index of the desired note to remove
+   */
   async function removeNoteEntry(remove_index) {
     const database = client.database("uc-ctct");
     const container = database.container("Students");
@@ -270,7 +287,7 @@ export default function StudentProfile({ student, user }) {
                             <h4>Tertiary Choice |</h4>
                         </div>
                         <p><strong>Clinic: </strong>{ clinic_id_3 == "" ? 'Unassigned' : getAssignedClinic(clinic_id_3).name }</p>
-                        <p><strong>Preceptor: </strong>{ precep_id_3 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_2).firstname} ${getAssignedPreceptor(precep_id_2).lastname}` }</p>
+                        <p><strong>Preceptor: </strong>{ precep_id_3 == "" ? 'Unassigned' : `${getAssignedPreceptor(precep_id_3).firstname} ${getAssignedPreceptor(precep_id_3).lastname}` }</p>
                         <p><strong>Date Assigned: </strong>{ date_assigned_3 == "" ? 'Unknown' : date_assigned_3 }</p>
                     </div> 
                   </React.Fragment>

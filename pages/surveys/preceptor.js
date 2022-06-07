@@ -26,7 +26,7 @@ export default function PreceptorSurveys({ preceptors, user }) {
     const [ campusStatus, setCampusStatus ] = useState("ALL")
 
     /**
-     * This function filters preceptor based on their campus
+     * @function filterPreceptorByStatus This function filters preceptor based on their campus
      */
     const filterPreceptorByStatus = () => {
         if (campusStatus == "ALL") {
@@ -35,6 +35,10 @@ export default function PreceptorSurveys({ preceptors, user }) {
         return preceptors.filter(x => x.location_affiliation == campusStatus)
     }
 
+    /**
+     * @function getFormattedDate : Get a date in the format of mm/dd/yyyy
+     * @returns : String
+     */
     const getFormattedDate = () => {
         const curDate = new Date()
         return `${curDate.getMonth()+1 < 10 ? '0' : ''}${curDate.getMonth()+1}/${curDate.getDate() < 10 ? '0' : ''}${curDate.getDate()}/${curDate.getFullYear()}`
